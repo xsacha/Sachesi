@@ -98,6 +98,7 @@ signals:
     void splitProgressChanged();
     void currentFileChanged();
     void killSplit();
+    void populateFirmwareData(QByteArray data);
 private slots:
     void reverseLookupReply();
     void serverReply();

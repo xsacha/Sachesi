@@ -615,134 +615,34 @@ QString MainNet::NPCFromLocale(int carrier, int country) {
     return homeNPC;
 }
 
-QString MainNet::HWIDFromVariant(int variant) {
-    QString id;
-    // Device
-    // 0 = Z30 (A Series)
-    // 1 = Z10 (N Series)
-    // 2 = Z5  (K Series)
-    // 3 = Z3  (J Series)
-    // 4 = Q30 (W Series)
-    // 5 = Q10 (L Series)
-    // 6 = Q5  (R Series)
-    // 7 = B Series
-    // 8 = Cafe Series
-    // 9 = Dev Alpha
-    // 10 = Playbook
-    switch (variant)
-    {
-    case 101:
-        id = "D00A106"; // Playbook (4G)
-        break;
-    case 100:
-        id = "6001A06"; // Playbook (Wifi)
-        break;
-    case 92:
-        id = "8D00270A"; // Dev Alpha C
-        break;
-    case 91:
-        id = "4002607"; // Dev Alpha B
-        break;
-    case 90:
-        id = "4002307"; // Dev Alpha A
-        break;
-    case 81:
-        id = "8C002A07"; // SQC 100-2
-        break;
-    case 80:
-        id = "87002A07"; // SQC 100-1
-        break;
-    case 74:
-        id = "9C00240A"; // STB 100-5
-        break;
-    case 73:
-        id = "AC00240A"; // STB 100-4
-        break;
-    case 72:
-        id = "A700240A"; // STB 100-3
-        break;
-    case 71:
-        id = "9600240A"; // STB 100-2
-        break;
-    case 70:
-        id = "9700240A"; // STB 100-1
-        break;
-    case 62:
-        id = "86002A0A"; // SQR 100-3
-    case 61:
-        id = "85002A0A"; // SQR 100-2
-        break;
-    case 60:
-        id = "84002A0A"; // SQR 100-1
-        break;
-    case 54:
-        id = "8700270A"; // SQN 100-5
-        break;
-    case 53:
-        id = "8C00270A"; // SQN 100-4
-        break;
-    case 52:
-        id = "8600270A"; // SQN 100-3
-        break;
-    case 51:
-        id = "8500270A"; // SQN 100-2
-        break;
-    case 50:
-        id = "8400270A"; // SQN 100-1
-        break;
-    case 43:
-        id = "87002C0A"; // SQW Variant D
-        break;
-    case 42:
-        id = "86002C0A"; // SQW Variant C
-        break;
-    case 41:
-        id = "85002C0A"; // SQW Variant B
-        break;
-    case 40:
-        id = "84002C0A"; // SQW Variant A
-        break;
-    case 30:
-        id = "04002E07"; // STJ 100-1
-        break;
-    case 21:
-        id = "A600240A"; // STK 100-2
-        break;
-    case 20:
-        id = "A500240A"; // STK 100-1
-        break;
-    case 13:
-        id = "8400240A"; // STL 100-4
-        break;
-    case 12:
-        id = "8500240A"; // STL 100-3
-        break;
-    case 11:
-        id = "8700240A"; // STL 100-2
-        break;
-    case 10:
-        id = "4002607"; // STL 100-1 / DAB
-        break;
-	case 5:
-		id = "B500240a"; // STA 100-6
-		break;
-    case 4:
-        id = "9500240A"; // STA 100-5
-        break;
-    case 3:
-        id = "8F00240A"; // STA 100-4
-        break;
-    case 2:
-        id = "8E00240A"; // STA 100-3
-        break;
-    case 1:
-        id = "8D00240A"; // STA 100-2
-        break;
-    case 0:
-    default:
-        id = "8C00240A"; // STA 100-1
-        break;
-    }
+
+QStringList dev[] = [
+                     // 0 = Z30 (A Series)
+                     QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
+                     // 1 = Z10 (L Series)
+                     QStringList() << "4002607"<< "8700240A" << "8500240A" << "8400240A",
+                     // 2 = Z5  (K Series)
+                     QStringList() << "A500240A" << "A600240A",
+                     // 3 = Z3  (J Series)
+                     QStringList() << "04002E07",
+                     // 4 = Q30 (W Series)
+                     QStringList() << "84002C0A" << "85002C0A" << "86002C0A" << "87002C0A",
+                     // 5 = Q10 (N Series)
+                     QStringList() << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
+                     // 6 = Q5  (R Series)
+                     QStringList() << "84002A0A" << "85002A0A" << "86002A0A",
+                     // 7 = B Series
+                     QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
+                     // 8 = Cafe Series
+                     QStringList() << "87002A07" << "8C002A07",
+                     // 9 = Dev Alpha
+                     QStringList() << "4002307" << "4002607" << "8D00270A",
+                     // 10 = Playbook
+                     QStringList() << "6001A06" << "D001A06",
+                    ];
+QString MainNet::HWIDFromVariant(int device, int variant) {
+    id = dev[device][variant];
+    // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
 }
 
@@ -759,7 +659,7 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
 {
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
     setScanning(true);
-    QString id = HWIDFromVariant(device * 10 + variant);
+    QString id = HWIDFromVariant(device, variant);
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
     QString requestUrl;
 
@@ -853,7 +753,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         break;
     }
 
-    QString id = HWIDFromVariant(device * 10 + variant);
+    QString id = HWIDFromVariant(device, variant);
 
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
@@ -923,7 +823,11 @@ void MainNet::serverReply()
     setScanning(false);
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
+    populateFirmwareData(data);
+}
 
+void MainNet::populateFirmwareData(QByteArray data)
+{
     QXmlStreamReader xml(data);
     QString ver = "";
     QString desc = "";
