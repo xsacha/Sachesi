@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/generic/UI/Config.qml</file>
+        <file>qml/generic/UI/RoundButton.qml</file>
+        <file>qml/generic/UI/SelectionText.qml</file>
+        <file>qml/generic/UI/TabObject.qml</file>
+        <file>qml/generic/UI/TextCouple.qml</file>
+        <file>qml/generic/UI/TextCoupleSelect.qml</file>
+        <file>qml/generic/UI/TitleObject.qml</file>
+        <file>qml/generic/UI/Circle.qml</file>
+        <file>qml/generic/UI/PageTab.qml</file>
+        <file>qml/generic/Title.qml</file>
+        <file>qml/generic/installer.qml</file>
+        <file>qml/generic/backup.qml</file>
+        <file>qml/generic/downloader.qml</file>
+        <file>qml/generic/usbconnect.qml</file>
+        <file>qml/generic/text.png</file>
+        <file>qml/generic/trash.png</file>
+        <file>qml/generic/boot.qml</file>
+        <file>qml/generic/extract.qml</file>
+        <file>qml/generic/arrow.png</file>
+    </qresource>
+</RCC>

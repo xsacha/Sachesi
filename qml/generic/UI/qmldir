@@ -1,0 +1,7 @@
+Config 1.0 Config.qml
+RoundButton 1.0 RoundButton.qml
+SelectionText 1.0 SelectionText.qml
+TabObject 1.0 TabObject.qml
+TextCouple 1.0 TextCouple.qml
+TextCoupleSelect 1.0 TextCoupleSelect.qml
+TitleObject 1.0 TitleObject.qml

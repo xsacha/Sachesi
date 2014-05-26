@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<qnx xmlns="http://www.qnx.com/schemas/application/1.0">
+    <id>com.Qtness.BBUpdateScan</id>
+    <filename>Sachesi</filename>
+    <name>Sachesi</name>
+    <versionNumber>1.2.0</versionNumber>
+    <buildId>1</buildId>
+    <description>Extractor, Searcher, Installer</description>
+
+    <copyright>2013</copyright>
+    <initialWindow>
+        <systemChrome>none</systemChrome>
+        <transparent>false</transparent>
+        <autoOrients>false</autoOrients>
+        <aspectRatio>portrait</aspectRatio>
+    </initialWindow>
+    <publisher>Qtness</publisher>
+    <env var="QML_IMPORT_PATH" value="app/native/imports:/usr/lib/qt4/imports"/>
+    <env var="QT_PLUGIN_PATH" value="app/native/plugins:/usr/lib/qt4/plugins"/>
+    <env var="LD_LIBRARY_PATH" value="/usr/lib/qt4/lib:app/native/lib:/usr/lib/qt4/lib/"/>
+    <permission system="true">run_native</permission>
+    <permission>access_internet</permission>
+    <permission>access_shared</permission>
+    <category>core.games</category>
+    <icon>
+        <image>res/sachesi-114.png</image>
+    </icon>
+</qnx>
