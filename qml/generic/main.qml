@@ -334,7 +334,7 @@ PageTab {
                 id: babyModel
                 ListElement { name: "Z30" }
                 ListElement { name: "Z10" }
-                ListElement { name: "Z5" }
+                ListElement { name: "P9982" }
                 ListElement { name: "Z3" }
                 ListElement { name: "Q30" }
                 ListElement { name: "Q10" }
@@ -393,6 +393,7 @@ PageTab {
                                    else if (listModel === q10 && selectedItem == 1) { country.value = "311"; carrier.value = "480" }
                                    else if (listModel === q10 && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
                                    else if (listModel === z30 && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
+								   else if (listModel === z30 && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
             ListModel {
                 id: z30
                 ListElement { name: "STA 100-1" }
