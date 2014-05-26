@@ -450,7 +450,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
                 "* Radios *\n"
                 "Z10 (-1): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.m5730/" + radioVersion + "/m5730-" + radioVersion + "-nto+armle-v7+signed.bar\n"
                 "Z10 (-2/3) and 9982 (Porsche): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960/" + radioVersion + "/qc8960-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-				"Z10 (-4): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.omadm/" + radioVersion + "/qc8960.omadm-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Z10 (-4): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.omadm/" + radioVersion + "/qc8960.omadm-" + radioVersion + "-nto+armle-v7+signed.bar\n"
                 "Z30: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.wtr5/" + radioVersion + "/qc8960.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
                 "Q10: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.wtr/" + radioVersion + "/qc8960.wtr-" + radioVersion + "-nto+armle-v7+signed.bar\n"
                 "Z3 (Jakarta): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8930.wtr5/" + radioVersion + "/qc8930.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
