@@ -314,14 +314,14 @@ PageTab {
             z: 11
             selectedItem: 3
             type: "Device"
-            initialText: "Z3 (Jakarta)"
+            initialText: "Z3"
             listModel: p.advanced ? advancedModel : babyModel
             ListModel {
                 id: advancedModel
                 ListElement { name: "Z30" }
                 ListElement { name: "Z10" }
-                ListElement { name: "Z5 (Porsche)" }
-                ListElement { name: "Z3 (Jakarta)" }
+                ListElement { name: "P9982" }
+                ListElement { name: "Z3" }
                 ListElement { name: "Q30" }
                 ListElement { name: "Q10" }
                 ListElement { name: "Q5" }
