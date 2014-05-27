@@ -233,6 +233,7 @@ PageTab {
                 text: "Delta"
             }
             RoundButton {
+                id: searchButton
                 enabled: !p.scanning
                 text: p.scanning ? "Searching..." : "Search"
                 onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem/*, version.selectedItem*/) }
@@ -279,9 +280,14 @@ PageTab {
             type: "Country"
             subtext: "Indonesia"
             value: "510"
-            onValueChanged: if (value.length == 3) subtext = MCC.to_country(value);
+            onValueChanged: {
+                if (value.length == 3) subtext = MCC.to_country(value);
+                if (carrier != null) carrier.updateVal();
+            }
             before: carrier.thisid
             after: carrier.thisid
+            onClicked: searchButton.clicked();
+
             Rectangle {
                 color: config.shadowColor
                 anchors.left: country.typeOffset
@@ -304,9 +310,14 @@ PageTab {
             id: carrier
             type: "Carrier"
             value: "01"
-            onValueChanged: if (value.length <= 3) subtext = MCC.to_carrier(country.value, ("00" + value).slice(-3)); else subtext = "";
+            function updateVal() {
+                if (value.length <= 3) subtext = MCC.to_carrier(country.value, ("00" + value).slice(-3)); else subtext = "";
+            }
+
+            onValueChanged: updateVal();
             before: country.thisid
             after: country.thisid
+            onClicked: searchButton.clicked();
         }
         TextCoupleSelect {
             id: device
