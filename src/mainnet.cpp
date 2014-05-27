@@ -19,6 +19,7 @@
 #include <QFileDialog>
 #include <QListView>
 #include <QTreeView>
+#include <QStringList>
 #include <QMessageBox>
 #include "splitter.h"
 #include <QDesktopServices>
@@ -620,8 +621,7 @@ QString MainNet::NPCFromLocale(int carrier, int country) {
     return homeNPC;
 }
 
-
-QStringList dev[] = [
+static QStringList dev[] = {
                      // 0 = Z30 (A Series)
                      QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
                      // 1 = Z10 (L Series)
@@ -644,9 +644,9 @@ QStringList dev[] = [
                      QStringList() << "4002307" << "4002607" << "8D00270A",
                      // 10 = Playbook
                      QStringList() << "6001A06" << "D001A06",
-                    ];
-QString MainNet::HWIDFromVariant(int device, int variant) {
-    id = dev[device][variant];
+                    };
+QString MainNet::HWIDFromVariant(unsigned int device, unsigned int variant) {
+    QString id = dev[device][variant];
     // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
 }

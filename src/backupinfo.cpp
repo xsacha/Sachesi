@@ -18,7 +18,7 @@
 #include "backupinfo.h"
 
 BackupInfo::BackupInfo() :
-    _size(0), _maxSize(1), _progress(0),
+    _progress(0), _size(0), _maxSize(1),
     _mode(0), _curMode(0), _numMethods(0)
 {
 }

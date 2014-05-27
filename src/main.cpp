@@ -18,7 +18,7 @@
 #include <QApplication>
 #include <QDeclarativeContext>
 #include <QtDeclarative/qdeclarative.h>
-#include "qmlapplicationviewer.h"
+#include "../qmlapplicationviewer/qmlapplicationviewer.h"
 #include "mainnet.h"
 #ifndef BLACKBERRY
 #include "install.h"
@@ -26,7 +26,7 @@
 #include "backupinfo.h"
 #include "apps.h"
 #endif
-#if !defined(_WIN32) && !defined(BLACKBERRY) && !defined(ANDROID)
+#ifdef BOOTLOADER_ACCESS
 #include "boot.h"
 #endif
 
@@ -60,7 +60,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #if defined(__APPLE__)
     QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
 #endif
-#if !defined(_WIN32) && !defined(BLACKBERRY) && !defined(ANDROID)
+#ifdef BOOTLOADER_ACCESS
     Boot b;
     QThread thread;
     thread.connect(&thread, SIGNAL(started()), &b, SLOT(search()));
@@ -76,7 +76,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
     viewer.rootContext()->setContextProperty("i",&i);
 #endif
-#if !defined(_WIN32) && !defined(BLACKBERRY) && !defined(ANDROID)
+#ifdef BOOTLOADER_ACCESS
     viewer.rootContext()->setContextProperty("b",&b);
 #endif
     viewer.setSource(QUrl("qrc:/qml/generic/Title.qml"));

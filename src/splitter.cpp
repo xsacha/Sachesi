@@ -162,8 +162,8 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
                 }
             }
 
-            QuaZipFile* zipFile;
-            QFile* newFile;
+            QuaZipFile* zipFile = 0;
+            QFile* newFile = 0;
             bool isManifest = (tier == 3) && (dir == "MANIFEST.MF");
             QByteArray manifestDump;
             if (extractApps)

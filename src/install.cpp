@@ -43,11 +43,12 @@
 #endif
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
-    _backing(false), _restoring(false), _knownBattery(-1),
-    _installing(false), _completed(false), _dgProgress(-1), _curDGProgress(-1),
-    reply(NULL), _zipFile(NULL), currentBackupZip(NULL), _knownPIN(""), _knownOS(""),
-    _wrongPass(false), _wrongPassBlock(false), _state(0), _hadPassword(true),
-    manager(NULL), cookieJar(NULL)
+    manager(NULL), reply(NULL), cookieJar(NULL),
+    _knownOS(""), _knownBattery(-1), _knownPIN(""),
+    _wrongPass(false), _wrongPassBlock(false), _state(0),
+    _dgProgress(-1), _curDGProgress(-1), _completed(false),
+    _installing(false), _restoring(false), _backing(false),
+    _hadPassword(true), currentBackupZip(NULL), _zipFile(NULL)
 {
 #ifdef WIN32
     WSAStartup(MAKEWORD(2,0), &wsadata);
@@ -1022,7 +1023,7 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "UpdateProgress")
     {
-        bool inProgress;
+        bool inProgress = false;
         while (xml.readNextStartElement()) {
             element = xml.readElementText();
             if (xml.name() == "Status")

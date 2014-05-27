@@ -112,7 +112,7 @@ private slots:
 private:
     // Utils:
     QString NPCFromLocale(int country, int carrier);
-    QString HWIDFromVariant(int variant);
+    QString HWIDFromVariant(unsigned int device, unsigned int variant);
 
 
     QThread* splitThread;

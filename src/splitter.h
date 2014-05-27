@@ -62,9 +62,9 @@ class Splitter: public QObject {
     Q_OBJECT
 
 public:
-    Splitter(QString file) : selectedFile(file), kill(false) { reset(); }
-    Splitter(QString file, int options) : selectedFile(file), kill(false), option(options)  { reset(); }
-    Splitter(QStringList files) : selectedFiles(files), kill(false)  { reset(); }
+    Splitter(QString file) : kill(false), selectedFile(file) { reset(); }
+    Splitter(QString file, int options) : kill(false), option(options), selectedFile(file)  { reset(); }
+    Splitter(QStringList files) : kill(false), selectedFiles(files)  { reset(); }
     ~Splitter() { }
     bool extractApps, extractImage;
     int extractTypes;

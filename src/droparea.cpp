@@ -35,6 +35,7 @@ void DropArea::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 
 void DropArea::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
+    Q_UNUSED(event)
     unsetCursor();
 }
 

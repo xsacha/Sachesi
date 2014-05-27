@@ -45,7 +45,7 @@ mac {
         LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so
         INCLUDEPATH += $$P/Android/include/
     } else {
-        LIBS+= /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libquazip.a /usr/lib/x86_64-linux-gnu/libusb-1.0.a -ldl -lz -ludev
+        LIBS += /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libquazip.a /usr/lib/x86_64-linux-gnu/libusb-1.0.a -ldl -lz -ludev
     }
 }
 
@@ -77,6 +77,7 @@ HEADERS += \
 }
 
 !win32:!blackberry:!android {
+    DEFINES += BOOTLOADER_ACCESS
     SOURCES += src/boot.cpp
     HEADERS += src/boot.h
 }
@@ -111,6 +112,6 @@ OTHER_FILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
 
-# Please do not modify the following two lines. Required for deployment.
+# Useful for adjusting paths and setting icons
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
