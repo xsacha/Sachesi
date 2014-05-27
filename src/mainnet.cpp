@@ -48,12 +48,12 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
     _scanning = false;
     _currentId = 0; _maxId = 0;
     _splitting = 0;
-	_splitProgress = 0;
+    _splitProgress = 0;
     _downloading = false;
     _dlProgress = -1;
     QSettings settings("Qtness","Sachesi");
 #ifdef BLACKBERRY
-	setAdvanced(true);
+    setAdvanced(true);
 #else
     setAdvanced(settings.value("advanced", false).toBool());
 #endif
@@ -68,15 +68,15 @@ MainNet::~MainNet()
 void MainNet::splitAutoloader(int options)
 {
     QSettings settings("Qtness","Sachesi");
-	_options = options;
+    _options = options;
 #ifdef BLACKBERRY
-	bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-	filePicker->setDirectories(QStringList() << SAVE_DIR);
-	filePicker->setFilter(QStringList() << "*.exe" << "*.bar" << "*.zip");
-	filePicker->setTitle("Split Autoloader");
-	filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-	filePicker->open();
-	QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(splitAutoloaderSlot(const QStringList&)));
+    bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
+    filePicker->setDirectories(QStringList() << SAVE_DIR);
+    filePicker->setFilter(QStringList() << "*.exe" << "*.bar" << "*.zip");
+    filePicker->setTitle("Split Autoloader");
+    filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
+    filePicker->open();
+    QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(splitAutoloaderSlot(const QStringList&)));
 #else
     QFileDialog finder;
     finder.setDirectory(SAVE_DIR);
@@ -108,9 +108,9 @@ void MainNet::splitAutoloader(int options)
 
 void MainNet::splitAutoloaderSlot(const QStringList& fileNames) {
     QSettings settings("Qtness","Sachesi");
-	if (fileNames.isEmpty())
-		return;
-	QFileInfo fileInfo(fileNames.first());
+    if (fileNames.isEmpty())
+        return;
+    QFileInfo fileInfo(fileNames.first());
     settings.setValue("splitDir", fileInfo.absolutePath());
     _splitting = 1; emit splittingChanged();
     splitThread = new QThread();
@@ -150,13 +150,13 @@ void MainNet::combineFiles()
 {
     QSettings settings("Qtness","Sachesi");
 #ifdef BLACKBERRY
-	bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-	filePicker->setDirectories(QStringList() << SAVE_DIR);
-	filePicker->setFilter(QStringList() << "*.signed");
-	filePicker->setTitle("Combine Signed Files");
-	filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-	filePicker->open();
-	QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
+    bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
+    filePicker->setDirectories(QStringList() << SAVE_DIR);
+    filePicker->setFilter(QStringList() << "*.signed");
+    filePicker->setTitle("Combine Signed Files");
+    filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
+    filePicker->open();
+    QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
 #else
     QFileDialog finder;
     finder.setWindowTitle("Combine Signed Files");
@@ -176,50 +176,50 @@ void MainNet::combineFiles()
 void MainNet::combineAutoloader(QStringList selectedFiles)
 {
     QSettings settings("Qtness","Sachesi");
-        QFileInfo fileInfo(selectedFiles.first());
-        settings.setValue("splitDir", fileInfo.absolutePath());
-        QStringList splitFiles = QStringList();
-        foreach(QString fileName, selectedFiles) {
-            if (QFileInfo(fileName).isDir())
-            {
-                QStringList suffixOnly = QDir(fileName).entryList(QStringList("*.signed"));
-                foreach (QString suffix, suffixOnly) {
-                    splitFiles.append(fileName + "/" + suffix);
-                }
-            } else if (fileName.endsWith(".signed"))
-                splitFiles.append(fileName);
-        }
-        if (splitFiles.isEmpty())
-            return;
-        settings.setValue("splitDir", QFileInfo(selectedFiles.first()).absolutePath());
-        splitThread = new QThread;
-        _splitting = 2; emit splittingChanged();
-        Splitter* splitter = new Splitter(splitFiles);
-        splitter->moveToThread(splitThread);
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
-        connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-        connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-        connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-        connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-        connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-
-        // Download required files.
-#ifdef BLACKBERRY
-		QFileInfo capFile("/accounts/1000/shared/misc/Sachesi/cap.exe");
-#else
-        QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-        QFileInfo capFile(QFileInfo(ini.fileName()).absolutePath()+"/Sachesi/cap.exe");
-#endif
-        if (!capFile.exists())
+    QFileInfo fileInfo(selectedFiles.first());
+    settings.setValue("splitDir", fileInfo.absolutePath());
+    QStringList splitFiles = QStringList();
+    foreach(QString fileName, selectedFiles) {
+        if (QFileInfo(fileName).isDir())
         {
-            QString capUrl = "http://ppsspp.mvdan.cc/PPSSPP-0.8.1-s.bar";
-            QNetworkAccessManager* mNetworkManager = new QNetworkAccessManager(this);
-            QObject::connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(capNetworkReply(QNetworkReply*)));
-            /*QNetworkReply* reply =*/ mNetworkManager->get(QNetworkRequest(capUrl));
-            _splitting = 5; emit splittingChanged();
-            return;
-        }
-        splitThread->start();
+            QStringList suffixOnly = QDir(fileName).entryList(QStringList("*.signed"));
+            foreach (QString suffix, suffixOnly) {
+                splitFiles.append(fileName + "/" + suffix);
+            }
+        } else if (fileName.endsWith(".signed"))
+            splitFiles.append(fileName);
+    }
+    if (splitFiles.isEmpty())
+        return;
+    settings.setValue("splitDir", QFileInfo(selectedFiles.first()).absolutePath());
+    splitThread = new QThread;
+    _splitting = 2; emit splittingChanged();
+    Splitter* splitter = new Splitter(splitFiles);
+    splitter->moveToThread(splitThread);
+    connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
+    connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
+    connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
+    connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
+    connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
+    connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
+
+    // Download required files.
+#ifdef BLACKBERRY
+    QFileInfo capFile("/accounts/1000/shared/misc/Sachesi/cap.exe");
+#else
+    QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    QFileInfo capFile(QFileInfo(ini.fileName()).absolutePath()+"/cap.exe");
+#endif
+    if (!capFile.exists())
+    {
+        QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.6.exe";
+        QNetworkAccessManager* mNetworkManager = new QNetworkAccessManager(this);
+        QObject::connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(capNetworkReply(QNetworkReply*)));
+        /*QNetworkReply* reply =*/ mNetworkManager->get(QNetworkRequest(capUrl));
+        _splitting = 5; emit splittingChanged();
+        return;
+    }
+    splitThread->start();
 }
 
 void MainNet::capNetworkReply(QNetworkReply* reply) {
@@ -227,13 +227,15 @@ void MainNet::capNetworkReply(QNetworkReply* reply) {
         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() == 200) {
             QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
 #ifdef BLACKBERRY
-            QString capPath = "/accounts/1000/shared/misc/";
+            QString capPath = "/accounts/1000/shared/misc/Sachesi";
 #else
             QString capPath = QFileInfo(ini.fileName()).absolutePath();
 #endif
-            QDir capDir(capPath); capDir.mkpath("Sachesi");
-            QFile capFile(capPath+"/Sachesi/cap.exe");
+            QFile capFile(capPath+"/cap.exe");
             capFile.open(QIODevice::WriteOnly);
+            // We remove the first character from the executable to
+            // allow GoogleDrive to serve it.
+            //capFile.write("M",1);
             capFile.write(reply->readAll());
             capFile.close();
         } else
@@ -247,22 +249,22 @@ void MainNet::capNetworkReply(QNetworkReply* reply) {
 void MainNet::extractImage(int type, int options)
 {
     QSettings settings("Qtness","Sachesi");
-	_options = options;
-	_type = type;
+    _options = options;
+    _type = type;
 #ifdef BLACKBERRY
-	bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-	filePicker->setDirectories(QStringList() << SAVE_DIR);
-	QStringList filter;
-	filter << "*.exe" << "*.signed";
+    bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
+    filePicker->setDirectories(QStringList() << SAVE_DIR);
+    QStringList filter;
+    filter << "*.exe" << "*.signed";
     if (type == 0 && _options & 1)
-		filter << "*.rcfs";
+        filter << "*.rcfs";
     if (type == 2 || (type == 0 && _options & 2))
         filter << " *.qnx6";
-	filePicker->setFilter(filter);
-	filePicker->setTitle("Extract Image");
-	filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-	filePicker->open();
-	QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(extractImageSlot(const QStringList&)));
+    filePicker->setFilter(filter);
+    filePicker->setTitle("Extract Image");
+    filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
+    filePicker->open();
+    QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(extractImageSlot(const QStringList&)));
 #else
     QFileDialog finder;
     finder.setWindowTitle("Extract Image");
@@ -325,49 +327,49 @@ void MainNet::extractImage(int type, int options)
 void MainNet::extractImageSlot(const QStringList& selectedFiles)
 {
     QSettings settings("Qtness","Sachesi");
-        if (selectedFiles.empty())
-            return;
-        QFileInfo fileInfo(selectedFiles.first());
-        if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
-            QString errorMsg = "You can only extract apps from debrick OS images.";
-            if (fileInfo.size() < 50 * 1024 * 1024)
-                errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
-            QMessageBox::information(NULL, "Warning", errorMsg, QMessageBox::Ok);
-            return;
-        }
-        settings.setValue("splitDir", fileInfo.absolutePath());
-        _splitting = 3 + (_type == 2); emit splittingChanged();
-        splitThread = new QThread;
-        Splitter* splitter = new Splitter(selectedFiles.first());
-        switch (_type) {
-        case 1:
-            splitter->extractImage = true;
-            break;
-        case 2:
-            splitter->extractApps = true;
-            break;
-        case 0:
-        default:
-            break;
-        }
-        splitter->extractTypes = _options;
-        splitter->moveToThread(splitThread);
-        if (fileInfo.suffix() == "rcfs")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractRCFS()));
-        else if (fileInfo.suffix() == "qnx6")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractQNX6()));
-        else if (fileInfo.suffix() == "exe")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractAutoloader()));
-        else if (fileInfo.suffix() == "signed")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractSigned()));
-        else // Bar, Zip
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractBar()));
-        connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-        connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-        connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-        connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-        connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-        splitThread->start();
+    if (selectedFiles.empty())
+        return;
+    QFileInfo fileInfo(selectedFiles.first());
+    if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
+        QString errorMsg = "You can only extract apps from debrick OS images.";
+        if (fileInfo.size() < 50 * 1024 * 1024)
+            errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
+        QMessageBox::information(NULL, "Warning", errorMsg, QMessageBox::Ok);
+        return;
+    }
+    settings.setValue("splitDir", fileInfo.absolutePath());
+    _splitting = 3 + (_type == 2); emit splittingChanged();
+    splitThread = new QThread;
+    Splitter* splitter = new Splitter(selectedFiles.first());
+    switch (_type) {
+    case 1:
+        splitter->extractImage = true;
+        break;
+    case 2:
+        splitter->extractApps = true;
+        break;
+    case 0:
+    default:
+        break;
+    }
+    splitter->extractTypes = _options;
+    splitter->moveToThread(splitThread);
+    if (fileInfo.suffix() == "rcfs")
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractRCFS()));
+    else if (fileInfo.suffix() == "qnx6")
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractQNX6()));
+    else if (fileInfo.suffix() == "exe")
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractAutoloader()));
+    else if (fileInfo.suffix() == "signed")
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractSigned()));
+    else // Bar, Zip
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractBar()));
+    connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
+    connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
+    connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
+    connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
+    connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
+    splitThread->start();
 }
 
 void MainNet::cancelSplit()
@@ -443,7 +445,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
                 "Qualcomm Devices (Everyone else)\n"
                 "Debrick OS: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi.desktop/" + osVersion + "/qc8960.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
                 "Core OS   : http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi/" + osVersion + "/qc8960.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
-				"\n"
+                "\n"
                 "Verizon Devices\n"
                 "Debrick OS: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi.desktop/" + osVersion + "/qc8960.verizon_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
                 "Core OS   : http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi/" + osVersion + "/qc8960.verizon_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
@@ -622,29 +624,29 @@ QString MainNet::NPCFromLocale(int carrier, int country) {
 }
 
 static QStringList dev[] = {
-                     // 0 = Z30 (A Series)
-                     QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
-                     // 1 = Z10 (L Series)
-                     QStringList() << "4002607"<< "8700240A" << "8500240A" << "8400240A",
-                     // 2 = Z5  (K Series)
-                     QStringList() << "A500240A" << "A600240A",
-                     // 3 = Z3  (J Series)
-                     QStringList() << "04002E07",
-                     // 4 = Q30 (W Series)
-                     QStringList() << "84002C0A" << "85002C0A" << "86002C0A" << "87002C0A",
-                     // 5 = Q10 (N Series)
-                     QStringList() << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
-                     // 6 = Q5  (R Series)
-                     QStringList() << "84002A0A" << "85002A0A" << "86002A0A",
-                     // 7 = B Series
-                     QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
-                     // 8 = Cafe Series
-                     QStringList() << "87002A07" << "8C002A07",
-                     // 9 = Dev Alpha
-                     QStringList() << "4002307" << "4002607" << "8D00270A",
-                     // 10 = Playbook
-                     QStringList() << "6001A06" << "D001A06",
-                    };
+    // 0 = Z30 (A Series)
+    QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
+    // 1 = Z10 (L Series)
+    QStringList() << "4002607"<< "8700240A" << "8500240A" << "8400240A",
+    // 2 = Z5  (K Series)
+    QStringList() << "A500240A" << "A600240A",
+    // 3 = Z3  (J Series)
+    QStringList() << "04002E07",
+    // 4 = Q30 (W Series)
+    QStringList() << "84002C0A" << "85002C0A" << "86002C0A" << "87002C0A",
+    // 5 = Q10 (N Series)
+    QStringList() << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
+    // 6 = Q5  (R Series)
+    QStringList() << "84002A0A" << "85002A0A" << "86002A0A",
+    // 7 = B Series
+    QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
+    // 8 = Cafe Series
+    QStringList() << "87002A07" << "8C002A07",
+    // 9 = Dev Alpha
+    QStringList() << "4002307" << "4002607" << "8D00270A",
+    // 10 = Playbook
+    QStringList() << "6001A06" << "D001A06",
+};
 QString MainNet::HWIDFromVariant(unsigned int device, unsigned int variant) {
     QString id = dev[device][variant];
     // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
@@ -678,19 +680,19 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
         requestUrl = "https://cs.sl.blackberry.com/cse/srVersionLookup/";
         break;
     }
-	requestUrl += "2.0/";
-//
+    requestUrl += "2.0/";
+    //
     //0x8d00240a
     QString query = "<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"1366644680359\">"
-                    "<clientProperties><hardware>"
-                        "<pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><imei>004402242176786</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
-                    "</hardware>"
-                    "<network>"
-                        "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><currentNPC>0x"+homeNPC+"</currentNPC><ecid>0x1</ecid>"
-                    "</network>"
-                    "<software><currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale>"
-					"<osVersion>"+OSver+"</osVersion><omadmEnabled>false</omadmEnabled></software></clientProperties>"
-                    "</srVersionLookupRequest>";
+            "<clientProperties><hardware>"
+            "<pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><imei>004402242176786</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
+            "</hardware>"
+            "<network>"
+            "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><currentNPC>0x"+homeNPC+"</currentNPC><ecid>0x1</ecid>"
+            "</network>"
+            "<software><currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale>"
+            "<osVersion>"+OSver+"</osVersion><omadmEnabled>false</omadmEnabled></software></clientProperties>"
+            "</srVersionLookupRequest>";
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     request.setUrl(QUrl(requestUrl));
@@ -729,7 +731,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         requestUrl = "https://cs.sl.blackberry.com/cse/updateDetails/";
         break;
     }
-/*
+    /*
     switch(version)
     {
     case 2:
@@ -743,7 +745,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         requestUrl += "2.1.0/";
         break;
     }*/
-	requestUrl += "2.2.0/";
+    requestUrl += "2.2.0/";
 
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
 
@@ -796,24 +798,24 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
                 "</updateDetailRequest>";
     } else*/ { // 2.1.0 (newest)
         query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				"<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
-                    "<clientProperties>"
-                        "<hardware>"
-                            "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
-                        "</hardware>"
-                        "<network>"
-                            "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
-                        "</network>"
-                        "<software>"
-                            "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
-                        "</software>"
-                    "</clientProperties>"
-                    "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
-                    "<pollType>manual</pollType>"
-                    "<resultPackageSetCriteria>"
-                        "<softwareRelease softwareReleaseVersion=\"latest\" />"
-                        "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
-                    "</resultPackageSetCriteria>" + delta +
+                "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
+                "<clientProperties>"
+                "<hardware>"
+                "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
+                "</hardware>"
+                "<network>"
+                "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
+                "</network>"
+                "<software>"
+                "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
+                "</software>"
+                "</clientProperties>"
+                "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
+                "<pollType>manual</pollType>"
+                "<resultPackageSetCriteria>"
+                "<softwareRelease softwareReleaseVersion=\"latest\" />"
+                "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
+                "</resultPackageSetCriteria>" + delta +
                 "</updateDetailRequest>";
     }
     _error = ""; emit errorChanged();

@@ -41,6 +41,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_X11InitThreads, true);
 #endif
     QScopedPointer<QApplication> app(createApplication(argc, argv));
+    QCoreApplication::setOrganizationName("Qtness");
+    QCoreApplication::setApplicationName("Sachesi");
 
     QmlApplicationViewer viewer;
     MainNet p;
