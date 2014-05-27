@@ -790,7 +790,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     setScanning((variant != 0) ? 1 : variantCount(device));
     if (_scanning > 1)
         setMultiscan(true);
-    for (int i = start; i < end; i++) {
+    for (int i = start; i <= end; i++) {
         QString query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
             "<clientProperties>"
@@ -883,10 +883,25 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         }
         xml.readNext();
     }
-    if (_multiscan && ver > _versionRelease) {
+    // Check if the version string is newer. Not sure if QString compare would work
+    bool isNewer = !_multiscan || _multiscanVersion == "";
+    if (!isNewer && ver != "") {
+        QStringList newVer = ver.split('.');
+        QStringList oldVer = _multiscanVersion.split('.');
+        for (int i = 0; i < 4; i++) {
+            int newBuild = newVer.at(i).toInt();
+            int oldBuild = oldVer.at(i).toInt();
+            if (newBuild > oldBuild)
+                isNewer = true;
+            if (newBuild != oldBuild)
+                break;
+        }
+    }
+    if (isNewer) {
         _variant = variant; emit variantChanged();
         _versionOS = os;
         _versionRadio = radio;
+        _multiscanVersion = ver;
         _versionRelease = ver; emit versionChanged();
         _description = desc; emit descriptionChanged();
         _url = addr; emit urlChanged();
@@ -918,7 +933,10 @@ void MainNet::serverError(QNetworkReply::NetworkError err)
 
 void MainNet::setDLProgress(const int &progress) { _dlProgress = progress; emit dlProgressChanged(); }
 void MainNet::setAdvanced(const bool &advanced) { QSettings settings("Qtness","Sachesi"); settings.setValue("advanced", advanced); _advanced = advanced; emit advancedChanged(); }
-void MainNet::setMultiscan(const bool &multiscan) { _multiscan = multiscan; emit multiscanChanged(); }
+void MainNet::setMultiscan(const bool &multiscan) {
+    _multiscan = multiscan; emit multiscanChanged();
+    if (true) { _multiscanVersion = ""; emit versionChanged(); }
+}
 void MainNet::setScanning(const int &scanning) { _scanning = scanning; emit scanningChanged(); }
 void MainNet::setDownloading(const bool &downloading) { _downloading = downloading; emit downloadingChanged(); }
 void MainNet::setSplitProgress(const int &progress) { if (_splitProgress > 1000) _splitProgress = 0; else _splitProgress = progress; emit splitProgressChanged(); }

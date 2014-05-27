@@ -32,6 +32,7 @@ class MainNet : public QObject {
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)
     Q_PROPERTY(QString applications READ applications NOTIFY applicationsChanged)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+    Q_PROPERTY(QString multiscanVersion READ multiscanVersion NOTIFY versionChanged)
     Q_PROPERTY(bool    advanced READ advanced WRITE setAdvanced NOTIFY advancedChanged)
     Q_PROPERTY(bool    downloading READ downloading WRITE setDownloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess NOTIFY hasBootAccessChanged)
@@ -72,6 +73,7 @@ public:
     QString url()            const { return _url; }
     QString applications()   const { return _applications; }
     QString error()          const { return _error; }
+    QString multiscanVersion() const { return _multiscanVersion; }
     bool    advanced()       const { return _advanced; }
     bool    downloading()    const { return _downloading; }
     bool    hasBootAccess()  const { return
@@ -143,6 +145,7 @@ private:
     QString _applications;
     QString _links;
     QString _error;
+    QString _multiscanVersion;
     bool _advanced, _downloading, _multiscan;
     int _scanning;
     QFile _currentFile;

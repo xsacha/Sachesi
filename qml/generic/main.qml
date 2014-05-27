@@ -350,9 +350,9 @@ PageTab {
                 variant.selectedItem = 0; variant.text = variant.listModel.get(variant.selectedItem).name;
             }
         }
-        // TODO: Default variant will be 'Any' unless advanced is turned on.
-        // But how to deal with OMAP STL 100-1?
+        // How to deal with OMAP STL 100-1? Currently, assume the same carrier does not carry both types.
         TextCoupleSelect {
+            visible: p.advanced
             id: variant
             z: 10
             type: "Variant"
