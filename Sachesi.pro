@@ -3,9 +3,14 @@ win32: QT += sql xmlpatterns
 
 TARGET="Sachesi"
 ICON=sachesi-114.png
+VERSION=1.2.2
 
 P = $$_PRO_FILE_PWD_
 INCLUDEPATH += $$P/ext $$P/src
+
+DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
+exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
+!isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
 
 greaterThan(QT_MAJOR_VERSION,4) {
     win32 {

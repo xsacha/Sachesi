@@ -82,7 +82,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.setSource(QUrl("qrc:/qml/generic/Title.qml"));
     viewer.setMinimumHeight(440);
     viewer.setMinimumWidth(520);
-    viewer.setWindowTitle("Sachesi 1.2.1");
+#ifdef SACHESI_GIT_VERSION
+    viewer.setWindowTitle(QString("Sachesi ") + SACHESI_VERSION + "-" + SACHESI_GIT_VERSION);
+#else
+    viewer.setWindowTitle(QString("Sachesi ") + SACHESI_VERSION);
+#endif
 
     QSettings settings("Qtness", "Sachesi");
     viewer.restoreGeometry(settings.value("geometry").toByteArray());
