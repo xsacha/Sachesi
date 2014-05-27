@@ -135,7 +135,6 @@ PageTab {
                         font.pixelSize: config.defaultFontSize
                     }
                 }
-                // TODO: Check link automatically? Make a scanner?
             }
             Column {
                 anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 10 }
@@ -382,6 +381,8 @@ PageTab {
                 variant.selectedItem = 0; variant.text = variant.listModel.get(variant.selectedItem).name;
             }
         }
+        // TODO: Default variant will be 'Any' unless advanced is turned on.
+        // But how to deal with OMAP STL 100-1?
         TextCoupleSelect {
             id: variant
             z: 10
@@ -528,7 +529,7 @@ PageTab {
                 selectByMouse: true
                 wrapMode: TextEdit.WrapAnywhere
                 readOnly: true
-                text: "<b>Update " + p.versionRelease + " available!</b><br>" +
+                text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
                       (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
                       (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +
                       "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.url + "<br><b>Files<br></b>" + p.applications + "<br>";

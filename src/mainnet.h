@@ -27,6 +27,7 @@ class MainNet : public QObject {
     Q_PROPERTY(QString versionRelease READ versionRelease NOTIFY versionChanged)
     Q_PROPERTY(QString versionOS READ versionOS NOTIFY versionChanged)
     Q_PROPERTY(QString versionRadio READ versionRadio NOTIFY versionChanged)
+    Q_PROPERTY(QString variant READ variant NOTIFY variantChanged)
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)
     Q_PROPERTY(QString applications READ applications NOTIFY applicationsChanged)
@@ -61,6 +62,7 @@ public:
     QString versionRelease() const;
     QString versionOS() const;
     QString versionRadio() const;
+    QString variant() const;
     QString description() const;
     QString url() const;
     QString applications() const;
@@ -84,6 +86,7 @@ public slots:
 signals:
     void softwareReleaseChanged();
     void versionChanged();
+    void variantChanged();
     void descriptionChanged();
     void urlChanged();
     void applicationsChanged();
@@ -112,7 +115,9 @@ private slots:
 private:
     // Utils:
     QString NPCFromLocale(int country, int carrier);
+    QString NameFromVariant(unsigned int device, unsigned int variant);
     QString HWIDFromVariant(unsigned int device, unsigned int variant);
+    QString curVariant;
 
 
     QThread* splitThread;
@@ -120,6 +125,7 @@ private:
     QNetworkAccessManager *manager;
     QString _softwareRelease;
     QString _versionRelease, _versionOS, _versionRadio;
+    QString _variant;
     QString _description;
     QString _url;
     QString _applications;

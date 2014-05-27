@@ -45,6 +45,7 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
     _versionRelease = "";
     _versionOS = "";
     _versionRadio = "";
+    _variant = "";
     _scanning = false;
     _currentId = 0; _maxId = 0;
     _splitting = 0;
@@ -625,30 +626,47 @@ QString MainNet::NPCFromLocale(int carrier, int country) {
 
 static QStringList dev[] = {
     // 0 = Z30 (A Series)
+    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6",
     QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
     // 1 = Z10 (L Series)
+    QStringList() << "STL 100-1" << "STL 100-2" << "STL 100-3" << "STL 100-4",
     QStringList() << "4002607"<< "8700240A" << "8500240A" << "8400240A",
     // 2 = Z5  (K Series)
+    QStringList() << "STK 100-1" << "STK 100-2",
     QStringList() << "A500240A" << "A600240A",
     // 3 = Z3  (J Series)
+    QStringList() << "STJ 100-1",
     QStringList() << "04002E07",
     // 4 = Q30 (W Series)
+    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQN 100-3" << "SQN 100-4" ,
     QStringList() << "84002C0A" << "85002C0A" << "86002C0A" << "87002C0A",
     // 5 = Q10 (N Series)
+    QStringList() << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5",
     QStringList() << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
     // 6 = Q5  (R Series)
+    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3",
     QStringList() << "84002A0A" << "85002A0A" << "86002A0A",
     // 7 = B Series
+    QStringList() << "STB 100-1" << "STB 100-2" << "STB 100-3" << "STB 100-4" << "STB 100-5",
     QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
     // 8 = Cafe Series
+    QStringList() << "STC 100-1" << "STC 100-2",
     QStringList() << "87002A07" << "8C002A07",
     // 9 = Dev Alpha
+    QStringList() << "Dev Alpha A" << "Dev Alpha B" << "Dev Alpha C",
     QStringList() << "4002307" << "4002607" << "8D00270A",
     // 10 = Playbook
+    QStringList() << "Playbook (Wifi)" << "Playbook (3G)",
     QStringList() << "6001A06" << "D001A06",
 };
+// Make Invokable to use in QML
+QString MainNet::NameFromVariant(unsigned int device, unsigned int variant) {
+    QString id = dev[device*2][variant];
+    // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
+    return id;
+}
 QString MainNet::HWIDFromVariant(unsigned int device, unsigned int variant) {
-    QString id = dev[device][variant];
+    QString id = dev[device*2+1][variant];
     // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
 }
@@ -818,6 +836,8 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
                 "</resultPackageSetCriteria>" + delta +
                 "</updateDetailRequest>";
     }
+    // TODO: When scanning enabled, perform this after successful scan or attach to data
+    curVariant = NameFromVariant(device, variant);
     _error = ""; emit errorChanged();
     reply = manager->post(request, query.toUtf8());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -886,6 +906,7 @@ void MainNet::showFirmwareData(QByteArray data)
         }
         xml.readNext();
     }
+    _variant = curVariant; emit variantChanged();
     _versionRelease = ver; emit versionChanged();
     _description = desc; emit descriptionChanged();
     _url = addr; emit urlChanged();
@@ -921,6 +942,7 @@ QString MainNet::softwareRelease() const { return _softwareRelease; }
 QString MainNet::versionRelease() const { return _versionRelease; }
 QString MainNet::versionOS()      const { return _versionOS; }
 QString MainNet::versionRadio()   const { return _versionRadio; }
+QString MainNet::variant()        const { return _variant; }
 QString MainNet::description()    const { return _description; }
 QString MainNet::url()            const { return _url; }
 QString MainNet::applications()   const { return _applications; }
