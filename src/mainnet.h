@@ -15,8 +15,8 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#ifndef MAINNET_H
-#define MAINNET_H
+#pragma once
+
 #include <QtNetwork>
 #include <QObject>
 #include "splitter.h"
@@ -134,5 +134,3 @@ private:
 	int _options;
 	int _type;
 };
-
-#endif // MAINNET_H

@@ -15,8 +15,8 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#ifndef SPLITTER_H
-#define SPLITTER_H
+#pragma once
+
 #include <QObject>
 #include <QStringList>
 #include <QFile>
@@ -431,5 +431,3 @@ private:
     QuaZip* currentZip; // For extracting apps
     QList<QString> manifestApps;
 };
-
-#endif // SPLITTER_H

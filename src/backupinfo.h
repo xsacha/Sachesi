@@ -15,8 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#ifndef BACKUP_H
-#define BACKUP_H
+#pragma once
 
 #include <QString>
 #include <QStringList>
@@ -98,5 +97,3 @@ private:
     int _curMode;
     int _numMethods;
 };
-
-#endif // BACKUP_H

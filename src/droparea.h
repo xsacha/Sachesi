@@ -15,8 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#ifndef DROPAREA_H
-#define DROPAREA_H
+#pragma once
 
 #include <QDeclarativeItem>
 
@@ -41,5 +40,3 @@ protected:
 private:
     bool m_accepting;
 };
-
-#endif // DROPAREA_H

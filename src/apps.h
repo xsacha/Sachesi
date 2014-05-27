@@ -15,8 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#ifndef APPS_H
-#define APPS_H
+#pragma once
 
 #include <QString>
 #include <QObject>
@@ -79,4 +78,3 @@ class Apps : public QObject {
         QString _versionId;
         QString _checksum;
 };
-#endif // APPS_H

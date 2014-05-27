@@ -15,8 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#ifndef BOOT_H
-#define BOOT_H
+#pragma once
 
 #include <QObject>
 #include <QFile>
@@ -139,5 +138,3 @@ private:
     QList<QByteArray*> bootloaderModeData;
     bool _kill;
 };
-
-#endif // BOOT_H
