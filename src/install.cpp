@@ -557,17 +557,18 @@ void InstallNet::login()
     {
 #ifdef _WIN32
         // TODO: Still getting bad result?!
-		if (inter.addressEntries().count() != 2)
-			continue;
+        //if (inter.addressEntries().count() != 2)
+        //	continue;
 #endif
-		if (inter.humanReadableName().startsWith("VMware"))
-			continue;
+        // VMWare responds for some reason. Who else does?
+        if (inter.humanReadableName().startsWith("VMware"))
+            continue;
         if ((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
         {
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
             {
                 if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol)
-				{
+                {
                     QList<quint8> addrParts;
                     foreach(QString addrString, addr.ip().toString().split('.'))
                         addrParts.append(addrString.toInt());
@@ -582,7 +583,8 @@ void InstallNet::login()
     ips.removeDuplicates();
     if (ips.isEmpty())
 		return;
-	setIp(ips.first());
+    // Note: Removing fallback IP. Device will have to respond.
+    //setIp(ips.first());
 
     request = QNetworkRequest();
 
@@ -594,6 +596,7 @@ void InstallNet::login()
         manager->setCookieJar(cookieJar);
     }
     foreach(QString ip_addr, ips) {
+        request.setAttribute(QNetworkRequest::CustomVerbAttribute, ip_addr);
         request.setUrl(QUrl("http://"+ip_addr+"/cgi-bin/discovery.cgi"));
         reply = manager->get(request);
     }
@@ -604,7 +607,9 @@ void InstallNet::login()
 }
 
 void InstallNet::discoveryReply() {
-    if (state() && reply->url().host() != ip())
+    QString ip_addr = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
+    // Just to prevent fighting between two devices
+    if (state() /*&& ip_addr != ip()*/)
         return;
     QByteArray data = reply->readAll();
     //qDebug() << "Message:\n" << QString(data).simplified().left(3000);
@@ -613,10 +618,8 @@ void InstallNet::discoveryReply() {
     xml.readNextStartElement();
     if (xml.name() == "DeviceCharacteristics") {
         // Valid device
-        if (!state()) {
-            setIp(reply->url().host());
-            setState(1);
-        }
+        setIp(ip_addr);
+        setState(1);
         while (!xml.atEnd())
         {
             xml.readNext();
