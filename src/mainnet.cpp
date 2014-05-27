@@ -46,7 +46,7 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
     _versionOS = "";
     _versionRadio = "";
     _variant = "";
-    _scanning = false;
+    _scanning = 0;
     _currentId = 0; _maxId = 0;
     _splitting = 0;
     _splitProgress = 0;
@@ -686,7 +686,7 @@ void MainNet::downloadPotentialLink(QString softwareRelease, QString osVersion) 
 void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver)
 {
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
-    setScanning(true);
+    setScanning(1);
     QString id = hwidFromVariant(device, variant);
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
     QString requestUrl;
@@ -734,12 +734,11 @@ void MainNet::reverseLookupReply() {
         }
         xml.readNext();
     }
-    setScanning(false);
+    setScanning(0);
 }
 
-void MainNet::updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server/*, int version*/)
+void MainNet::updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server)
 {
-    setScanning(true);
     QString up, requestUrl;
 
     switch (server)
@@ -781,76 +780,49 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         break;
     }
 
-    QString id = hwidFromVariant(device, variant);
-
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     request.setUrl(QUrl(requestUrl));
 
-    QString query;
-    /*if (version == 2) // 1.0.0 (legacy)
-    {
-        query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                "<updateDetailRequest version=\"1.0.0\" authEchoTS=\"1342754372525\">"
-                "<deviceId><pin>0x25D81234</pin><serialNumber>1128121361</serialNumber></deviceId>"
-                "<clientProperties><hardware><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure></hardware>"
-                "<network><vendorId>0x0</vendorId><homeNPC>822349872</homeNPC></network>"
-                "<software><currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion></software></clientProperties>"
-                "<currentTransport>WIFI</currentTransport><updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideBundleDescriptions>true</provideBundleDescriptions><directive type=\"allowOSDowngrades\">true</directive></updateDirectives>"
-                "</updateDetailRequest>";
-    } else if (version == 1) { // 2.0.0 (new)
-        query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                "<updateDetailRequest version=\"2.0.0\" authEchoTS=\"1361763056140\">"
-                    "<clientProperties>"
-                        "<hardware>"
-                            "<pin>0x25D81234</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
-                        "</hardware>"
-                        "<network>"
-                            "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
-                        "</network>"
-                        "<software>"
-                            "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
-                        "</software>"
-                    "</clientProperties>"
-                    "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
-                    "<resultPackageSetCriteria>"
-                        "<softwareRelease softwareReleaseVersion=\"latest\" />"
-                    "</resultPackageSetCriteria>"
-                "</updateDetailRequest>";
-    } else*/ { // 2.1.0 (newest)
-        query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
-                "<clientProperties>"
-                "<hardware>"
-                "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
-                "</hardware>"
-                "<network>"
-                "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
-                "</network>"
-                "<software>"
-                "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
-                "</software>"
-                "</clientProperties>"
-                "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
-                "<pollType>manual</pollType>"
-                "<resultPackageSetCriteria>"
-                "<softwareRelease softwareReleaseVersion=\"latest\" />"
-                "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
-                "</resultPackageSetCriteria>" + delta +
-                "</updateDetailRequest>";
-    }
-    // TODO: When scanning enabled, perform this after successful scan or attach to data
-    _error = ""; emit errorChanged();
-    request.setAttribute(QNetworkRequest::CustomVerbAttribute, nameFromVariant(device, variant));
-    reply = manager->post(request, query.toUtf8());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+    // We either selected 'Any' (if there was more than one variant) or we picked a specific variant.
+    int start = (variant != 0) ? variant - 1 : 0;
+    int end   = (variant != 0) ? variant - 1 : variantCount(device) - 1;
+    setScanning((variant != 0) ? 1 : variantCount(device));
+    if (_scanning > 1)
+        setMultiscan(true);
+    for (int i = start; i < end; i++) {
+        QString query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
+            "<clientProperties>"
+            "<hardware>"
+            "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, variant)+"</id><isBootROMSecure>true</isBootROMSecure>"
+            "</hardware>"
+            "<network>"
+            "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
+            "</network>"
+            "<software>"
+            "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
+            "</software>"
+            "</clientProperties>"
+            "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
+            "<pollType>manual</pollType>"
+            "<resultPackageSetCriteria>"
+            "<softwareRelease softwareReleaseVersion=\"latest\" />"
+            "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
+            "</resultPackageSetCriteria>" + delta +
+            "</updateDetailRequest>";
+        _error = ""; emit errorChanged();
+        // Pass the variant in the request so it can be retrieved out-of-order
+        request.setAttribute(QNetworkRequest::CustomVerbAttribute, nameFromVariant(device, variant));
+        reply = manager->post(request, query.toUtf8());
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(serverError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(serverReply()));
+        connect(reply, SIGNAL(finished()), this, SLOT(serverReply()));
+    }
 }
 
 void MainNet::serverReply()
 {
-    setScanning(false);
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
     showFirmwareData(data, reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString());
@@ -860,6 +832,8 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
 {
     QXmlStreamReader xml(data);
     QString ver = "";
+    QString os = "";
+    QString radio = "";
     QString desc = "";
     QString addr = "";
     QString apps = "";
@@ -877,9 +851,9 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 QString app_path = xml.attributes().value("path").toString();
                 QString type = xml.attributes().value("type").toString();
                 if (type == "system:os" || type == "system:desktop")
-                    _versionOS = app_path.split('/').at(1);
+                    os = app_path.split('/').at(1);
                 if (type == "system:radio")
-                    _versionRadio = app_path.split('/').at(1);
+                    radio = app_path.split('/').at(1);
                 links += currentaddr + "/" + app_path + "\n";
             }
             else if (xml.name() == "friendlyMessage")
@@ -909,15 +883,22 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         }
         xml.readNext();
     }
-    _variant = variant; emit variantChanged();
-    _versionRelease = ver; emit versionChanged();
-    _description = desc; emit descriptionChanged();
-    _url = addr; emit urlChanged();
-    _applications = apps; emit applicationsChanged();
-    _sizes = sizes;
-    _dlTotal = 0;
-    foreach(int i, _sizes) { _dlTotal += i; }
-    _links = links;
+    if (_multiscan && ver > _versionRelease) {
+        _variant = variant; emit variantChanged();
+        _versionOS = os;
+        _versionRadio = radio;
+        _versionRelease = ver; emit versionChanged();
+        _description = desc; emit descriptionChanged();
+        _url = addr; emit urlChanged();
+        _applications = apps; emit applicationsChanged();
+        _sizes = sizes;
+        _dlTotal = 0;
+        foreach(int i, _sizes) { _dlTotal += i; }
+        _links = links;
+    }
+    setScanning(_scanning-1);
+    if (_scanning == 0)
+        setMultiscan(false);
     if (_dlTotal > 0)
     {
         _error = ""; emit errorChanged();
@@ -937,7 +918,8 @@ void MainNet::serverError(QNetworkReply::NetworkError err)
 
 void MainNet::setDLProgress(const int &progress) { _dlProgress = progress; emit dlProgressChanged(); }
 void MainNet::setAdvanced(const bool &advanced) { QSettings settings("Qtness","Sachesi"); settings.setValue("advanced", advanced); _advanced = advanced; emit advancedChanged(); }
-void MainNet::setScanning(const bool &scanning) { _scanning = scanning; emit scanningChanged(); }
+void MainNet::setMultiscan(const bool &multiscan) { _multiscan = multiscan; emit multiscanChanged(); }
+void MainNet::setScanning(const int &scanning) { _scanning = scanning; emit scanningChanged(); }
 void MainNet::setDownloading(const bool &downloading) { _downloading = downloading; emit downloadingChanged(); }
 void MainNet::setSplitProgress(const int &progress) { if (_splitProgress > 1000) _splitProgress = 0; else _splitProgress = progress; emit splitProgressChanged(); }
 

@@ -33,9 +33,10 @@ class MainNet : public QObject {
     Q_PROPERTY(QString applications READ applications NOTIFY applicationsChanged)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged)
     Q_PROPERTY(bool    advanced READ advanced WRITE setAdvanced NOTIFY advancedChanged)
-    Q_PROPERTY(bool    scanning READ scanning WRITE setScanning NOTIFY scanningChanged)
     Q_PROPERTY(bool    downloading READ downloading WRITE setDownloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess NOTIFY hasBootAccessChanged)
+    Q_PROPERTY(bool    multiscan READ multiscan WRITE setMultiscan NOTIFY multiscanChanged)
+    Q_PROPERTY(int     scanning READ scanning WRITE setScanning NOTIFY scanningChanged)
     Q_PROPERTY(int     dlProgress READ dlProgress WRITE setDLProgress NOTIFY dlProgressChanged)
     Q_PROPERTY(int     currentId READ currentId NOTIFY currentIdChanged)
     Q_PROPERTY(int     maxId READ maxId NOTIFY maxIdChanged)
@@ -72,7 +73,6 @@ public:
     QString applications()   const { return _applications; }
     QString error()          const { return _error; }
     bool    advanced()       const { return _advanced; }
-    bool    scanning()       const { return _scanning; }
     bool    downloading()    const { return _downloading; }
     bool    hasBootAccess()  const { return
 #ifdef BOOTLOADER_ACCESS
@@ -81,14 +81,17 @@ public:
                 false;
 #endif
                                    }
+    bool    multiscan()      const { return _multiscan; }
+    int     scanning()       const { return _scanning; }
     int     dlProgress()     const { return _dlProgress; }
     int     currentId()      const { return _currentId; }
     int     maxId()          const { return _maxId; }
     int     splitting()      const { return _splitting; }
     int     splitProgress()  const { return _splitProgress; }
+    void    setMultiscan(const bool &multiscan);
+    void    setScanning(const int &scanning);
     void    setDLProgress(const int &progress);
     void    setAdvanced(const bool &advanced);
-    void    setScanning(const bool &scanning);
     void    setDownloading(const bool &downloading);
     QString currentFile() const;
 public slots:
@@ -103,6 +106,7 @@ signals:
     void applicationsChanged();
     void errorChanged();
     void advancedChanged();
+    void multiscanChanged();
     void scanningChanged();
     void downloadingChanged();
     void hasBootAccessChanged();
@@ -116,7 +120,7 @@ signals:
 private slots:
     void reverseLookupReply();
     void serverReply();
-    void showFirmwareData(QByteArray data);
+    void showFirmwareData(QByteArray data, QString variant);
     void serverError(QNetworkReply::NetworkError error);
     void downloadFinish();
     void cancelSplit();
@@ -127,8 +131,6 @@ private slots:
 private:
     // Utils:
     QString NPCFromLocale(int country, int carrier);
-    QString curVariant;
-
 
     QThread* splitThread;
     QNetworkReply *reply, *replydl;
@@ -141,7 +143,8 @@ private:
     QString _applications;
     QString _links;
     QString _error;
-    bool _advanced, _scanning, _downloading;
+    bool _advanced, _downloading, _multiscan;
+    int _scanning;
     QFile _currentFile;
     QList<int> _sizes;
     int _currentId, _maxId, _dlBytes, _dlTotal;
