@@ -58,6 +58,9 @@ public:
     Q_INVOKABLE void abortSplit();
     Q_INVOKABLE void reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver);
     Q_INVOKABLE void downloadPotentialLink(QString softwareRelease, QString osVersion);
+    Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
+    Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
+    Q_INVOKABLE unsigned int variantCount(unsigned int device);
     QString softwareRelease() const;
     QString versionRelease() const;
     QString versionOS() const;
@@ -115,8 +118,6 @@ private slots:
 private:
     // Utils:
     QString NPCFromLocale(int country, int carrier);
-    QString NameFromVariant(unsigned int device, unsigned int variant);
-    QString HWIDFromVariant(unsigned int device, unsigned int variant);
     QString curVariant;
 
 

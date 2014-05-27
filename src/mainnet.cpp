@@ -650,25 +650,28 @@ static QStringList dev[] = {
     QStringList() << "STB 100-1" << "STB 100-2" << "STB 100-3" << "STB 100-4" << "STB 100-5",
     QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
     // 8 = Cafe Series
-    QStringList() << "STC 100-1" << "STC 100-2",
+    QStringList() << "SQC 100-1" << "SQC 100-2",
     QStringList() << "87002A07" << "8C002A07",
     // 9 = Dev Alpha
-    QStringList() << "Dev Alpha A" << "Dev Alpha B" << "Dev Alpha C",
+    QStringList() << "A" << "B" << "C",
     QStringList() << "4002307" << "4002607" << "8D00270A",
     // 10 = Playbook
-    QStringList() << "Playbook (Wifi)" << "Playbook (3G)",
+    QStringList() << "Wifi" << "3G",
     QStringList() << "6001A06" << "D001A06",
 };
-// Make Invokable to use in QML
-QString MainNet::NameFromVariant(unsigned int device, unsigned int variant) {
+
+QString MainNet::nameFromVariant(unsigned int device, unsigned int variant) {
     QString id = dev[device*2][variant];
     // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
 }
-QString MainNet::HWIDFromVariant(unsigned int device, unsigned int variant) {
+QString MainNet::hwidFromVariant(unsigned int device, unsigned int variant) {
     QString id = dev[device*2+1][variant];
     // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
+}
+unsigned int MainNet::variantCount(unsigned int device) {
+    return dev[device*2].count();
 }
 
 void MainNet::downloadPotentialLink(QString softwareRelease, QString osVersion) {
@@ -684,7 +687,7 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
 {
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
     setScanning(true);
-    QString id = HWIDFromVariant(device, variant);
+    QString id = hwidFromVariant(device, variant);
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
     QString requestUrl;
 
@@ -778,7 +781,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         break;
     }
 
-    QString id = HWIDFromVariant(device, variant);
+    QString id = hwidFromVariant(device, variant);
 
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
@@ -837,7 +840,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
                 "</updateDetailRequest>";
     }
     // TODO: When scanning enabled, perform this after successful scan or attach to data
-    curVariant = NameFromVariant(device, variant);
+    curVariant = nameFromVariant(device, variant);
     _error = ""; emit errorChanged();
     reply = manager->post(request, query.toUtf8());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),

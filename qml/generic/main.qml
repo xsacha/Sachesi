@@ -341,42 +341,9 @@ PageTab {
             }
             onExpanded: { mode.close(); variant.close(); }
             onSelectedItemChanged: {
-                switch (selectedItem) {
-                case 10:
-                    variant.listModel = playbook
-                    break;
-                case 9:
-                    variant.listModel = devalpha
-                    break;
-                case 8:
-                    variant.listModel = cseries;
-                    break
-                case 7:
-                    variant.listModel = bseries;
-                    break
-                case 6:
-                    variant.listModel = q5;
-                    break;
-                case 5:
-                    variant.listModel = q10;
-                    break;
-                case 4:
-                    variant.listModel = q30;
-                    break;
-                case 3:
-                    variant.listModel = z3;
-                    break;
-                case 2:
-                    variant.listModel = z5;
-                    break
-                case 1:
-                    variant.listModel = z10;
-                    break;
-                default:
-                case 0:
-                    variant.listModel = z30;
-                    break
-                }
+                variant.listModel.clear();
+                for (var i = 0; i < p.variantCount(selectedItem); i++)
+                    variant.listModel.append({'name': p.nameFromVariant(selectedItem, i)})
 
                 variant.selectedItem = 0; variant.text = variant.listModel.get(variant.selectedItem).name;
             }
@@ -396,79 +363,10 @@ PageTab {
                                    else if (listModel === z30 && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
                                    else if (listModel === z30 && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
             ListModel {
-                id: z30
-                ListElement { name: "STA 100-1" }
-                ListElement { name: "STA 100-2" }
-                ListElement { name: "STA 100-3" }
-                ListElement { name: "STA 100-4" }
-                ListElement { name: "STA 100-5" }
-                ListElement { name: "STA 100-6" }
-            }
-            ListModel {
-                id: z10
-                ListElement { name: "STL 100-1" }
-                ListElement { name: "STL 100-2" }
-                ListElement { name: "STL 100-3" }
-                ListElement { name: "STL 100-4" }
-            }
-            ListModel {
-                id: z5
-                ListElement { name: "STK 100-1" }
-                ListElement { name: "STK 100-2" }
-            }
-            ListModel {
                 id: z3
                 ListElement { name: "STJ 100-1" }
             }
-            ListModel {
-                id: q30
-                ListElement { name: "SQW Variant A" }
-                ListElement { name: "SQW Variant B" }
-                ListElement { name: "SQW Variant C" }
-                ListElement { name: "SQW Variant D" }
-            }
-            ListModel {
-                id: q10
-                ListElement { name: "SQN 100-1" }
-                ListElement { name: "SQN 100-2" }
-                ListElement { name: "SQN 100-3" }
-                ListElement { name: "SQN 100-4" }
-                ListElement { name: "SQN 100-5" }
-            }
 
-            ListModel {
-                id: q5
-                ListElement { name: "SQR 100-1" }
-                ListElement { name: "SQR 100-2" }
-                ListElement { name: "SQR 100-3" }
-            }
-
-            ListModel {
-                id: bseries
-                ListElement { name: "STB 100-1" }
-                ListElement { name: "STB 100-2" }
-                ListElement { name: "STB 100-3" }
-                ListElement { name: "STB 100-4" }
-                ListElement { name: "STB 100-5" }
-            }
-
-            ListModel {
-                id: cseries
-                ListElement { name: "SQC 100-1" }
-                ListElement { name: "SQC 100-2" }
-            }
-
-            ListModel {
-                id: devalpha
-                ListElement { name: "A" }
-                ListElement { name: "B" }
-                ListElement { name: "C" }
-            }
-            ListModel {
-                id: playbook
-                ListElement { name: "Wifi" }
-                ListElement { name: "4G" }
-            }
             listModel: z3
             onExpanded: { device.close(); mode.close(); server.close(); }
         }
