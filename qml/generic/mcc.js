@@ -2,6 +2,21 @@ function to_carrier(country, value) {
     var subtext = "";
     switch(country)
     {
+    case "208":
+        switch(value) {
+        case "001": subtext = "Orange"; break;
+        case "010": subtext = "SFR"; break;
+        case "020": subtext = "Bouygues"; break;
+        }
+        break;
+    case "214":
+        switch(value) {
+        case "001": subtext = "Vodafone"; break;
+        case "003": subtext = "Orange"; break;
+        case "004": subtext = "Yoigo"; break;
+        case "008": subtext = "Euskaltel"; break;
+        }
+        break
     case "234":
         switch(value) {
         case "000": subtext = "BT"; break;
@@ -9,11 +24,28 @@ function to_carrier(country, value) {
         case "015": subtext = "Vodafone"; break;
         }
         break;
+    case "262":
+        switch(value) {
+        case "001": subtext = "Deutsche Telekom"; break;
+        case "002": subtext = "Vodafone"; break;
+        case "007": subtext = "O2"; break;
+        }
+        break;
     case "302":
         switch(value) {
         case "220": subtext = "Telus"; break;
-        case "610": subtext = "Virgin Mobile"; break;
+        case "490": subtext = "WIND Mobile"; break;
+        case "500": subtext = "Videotron"; break;
+        case "610": subtext = "Bell Mobility"; break;
         case "720": subtext = "Rogers"; break;
+        case "780": subtext = "SaskTel"; break;
+        }
+        break;
+    case "310":
+        switch(value) {
+        case "120": subtext = "Sprint"; break;
+        case "160": case "260": subtext = "T-Mobile"; break;
+        case "410": case "150": subtext = "AT&T"; break;
         }
         break;
     case "311":
@@ -23,7 +55,21 @@ function to_carrier(country, value) {
         break;
     case "374":
         switch(value) {
+        case "012": subtext = "bmobile"; break;
         case "130": subtext = "Digicel"; break;
+        }
+        break;
+    case "420":
+        switch(value) {
+        case "001": subtext = "STC"; break;
+        case "003": subtext = "Mobily"; break;
+        case "004": subtext = "Zain"; break;
+        }
+        break;
+    case "424":
+        switch(value) {
+        case "002": subtext = "Etisalat"; break;
+        case "003": subtext = "du"; break;
         }
         break;
     case "505":
@@ -37,7 +83,7 @@ function to_carrier(country, value) {
         switch(value) {
         case "001": subtext = "Indosat"; break;
         case "010": subtext = "Telkomsel"; break;
-        case "010": subtext = "XL"; break;
+        case "011": subtext = "XL"; break;
         }
         break;
 
@@ -91,7 +137,7 @@ function to_country(value) {
     case "624": subtext = "Cameroon"; break;
     case "302": subtext = "Canada"; break;
     case "625": subtext = "Cape Verde"; break;
-    case "346": subtext = "Cayman Islands] (UK)"; break;
+    case "346": subtext = "Cayman Islands (UK)"; break;
     case "623": subtext = "Central African Republic"; break;
     case "622": subtext = "Chad"; break;
     case "730": subtext = "Chile"; break;
@@ -160,14 +206,14 @@ function to_country(value) {
     case "450": subtext = "South Korea"; break;
     case "212": subtext = "Kosovo"; break;
     case "419": subtext = "Kuwait"; break;
-    case "437": subtext = "Krygyzstan"; break;
+    case "437": subtext = "Kyrgyzstan"; break;
     case "457": subtext = "Laos"; break;
     case "247": subtext = "Latvia"; break;
     case "415": subtext = "Lebanon"; break;
     case "651": subtext = "Lesotho"; break;
     case "618": subtext = "Liberia"; break;
     case "606": subtext = "Libya"; break;
-    case "295": subtext = "Liechenstein"; break;
+    case "295": subtext = "Liechtenstein"; break;
     case "246": subtext = "Lithuania"; break;
     case "270": subtext = "Luxembourg"; break;
     case "455": subtext = "Macau"; break;
