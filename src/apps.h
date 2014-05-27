@@ -34,47 +34,47 @@ class Apps : public QObject {
     Q_PROPERTY(QString versionId READ versionId WRITE setVersionId NOTIFY versionIdChanged)
     Q_PROPERTY(QString checksum READ checksum WRITE setChecksum NOTIFY checksumChanged)
 
-    public:
-        Apps(QObject *parent = 0);
+public:
+    Apps(QObject *parent = 0);
 
-        QString name() const;
-        QString packageId() const;
-        QString friendlyName() const;
-        int code() const;
-        bool isMarked() const;
-        QString type() const;
-        QString version() const;
-        QString versionId() const;
-        QString checksum() const;
-        void setName(const QString &str);
-        void setPackageId(const QString &str);
-        void setFriendlyName(const QString &str);
-        void setCode(const int &num);
-        void setIsMarked(const bool &marked);
-        void setType(const QString &str);
-        void setVersion(const QString &str);
-        void setVersionId(const QString &str);
-        void setChecksum(const QString &str);
+    QString name() const;
+    QString packageId() const;
+    QString friendlyName() const;
+    int code() const;
+    bool isMarked() const;
+    QString type() const;
+    QString version() const;
+    QString versionId() const;
+    QString checksum() const;
+    void setName(const QString &str);
+    void setPackageId(const QString &str);
+    void setFriendlyName(const QString &str);
+    void setCode(const int &num);
+    void setIsMarked(const bool &marked);
+    void setType(const QString &str);
+    void setVersion(const QString &str);
+    void setVersionId(const QString &str);
+    void setChecksum(const QString &str);
 
-    signals:
-        void nameChanged();
-        void packageIdChanged();
-        void friendlyNameChanged();
-        void codeChanged();
-        void isMarkedChanged();
-        void typeChanged();
-        void versionChanged();
-        void versionIdChanged();
-        void checksumChanged();
+signals:
+    void nameChanged();
+    void packageIdChanged();
+    void friendlyNameChanged();
+    void codeChanged();
+    void isMarkedChanged();
+    void typeChanged();
+    void versionChanged();
+    void versionIdChanged();
+    void checksumChanged();
 
-    private:
-        QString _name;
-        QString _packageId;
-        QString _friendlyName;
-        int _code;
-        bool _isMarked;
-        QString _type;
-        QString _version;
-        QString _versionId;
-        QString _checksum;
+private:
+    QString _name;
+    QString _packageId;
+    QString _friendlyName;
+    int _code;
+    bool _isMarked;
+    QString _type;
+    QString _version;
+    QString _versionId;
+    QString _checksum;
 };

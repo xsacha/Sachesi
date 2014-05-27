@@ -98,10 +98,10 @@ signals:
     void splitProgressChanged();
     void currentFileChanged();
     void killSplit();
-    void populateFirmwareData(QByteArray data);
 private slots:
     void reverseLookupReply();
     void serverReply();
+    void showFirmwareData(QByteArray data);
     void serverError(QNetworkReply::NetworkError error);
     void downloadFinish();
     void cancelSplit();

@@ -828,10 +828,10 @@ void MainNet::serverReply()
     setScanning(false);
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
-    populateFirmwareData(data);
+    showFirmwareData(data);
 }
 
-void MainNet::populateFirmwareData(QByteArray data)
+void MainNet::showFirmwareData(QByteArray data)
 {
     QXmlStreamReader xml(data);
     QString ver = "";

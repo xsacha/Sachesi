@@ -14,5 +14,3 @@ int lzo1x_decompress_safe(const unsigned char *in, size_t in_len, unsigned char 
 #define LZO_E_EOF_NOT_FOUND         (-7)
 #define LZO_E_INPUT_NOT_CONSUMED    (-8)
 #define LZO_E_NOT_YET_IMPLEMENTED   (-9)    /* [not used right now] */
-
-#endif
