@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 import "mcc.js" as MCC
 import "UI" 1.0
 
@@ -362,12 +362,8 @@ PageTab {
                                    else if (listModel === q10 && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
                                    else if (listModel === z30 && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
                                    else if (listModel === z30 && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
-            ListModel {
-                id: z3
-                ListElement { name: "STJ 100-1" }
-            }
 
-            listModel: z3
+            listModel: ListModel { ListElement { name: "STJ 100-1" } }
             onExpanded: { device.close(); mode.close(); server.close(); }
         }
         TextCoupleSelect {
