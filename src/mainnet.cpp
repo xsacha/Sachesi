@@ -941,21 +941,4 @@ void MainNet::setScanning(const bool &scanning) { _scanning = scanning; emit sca
 void MainNet::setDownloading(const bool &downloading) { _downloading = downloading; emit downloadingChanged(); }
 void MainNet::setSplitProgress(const int &progress) { if (_splitProgress > 1000) _splitProgress = 0; else _splitProgress = progress; emit splitProgressChanged(); }
 
-QString MainNet::softwareRelease() const { return _softwareRelease; }
-QString MainNet::versionRelease() const { return _versionRelease; }
-QString MainNet::versionOS()      const { return _versionOS; }
-QString MainNet::versionRadio()   const { return _versionRadio; }
-QString MainNet::variant()        const { return _variant; }
-QString MainNet::description()    const { return _description; }
-QString MainNet::url()            const { return _url; }
-QString MainNet::applications()   const { return _applications; }
-QString MainNet::error()          const { return _error; }
-bool    MainNet::advanced()       const { return _advanced; }
-bool    MainNet::scanning()       const { return _scanning; }
-bool    MainNet::downloading()    const { return _downloading; }
-int     MainNet::dlProgress()     const { return _dlProgress; }
-int     MainNet::currentId()      const { return _currentId; }
-int     MainNet::maxId()          const { return _maxId; }
-int     MainNet::splitting()      const { return _splitting; }
-int     MainNet::splitProgress()  const { return _splitProgress; }
 QString MainNet::currentFile()    const { QString ret = _currentFile.fileName().split("/").last(); if (ret.length() > 30) ret.truncate(30); return ret; }

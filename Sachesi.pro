@@ -96,22 +96,16 @@ win32|android {
 
 RESOURCES += bbupdatescan.qrc
 blackberry {
-        RESOURCES += UI_bb10.qrc
+    RESOURCES += UI_bb10.qrc
 } else {
-    win32 {
-        RESOURCES += UI_win32.qrc
-    } else {
-        RESOURCES += UI_generic.qrc
-    }
+    RESOURCES += UI_generic.qrc
 }
 
 OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \
-    qml/win32/*.qml \
     qml/bb10/*.qml \
     qml/generic/UI/*.qml \
-    qml/win32/UI/*.qml \
     qml/bb10/UI/*.qml \
     Android/AndroidManifest.xml
 

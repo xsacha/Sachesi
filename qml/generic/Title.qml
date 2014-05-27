@@ -44,14 +44,14 @@ Rectangle {
             property int w: visible ? width : 0
         }
         TitleObject {
-            visible: p.advanced
+            visible: p.advanced && p.hasBootAccess
             id: title2
             obj: 1
             text: "Tools"
             property int w: visible ? width : 0
         }
         TitleObject {
-            visible: p.advanced
+            visible: p.advanced && p.hasBootAccess
             id: title3
             obj: 2
             text: "Boot"
@@ -90,7 +90,7 @@ Rectangle {
         anchors.topMargin: 15 + config.notificationFontSize
         width: parent.width;
         height: parent.height - 5 - config.notificationFontSize;
-        source: "downloader.qml"
+        source: p.hasBootAccess ? "downloader.qml" : ""
     }
     Loader {
         visible: titleRow.curObj == 2
@@ -98,7 +98,7 @@ Rectangle {
         anchors.topMargin: 15 + config.notificationFontSize
         width: parent.width;
         height: parent.height - 5 - config.notificationFontSize;
-        source: "boot.qml"
+        source: p.hasBootAccess ? "boot.qml" : ""
     }
     Loader {
         visible: titleRow.curObj == 3

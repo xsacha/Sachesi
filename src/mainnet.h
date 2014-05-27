@@ -35,6 +35,7 @@ class MainNet : public QObject {
     Q_PROPERTY(bool    advanced READ advanced WRITE setAdvanced NOTIFY advancedChanged)
     Q_PROPERTY(bool    scanning READ scanning WRITE setScanning NOTIFY scanningChanged)
     Q_PROPERTY(bool    downloading READ downloading WRITE setDownloading NOTIFY downloadingChanged)
+    Q_PROPERTY(bool    hasBootAccess READ hasBootAccess NOTIFY hasBootAccessChanged)
     Q_PROPERTY(int     dlProgress READ dlProgress WRITE setDLProgress NOTIFY dlProgressChanged)
     Q_PROPERTY(int     currentId READ currentId NOTIFY currentIdChanged)
     Q_PROPERTY(int     maxId READ maxId NOTIFY maxIdChanged)
@@ -61,27 +62,34 @@ public:
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE unsigned int variantCount(unsigned int device);
-    QString softwareRelease() const;
-    QString versionRelease() const;
-    QString versionOS() const;
-    QString versionRadio() const;
-    QString variant() const;
-    QString description() const;
-    QString url() const;
-    QString applications() const;
-    QString error() const;
-    bool    advanced() const;
-    bool    scanning() const;
+    QString softwareRelease()const { return _softwareRelease; }
+    QString versionRelease() const { return _versionRelease; }
+    QString versionOS()      const { return _versionOS; }
+    QString versionRadio()   const { return _versionRadio; }
+    QString variant()        const { return _variant; }
+    QString description()    const { return _description; }
+    QString url()            const { return _url; }
+    QString applications()   const { return _applications; }
+    QString error()          const { return _error; }
+    bool    advanced()       const { return _advanced; }
+    bool    scanning()       const { return _scanning; }
+    bool    downloading()    const { return _downloading; }
+    bool    hasBootAccess()  const { return
+#ifdef BOOTLOADER_ACCESS
+                true;
+#else
+                false;
+#endif
+                                   }
+    int     dlProgress()     const { return _dlProgress; }
+    int     currentId()      const { return _currentId; }
+    int     maxId()          const { return _maxId; }
+    int     splitting()      const { return _splitting; }
+    int     splitProgress()  const { return _splitProgress; }
+    void    setDLProgress(const int &progress);
     void    setAdvanced(const bool &advanced);
     void    setScanning(const bool &scanning);
-    bool    downloading() const;
     void    setDownloading(const bool &downloading);
-    int     dlProgress() const;
-    void    setDLProgress(const int &progress);
-    int     currentId() const;
-    int     maxId() const;
-    int     splitting() const;
-    int     splitProgress() const;
     QString currentFile() const;
 public slots:
     void    setSplitProgress(const int &progress);
@@ -97,6 +105,7 @@ signals:
     void advancedChanged();
     void scanningChanged();
     void downloadingChanged();
+    void hasBootAccessChanged();
     void dlProgressChanged();
     void currentIdChanged();
     void maxIdChanged();
