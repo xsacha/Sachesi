@@ -840,8 +840,8 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
                 "</updateDetailRequest>";
     }
     // TODO: When scanning enabled, perform this after successful scan or attach to data
-    curVariant = nameFromVariant(device, variant);
     _error = ""; emit errorChanged();
+    request.setAttribute(QNetworkRequest::CustomVerbAttribute, nameFromVariant(device, variant));
     reply = manager->post(request, query.toUtf8());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(serverError(QNetworkReply::NetworkError)));
@@ -853,10 +853,10 @@ void MainNet::serverReply()
     setScanning(false);
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
-    showFirmwareData(data);
+    showFirmwareData(data, reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString());
 }
 
-void MainNet::showFirmwareData(QByteArray data)
+void MainNet::showFirmwareData(QByteArray data, QString variant)
 {
     QXmlStreamReader xml(data);
     QString ver = "";
@@ -909,7 +909,7 @@ void MainNet::showFirmwareData(QByteArray data)
         }
         xml.readNext();
     }
-    _variant = curVariant; emit variantChanged();
+    _variant = variant; emit variantChanged();
     _versionRelease = ver; emit versionChanged();
     _description = desc; emit descriptionChanged();
     _url = addr; emit urlChanged();
