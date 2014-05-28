@@ -58,7 +58,6 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
 #else
     setAdvanced(settings.value("advanced", false).toBool());
 #endif
-    reply = NULL;
     replydl = NULL;
 }
 
@@ -665,12 +664,10 @@ static QStringList dev[] = {
 
 QString MainNet::nameFromVariant(unsigned int device, unsigned int variant) {
     QString id = dev[device*2][variant];
-    // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
 }
 QString MainNet::hwidFromVariant(unsigned int device, unsigned int variant) {
     QString id = dev[device*2+1][variant];
-    // TODO: How to get 'Any variant'? Maybe subtract variant by 1 if it isn't 0 (any).
     return id;
 }
 unsigned int MainNet::variantCount(unsigned int device) {
@@ -720,13 +717,14 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     request.setUrl(QUrl(requestUrl));
-    reply = manager->post(request, query.toUtf8());
+    QNetworkReply* reply = manager->post(request, query.toUtf8());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(serverError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(finished()), this, SLOT(reverseLookupReply()));
 }
 
 void MainNet::reverseLookupReply() {
+    QNetworkReply* reply = (QNetworkReply*)sender();
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
     QXmlStreamReader xml(data);
@@ -738,6 +736,7 @@ void MainNet::reverseLookupReply() {
         xml.readNext();
     }
     setScanning(0);
+    sender()->deleteLater();
 }
 
 void MainNet::updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server)
@@ -783,22 +782,18 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         break;
     }
 
-    QNetworkRequest request;
-    request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
-    request.setUrl(QUrl(requestUrl));
-
     // We either selected 'Any' (if there was more than one variant) or we picked a specific variant.
-    int start = (variant != 0) ? variant - 1 : 0;
-    int end   = (variant != 0) ? variant - 1 : variantCount(device) - 1;
+    int start = (variant != 0) ? (variant - 1) : 0;
+    int end   = (variant != 0) ? variant : variantCount(device);
     setScanning((variant != 0) ? 1 : variantCount(device));
     if (_scanning > 1)
         setMultiscan(true);
-    for (int i = start; i <= end; i++) {
+    for (int i = start; i < end; i++) {
         QString query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
             "<clientProperties>"
             "<hardware>"
-            "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, variant)+"</id><isBootROMSecure>true</isBootROMSecure>"
+            "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, i)+"</id><isBootROMSecure>true</isBootROMSecure>"
             "</hardware>"
             "<network>"
             "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
@@ -816,8 +811,11 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
             "</updateDetailRequest>";
         _error = ""; emit errorChanged();
         // Pass the variant in the request so it can be retrieved out-of-order
-        request.setAttribute(QNetworkRequest::CustomVerbAttribute, nameFromVariant(device, variant));
-        reply = manager->post(request, query.toUtf8());
+        QNetworkRequest request;
+        request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
+        request.setUrl(QUrl(requestUrl));
+        request.setAttribute(QNetworkRequest::CustomVerbAttribute, nameFromVariant(device, i));
+        QNetworkReply* reply = manager->post(request, query.toUtf8());
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(serverError(QNetworkReply::NetworkError)));
         connect(reply, SIGNAL(finished()), this, SLOT(serverReply()));
@@ -826,9 +824,11 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
 
 void MainNet::serverReply()
 {
+    QNetworkReply *reply = (QNetworkReply *)sender();
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
     showFirmwareData(data, reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString());
+    sender()->deleteLater();
 }
 
 void MainNet::showFirmwareData(QByteArray data, QString variant)
@@ -904,6 +904,8 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         _variant = variant; emit variantChanged();
         _versionOS = os;
         _versionRadio = radio;
+        if (_scanning == 0)
+            setMultiscan(false);
         _multiscanVersion = ver;
         _versionRelease = ver; emit versionChanged();
         _description = desc; emit descriptionChanged();
@@ -925,13 +927,17 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
 
 void MainNet::serverError(QNetworkReply::NetworkError err)
 {
-    setScanning(false);
-    QString errormsg;
-    errormsg.setNum(err);
-    errormsg.prepend("Error: ");
-    _error = QString::number(err); emit errorChanged();
-    _versionRelease = ""; _versionOS = ""; _versionRadio = ""; emit versionChanged();
-
+    setScanning(_scanning-1);
+    // Only show error if we are doing single scan or multiscan version is empty.
+    if (!_multiscan || (_multiscanVersion == "" && _scanning == 0)) {
+        QString errormsg;
+        errormsg.setNum(err);
+        errormsg.prepend("Error: ");
+        _error = QString::number(err); emit errorChanged();
+        _versionRelease = ""; _versionOS = ""; _versionRadio = ""; emit versionChanged();
+    }
+    if (_scanning == 0)
+        setMultiscan(false);
 }
 
 void MainNet::setDLProgress(const int &progress) { _dlProgress = progress; emit dlProgressChanged(); }

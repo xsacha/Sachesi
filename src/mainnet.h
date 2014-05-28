@@ -135,7 +135,7 @@ private:
     QString NPCFromLocale(int country, int carrier);
 
     QThread* splitThread;
-    QNetworkReply *reply, *replydl;
+    QNetworkReply *replydl;
     QNetworkAccessManager *manager;
     QString _softwareRelease;
     QString _versionRelease, _versionOS, _versionRadio;
