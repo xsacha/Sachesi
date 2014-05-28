@@ -206,7 +206,7 @@ private slots:
     void dumpLogs();
     void setActionProperty(QString name, QString value);
 private:
-    void setData(QString page, QString contentType);
+    QNetworkRequest setData(QString page, QString contentType);
 
     QTcpSocket* sock;
     unsigned char* serverChallenge;
@@ -222,7 +222,6 @@ private:
     SslNetworkAccessManager* manager;
     QNetworkReply *reply, *replydl;
     QNetworkCookieJar* cookieJar;
-    QNetworkRequest request;
     QFile* compressedFile;
     QStringList _firmwareNames;
     QStringList _firmwarePaths;
