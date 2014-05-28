@@ -628,9 +628,12 @@ static QStringList dev[] = {
     // 0 = Z30 (A Series)
     QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6",
     QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
-    // 1 = Z10 (L Series)
-    QStringList() << "STL 100-1" << "STL 100-2" << "STL 100-3" << "STL 100-4",
-    QStringList() << "4002607"<< "8700240A" << "8500240A" << "8400240A",
+    // 1 = Z10 (L Series) OMAP
+    QStringList() << "STL 100-1",
+    QStringList() << "4002607",
+    // 2 = Z10 (L Series) Qualcomm
+    QStringList() << "STL 100-2" << "STL 100-3" << "STL 100-4",
+    QStringList() << "8700240A" << "8500240A" << "8400240A",
     // 2 = Z5  (K Series)
     QStringList() << "STK 100-1" << "STK 100-2",
     QStringList() << "A500240A" << "A600240A",

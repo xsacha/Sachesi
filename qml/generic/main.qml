@@ -50,7 +50,7 @@ PageTab {
                     TextCouple {
                         id: build
                         type: "Build"
-                        value: "2947"
+                        value: "3175"
                         subtext: "Multiple of 3"
                         large: false
                         after: major.thisid
@@ -322,14 +322,15 @@ PageTab {
         TextCoupleSelect {
             id: device
             z: 11
-            selectedItem: 3
+            selectedItem: 4
             type: "Device"
             initialText: "Z3"
             listModel: p.advanced ? advancedModel : babyModel
             ListModel {
                 id: advancedModel
                 ListElement { name: "Z30" }
-                ListElement { name: "Z10" }
+                ListElement { name: "Z10 OMAP" }
+                ListElement { name: "Z10 QCOM" }
                 ListElement { name: "P9982" }
                 ListElement { name: "Z3" }
                 ListElement { name: "Q30" }
@@ -343,7 +344,8 @@ PageTab {
             ListModel {
                 id: babyModel
                 ListElement { name: "Z30" }
-                ListElement { name: "Z10" }
+                ListElement { name: "Z10 OMAP" }
+                ListElement { name: "Z10 QCOM" }
                 ListElement { name: "P9982" }
                 ListElement { name: "Z3" }
                 ListElement { name: "Q30" }
