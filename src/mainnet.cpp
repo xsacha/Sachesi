@@ -633,7 +633,7 @@ static QStringList dev[] = {
     // 2 = Z10 (L Series) Qualcomm
     QStringList() << "STL 100-2" << "STL 100-3" << "STL 100-4",
     QStringList() << "8700240A" << "8500240A" << "8400240A",
-    // 2 = Z5  (K Series)
+    // 2 = P9982  (K Series)
     QStringList() << "STK 100-1" << "STK 100-2",
     QStringList() << "A500240A" << "A600240A",
     // 3 = Z3  (J Series)
@@ -660,6 +660,15 @@ static QStringList dev[] = {
     // 10 = Playbook
     QStringList() << "Wifi" << "3G",
     QStringList() << "6001A06" << "D001A06",
+    // 11 = Ontario Series
+    QStringList() << "STO 100-1" << "STO 100-2" << "STO 100-3" << "STO 100-4",
+    QStringList() << "AE00240A" << "AF00240A" << "B400240A" << "B600240A",
+    // 12 = Classic
+    QStringList() << "Classic Variant A" << "Classic Variant B" << "Classic Variant C" << " Classic Variant D",
+    QStringList() << "9400270A" << "9500270A" << "9600270A" << "9700270A",
+    // 13 = Khan
+    QStringList() << "Khan Variant A" << "Khan Variant B",
+    QStringList() << "8E00270A" << "8F00270A",
 };
 
 QString MainNet::nameFromVariant(unsigned int device, unsigned int variant) {

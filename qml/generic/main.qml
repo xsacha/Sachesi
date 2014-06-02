@@ -336,10 +336,13 @@ PageTab {
                 ListElement { name: "Q30" }
                 ListElement { name: "Q10" }
                 ListElement { name: "Q5" }
-                ListElement { name: "B-Series" }
-                ListElement { name: "C-Series" }
+                ListElement { name: "Z5" }
+                ListElement { name: "Q3" }
                 ListElement { name: "Dev Alpha" }
                 ListElement { name: "Playbook" }
+                ListElement { name: "Ontario" }
+                ListElement { name: "Classic" }
+                ListElement { name: "Khan" }
             }
             ListModel {
                 id: babyModel
