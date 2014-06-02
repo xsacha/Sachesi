@@ -117,7 +117,7 @@ PageTab {
                             interval: 10;
                             running: parent.looking && !p.scanning
                             onTriggered: {
-                                if (p.scanning)
+                                if (p.scanning > 0)
                                     return;
                                 if (downloadPotential.visible) {
                                     parent.looking = false;

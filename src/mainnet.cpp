@@ -685,6 +685,8 @@ void MainNet::downloadPotentialLink(QString softwareRelease, QString osVersion) 
 
 void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver)
 {
+    if (scanning())
+        return;
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
     setScanning(1);
     QString id = hwidFromVariant(device, variant);
