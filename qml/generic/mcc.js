@@ -2,11 +2,35 @@ function to_carrier(country, value) {
     var subtext = "";
     switch(country)
     {
+    case "202": //Greece
+        switch(value) {
+        case "001": subtext = "Cosmote"; break;
+        case "005": subtext = "Vodafone"; break;
+        case "010": subtext = "WIND Hellas"; break;
+        }
+        break;
+    case "204": //Netherlands
+        switch(value) {
+        case "004": subtext = "Vodafone"; break;
+        case "008": subtext = "KPN"; break;
+        case "012": subtext = "Telfort"; break;
+        case "016": case "020": subtext = "T-Mobile"; break;
+        }
+        break;
+    case "206": //Belgium
+        switch(value) {
+        case "001": subtext = "Proximus"; break;
+        case "010": subtext = "Mobistar"; break;
+        case "020": subtext = "BASE"; break;
+        }
+        break;
     case "208": //France
         switch(value) {
         case "001": subtext = "Orange"; break;
         case "010": subtext = "SFR"; break;
+        case "015": subtext = "Free Mobile"; break;
         case "020": subtext = "Bouygues"; break;
+        case "023": subtext = "Virgin Mobile"; break;
         }
         break;
     case "214": //Spain
@@ -16,7 +40,35 @@ function to_carrier(country, value) {
         case "004": subtext = "Yoigo"; break;
         case "008": subtext = "Euskaltel"; break;
         }
-        break
+        break;
+    case "216": //Hungary
+        switch(value) {
+        case "001": subtext = "Telenor"; break;
+        case "030": subtext = "T-Mobile"; break;
+        case "070": subtext = "Vodafone"; break;
+        }
+        break;
+    case "222": //Italy
+        switch(value) {
+        case "001": subtext = "TIM"; break;
+        case "010": subtext = "Vodafone"; break;
+        case "088": subtext = "WIND"; break;
+        case "099": subtext = "3 Italia"; break;
+        }
+        break;
+    case "230": //Czech Republic
+        switch(value) {
+        case "001": subtext = "T-Mobile"; break;
+        case "002": subtext = "O2"; break;
+        case "003": subtext = "Vodafone"; break;
+        }
+        break;
+    case "232": //Austria
+        switch(value) {
+        case "001": subtext = "A1"; break;
+        case "003": subtext = "T-Mobile Austria"; break;
+        }
+        break;
     case "234": //UK
         switch(value) {
         case "000": subtext = "BT"; break;
@@ -24,10 +76,24 @@ function to_carrier(country, value) {
         case "015": subtext = "Vodafone"; break;
         }
         break;
+    case "238": //Denmark
+        switch(value) {
+        case "001": subtext = "TDC"; break;
+        case "006": subtext = "3"; break;
+        case "020": subtext = "Telia"; break;
+        }
+        break;
+    case "242": //Norway
+        switch(value) {
+        case "001": subtext = "Telenor"; break;
+        case "002": subtext = "NetCom"; break;
+        }
+        break;
     case "262": //Germany
         switch(value) {
         case "001": subtext = "Deutsche Telekom"; break;
         case "002": subtext = "Vodafone"; break;
+        case "003": subtext = "E-Plus"; break;
         case "007": subtext = "O2"; break;
         }
         break;
@@ -37,8 +103,9 @@ function to_carrier(country, value) {
         case "320": subtext = "Mobilicity"; break;
         case "370": subtext = "Fido"; break;
         case "490": subtext = "WIND Mobile"; break;
-        case "500": subtext = "Videotron"; break;
+        case "500": case "510": subtext = "Videotron"; break;
         case "610": subtext = "Bell Mobility"; break;
+        case "660": subtext = "MTS"; break;
         case "720": subtext = "Rogers"; break;
         case "780": subtext = "SaskTel"; break;
         }
@@ -95,7 +162,58 @@ function to_carrier(country, value) {
         case "011": subtext = "XL"; break;
         }
         break;
-
+    case "530": //New Zealand
+        switch(value) {
+        case "001": subtext = "Vodafone"; break;
+        case "005": subtext = "XT Mobile"; break;
+        }
+        break;
+    case "515": //Philippines
+        switch(value) {
+        case "002": subtext = "Globe"; break;
+        case "003": subtext = "Smart"; break;
+        case "005": subtext = "Sun"; break;
+        }
+        break;
+    case "602": //Egypt
+        switch(value) {
+        case "001": subtext = "Mobinil"; break;
+        case "002": subtext = "Vodafone"; break;
+        case "003": subtext = "Etisalat"; break;
+        }
+        break;
+    case "655": //South Africa
+        switch(value) {
+        case "001": subtext = "Vodacom"; break;
+        case "007": subtext = "Cell C"; break;
+        case "010": subtext = "MTN"; break;
+        }
+        break;
+    case "722": //Argentina
+        switch(value) {
+        case "310": case "320": case "330": subtext = "Claro"; break;
+        case "340": subtext = "Personal"; break;
+        }
+        break;
+    case "724": //Brazil
+        switch(value) {
+        case "002": case "003": case "004": subtext = "TIM"; break;
+        case "005": subtext = "Claro"; break;
+        case "016": case "031": subtext = "Oi"; break;
+        }
+        break;
+    case "730": //Chile
+        switch(value) {
+        case "001": case "010": subtext = "Entel"; break;
+        case "003": subtext = "Claro"; break;
+        }
+        break;
+    case "732": //Colombia
+        switch(value) {
+        case "101": subtext = "Claro"; break;
+        case "103": case "111": subtext = "Tigo"; break;
+        }
+        break;
     default:
         subtext = "";
         break;
