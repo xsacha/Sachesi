@@ -593,7 +593,7 @@ void InstallNet::login()
 
 void InstallNet::discoveryReply() {
     QNetworkReply* replyTemp = (QNetworkReply*)sender();
-    QNetworkRequest request = reply->request();
+    QNetworkRequest request = replyTemp->request();
     QString ip_addr = request.attribute(QNetworkRequest::CustomVerbAttribute).toString();
     // Just to prevent fighting between two devices
     if (state() /*&& ip_addr != ip()*/)
