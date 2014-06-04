@@ -91,6 +91,7 @@ InstallNet::~InstallNet()
 
 QNetworkRequest InstallNet::setData(QString page, QString contentType) {
     QNetworkRequest request = QNetworkRequest();
+    request.setRawHeader("User-Agent", "QNXWebClient/1.0");
     request.setUrl(QUrl("https://" + ip() + "/cgi-bin/" + page));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/" + contentType);
     return request;
@@ -631,19 +632,13 @@ void InstallNet::discoveryReply() {
                 }
             }
         }
-        request.setUrl(QUrl("https://"+ip()+":443/cgi-bin/login.cgi?request_version=1"));
-        reply = manager->get(request);
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        requestLogin();
         sender()->deleteLater();
     }
 }
 
 void InstallNet::requestLogin() {
-    QNetworkRequest request = reply->request();
-    request.setUrl(QUrl("https://"+ip()+":443/cgi-bin/login.cgi?request_version=1"));
-    reply = manager->get(request);
+    reply = manager->get(setData("login.cgi?request_version=1", "x-www-form-urlencoded"));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(restoreError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
@@ -1258,10 +1253,9 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
         _dlBytes = 0;
         _dlTotal = 0;
     }
-    else return;
     if (error == 5) // On purpose
         return;
-    setNewLine("Error: " + reply->errorString());
+    setNewLine("Communication Error: " + reply->errorString() + "<br>");
     qDebug() << "Error: " << error;
 }
 

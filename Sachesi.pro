@@ -3,7 +3,7 @@ win32: QT += sql xmlpatterns
 
 TARGET="Sachesi"
 ICON=sachesi-114.png
-VERSION=1.2.2
+VERSION=1.2.3
 
 P = $$_PRO_FILE_PWD_
 INCLUDEPATH += $$P/ext $$P/src
