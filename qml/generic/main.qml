@@ -12,7 +12,6 @@ PageTab {
         id: versionLookup
         opacity: 0.9
         color: "gray"
-
         visible: false
         x: 20; y: 20
         height: 20 + config.defaultFontSize * 10; width: 50 + config.defaultFontSize * 18; radius: 4
@@ -375,11 +374,11 @@ PageTab {
             selectedItem: 0
             initialText: "STJ 100-1"
             subtext: i.knownHW != "" ? "Connected: " + i.knownHW : ""
-            onSelectedItemChanged: if (device.text === "Z10" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
-                                   else if (device.text === "Q10" && selectedItem == 1) { country.value = "311"; carrier.value = "480" }
-                                   else if (device.text === "Q10" && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
-                                   else if (device.text === "Z30" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
-                                   else if (device.text === "Z30" && selectedItem == 3) { country.value = "310"; carrier.value = "120" }
+            onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
+                                   else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
+                                   else if (device.text === "Q10" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
+                                   else if (device.text === "Z30" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
+                                   else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
 
             listModel: ListModel { ListElement { name: "STJ 100-1" } }
             onExpanded: { device.close(); mode.close(); server.close(); }
