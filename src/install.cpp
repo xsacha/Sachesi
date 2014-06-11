@@ -1255,7 +1255,7 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
     }
     if (error == 5) // On purpose
         return;
-    setNewLine("Communication Error: " + reply->errorString() + "<br>");
+    setNewLine("Communication Error: " + ((QNetworkReply*)sender())->errorString() + "<br>");
     qDebug() << "Error: " << error;
 }
 
