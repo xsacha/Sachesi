@@ -15,6 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
+#include "ports.h"
 #include "boot.h"
 #include "install.h"
 #include <QDebug>
@@ -305,7 +306,7 @@ void Boot::search() {
         int received = commandGetVariable(handle, 2, &buffer, 2000);
         if (received == -7)
             return;
-        QFile info("info.txt");
+        QFile info(getSaveDir() + "info.txt");
         info.open(QIODevice::WriteOnly);
         QBuffer bufferStream(&buffer);
         bufferStream.open(QIODevice::ReadOnly);
@@ -332,15 +333,8 @@ void Boot::search() {
         info.write(QByteArray("BR ID: 0x" + QByteArray::number(brId, 16)) + "\n");
         info.write(buffer.mid(bufferStream.pos(), received - bufferStream.pos()));
         bufferStream.close();
+        openFile(info.fileName());
         info.close();
-        QProcess wordpad;
-#ifdef _WIN32
-        wordpad.startDetached("explorer info.txt");
-#elif defined(__APPLE__)
-        wordpad.startDetached("open info.txt");
-#else
-        wordpad.startDetached("xdg-open info.txt");
-#endif
     }
         break;
     case commandBootloader:

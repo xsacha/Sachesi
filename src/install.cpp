@@ -16,31 +16,11 @@
 // http://github.com/xsacha/Sachesi
 
 #include "install.h"
-#include <QListView>
-#include <QTreeView>
+#include "ports.h"
 #include <QAbstractListModel>
 #include <QDebug>
 #include <QMessageBox>
 #include <QNetworkInterface>
-#if QT_VERSION >= 0x050000
-#include <QUrlQuery>
-#define encodedQuery query(QUrl::FullyEncoded).toUtf8
-#else
-#define QUrlQuery QUrl
-#endif
-
-#ifdef BLACKBERRY
-#define SAVE_DIR settings.value("installDir", "/accounts/1000/shared/misc/Sachesi/").toString()
-#include <bb/cascades/pickers/FilePicker>
-#else
-#if QT_VERSION >= 0x050000
-#include <QStandardPaths>
-#define SAVE_DIR settings.value("installDir", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first()).toString()
-#else
-#include <QDesktopServices>
-#define SAVE_DIR settings.value("installDir", QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)).toString()
-#endif
-#endif
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
     manager(NULL), reply(NULL), cookieJar(NULL),
@@ -120,33 +100,20 @@ void InstallNet::scanProps()
 bool InstallNet::selectInstallFolder()
 {
     QSettings settings("Qtness", "Sachesi");
-// TODO
+    FileSelect finder = selectFiles("Install Folder of Bar Files", getSaveDir(), "Blackberry Installable", "*.bar");
 #ifdef BLACKBERRY
-	bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-	filePicker->setFilter(QStringList() << "*.bar");
-	filePicker->setTitle("Install Folder of Bar Files");
-	filePicker->setMode(bb::cascades::pickers::FilePickerMode::PickerMultiple);
-	filePicker->open();
-//	QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallFolderSlot(const QStringList&)));
-	return true;
+//	QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallFolderSlot(const QStringList&)));
+    return false;
 #else
-    QFileDialog finder;
-    finder.setFileMode(QFileDialog::Directory);
-    finder.setDirectory(SAVE_DIR);
-    finder.setWindowTitle("Install Folder of Bar Files");
-    finder.setNameFilter("Blackberry Installable (*.bar)");
-    QListView *l = finder.findChild<QListView*>("listView");
-    if (l)
-        l->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    QTreeView *t = finder.findChild<QTreeView*>();
-    if (t)
-        t->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    if (finder.exec()) {
-        QFileInfo fileInfo(finder.selectedFiles().first());
+    finder->setFileMode(QFileDialog::Directory);
+    if (finder->exec()) {
+        QFileInfo fileInfo(finder->selectedFiles().first());
         settings.setValue("installDir", fileInfo.absolutePath());
-        install(finder.selectedFiles());
+        install(finder->selectedFiles());
+        finder->deleteLater();
         return true;
     }
+    finder->deleteLater();
 #endif
     return false;
 }
@@ -154,22 +121,20 @@ bool InstallNet::selectInstallFolder()
 bool InstallNet::selectInstall()
 {
     QSettings settings("Qtness", "Sachesi");
-    QFileDialog finder;
-    finder.setDirectory(SAVE_DIR);
-    finder.setWindowTitle("Install Bar Files");
-    finder.setNameFilter("Blackberry Installable (*.bar)");
-    QListView *l = finder.findChild<QListView*>("listView");
-    if (l)
-        l->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    QTreeView *t = finder.findChild<QTreeView*>();
-    if (t)
-        t->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    if (finder.exec()) {
-        QFileInfo fileInfo(finder.selectedFiles().first());
+    FileSelect finder = selectFiles("Install Folder of Bar Files", getSaveDir(), "Blackberry Installable", "*.bar");
+#ifdef BLACKBERRY
+//	QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallSlot(const QStringList&)));
+    return false;
+#else
+    if (finder->exec()) {
+        QFileInfo fileInfo(finder->selectedFiles().first());
         settings.setValue("installDir", fileInfo.absolutePath());
-        install(finder.selectedFiles());
+        install(finder->selectedFiles());
+        finder->deleteLater();
         return true;
     }
+    finder->deleteLater();
+#endif
     return false;
 }
 
@@ -292,9 +257,7 @@ bool InstallNet::uninstallMarked()
 
 void InstallNet::selectBackup(int options)
 {
-    QFileDialog finder;
-    finder.setAcceptMode(QFileDialog::AcceptSave);
-    finder.setDirectory(QDir::homePath());
+    QString dir = QDir::homePath();
 #ifdef _WIN32
     QFile linkSettings(QDir::homePath()+"/AppData/Roaming/Research In Motion/BlackBerry 10 Desktop/Settings.config");
     linkSettings.open(QIODevice::WriteOnly);
@@ -302,16 +265,19 @@ void InstallNet::selectBackup(int options)
     for (xml.readNext(); !xml.atEnd(); xml.readNext()) {
         if (xml.isStartElement()) {
             if (xml.name() == "Configuration" && xml.attributes().count() > 1 && xml.attributes().at(0).value() == "BackupFolderLocation") {
-                finder.setDirectory(xml.attributes().at(1).value().toString());
+                dir = xml.attributes().at(1).value().toString();
             }
         }
     }
     linkSettings.close();
 #endif
-    finder.setWindowTitle("Create Backup");
-    finder.setNameFilter("Blackberry Backup (*.bbb)");
-    if (finder.exec())
-        _fileNames = finder.selectedFiles();
+    FileSelect finder = selectFiles("Create Backup", dir, "Blackberry Backup", "*.bbb");
+#ifdef BLACKBERRY
+    //
+#else
+    finder->setAcceptMode(QFileDialog::AcceptSave);
+    if (finder->exec())
+        _fileNames = finder->selectedFiles();
     if (_fileNames.isEmpty())
         return;
     if (!_fileNames.first().endsWith(".bbb"))
@@ -319,6 +285,8 @@ void InstallNet::selectBackup(int options)
     _back.setMode(options);
     _back.setCurMode(0);
     backup();
+    finder->deleteLater();
+#endif
 }
 
 void InstallNet::backup()
@@ -379,16 +347,19 @@ void InstallNet::backupQuery() {
 
 void InstallNet::selectRestore(int options)
 {
-    QFileDialog finder;
+    QString dir = QDir::homePath();
     QDir docs(QDir::homePath());
     if (docs.exists("Documents/Blackberry/Backup"))
-        finder.setDirectory(QDir::homePath() + "/Documents/Blackberry/Backup");
+        dir = QDir::homePath() + "/Documents/Blackberry/Backup";
     else if (docs.exists("My Documents/Blackberry/Backup"))
-        finder.setDirectory(QDir::homePath() + "/My Documents/Blackberry/Backup");
-    finder.setWindowTitle("Restore Backup");
-    finder.setNameFilter("Blackberry Backup (*.bbb)");
-    if (finder.exec())
-        _fileNames = finder.selectedFiles();
+        dir = QDir::homePath() + "/My Documents/Blackberry/Backup";
+    FileSelect finder = selectFiles("Restore Backup", dir, "Blackberry Backup", "*.bbb");
+
+#ifdef BLACKBERRY
+#else
+    if (finder->exec())
+        _fileNames = finder->selectedFiles();
+    finder->deleteLater();
     if (_fileNames.isEmpty())
         return;
     if (!QFile::exists(_fileNames.first()))
@@ -422,6 +393,7 @@ void InstallNet::selectRestore(int options)
         _back.setCurMode(0);
         restore();
     }
+#endif
 }
 
 void InstallNet::restore()
@@ -861,7 +833,7 @@ void InstallNet::restoreReply()
         emit appListChanged();
     }
     else if (xml.name() == "RTASChallenge") {
-        QFile rtasData("rtasdata.txt");
+        QFile rtasData(getSaveDir() + "rtasdata.txt");
         rtasData.open(QIODevice::WriteOnly | QIODevice::Text);
         rtasData.write(QByteArray("Use these values for RLT:\n\n"));
         for (xml.readNext(); !xml.atEnd(); xml.readNext()) {
@@ -881,18 +853,11 @@ void InstallNet::restoreReply()
                     rtasData.write(QString(xml.readElementText()+"\n").toLocal8Bit());
             }
         }
-        rtasData.close();
         setCompleted(false);
         setState(false);
         QMessageBox::information(NULL, "Success", "RTAS has been started.\nSachesi will now terminate its connection.", QMessageBox::Ok);
-        QProcess wordpad;
-#ifdef _WIN32
-        wordpad.startDetached("explorer rtasdata.txt");
-#elif defined(__APPLE__)
-        wordpad.startDetached("open rtasdata.txt");
-#else
-        wordpad.startDetached("xdg-open rtasdata.txt");
-#endif
+        openFile(rtasData.fileName());
+        rtasData.close();
     }
     else if (xml.name() == "DevicePIN") {
         while (!xml.atEnd())
@@ -1319,7 +1284,7 @@ QString InstallNet::appDeltaMsg()
 
 void InstallNet::exportInstalled()
 {
-    QFile installedTxt("installed.txt");
+    QFile installedTxt(getSaveDir() + "installed.txt");
     installedTxt.open(QIODevice::WriteOnly | QIODevice::Text);
     installedTxt.write("Installed Applications:\n");
     for (int i = 0; i < _appList.count(); i++) {
@@ -1337,16 +1302,8 @@ void InstallNet::exportInstalled()
             installedTxt.write(appLine.toStdString().c_str());
         }
     }
+    openFile(installedTxt.fileName());
     installedTxt.close();
-
-    QProcess wordpad;
-#ifdef _WIN32
-    wordpad.startDetached("explorer installed.txt");
-#elif defined(__APPLE__)
-    wordpad.startDetached("open installed.txt");
-#else
-    wordpad.startDetached("xdg-open installed.txt");
-#endif
 }
 
 //Network Manager

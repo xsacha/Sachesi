@@ -59,11 +59,13 @@ SOURCES += \
     src/main.cpp \
     src/mainnet.cpp \
     src/splitter.cpp \
-    src/lzo.cpp
+    src/lzo.cpp \
+    src/ports.cpp
 HEADERS += \
     src/mainnet.h \
     src/splitter.h \
-    src/lzo.h
+    src/lzo.h \
+    src/ports.h
 
 !blackberry {
     SOURCES += \

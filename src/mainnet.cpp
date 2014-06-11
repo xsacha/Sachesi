@@ -16,27 +16,10 @@
 // http://github.com/xsacha/Sachesi
 
 #include "mainnet.h"
-#include <QFileDialog>
-#include <QListView>
-#include <QTreeView>
+#include "splitter.h"
+#include "ports.h"
 #include <QStringList>
 #include <QMessageBox>
-#include "splitter.h"
-#include <QDesktopServices>
-
-#ifdef BLACKBERRY
-#define SAVE_DIR settings.value("splitDir", "/accounts/1000/shared/misc/Sachesi/").toString()
-#include <bb/cascades/pickers/FilePicker>
-#include <bb/system/Clipboard>
-#else
-#if QT_VERSION >= 0x050000
-#include <QStandardPaths>
-#define SAVE_DIR settings.value("splitDir", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation)).toString()
-#else
-#include <QDesktopServices>
-#define SAVE_DIR settings.value("splitDir", QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)).toString()
-#endif
-#endif
 
 MainNet::MainNet( QObject* parent) : QObject(parent)
 {
@@ -69,40 +52,13 @@ void MainNet::splitAutoloader(int options)
 {
     QSettings settings("Qtness","Sachesi");
     _options = options;
+    FileSelect finder = selectFiles("Split Autoloader", getSaveDir(), "Signed Container", "*.exe *.bar *.zip");
 #ifdef BLACKBERRY
-    bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-    filePicker->setDirectories(QStringList() << SAVE_DIR);
-    filePicker->setFilter(QStringList() << "*.exe" << "*.bar" << "*.zip");
-    filePicker->setTitle("Split Autoloader");
-    filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-    filePicker->open();
-    QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(splitAutoloaderSlot(const QStringList&)));
+    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(splitAutoloaderSlot(const QStringList&)));
 #else
-    QFileDialog finder;
-    finder.setDirectory(SAVE_DIR);
-    finder.setWindowTitle("Split Autoloader");
-    finder.setNameFilter("Signed Container (*.exe *.bar *.zip)");
-    if (finder.exec())
-    {
-        if (finder.selectedFiles().empty())
-            return;
-        QFileInfo fileInfo(finder.selectedFiles().first());
-        settings.setValue("splitDir", fileInfo.absolutePath());
-        _splitting = 1; emit splittingChanged();
-        splitThread = new QThread();
-        Splitter* splitter = new Splitter(finder.selectedFiles().first(), _options);
-        splitter->moveToThread(splitThread);
-        if (fileInfo.suffix() == "exe")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processSplitAutoloader()));
-        else
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processSplitBar()));
-        connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-        connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-        connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-        connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-        connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-        splitThread->start();
-    }
+    if (finder->exec())
+        splitAutoloaderSlot(finder->selectedFiles());
+    finder->deleteLater();
 #endif
 }
 
@@ -130,46 +86,27 @@ void MainNet::splitAutoloaderSlot(const QStringList& fileNames) {
 
 void MainNet::combineFolder()
 {
-    QSettings settings("Qtness","Sachesi");
-    QFileDialog finder;
-    finder.setFileMode(QFileDialog::Directory);
-    finder.setWindowTitle("Combine Folder of Signed");
-    finder.setDirectory(SAVE_DIR);
-    finder.setNameFilter("Signed Images (*.signed)");
-    QListView *l = finder.findChild<QListView*>("listView");
-    if (l)
-        l->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    QTreeView *t = finder.findChild<QTreeView*>();
-    if (t)
-        t->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    if (finder.exec())
-        combineAutoloader(finder.selectedFiles());
+    FileSelect finder = selectFiles("Combine Folder of Signed", getSaveDir(), "Signed Images", "*.signed");
+#ifdef BLACKBERRY
+    // TODO: Directory?
+    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
+#else
+    finder->setFileMode(QFileDialog::Directory);
+    if (finder->exec())
+        combineAutoloader(finder->selectedFiles());
+    finder->deleteLater();
+#endif
 }
 
 void MainNet::combineFiles()
 {
-    QSettings settings("Qtness","Sachesi");
+    FileSelect finder = selectFiles("Combine Signed Files", getSaveDir(), "Signed Images", "*.signed");
 #ifdef BLACKBERRY
-    bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-    filePicker->setDirectories(QStringList() << SAVE_DIR);
-    filePicker->setFilter(QStringList() << "*.signed");
-    filePicker->setTitle("Combine Signed Files");
-    filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-    filePicker->open();
-    QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
+    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
 #else
-    QFileDialog finder;
-    finder.setWindowTitle("Combine Signed Files");
-    finder.setDirectory(SAVE_DIR);
-    finder.setNameFilter("Signed Images (*.signed)");
-    QListView *l = finder.findChild<QListView*>("listView");
-    if (l)
-        l->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    QTreeView *t = finder.findChild<QTreeView*>();
-    if (t)
-        t->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    if (finder.exec())
-        combineAutoloader(finder.selectedFiles());
+    if (finder->exec())
+        combineAutoloader(finder->selectedFiles());
+    finder->deleteLater();
 #endif
 }
 
@@ -233,9 +170,6 @@ void MainNet::capNetworkReply(QNetworkReply* reply) {
 #endif
             QFile capFile(capPath+"/cap.exe");
             capFile.open(QIODevice::WriteOnly);
-            // We remove the first character from the executable to
-            // allow GoogleDrive to serve it.
-            //capFile.write("M",1);
             capFile.write(reply->readAll());
             capFile.close();
         } else
@@ -248,87 +182,29 @@ void MainNet::capNetworkReply(QNetworkReply* reply) {
 
 void MainNet::extractImage(int type, int options)
 {
-    QSettings settings("Qtness","Sachesi");
     _options = options;
     _type = type;
-#ifdef BLACKBERRY
-    bb::cascades::pickers::FilePicker* filePicker = new bb::cascades::pickers::FilePicker();
-    filePicker->setDirectories(QStringList() << SAVE_DIR);
-    QStringList filter;
-    filter << "*.exe" << "*.signed";
-    if (type == 0 && _options & 1)
-        filter << "*.rcfs";
-    if (type == 2 || (type == 0 && _options & 2))
-        filter << " *.qnx6";
-    filePicker->setFilter(filter);
-    filePicker->setTitle("Extract Image");
-    filePicker->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-    filePicker->open();
-    QObject::connect(filePicker, SIGNAL(fileSelected(const QStringList&)), this, SLOT(extractImageSlot(const QStringList&)));
-#else
-    QFileDialog finder;
-    finder.setWindowTitle("Extract Image");
-    finder.setDirectory(SAVE_DIR);
     QString filter = "*.exe *.signed";
     if (type == 0 && _options & 1)
         filter += " *.rcfs";
     if (type == 2 || (type == 0 && _options & 2))
         filter += " *.qnx6";
-    finder.setNameFilter("Filesystem Containers ("+ filter +")");
-    if (finder.exec())
-    {
-        if (finder.selectedFiles().empty())
-            return;
-        QFileInfo fileInfo(finder.selectedFiles().first());
-        if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
-            QString errorMsg = "You can only extract apps from debrick OS images.";
-            if (fileInfo.size() < 50 * 1024 * 1024)
-                errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
-            QMessageBox::information(NULL, "Warning", errorMsg, QMessageBox::Ok);
-            return;
-        }
-        settings.setValue("splitDir", fileInfo.absolutePath());
-        _splitting = 3 + (_type == 2); emit splittingChanged();
-        splitThread = new QThread;
-        Splitter* splitter = new Splitter(finder.selectedFiles().first());
-        switch (_type) {
-        case 1:
-            splitter->extractImage = true;
-            break;
-        case 2:
-            splitter->extractApps = true;
-            break;
-        case 0:
-        default:
-            break;
-        }
-        splitter->extractTypes = _options;
-        splitter->moveToThread(splitThread);
-        if (fileInfo.suffix() == "rcfs")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractRCFS()));
-        else if (fileInfo.suffix() == "qnx6")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractQNX6()));
-        else if (fileInfo.suffix() == "exe")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractAutoloader()));
-        else if (fileInfo.suffix() == "signed")
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractSigned()));
-        else // Bar, Zip
-            connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractBar()));
-        connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-        connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-        connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-        connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-        connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-        splitThread->start();
-    }
+    FileSelect finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
+#ifdef BLACKBERRY
+    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(extractImageSlot(const QStringList&)));
+#else
+    if (finder->exec())
+        extractImageSlot(finder->selectedFiles());
+    finder->deleteLater();
 #endif
 }
 
 void MainNet::extractImageSlot(const QStringList& selectedFiles)
 {
-    QSettings settings("Qtness","Sachesi");
     if (selectedFiles.empty())
         return;
+    // TODO: Actually detect file by inspection
+    QSettings settings("Qtness","Sachesi");
     QFileInfo fileInfo(selectedFiles.first());
     if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
         QString errorMsg = "You can only extract apps from debrick OS images.";
@@ -386,30 +262,22 @@ void MainNet::abortSplit()
 
 void MainNet::grabLinks()
 {
+    QFile updates(getSaveDir() + "/updates.txt");
+
+    if (!updates.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    updates.write(_links.toLatin1());
+    updates.close();
+
+    openFile(updates.fileName());
+
 #ifdef BLACKBERRY
     bb::system::Clipboard clipboard;
     clipboard.clear();
     clipboard.insert("text/plain", _links.toLocal8Bit());
     return;
 #endif
-
-#ifdef ANDROID
-    QSettings settings("Qtness","Sachesi");
-    QFile updates(SAVE_DIR + "/updates.txt");
-#else
-    QFile updates("updates.txt");
-#endif
-    if (!updates.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    updates.write(_links.toLatin1());
-    updates.close();
-
-    QProcess wordpad;
-#ifdef _WIN32
-    wordpad.startDetached("explorer updates.txt");
-#elif defined(__APPLE__)
-    wordpad.startDetached("open updates.txt");
-/*#elif defined(BLACKBERRY)
+/*#if defined(BLACKBERRY)
     QVariantMap data;
     data["title"] = "Links";
     bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
@@ -417,11 +285,6 @@ void MainNet::grabLinks()
                                 "sys.pim.remember.composer"));
     connect(invocation, SIGNAL(finished()), invocation, SLOT(deleteLater()));
 */
-#elif defined(ANDROID)
-    QDesktopServices::openUrl(QUrl::fromLocalFile(SAVE_DIR + "/updates.txt"));
-#else
-    wordpad.startDetached("xdg-open updates.txt");
-#endif
 }
 
 void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
@@ -436,52 +299,46 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
         radioVersion += parts.at(i) + ".";
     radioVersion += QString::number(build);
 
+    QString server = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/";
+
     QString potentialText = QString(
                 "* Operating Systems *\n"
                 "OMAP Devices (STL 100-1)\n"
-                "Debrick OS: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.factory.desktop/" + osVersion + "/winchester.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "Core OS   : http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.factory/" + osVersion + "/winchester.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
+                "Debrick OS: " + server + hashval + "/com.qnx.coreos.qcfm.os.factory.desktop/" + osVersion + "/winchester.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
+                "Core OS   : " + server + hashval + "/com.qnx.coreos.qcfm.os.factory/" + osVersion + "/winchester.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
                 "\n"
                 "Qualcomm Devices (Everyone else)\n"
-                "Debrick OS: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi.desktop/" + osVersion + "/qc8960.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "Core OS   : http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi/" + osVersion + "/qc8960.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
+                "Debrick OS: " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi.desktop/" + osVersion + "/qc8960.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
+                "Core OS   : " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi/" + osVersion + "/qc8960.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
                 "\n"
                 "Verizon Devices\n"
-                "Debrick OS: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi.desktop/" + osVersion + "/qc8960.verizon_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "Core OS   : http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi/" + osVersion + "/qc8960.verizon_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
+                "Debrick OS: " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi.desktop/" + osVersion + "/qc8960.verizon_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
+                "Core OS   : " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi/" + osVersion + "/qc8960.verizon_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
                 "\n\n"
                 "* Radios *\n"
-                "Z10 (-1): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.m5730/" + radioVersion + "/m5730-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z10 (-2/3) and P9982 (Porsche): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960/" + radioVersion + "/qc8960-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z10 (-4): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.omadm/" + radioVersion + "/qc8960.omadm-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z30: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.wtr5/" + radioVersion + "/qc8960.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Q10: http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8960.wtr/" + radioVersion + "/qc8960.wtr-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z3 (Jakarta): http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx.qcfm.radio.qc8930.wtr5/" + radioVersion + "/qc8930.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Z10 (-1): " + server + hashval + "/com.qnx.qcfm.radio.m5730/" + radioVersion + "/m5730-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Z10 (-2/3) and P9982 (Porsche): " + server + hashval + "/com.qnx.qcfm.radio.qc8960/" + radioVersion + "/qc8960-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Z10 (-4): " + server + hashval + "/com.qnx.qcfm.radio.qc8960.omadm/" + radioVersion + "/qc8960.omadm-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Z30: " + server + hashval + "/com.qnx.qcfm.radio.qc8960.wtr5/" + radioVersion + "/qc8960.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Q10: " + server + hashval + "/com.qnx.qcfm.radio.qc8960.wtr/" + radioVersion + "/qc8960.wtr-" + radioVersion + "-nto+armle-v7+signed.bar\n"
+                "Z3 (Jakarta): " + server + hashval + "/com.qnx.qcfm.radio.qc8930.wtr5/" + radioVersion + "/qc8930.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
                 "");
+
+    QFile updates(getSaveDir() + "/versionlookup.txt");
+
+    if (!updates.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    updates.write(potentialText.toLocal8Bit());
+    openFile(updates.fileName());
+    updates.close();
+
 #ifdef BLACKBERRY
     bb::system::Clipboard clipboard;
     clipboard.clear();
     clipboard.insert("text/plain", potentialText.toLocal8Bit());
     return;
 #endif
-
-#ifdef ANDROID
-    QSettings settings("Qtness","Sachesi");
-    QFile updates(SAVE_DIR + "/versionlookup.txt");
-#else
-    QFile updates("versionlookup.txt");
-#endif
-    if (!updates.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    updates.write(potentialText.toLocal8Bit());
-    updates.close();
-
-    QProcess wordpad;
-#ifdef _WIN32
-    wordpad.startDetached("explorer versionlookup.txt");
-#elif defined(__APPLE__)
-    wordpad.startDetached("open versionlookup.txt");
-/*#elif defined(BLACKBERRY)
+/*#if defined(BLACKBERRY)
     QVariantMap data;
     data["title"] = "Links";
     bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
@@ -489,11 +346,6 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
                                 "sys.pim.remember.composer"));
     connect(invocation, SIGNAL(finished()), invocation, SLOT(deleteLater()));
 */
-#elif defined(ANDROID)
-    QDesktopServices::openUrl(QUrl::fromLocalFile(SAVE_DIR + "/versionlookup.txt"));
-#else
-    wordpad.startDetached("xdg-open versionlookup.txt");
-#endif
 }
 
 void MainNet::downloadLinks()
