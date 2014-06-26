@@ -93,7 +93,6 @@ public:
     ~InstallNet();
     Q_INVOKABLE void keepAlive();
     Q_INVOKABLE void scanProps();
-    Q_INVOKABLE void listApps();
     Q_INVOKABLE bool selectInstallFolder();
     Q_INVOKABLE bool selectInstall();
     Q_INVOKABLE void install();
@@ -206,7 +205,7 @@ signals:
     void knownPINChanged();
     void appListChanged();
 private slots:
-    void requestLogin();
+    bool checkLogin();
     void login();
     void connected();
     void disconnected();
@@ -224,7 +223,8 @@ private slots:
     void setActionProperty(QString name, QString value);
 private:
     QNetworkRequest setData(QString page, QString contentType);
-
+    QNetworkReply* postQuery(QString page, QString contentType, const QByteArray& query);
+    QNetworkReply* getQuery(QString page, QString contentType);
     QTcpSocket* sock;
     unsigned char* serverChallenge;
     RSA* privkey;
@@ -237,7 +237,7 @@ private:
 #endif
     QNetworkAccessManager* dlmanager;
     SslNetworkAccessManager* manager;
-    QNetworkReply *reply, *replydl;
+    QNetworkReply *reply;
     QNetworkCookieJar* cookieJar;
     QFile* compressedFile;
     QStringList _firmwareNames;

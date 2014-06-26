@@ -77,24 +77,29 @@ QNetworkRequest InstallNet::setData(QString page, QString contentType) {
     return request;
 }
 
-void InstallNet::listApps()
-{
-    scanProps();
+QNetworkReply* InstallNet::postQuery(QString page, QString contentType, const QByteArray& query) {
+    reply = manager->post(setData(page, contentType), query);
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(restoreError(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    return reply;
+}
+
+QNetworkReply* InstallNet::getQuery(QString page, QString contentType) {
+    reply = manager->get(setData(page, contentType));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(restoreError(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    return reply;
 }
 
 void InstallNet::scanProps()
 {
-    if (!completed())
-        requestLogin();
-    else
+    if (checkLogin())
     {
         QUrlQuery postData;
         postData.addQueryItem("Get Dynamic Properties","Get Dynamic Properties");
-
-        reply = manager->post(setData("dynamicProperties.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
 bool InstallNet::selectInstallFolder()
@@ -189,9 +194,7 @@ void InstallNet::install(QStringList files)
 void InstallNet::install()
 {
     setInstalling(true);
-    if (!completed())
-        requestLogin();
-    else
+    if (checkLogin())
     {
         QUrlQuery postData;
         int nfilesize = 0;
@@ -207,11 +210,7 @@ void InstallNet::install()
         filesize.setNum(nfilesize);
         postData.addQueryItem("mode", firmwareUpdate() ? "os" : "bar");
         postData.addQueryItem("size", filesize);
-
-        reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
 
@@ -220,9 +219,7 @@ void InstallNet::uninstall(QStringList packageids)
     if (packageids.isEmpty())
         return;
     setInstalling(true);
-    if (!completed())
-        requestLogin();
-    else
+    if (checkLogin())
     {
         QUrlQuery postData;
         _downgradePos = 0;
@@ -232,10 +229,7 @@ void InstallNet::uninstall(QStringList packageids)
         postData.addQueryItem("mode", "app");
         postData.addQueryItem("size", "0");
 
-        reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
 
@@ -292,9 +286,8 @@ void InstallNet::selectBackup(int options)
 void InstallNet::backup()
 {
     setBacking(true);
-    if (!completed())
-        requestLogin();
-    else {
+    if (checkLogin())
+    {
         currentBackupZip = new QuaZip(_fileNames.first());
         currentBackupZip->open(QuaZip::mdCreate);
         if (!currentBackupZip->isOpen()) {
@@ -323,25 +316,17 @@ void InstallNet::backup()
         QUrlQuery postData;
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("mode", _back.modeString());
-        reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
 
 void InstallNet::backupQuery() {
-    if (!completed())
-        requestLogin();
-    else {
+    if (checkLogin())
+    {
         QUrlQuery postData;
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("query", "list");
-
-        reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
 
@@ -399,19 +384,13 @@ void InstallNet::selectRestore(int options)
 void InstallNet::restore()
 {
     setRestoring(true);
-    if (!completed())
-        requestLogin();
-    else
+    if (checkLogin())
     {
         QUrlQuery postData;
         postData.addQueryItem("action", "restore");
         postData.addQueryItem("mode", _back.modeString());
         postData.addQueryItem("totalsize", QString::number(_back.maxSize()));
-
-        reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
 
@@ -420,38 +399,26 @@ void InstallNet::wipe() {
         return;
     QUrlQuery postData;
     postData.addQueryItem("wipe", "wipe");
-    reply = manager->post(setData("wipe.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::startRTAS() {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "start_rtas");
-    reply = manager->post(setData("wipe.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::newPin(QString pin) {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "pin");
     postData.addQueryItem("newpin", pin.left(8));
-    reply = manager->post(setData("wipe.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::resignNVRAM() {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "re_sign");
-    reply = manager->post(setData("wipe.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::factorywipe() {
@@ -461,37 +428,25 @@ void InstallNet::factorywipe() {
     postData.addQueryItem("wipe", "wipe");
     postData.addQueryItem("factorywipe", "1");
     postData.addQueryItem("nopoweroff", "1");
-    reply = manager->post(setData("wipe.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::reboot() {
     QUrlQuery postData;
     postData.addQueryItem("reset", "true");
-    reply = manager->post(setData("reset.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("reset.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::getPIN() {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "getpin");
-    reply = manager->post(setData("wipe.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::dumpLogs() {
     QUrlQuery postData;
     postData.addQueryItem("facility", "dumplog");
-    reply = manager->post(setData("support.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("support.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::setActionProperty(QString name, QString value) {
@@ -499,10 +454,7 @@ void InstallNet::setActionProperty(QString name, QString value) {
     postData.addQueryItem("action", "set");
     postData.addQueryItem("name", name);
     postData.addQueryItem("value", value);
-    reply = manager->post(setData("dynamicProperties.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::login()
@@ -515,11 +467,6 @@ void InstallNet::login()
     int flags = QNetworkInterface::IsUp | QNetworkInterface::IsRunning | QNetworkInterface::CanBroadcast | QNetworkInterface::CanMulticast;
     foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
     {
-#ifdef _WIN32
-        // TODO: Still getting bad result?!
-        //if (inter.addressEntries().count() != 2)
-        //	continue;
-#endif
         // VMWare responds for some reason. Who else does?
         if (inter.humanReadableName().startsWith("VMware"))
             continue;
@@ -604,16 +551,18 @@ void InstallNet::discoveryReply() {
                 }
             }
         }
-        requestLogin();
-        sender()->deleteLater();
+        setCompleted(false);
+        checkLogin();
     }
+    sender()->deleteLater();
 }
 
-void InstallNet::requestLogin() {
-    reply = manager->get(setData("login.cgi?request_version=1", "x-www-form-urlencoded"));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+bool InstallNet::checkLogin() {
+    if (!completed()) {
+        getQuery("login.cgi?request_version=1", "x-www-form-urlencoded");
+        return false;
+    }
+    return true;
 }
 
 void InstallNet::installProgress(qint64 pread, qint64)
@@ -655,10 +604,7 @@ void InstallNet::backupFileFinish()
         _back.setProgress(0);
         postData.addQueryItem("type", _back.curMode());
     }
-    reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(restoreError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+    postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 }
 
 void InstallNet::restoreReply()
@@ -712,6 +658,7 @@ void InstallNet::restoreReply()
 
         QNetworkRequest request = reply->request();
         request.setUrl(QUrl("https://"+ip()+":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=1"));
+
         reply = manager->get(request);
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(restoreError(QNetworkReply::NetworkError)));
@@ -894,10 +841,7 @@ void InstallNet::restoreReply()
     {
         postData.addQueryItem("type", "bar");
         postData.addQueryItem("packageid", _downgradeInfo.at(_downgradePos));
-        reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
     else if (xml.name() == "DeleteProgress")
     {
@@ -909,10 +853,7 @@ void InstallNet::restoreReply()
             postData.addQueryItem("status", "success");
         else
             postData.addQueryItem("packageid", _downgradeInfo.at(_downgradePos));
-        reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
     else if (xml.name() == "UpdateStart")
     {
@@ -962,11 +903,7 @@ void InstallNet::restoreReply()
                 }
             }
         }
-        reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
     else if (xml.name() == "UpdateProgress")
     {
@@ -1083,17 +1020,15 @@ void InstallNet::restoreReply()
             connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
             connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
             connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
-
+            connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                this, SLOT(restoreError(QNetworkReply::NetworkError)));
         } else {
             postData.addQueryItem("status", "success");
-            reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-            connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+            postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
             currentBackupZip->close();
             delete currentBackupZip;
             setBacking(false);
         }
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
     }
     else if (xml.name() == "BackupList")
     {
@@ -1114,10 +1049,7 @@ void InstallNet::restoreReply()
         }
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("type", _back.curMode());
-        reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
-        connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
     else if (xml.name() == "BackupStartActivity")
     {
@@ -1172,10 +1104,7 @@ void InstallNet::restoreReply()
         _back.setCurMode(1);
         if (_back.curMode() == "complete") {
             postData.addQueryItem("status", "success");
-            reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-            connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                    this, SLOT(restoreError(QNetworkReply::NetworkError)));
-            connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+            postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
 
             setRestoring(false);
             currentBackupZip->close();

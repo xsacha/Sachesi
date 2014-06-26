@@ -143,7 +143,7 @@ PageTab {
         RoundButton {
             id: list_files
             text: "Refresh"
-            onClicked: i.listApps();
+            onClicked: i.scanProps();
         }
     }
 
