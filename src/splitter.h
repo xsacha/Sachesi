@@ -32,12 +32,29 @@
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
 
-#define QCFM_IS_COMPRESSED (1 << 23)
-#define QCFM_IS_DIRECTORY (1 << 14)
-#define QCFM_IS_SYMLINK (1 << 13)
+#define PACKED_FILE_OS      (1 << 0)
+#define PACKED_FILE_RADIO   (1 << 1)
+#define PACKED_FILE_PINLIST (1 << 2)
+
+#define QCFM_IS_COMPRESSED  (1 << 23)
+#define QCFM_IS_DIRECTORY   (1 << 14)
+#define QCFM_IS_SYMLINK     (1 << 13)
 #define BUFFER_LEN (qint64)4096
 
 #define READ_TMP(x, y) x y; stream >> y;
+
+class QNXStream : public QDataStream {
+public:
+    QNXStream(QIODevice * device)
+    : QDataStream(device) {
+        setByteOrder(QDataStream::LittleEndian);
+    }
+    QNXStream(QByteArray * a, QIODevice::OpenMode flags)
+    : QDataStream(a, flags) {
+        setByteOrder(QDataStream::LittleEndian);
+        resetStatus();
+    }
+};
 
 struct qinode {
     int size;
@@ -171,6 +188,7 @@ public slots:
     }
 
     void scanAutoloader() {
+        // We hardcode this only to speed it up. It isn't required and may cause issues later on.
 #define START_CAP_SEARCH 0x400000
 #define END_CAP_SEARCH 0x800000
         signedFile = new QFile(selectedFile);
@@ -196,8 +214,7 @@ public slots:
         }
         qint64 files;
         QList<qint64> offsets;
-        QDataStream dataStream(signedFile);
-        dataStream.setByteOrder(QDataStream::LittleEndian);
+        QNXStream dataStream(signedFile);
         signedFile->seek(findHeader);
         dataStream >> files;
         // Collect offsets
@@ -209,18 +226,20 @@ public slots:
         // Create sizes and files
         QString baseName = selectedFile;
         baseName.chop(4);
+        // TODO: Use detection based on header. OS, Radio and PINList notify their header (but not RFOS?).
+        // Not a priority as the size indication is 100% accurate as long as it is actually an Autoloader
         for (int i = 0; i < files; i++) {
             QString filename = baseName;
             qint64 size = offsets[i+1] - offsets[i];
             int type = 0;
             if (size > 1024*1024*100) {
-                type = 1;
+                type = PACKED_FILE_OS;
                 filename += QString("-OS.%1").arg(i);
             } else if (size > 1024*1024*5) {
-                type = 2;
+                type = PACKED_FILE_RADIO;
                 filename += QString("-Radio.%1").arg(i);
             } else {
-                type = 4;
+                type = PACKED_FILE_PINLIST;
                 filename += QString("-PINList.%1").arg(i);
             }
             if (splitting) {
@@ -287,7 +306,7 @@ public slots:
         }
         else if (baseName.contains('_'))
             baseName = baseName.split('_').last();
-        if (!baseName.contains("autoloader",Qt::CaseInsensitive))
+        if (!baseName.contains("autoloader", Qt::CaseInsensitive))
             baseName.prepend("Autoloader-");
         // Find potential file
         int f = 0;
@@ -300,11 +319,9 @@ public slots:
         newAutoloader.open(QIODevice::WriteOnly);
         appendFile(capPath, &newAutoloader);
         QByteArray dataHeader = QByteArray(56, 0);
-        QDataStream dataStream(&dataHeader, QIODevice::WriteOnly);
-        dataStream.setByteOrder(QDataStream::LittleEndian);
-        dataStream.resetStatus();
-        dataStream << QByteArray::fromHex("9CD5C5979CD5C5979CD5C597");
-        dataStream << (quint64)selectedFiles.count();
+        QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
+        // This code is used as a separator
+        dataStream << QByteArray::fromHex("9CD5C5979CD5C5979CD5C597") << (quint64)selectedFiles.count();
         quint64 counter = newAutoloader.pos()+52;
         read = 100 * counter;
         foreach (QString fileInfo, selectedFiles)
@@ -356,15 +373,10 @@ public slots:
     }
 
     rinode createRNode(int offset, qint64 startPos) {
-        QDataStream stream(signedFile);
-        stream.setByteOrder(QDataStream::LittleEndian);
+        QNXStream stream(signedFile);
         signedFile->seek(4 + offset + startPos);
         rinode ind;
-        stream >> ind.mode;
-        stream >> ind.nameoffset;
-        stream >> ind.offset;
-        stream >> ind.size;
-        stream >> ind.time;
+        stream >> ind.mode >> ind.nameoffset >> ind.offset >> ind.size >> ind.time;
         signedFile->seek(ind.nameoffset + startPos);
         ind.name = QString(signedFile->readLine(128));
         if (ind.name == "")
@@ -373,8 +385,7 @@ public slots:
     }
 
     qinode createNode(int node, qint64 startPos) {
-        QDataStream stream(signedFile);
-        stream.setByteOrder(QDataStream::LittleEndian);
+        QNXStream stream(signedFile);
         qinode ind;
         qint64 base = findNode(node, startPos);
         signedFile->seek(base);
@@ -383,7 +394,7 @@ public slots:
         stream >> ind.time;
         signedFile->seek(base + 0x20);
         stream >> ind.perms;
-        qint16 tmp; stream >> tmp;
+        stream.skipRawData(2);
         int sector;
         for (int i = 0; i < 16; i++)
         {
@@ -396,7 +407,7 @@ public slots:
     }
     void extractManifest(int nodenum, qint64 startPos);
     void extractDir(int nodenum, QString basedir, qint64 startPos, int tier);
-    int processQStart(qint64 startPos, QString startDir);
+    int  processQStart(qint64 startPos, QString startDir);
     void processRStart(qint64 startPos, QString startDir);
     void extractRCFSDir(int offset, int numNodes, QString basedir, qint64 startPos);
 
@@ -425,9 +436,9 @@ private:
     QStringList selectedFiles;
     QList<QFile*> tmpFile;
     QIODevice* signedFile;
-    quint16 sectorSize; // For extracting
+    quint16 sectorSize;   // For extracting
     quint16 sectorOffset; // For extracting
-    QList<int> lfn; // For extracting
-    QuaZip* currentZip; // For extracting apps
+    QList<int> lfn;       // For extracting
+    QuaZip* currentZip;   // For extracting apps
     QList<QString> manifestApps;
 };

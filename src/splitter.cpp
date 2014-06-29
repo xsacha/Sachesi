@@ -19,20 +19,29 @@
 #include "lzo.h"
 #ifdef _WIN32
 #include "Windows.h"
+// We need to update the time of the extracted file based on the unix filesystem it comes from.
+void fixFileTime(QString filename, int time) {
+    FILETIME pft;
+    LONGLONG ll = Int32x32To64(time, 10000000) + 116444736000000000;
+    pft.dwLowDateTime = (DWORD)ll;
+    pft.dwHighDateTime = ll >> 32;
+    HANDLE fd_handle = CreateFile(filename.toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    SetFileTime(fd_handle, &pft,(LPFILETIME) NULL, &pft);
+    CloseHandle(fd_handle);
+}
 #endif
 
 void Splitter::extractManifest(int nodenum, qint64 startPos) {
-    QDataStream stream(signedFile);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QNXStream stream(signedFile);
     int count;
     qinode ind = createNode(nodenum, startPos);
     foreach(int num, ind.sectors)
     {
-        for (int i = 0; i < 0x80; i++)
+        for (int i = 0; i < 0x1000; i += 0x20)
         {
             if (kill) return die();
             updateProgress(1400);
-            signedFile->seek(findSector(num, startPos) + (i * 0x20));
+            signedFile->seek(findSector(num, startPos) + i);
             READ_TMP(int, inodenum);
             if (inodenum == 0)
                 break;
@@ -41,7 +50,7 @@ void Splitter::extractManifest(int nodenum, qint64 startPos) {
             count = c_byte;
             if (count == 0xFF)
             {
-                signedFile->seek(findSector(num, startPos) + (i * 0x20) + 0x8);
+                signedFile->seek(findSector(num, startPos) + i + 0x8);
                 READ_TMP(int, item);
                 if (item > lfn.count())
                     item = 1;
@@ -65,8 +74,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
     QDir mainDir;
     if (!extractApps)
         mainDir.mkdir(basedir);
-    QDataStream stream(signedFile);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QNXStream stream(signedFile);
     int count;
     qinode ind = createNode(nodenum, startPos);
     foreach(int num, ind.sectors)
@@ -208,13 +216,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
             else {
                 newFile->close();
 #ifdef _WIN32
-                FILETIME pft;
-                LONGLONG ll = Int32x32To64(ind.time, 10000000) + 116444736000000000;
-                pft.dwLowDateTime = (DWORD)ll;
-                pft.dwHighDateTime = ll >> 32;
-                HANDLE filename = CreateFile(newFile->fileName().toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-                SetFileTime(filename,&pft,(LPFILETIME) NULL, &pft);
-                CloseHandle(filename);
+                fixTimeTime(newFile->fileName(), ind.time);
 #endif
                 delete newFile;
             }
@@ -224,8 +226,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
 
 void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 startPos)
 {
-    QDataStream stream(signedFile);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QNXStream stream(signedFile);
     QDir mainDir(basedir);
     for (int i = 0; i < numNodes; i++) {
         rinode node = createRNode(offset + (i * 0x20), startPos);
@@ -241,13 +242,7 @@ void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 
 #ifdef _WIN32
                 QString lnkName = node.path_to + "/" + node.name + ".lnk";
                 QFile::link(node.path_to + "/" + signedFile->readLine(128), lnkName);
-                FILETIME pft;
-                LONGLONG ll = Int32x32To64(node.time, 10000000) + 116444736000000000;
-                pft.dwLowDateTime = (DWORD)ll;
-                pft.dwHighDateTime = ll >> 32;
-                HANDLE filename = CreateFile(lnkName.toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-                SetFileTime(filename,&pft,(LPFILETIME) NULL, &pft);
-                CloseHandle(filename);
+                fixFileTime(lnkName, node.time);
 #else
                 QFile::link(node.path_to + "/" + signedFile->readLine(128), node.path_to + "/" + node.name);
 #endif
@@ -270,7 +265,7 @@ void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 
                     char* readData = new char[size];
                     signedFile->read(readData, size);
                     size_t write_len = 0x4000;
-                    lzo1x_decompress_safe((const unsigned char*)readData, size, (unsigned char*)buffer, &write_len);
+                    lzo1x_decompress_safe(reinterpret_cast<const unsigned char*>(readData), size, reinterpret_cast<unsigned char*>(buffer), &write_len);
                     newFile.write(buffer, (qint64)write_len);
                     updateProgress(size);
                     delete [] readData;
@@ -286,13 +281,7 @@ void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 
             }
             newFile.close();
 #ifdef _WIN32
-                FILETIME pft;
-                LONGLONG ll = Int32x32To64(node.time, 10000000) + 116444736000000000;
-                pft.dwLowDateTime = (DWORD)ll;
-                pft.dwHighDateTime = ll >> 32;
-                HANDLE filename = CreateFile(newFile.fileName().toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-                SetFileTime(filename,&pft,(LPFILETIME) NULL, &pft);
-                CloseHandle(filename);
+            fixFileTime(newFile.fileName(), node.time);
 #endif
         }
     }
@@ -329,8 +318,7 @@ void Splitter::processExtractQNX6() {
 
 int Splitter::processQStart(qint64 startPos, QString startDir) {
     maxSize += 42000000; // Big hack!
-    QDataStream stream(signedFile);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QNXStream stream(signedFile);
     signedFile->seek(startPos+8);
     READ_TMP(unsigned char, typeQNX); // 0x10 = no offset; 0x08 = has offset
     unsigned char bootSig[] = {0xDD, 0xEE, 0xE6, 0x97};
@@ -379,8 +367,7 @@ int Splitter::processQStart(qint64 startPos, QString startDir) {
 
 void Splitter::processRStart(qint64 startPos, QString startDir) {
     signedFile->seek(startPos + 0x1038);
-    QDataStream stream(signedFile);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QNXStream stream(signedFile);
     READ_TMP(int, offset);
     extractRCFSDir(offset, 1, startDir, startPos);
 }
@@ -412,8 +399,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         QMessageBox::information(NULL, "Error", "Was not a Blackberry .signed image.");
         return;
     }
-    QDataStream stream(signedFile);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QNXStream stream(signedFile);
     QList<qint64> partitionOffsets, partitionSizes;
     signedFile->seek(signedPos+12);
     READ_TMP(int, numPartitions);
@@ -482,13 +468,12 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                     processRStart(startPos, baseName + rcfsTypeString);
                 } else {
                     // Extract the file
-                    QFile* rcfsFile = new QFile(baseName + rcfsTypeString + ".rcfs");
+                    QScopedPointer<QFile> rcfsFile(new QFile(baseName + rcfsTypeString + ".rcfs"));
                     if (!rcfsFile->open(QIODevice::WriteOnly))
                         return die();
 
                     for (qint64 s = rcfsSize + 0x1000; s > 0; s -= updateProgress(rcfsFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
                     rcfsFile->close();
-                    delete rcfsFile;
                 }
             }
         }
@@ -514,13 +499,12 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                 } else {
                     maxSize += partitionSizes[i];
                     // Extract the file
-                    QFile* qnx6File = new QFile(QString(baseName + ".%1.qnx6").arg(qnxcounter++));
+                    QScopedPointer<QFile> qnx6File(new QFile(QString(baseName + ".%1.qnx6").arg(qnxcounter++)));
                     if (!qnx6File->open(QIODevice::WriteOnly))
                         return die();
 
                     for (qint64 s = partitionSizes[i]; s > 0; s -= updateProgress(qnx6File->write(signedFile->read(qMin(BUFFER_LEN, s)))));
                     qnx6File->close();
-                    delete qnx6File;
                 }
             }
         }
