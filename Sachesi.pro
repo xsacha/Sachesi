@@ -12,7 +12,7 @@ DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
 exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
 
-greaterThan(QT_MAJOR_VERSION,4) {
+greaterThan(QT_MAJOR_VERSION, 4) {
     win32 {
         DEFINES += Q_WS_WIN32
         SOURCES += $$P/ext/zlib-win/*.c
@@ -39,18 +39,20 @@ win32 {
 }
 blackberry {
     DEFINES += BLACKBERRY
-    LIBS += -lbbcascadespickers -lbbsystem -lQtXml -L$$P/Blackberry -lquazip #-lcrypto
+    LIBS += -lbbcascadespickers -lbbsystem -lQtXml #-lcrypto
 }
 mac {
     INCLUDEPATH += /opt/local/include
-    LIBS+= -lcrypto -lssl -lz -framework CoreFoundation -framework IOKit -lobjc $$P/libquazip.a /opt/local/lib/libusb-1.0.a
+    LIBS+= -lcrypto -lssl -lz -framework CoreFoundation -framework IOKit -lobjc /opt/local/lib/libusb-1.0.a
 }
 !win32:!mac:!blackberry: {
     android {
         LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so
         INCLUDEPATH += $$P/Android/include/
     } else {
-        LIBS += /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libquazip.a /usr/lib/x86_64-linux-gnu/libusb-1.0.a -ldl -lz -ludev
+        LIBS += -ldl -lz -ludev
+        # These should be static for it to be fully portable
+        LIBS += -lcrypto -lusb-1.0
     }
 }
 
@@ -87,14 +89,12 @@ HEADERS += \
     DEFINES += BOOTLOADER_ACCESS
     SOURCES += src/boot.cpp
     HEADERS += src/boot.h
+    # This also means libusb needs to be linked
 }
 
-win32|android {
-    DEFINES += QUAZIP_STATIC
-    SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
-    HEADERS += $$P/ext/quazip/*.h
-#    INCLUDEPATH += $$P/ext/quazip
-}
+DEFINES += QUAZIP_STATIC
+SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
+HEADERS += $$P/ext/quazip/*.h
 
 RESOURCES += bbupdatescan.qrc
 blackberry {
