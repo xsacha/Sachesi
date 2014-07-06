@@ -24,12 +24,10 @@
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
     manager(NULL), reply(NULL), cookieJar(NULL),
-    _knownOS(""), _knownBattery(-1), _knownPIN(""),
-    _wrongPass(false), _wrongPassBlock(false), _state(0),
-    _dgProgress(-1), _curDGProgress(-1), _completed(false),
-    _installing(false), _restoring(false), _backing(false),
-    _hadPassword(true), currentBackupZip(NULL), _zipFile(NULL)
+    _wrongPass(false), _wrongPassBlock(false), _hadPassword(true),
+    currentBackupZip(NULL), _zipFile(NULL)
 {
+    resetVars();
 #ifdef WIN32
     WSAStartup(MAKEWORD(2,0), &wsadata);
 #endif
@@ -1005,7 +1003,7 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "UpdateEnd") {
         setInstalling(false);
-        setNewLine("Completed Update.");
+        setNewLine("Completed Update.<br>");
         setDGProgress(-1);
         setCurDGProgress(-1);
     }
@@ -1130,23 +1128,35 @@ void InstallNet::restoreSendFile() {
     connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
 }
 
-void InstallNet::restoreError(QNetworkReply::NetworkError error)
+void InstallNet::resetVars()
 {
+    if (manager != NULL)
+        delete manager;
+    if (reply != NULL)
+        delete reply;
+    if (cookieJar != NULL)
+        delete cookieJar;
     setCompleted(false);
     setRestoring(false);
     setBacking(false);
     setInstalling(false);
+    if (currentBackupZip != NULL)
+        delete currentBackupZip;
+    if (_zipFile != NULL)
+        delete _zipFile;
+    setKnownPIN("");
     setKnownOS("");
     setKnownBattery(-1);
     setState(0);
-    if (installing())
-    {
-        setInstalling(false);
-        setDGProgress(-1);
-        setCurDGProgress(-1);
-        _dlBytes = 0;
-        _dlTotal = 0;
-    }
+    setDGProgress(-1);
+    setCurDGProgress(-1);
+    _dlBytes = 0;
+    _dlTotal = 0;
+}
+
+void InstallNet::restoreError(QNetworkReply::NetworkError error)
+{
+    resetVars();
     if (error == 5) // On purpose
         return;
     setNewLine("Communication Error: " + ((QNetworkReply*)sender())->errorString() + "<br>");

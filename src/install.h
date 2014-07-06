@@ -213,6 +213,7 @@ private slots:
     void restoreSendFile();
     void restoreReply();
     void discoveryReply();
+    void resetVars();
     void restoreError(QNetworkReply::NetworkError error);
     void installProgress(qint64 pread, qint64);
     void backupProgress(qint64 pread, qint64 psize);

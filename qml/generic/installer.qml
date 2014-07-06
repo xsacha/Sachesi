@@ -193,7 +193,7 @@ PageTab {
         id: log_window
         visible: tabs.curObj == 1
         anchors {top: tabs.bottom; left: tabs.left; }
-        height: parent.height - (p.advanced ? 180 : 145) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 40; z: 2;
+        height: parent.height - (p.advanced ? 190 : 155) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 40; z: 2;
         Rectangle {
             id: updateMessage
             anchors.left: parent.left
@@ -252,7 +252,7 @@ PageTab {
         id: appList
         visible: tabs.curObj == 0
         anchors {top: tabs.bottom; left: tabs.left; }
-        height: parent.height - (p.advanced ? 180 : 145) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 40; z: 2;
+        height: parent.height - (p.advanced ? 190 : 155) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 40; z: 2;
         color: config.windowColor
         border.width: 2
         border.color: config.shadowColor
