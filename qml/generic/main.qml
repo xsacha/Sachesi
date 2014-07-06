@@ -14,7 +14,7 @@ PageTab {
         color: "gray"
         visible: false
         x: 20; y: 20
-        height: 20 + config.defaultFontSize * 10; width: 50 + config.defaultFontSize * 18; radius: 4
+        height: 30 + config.defaultFontSize * 10; width: 50 + config.defaultFontSize * 18; radius: 4
         z: 5
         MouseArea {
             anchors.fill: parent
@@ -161,7 +161,7 @@ PageTab {
                 }
                 RoundButton {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Close"
+                    text: "Hide"
                     onClicked: versionLookup.visible = false;
                 }
             }

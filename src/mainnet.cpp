@@ -492,8 +492,8 @@ static QStringList dev[] = {
     QStringList() << "STJ 100-1",
     QStringList() << "04002E07",
     // 4 = Q30 (W Series)
-    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQN 100-3" << "SQN 100-4" ,
-    QStringList() << "84002C0A" << "85002C0A" << "86002C0A" << "87002C0A",
+    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQW 100-3",
+    QStringList() << "87002C0A" << "85002C0A" << "84002C0A",
     // 5 = Q10 (N Series)
     QStringList() << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5",
     QStringList() << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
@@ -524,12 +524,12 @@ static QStringList dev[] = {
 };
 
 QString MainNet::nameFromVariant(unsigned int device, unsigned int variant) {
-    QString id = dev[device*2][variant];
-    return id;
+    Q_ASSERT(variantCount(device) > variant);
+    return dev[device*2][variant];
 }
 QString MainNet::hwidFromVariant(unsigned int device, unsigned int variant) {
-    QString id = dev[device*2+1][variant];
-    return id;
+    Q_ASSERT(variantCount(device) > variant);
+    return dev[device*2+1][variant];
 }
 unsigned int MainNet::variantCount(unsigned int device) {
     return dev[device*2].count();
