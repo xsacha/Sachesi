@@ -5,6 +5,13 @@ TARGET="Sachesi"
 ICON=sachesi-114.png
 VERSION=1.2.3
 
+# Global specific
+win32:CONFIG(release, debug|release): CONFIG_DIR = $$join(OUT_PWD,,,/release)
+else:win32:CONFIG(debug, debug|release): CONFIG_DIR = $$join(OUT_PWD,,,/debug)
+else:CONFIG_DIR=$$OUT_PWD
+OBJECTS_DIR = $$CONFIG_DIR/.obj/$$TARGET
+MOC_DIR = $$CONFIG_DIR/.moc/$$TARGET
+UI_DIR = $$CONFIG_DIR/.ui/$$TARGET
 P = $$_PRO_FILE_PWD_
 INCLUDEPATH += $$P/ext $$P/src
 

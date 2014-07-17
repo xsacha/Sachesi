@@ -57,11 +57,6 @@ PageTab {
                     text: "Total: " + totalVal + " MB"
                     font.pixelSize: config.defaultFontSize
                 }
-                Text {
-                    visible: totalText.totalVal > 4000
-                    font.pixelSize: config.defaultSubtextSize
-                    text: "Error: Backup files greater than 4GB are not supported yet."
-                }
             }
         }
 
@@ -76,7 +71,7 @@ PageTab {
             spacing: 20
             RoundButton {
                 text: "Create backup"
-                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && totalText.totalVal <= 4000
+                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
                 onClicked: i.selectBackup(options.value)
             }
             RoundButton {
