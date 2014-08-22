@@ -23,9 +23,9 @@
 #include <QNetworkInterface>
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
-    manager(NULL), reply(NULL), cookieJar(NULL),
+    manager(nullptr), reply(nullptr), cookieJar(nullptr),
     _wrongPass(false), _wrongPassBlock(false), _hadPassword(true),
-    currentBackupZip(NULL), _zipFile(NULL)
+    currentBackupZip(nullptr), _zipFile(nullptr)
 {
     resetVars();
 #ifdef WIN32
@@ -105,7 +105,7 @@ bool InstallNet::selectInstallFolder()
     QSettings settings("Qtness", "Sachesi");
     FileSelect finder = selectFiles("Install Folder of Bar Files", getSaveDir(), "Blackberry Installable", "*.bar");
 #ifdef BLACKBERRY
-//	QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallFolderSlot(const QStringList&)));
+//    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallFolderSlot(const QStringList&)));
     return false;
 #else
     finder->setFileMode(QFileDialog::Directory);
@@ -126,7 +126,7 @@ bool InstallNet::selectInstall()
     QSettings settings("Qtness", "Sachesi");
     FileSelect finder = selectFiles("Install Folder of Bar Files", getSaveDir(), "Blackberry Installable", "*.bar");
 #ifdef BLACKBERRY
-//	QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallSlot(const QStringList&)));
+//    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallSlot(const QStringList&)));
     return false;
 #else
     if (finder->exec()) {
@@ -289,15 +289,16 @@ void InstallNet::backup()
         currentBackupZip = new QuaZip(_fileNames.first());
         currentBackupZip->open(QuaZip::mdCreate);
         if (!currentBackupZip->isOpen()) {
-            QMessageBox::critical(NULL, "Error", "Unable to write backup. Please ensure you have permission to write to " + _fileNames.first());
+            QMessageBox::critical(nullptr, "Error", "Unable to write backup. Please ensure you have permission to write to " + _fileNames.first());
             delete currentBackupZip;
+            currentBackupZip = nullptr;
             setBacking(false);
             return;
         }
 
         QuaZipFile* manifest;
         manifest = new QuaZipFile(currentBackupZip);
-        manifest->open(QIODevice::WriteOnly, QuaZipNewInfo("Manifest.xml"), NULL, 0, 8);
+        manifest->open(QIODevice::WriteOnly, QuaZipNewInfo("Manifest.xml"), nullptr, 0, 8);
         QString manifestXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 "<BlackBerry_Backup><Version>3.0</Version><Client platform=\"SachESI\" osversion=\"Microsoft Windows NT 6.1.7601 Service Pack 1\" dtmversion=\"2.0.0.0\"/>"
                 "<SourceDevice pin=\"" + _knownPIN + "\"><Platform type=\"QNX\" version=\"10.0.0.0\"/></SourceDevice>"
@@ -350,8 +351,9 @@ void InstallNet::selectRestore(int options)
     currentBackupZip = new QuaZip(_fileNames.first());
     currentBackupZip->open(QuaZip::mdUnzip);
     if (!currentBackupZip->isOpen()) {
-        QMessageBox::critical(NULL, "Error", "Could not open backup file.");
+        QMessageBox::critical(nullptr, "Error", "Could not open backup file.");
         delete currentBackupZip;
+        currentBackupZip = nullptr;
         return;
     }
     for (int i = 0; i < _back.numMethods(); i++) {
@@ -393,7 +395,7 @@ void InstallNet::restore()
 }
 
 void InstallNet::wipe() {
-    if (QMessageBox::critical(NULL, "Loss of data", "Are you sure you want to wipe your device?\nThis will result in a permanent loss of data.", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+    if (QMessageBox::critical(nullptr, "Loss of data", "Are you sure you want to wipe your device?\nThis will result in a permanent loss of data.", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
         return;
     QUrlQuery postData;
     postData.addQueryItem("wipe", "wipe");
@@ -420,7 +422,7 @@ void InstallNet::resignNVRAM() {
 }
 
 void InstallNet::factorywipe() {
-    if (QMessageBox::critical(NULL, "Loss of data", "Are you sure you want to wipe your device?\nThis will result in a permanent loss of data.", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+    if (QMessageBox::critical(nullptr, "Loss of data", "Are you sure you want to wipe your device?\nThis will result in a permanent loss of data.", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
         return;
     QUrlQuery postData;
     postData.addQueryItem("wipe", "wipe");
@@ -487,13 +489,13 @@ void InstallNet::login()
     }
     ips.removeDuplicates();
     if (ips.isEmpty())
-		return;
+        return;
     // Note: Removing fallback IP. Device will have to respond.
     //setIp(ips.first());
 
-    if (manager == NULL)
+    if (manager == nullptr)
         manager = new SslNetworkAccessManager();
-    if (cookieJar == NULL) {
+    if (cookieJar == nullptr) {
         cookieJar = new QNetworkCookieJar(this);
         manager->setCookieJar(cookieJar);
     }
@@ -593,6 +595,7 @@ void InstallNet::backupFileFinish()
     _zipFile->write(reply->readAll());
     _zipFile->close();
     delete _zipFile;
+    _zipFile = nullptr;
 
     _back.setCurMode(1);
 
@@ -611,16 +614,18 @@ void InstallNet::restoreReply()
     //for (int s = 0; s < data.size(); s+=3000) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3000);
     if (data.size() == 0) {
         if (restoring()) {
-            QMessageBox::information(NULL, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
-            if (_zipFile) {
+            QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
+            if (_zipFile != nullptr) {
                 if (_zipFile->isOpen())
                     _zipFile->close();
                 delete _zipFile;
+                _zipFile = nullptr;
             }
-            if (currentBackupZip) {
+            if (currentBackupZip != nullptr) {
                 if (currentBackupZip->isOpen())
                     currentBackupZip->close();
                 delete currentBackupZip;
+                currentBackupZip = nullptr;
             }
             setRestoring(false);
         }
@@ -712,7 +717,7 @@ void InstallNet::restoreReply()
                 QString name = xml.name().toString();
                 if (name == "ErrorDescription")
                 {
-                    QMessageBox::information(NULL, "Error", xml.readElementText(), QMessageBox::Ok);
+                    QMessageBox::information(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
                 } else if (name == "Application") {
                     Apps* newApp = new Apps();
                     while(!xml.atEnd())
@@ -800,7 +805,7 @@ void InstallNet::restoreReply()
         }
         setCompleted(false);
         setState(false);
-        QMessageBox::information(NULL, "Success", "RTAS has been started.\nSachesi will now terminate its connection.", QMessageBox::Ok);
+        QMessageBox::information(nullptr, "Success", "RTAS has been started.\nSachesi will now terminate its connection.", QMessageBox::Ok);
         openFile(rtasData.fileName());
         rtasData.close();
     }
@@ -820,7 +825,7 @@ void InstallNet::restoreReply()
             if (xml.isStartElement())
             {
                 if (xml.name() == "ErrorDescription") {
-                    QMessageBox::critical(NULL, "Error", xml.readElementText(), QMessageBox::Ok);
+                    QMessageBox::critical(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
                 }
             }
         }
@@ -830,7 +835,7 @@ void InstallNet::restoreReply()
             if (xml.isStartElement())
             {
                 if (xml.name() == "Log") {
-                    QMessageBox::critical(NULL, "Error", xml.readElementText(), QMessageBox::Ok);
+                    QMessageBox::critical(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
                 }
             }
         }
@@ -897,7 +902,7 @@ void InstallNet::restoreReply()
                         return;
                     }
                 } else if (xml.name() == "ErrorDescription") {
-                    QMessageBox::critical(NULL, "Error", xml.readElementText(), QMessageBox::Ok);
+                    QMessageBox::critical(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
                 }
             }
         }
@@ -987,16 +992,17 @@ void InstallNet::restoreReply()
                     if (xml.readElementText() == "Error") {
                         if (backing()) {
                             setBacking(false);
-                            if (currentBackupZip != NULL) {
+                            if (currentBackupZip != nullptr) {
                                 currentBackupZip->close();
                                 delete currentBackupZip;
+                                currentBackupZip = nullptr;
                                 QFile::remove(_fileNames.first());
                             }
                         } else
                             _hadPassword = false;
                     }
                 } else if (xml.name() == "ErrorDescription") {
-                    QMessageBox::information(NULL, "Error", xml.readElementText().remove("HTTP_COOKIE="), QMessageBox::Ok);
+                    QMessageBox::information(nullptr, "Error", xml.readElementText().remove("HTTP_COOKIE="), QMessageBox::Ok);
                 }
             }
         }
@@ -1014,7 +1020,7 @@ void InstallNet::restoreReply()
             postData.addQueryItem("type", _back.curMode());
             reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
             _zipFile = new QuaZipFile(currentBackupZip);
-            _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), NULL, 0, 8);
+            _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), nullptr, 0, 8);
             connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
             connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
             connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
@@ -1025,6 +1031,7 @@ void InstallNet::restoreReply()
             postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
             currentBackupZip->close();
             delete currentBackupZip;
+            currentBackupZip = nullptr;
             setBacking(false);
         }
     }
@@ -1075,7 +1082,7 @@ void InstallNet::restoreReply()
                 {
                     _back.setMaxSize(xml.readElementText().toLongLong());
                     _zipFile = new QuaZipFile(currentBackupZip);
-                    _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), NULL, 0, 8);
+                    _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), nullptr, 0, 8);
                     connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
                     connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
                     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
@@ -1098,6 +1105,7 @@ void InstallNet::restoreReply()
             if (_zipFile->isOpen())
                 _zipFile->close();
             delete _zipFile;
+            _zipFile = nullptr;
         }
         _back.setCurMode(1);
         if (_back.curMode() == "complete") {
@@ -1107,6 +1115,7 @@ void InstallNet::restoreReply()
             setRestoring(false);
             currentBackupZip->close();
             delete currentBackupZip;
+            currentBackupZip = nullptr;
         } else {
             restoreSendFile();
         }
@@ -1130,20 +1139,30 @@ void InstallNet::restoreSendFile() {
 
 void InstallNet::resetVars()
 {
-    if (manager != NULL)
+    if (manager != nullptr) {
         delete manager;
-    if (reply != NULL)
+        manager = nullptr;
+    }
+    if (reply != nullptr) {
         delete reply;
-    if (cookieJar != NULL)
+        reply = nullptr;
+    }
+    if (cookieJar != nullptr) {
         delete cookieJar;
+        cookieJar = nullptr;
+    }
     setCompleted(false);
     setRestoring(false);
     setBacking(false);
     setInstalling(false);
-    if (currentBackupZip != NULL)
+    if (currentBackupZip != nullptr) {
         delete currentBackupZip;
-    if (_zipFile != NULL)
+        currentBackupZip = nullptr;
+    }
+    if (_zipFile != nullptr) {
         delete _zipFile;
+        _zipFile = nullptr;
+    }
     setKnownPIN("");
     setKnownOS("");
     setKnownBattery(-1);

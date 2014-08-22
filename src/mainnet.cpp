@@ -41,7 +41,7 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
 #else
     setAdvanced(settings.value("advanced", false).toBool());
 #endif
-    replydl = NULL;
+    replydl = nullptr;
 }
 
 MainNet::~MainNet()
@@ -210,7 +210,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
         QString errorMsg = "You can only extract apps from debrick OS images.";
         if (fileInfo.size() < 50 * 1024 * 1024)
             errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
-        QMessageBox::information(NULL, "Warning", errorMsg, QMessageBox::Ok);
+        QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
     }
     settings.setValue("splitDir", fileInfo.absolutePath());
@@ -250,7 +250,8 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
 
 void MainNet::cancelSplit()
 {
-    _splitting = 0; emit splittingChanged();
+    _splitting = 0;
+    emit splittingChanged();
 }
 
 void MainNet::abortSplit()
@@ -356,10 +357,11 @@ void MainNet::downloadLinks()
         {
             _currentFile.close();
             _currentFile.remove();
-            if (replydl != NULL)
+            if (replydl != nullptr)
             {
                 replydl->abort();
-                replydl = NULL;
+                delete replydl;
+                replydl = nullptr;
             }
             setDownloading(false);
             return;
@@ -401,10 +403,11 @@ void MainNet::downloadLinks()
                 box.exec();
                 _currentFile.close();
                 _currentFile.remove();
-                if (replydl != NULL)
+                if (replydl != nullptr)
                 {
                     replydl->abort();
-                    replydl = NULL;
+                    delete replydl;
+                    replydl = nullptr;
                 }
                 setDownloading(false);
                 return;
@@ -460,10 +463,10 @@ void MainNet::abortDL(QNetworkReply::NetworkError error)
     {
         _currentFile.close();
         _currentFile.remove();
-        if (replydl != NULL)
+        if (replydl != nullptr)
         {
-            replydl->abort();
-            replydl = NULL;
+            delete replydl;
+            replydl = nullptr;
         }
     }
     setDownloading(false);

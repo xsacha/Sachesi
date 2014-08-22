@@ -19,6 +19,8 @@ DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
 exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
 
+CONFIG += c++11
+
 greaterThan(QT_MAJOR_VERSION, 4) {
     win32 {
         DEFINES += Q_WS_WIN32

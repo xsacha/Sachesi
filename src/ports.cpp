@@ -19,6 +19,12 @@
 // For portability between platforms and Qt versions.
 // Clears up the code in the more important files.
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
+
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
 #ifdef BLACKBERRY
     FileSelect finder = new bb::cascades::pickers::FilePicker();
@@ -48,10 +54,8 @@ QString getSaveDir() {
     return settings.value("splitDir", "/accounts/1000/shared/misc/Sachesi/").toString();
 #else
 #if QT_VERSION >= 0x050000
-#include <QStandardPaths>
     return settings.value("splitDir", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation)).toString();
 #else
-#include <QDesktopServices>
     return settings.value("splitDir", QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)).toString();
 #endif
 #endif

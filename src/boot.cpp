@@ -31,27 +31,27 @@ Boot::Boot() : _bootloaderMode(0xFF), _connecting(false), _command(0), _rebootAf
     bootloaderModeData.append(new QByteArray("RIM-RAMLoader\0\0\0\1", 17));
     bootloaderModeData.append(new QByteArray("RIM UPL\0\0\0\0\0\0\0\0\0\1",       17));
     bootloaderModeData.append(new QByteArray("RIM-BootNUKE\0\0\0\0\1",  17));
-    libusb_init(NULL);
+    libusb_init(nullptr);
 }
 
 Boot::~Boot()
 {
-    libusb_exit(NULL);
+    libusb_exit(nullptr);
 }
 
 libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     int configuration = 0;
-    libusb_device_handle* handle = NULL;
+    libusb_device_handle* handle = nullptr;
 
     libusb_open(dev, &handle);
-    if (handle == NULL) {
+    if (handle == nullptr) {
 #ifdef _WIN32
-        QMessageBox::information(NULL, "Error", "You need to install WinUSB driver for the Blackberry device.");
+        QMessageBox::information(nullptr, "Error", "You need to install WinUSB driver for the Blackberry device.");
 #else
-        QMessageBox::information(NULL, "Error", "You need to run this application with root privileges (i.e. sudo).");
+        QMessageBox::information(nullptr, "Error", "You need to run this application with root privileges (i.e. sudo).");
 #endif
         libusb_close(handle);
-        return NULL;
+        return nullptr;
     }
 
     libusb_get_configuration(handle, &configuration);
@@ -59,8 +59,8 @@ libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     libusb_detach_kernel_driver(handle, 1);
     if(configuration != 1) {
         if (libusb_set_configuration(handle, 1) < 0) {
-            QMessageBox::information(NULL, "Error", "Error #1001");
-            return NULL;
+            QMessageBox::information(nullptr, "Error", "Error #1001");
+            return nullptr;
         }
     }
 
@@ -68,18 +68,18 @@ libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     int err = libusb_claim_interface(handle, 0);
     if (err < 0) {
 #ifdef Q_WS_MAC
-        QMessageBox::information(NULL, "Error", "Please reboot your device manually.");
-        return NULL;
+        QMessageBox::information(nullptr, "Error", "Please reboot your device manually.");
+        return nullptr;
 #else
-        QMessageBox::information(NULL, "Error", "Error #1002 (" + QString::number(err) + ")");
-        return NULL;
+        QMessageBox::information(nullptr, "Error", "Error #1002 (" + QString::number(err) + ")");
+        return nullptr;
 #endif
     }
     return handle;
 }
 
 int Boot::closeDevice(libusb_device_handle* handle) {
-    if (handle == NULL) {
+    if (handle == nullptr) {
         return -1;
     }
 
@@ -104,7 +104,7 @@ int Boot::sendControlMessage(libusb_device_handle* aHandle, uint8_t aCommand, QB
     int err = libusb_bulk_transfer(aHandle, _found == 0x1 ? 0x2 : 0x1, (unsigned char*)buffer.data(), aDataSize + 8, &transferred, 1000);
     if (err == -7)
     {
-        QMessageBox::information(NULL, "Error", "Was not able to send message to connected device.");
+        QMessageBox::information(nullptr, "Error", "Was not able to send message to connected device.");
         return -7;
     }
 
@@ -118,12 +118,12 @@ int Boot::receiveControlMessage(libusb_device_handle* aHandle, ControlMessageHea
     if (ret == -7) {
         if (_found != 0x1) {
 #ifdef _WIN32
-            QMessageBox::information(NULL, "Error", "Make sure the device is in 'Windows' mode.");
+            QMessageBox::information(nullptr, "Error", "Make sure the device is in 'Windows' mode.");
 #else
-            QMessageBox::information(NULL, "Error", "Make sure the device is in 'Mac' mode.");
+            QMessageBox::information(nullptr, "Error", "Make sure the device is in 'Mac' mode.");
 #endif
         } else {
-            QMessageBox::information(NULL, "Error", "The connected device did not respond as expected.");
+            QMessageBox::information(nullptr, "Error", "The connected device did not respond as expected.");
         }
         return -7;
     }
@@ -148,13 +148,13 @@ int Boot::receiveControlMessage(libusb_device_handle* aHandle, ControlMessageHea
 }
 
 void Boot::commandReboot(libusb_device_handle* aHandle) {
-    sendControlMessage(aHandle, kCommandReboot, NULL, 0); // reboots the device (message 00 command 03)
-    receiveControlMessage(aHandle, NULL, NULL); // discard the reboot confirmation message (message 00 command 04)
+    sendControlMessage(aHandle, kCommandReboot, nullptr, 0); // reboots the device (message 00 command 03)
+    receiveControlMessage(aHandle, nullptr, nullptr); // discard the reboot confirmation message (message 00 command 04)
 }
 
 void Boot::commandPing(libusb_device_handle* aHandle) {
-    sendControlMessage(aHandle, kCommandPing, NULL, 0); // reboots the device (message 00 command 03)
-    receiveControlMessage(aHandle, NULL, NULL); // discard the reboot confirmation message (message 00 command 04)
+    sendControlMessage(aHandle, kCommandPing, nullptr, 0); // reboots the device (message 00 command 03)
+    receiveControlMessage(aHandle, nullptr, nullptr); // discard the reboot confirmation message (message 00 command 04)
 }
 
 int Boot::commandGetVariable(libusb_device_handle* aHandle, int variable, QByteArray* buffer, int bufferSize) {
@@ -170,7 +170,7 @@ int Boot::commandGetVariable(libusb_device_handle* aHandle, int variable, QByteA
     if (err == -7)
         return -7;
 
-    err = receiveControlMessage(aHandle, NULL, buffer);
+    err = receiveControlMessage(aHandle, nullptr, buffer);
     if (err == -7)
         return -7;
 
@@ -183,24 +183,24 @@ void Boot::commandSetMode(libusb_device_handle* aHandle, BootloaderMode mode) {
 
     // update the bootloader mode
     ControlMessageHeader header;
-    receiveControlMessage(aHandle, &header, NULL);
+    receiveControlMessage(aHandle, &header, nullptr);
     _bootloaderMode = header.mode;
 }
 
 void Boot::commandLoadBootloader(libusb_device_handle* aHandle) {
-    sendControlMessage(aHandle, kCommandLoadTransferredData, NULL, 0); // loads the usb bootloader or reboots (message 00 command 0B) // needs to be in mode 01 (RIM-BootLoader) to work
-    receiveControlMessage(aHandle, NULL, NULL); // discard the mode confirmation message (message 00 command 0C)
+    sendControlMessage(aHandle, kCommandLoadTransferredData, nullptr, 0); // loads the usb bootloader or reboots (message 00 command 0B) // needs to be in mode 01 (RIM-BootLoader) to work
+    receiveControlMessage(aHandle, nullptr, nullptr); // discard the mode confirmation message (message 00 command 0C)
 }
 
 void Boot::commandTransferData(libusb_device_handle* aHandle) {
-    sendControlMessage(aHandle, kCommandReadyForDataTransfer, NULL, 0); // loads the usb bootloader or reboots (message 00 command 0B) // needs to be in mode 01 (RIM-BootLoader) to work
-    receiveControlMessage(aHandle, NULL, NULL);
+    sendControlMessage(aHandle, kCommandReadyForDataTransfer, nullptr, 0); // loads the usb bootloader or reboots (message 00 command 0B) // needs to be in mode 01 (RIM-BootLoader) to work
+    receiveControlMessage(aHandle, nullptr, nullptr);
 }
 
 bool Boot::commandSendPass(libusb_device_handle* aHandle) {
-    sendControlMessage(aHandle, kCommandGetPasswordInfo, NULL, 0); // get the device password info (message 00 command 0A)  // needs to be in mode 01 (RIM-BootLoader) to work
+    sendControlMessage(aHandle, kCommandGetPasswordInfo, nullptr, 0); // get the device password info (message 00 command 0A)  // needs to be in mode 01 (RIM-BootLoader) to work
     QByteArray challengeData(100,0);
-    receiveControlMessage(aHandle, NULL, &challengeData); // discard the mode confirmation message (message 00 command 0E)
+    receiveControlMessage(aHandle, nullptr, &challengeData); // discard the mode confirmation message (message 00 command 0E)
 
     QByteArray challenge = challengeData.mid(4, 4);
     QByteArray salt = challengeData.mid(12,8);
@@ -232,11 +232,11 @@ bool Boot::commandSendPass(libusb_device_handle* aHandle) {
 
     sendControlMessage(aHandle, kCommandSendPassword, &hashedData, 68);
     ControlMessageHeader header;
-    receiveControlMessage(aHandle, &header, NULL);
+    receiveControlMessage(aHandle, &header, nullptr);
     if (header.command == 0x10)
         return true;
     else {
-        QMessageBox::information(NULL,"Wrong Password.","You entered the wrong password. I don't handle this yet but basically you will need to go to the Install tab, fix your password, then try again.");
+        QMessageBox::information(nullptr,"Wrong Password.","You entered the wrong password. I don't handle this yet but basically you will need to go to the Install tab, fix your password, then try again.");
         return false;
     }
 }
@@ -245,26 +245,26 @@ void Boot::commandSendLoader(libusb_device_handle *aHandle)
 {
     // Should be telling us it's ready.
     ControlMessageHeader header;
-    receiveControlMessage(aHandle, &header, NULL);
+    receiveControlMessage(aHandle, &header, nullptr);
     if (header.command != kCommandReadyForDataTransfer)
         return;
     int transferred = 0;
     unsigned char startSend[] = {0x1, 0x0, 0x10, 0x0, 0x7B, 0x9, 0x2B, 0x96, 0xC, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0xF0};
     libusb_bulk_transfer(aHandle, 0x2, startSend, 16, &transferred, 1000);
-    receiveControlMessage(aHandle, &header, NULL); // Should give Info basically
+    receiveControlMessage(aHandle, &header, nullptr); // Should give Info basically
 }
 
 void Boot::search() {
     if (_kill)
         return;
-    libusb_device_handle* handle = NULL;
-    libusb_device *dev = NULL;
+    libusb_device_handle* handle = nullptr;
+    libusb_device *dev = nullptr;
     libusb_device **list;
-    libusb_get_device_list(NULL, &list);
+    libusb_get_device_list(nullptr, &list);
     _found = 0;
     struct libusb_device_descriptor desc;
     _devices.clear();
-    for (int i = 0; (dev = list[i]) != NULL; i++) {
+    for (int i = 0; (dev = list[i]) != nullptr; i++) {
         libusb_get_device_descriptor(dev, &desc);
         if (desc.idVendor == BLACKBERRY_VENDOR_ID) {
             _devices.append(QString::number(desc.idProduct,16));
@@ -274,7 +274,7 @@ void Boot::search() {
                     handle = openDevice(list[i]);
                 } else {
                     handle = openDevice(list[i]);
-                    if (handle != NULL) {
+                    if (handle != nullptr) {
                         commandReboot(handle);
                         closeDevice(handle);
                     } else
@@ -292,7 +292,7 @@ void Boot::search() {
         return;
     }
     QTimer::singleShot(1500, this, SLOT(search()));
-    if (handle == NULL) {
+    if (handle == nullptr) {
         if (_found == 0x1)
             setConnecting(false);
         return;

@@ -79,22 +79,26 @@ class Splitter: public QObject {
     Q_OBJECT
 
 public:
-    Splitter(QString file) : kill(false), selectedFile(file) { reset(); }
-    Splitter(QString file, int options) : kill(false), option(options), selectedFile(file)  { reset(); }
-    Splitter(QStringList files) : kill(false), selectedFiles(files)  { reset(); }
+    Splitter(QString file) : selectedFile(file) { reset(); }
+    Splitter(QString file, int options) : option(options), selectedFile(file)  { reset(); }
+    Splitter(QStringList files) : selectedFiles(files)  { reset(); }
     ~Splitter() { }
     bool extractApps, extractImage;
     int extractTypes;
 public slots:
     void reset() {
+        kill = false;
         read = 0; maxSize = 1; emit progressChanged(0);
         extractApps = false;
         extractImage = false;
         extractTypes = 0;
         extracting = false;
         splitting = false;
+        signedFile = nullptr;
+        currentZip = nullptr;
     }
 
+    // This should be used from the QML interface but isn't yet
     void killSplit() {
         kill = true;
         die();
@@ -102,10 +106,11 @@ public slots:
     void die() {
         qDebug() << "Tool terminated early due to unforseen circumstances.";
         if (extracting) {
-            if (signedFile) {
+            if (signedFile != nullptr) {
                 if (signedFile->isOpen())
                     signedFile->close();
                 delete signedFile;
+                signedFile = nullptr;
             }
         }
         if (splitting)
@@ -115,7 +120,8 @@ public slots:
                 if (tmpFile.at(i)->isOpen())
                 {
                     tmpFile.at(i)->close();
-                    tmpFile.at(i)->remove();
+                    delete tmpFile.at(i);
+                    tmpFile.removeAt(i);
                 }
             }
             tmpFile.clear();
@@ -170,6 +176,7 @@ public slots:
                 }
                 signedFile->close();
                 delete signedFile;
+                signedFile = nullptr;
             }
         }
         barFile.close();
@@ -209,7 +216,7 @@ public slots:
             b += tmp.size();
         }
         if (!findHeader) {
-            QMessageBox::information(NULL, "Error", "Was not a Blackberry Autoloader file.");
+            QMessageBox::information(nullptr, "Error", "Was not a Blackberry Autoloader file.");
             die();
         }
         qint64 files;
@@ -249,7 +256,7 @@ public slots:
                     tmpFile.append(new QFile(filename+".signed"));
                 }
                 else
-                    tmpFile.append(NULL);
+                    tmpFile.append(nullptr);
             } else if (extracting) {
                 if (size > 1024*1024*5)
                     processExtract(filename, size, offsets[i]);
@@ -259,7 +266,7 @@ public slots:
         if (splitting) {
             // Write them out
             for (int i = 0; i < files; i++) {
-                if (tmpFile.at(i) == NULL)
+                if (tmpFile.at(i) == nullptr)
                     continue;
                 signedFile->seek(offsets[i]);
                 tmpFile.at(i)->open(QIODevice::WriteOnly);
@@ -273,11 +280,13 @@ public slots:
                 }
                 tmpFile.at(i)->close();
                 delete tmpFile.at(i);
+                tmpFile.removeAt(i);
             }
             tmpFile.clear();
         }
         signedFile->close();
         delete signedFile;
+        signedFile = nullptr;
     }
     void appendFile(QString fileName, QFile* target) {
         QFile file(fileName);
@@ -426,11 +435,11 @@ signals:
     void progressChanged(int progress);
     void error(QString err);
 private:
+    bool kill;
     quint64 read, maxSize;
     bool splitting;
     bool combining;
     bool extracting;
-    bool kill;
     int option;
     QString selectedFile;
     QStringList selectedFiles;

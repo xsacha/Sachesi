@@ -55,7 +55,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
     QString curPath = QDir::currentPath();
     if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
-        QMessageBox::critical(NULL, "Error", "Cannot be run from within a zip.\n Please extract first.");
+        QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
         return 0;
     }
     // Workaround for Mavericks

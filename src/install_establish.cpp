@@ -31,7 +31,7 @@ void InstallNet::requestChallenge()
     logadd(QString("3. Request Challenge"));
     BIGNUM* e = BN_new(); BN_set_word(e, 65537);
     privkey = RSA_new();
-    RSA_generate_key_ex(privkey, 1024, e, NULL);
+    RSA_generate_key_ex(privkey, 1024, e, nullptr);
     unsigned char* privkey_mod = new unsigned char[BN_num_bytes(privkey->n)];
     BN_bn2bin(privkey->n, privkey_mod);
     QByteArray buffer(128,0);

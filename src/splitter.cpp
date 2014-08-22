@@ -25,8 +25,8 @@ void fixFileTime(QString filename, int time) {
     LONGLONG ll = Int32x32To64(time, 10000000) + 116444736000000000;
     pft.dwLowDateTime = (DWORD)ll;
     pft.dwHighDateTime = ll >> 32;
-    HANDLE fd_handle = CreateFile(filename.toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    SetFileTime(fd_handle, &pft,(LPFILETIME) NULL, &pft);
+    HANDLE fd_handle = CreateFile(filename.toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    SetFileTime(fd_handle, &pft,(LPFILETIME) nullptr, &pft);
     CloseHandle(fd_handle);
 }
 #endif
@@ -177,7 +177,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
             if (extractApps)
             {
                 zipFile = new QuaZipFile(currentZip);
-                zipFile->open(QIODevice::WriteOnly, tier == 2 ? QuaZipNewInfo(dir) : QuaZipNewInfo(basedir + "/" + dir), NULL, 0, 8);
+                zipFile->open(QIODevice::WriteOnly, tier == 2 ? QuaZipNewInfo(dir) : QuaZipNewInfo(basedir + "/" + dir), nullptr, 0, 8);
             } else {
                 newFile = new QFile(basedir + "/" + dir);
                 newFile->open(QIODevice::WriteOnly);
@@ -377,7 +377,7 @@ void Splitter::processExtractSigned()
     extracting = true;
     signedFile = new QFile(selectedFile);
     if (!signedFile->open(QIODevice::ReadOnly)) {
-        QMessageBox::information(NULL, "Error", "Could not open " + selectedFile);
+        QMessageBox::information(nullptr, "Error", "Could not open " + selectedFile);
         return die();
     }
     QString baseName = selectedFile;
@@ -396,7 +396,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     if (signedPos > 0)
         signedFile->seek(signedPos);
     if (signedFile->read(4) != QByteArray("mfcq", 4)) {
-        QMessageBox::information(NULL, "Error", "Was not a Blackberry .signed image.");
+        QMessageBox::information(nullptr, "Error", "Was not a Blackberry .signed image.");
         return;
     }
     QNXStream stream(signedFile);
@@ -405,7 +405,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     READ_TMP(int, numPartitions);
     READ_TMP(int, blockSize);
     if (numPartitions > 10) {
-        QMessageBox::information(NULL, "Error", "Bad partition table.");
+        QMessageBox::information(nullptr, "Error", "Bad partition table.");
         return;
     }
     int nextOffset;
