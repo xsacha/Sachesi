@@ -18,6 +18,7 @@ INCLUDEPATH += $$P/ext $$P/src
 DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
 exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
+freebsd-*|openbsd-*: CONFIG += bsd
 
 CONFIG += c++11
 
@@ -61,7 +62,8 @@ mac {
     } else {
         LIBS += -ldl -lz -ludev
         # These should be static for it to be fully portable
-        LIBS += -lcrypto -lusb-1.0
+        LIBS += -lcrypto
+        !bsd: LIBS += -lusb-1.0
     }
 }
 
@@ -94,7 +96,7 @@ HEADERS += \
         src/backupinfo.h
 }
 
-!win32:!blackberry:!android {
+!win32:!blackberry:!android:!bsd {
     DEFINES += BOOTLOADER_ACCESS
     SOURCES += src/boot.cpp
     HEADERS += src/boot.h

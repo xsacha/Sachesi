@@ -91,7 +91,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.show();
 
     int ret = app->exec();
-#if !defined(_WIN32) && !defined(BLACKBERRY) && !defined(ANDROID)
+#ifdef BOOTLOADER_ACCESS
     thread.quit();
     thread.wait(4000);
 #endif
