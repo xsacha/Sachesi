@@ -149,8 +149,8 @@ void InstallNet::install(QStringList files)
     setFirmwareUpdate(false);
     foreach(QString _fileName, files)
     {
-        if (_fileName.startsWith("file:///"))
-            _fileName.remove(0,8);
+        if (_fileName.startsWith("file://"))
+            _fileName.remove(0,7);
         if (QFileInfo(_fileName).isDir())
         {
             QStringList suffixOnly = QDir(_fileName).entryList(QStringList("*.bar"));
@@ -947,7 +947,7 @@ void InstallNet::restoreReply()
                         if (literal_name.contains(".wtr") || literal_name.contains("omadm-") || literal_name.startsWith("m5730") || literal_name.startsWith("qc8960-"))
                             request = setData("update.cgi?type=radio", "octet-stream");
                         else
-                            request =setData("update.cgi?type=bar", "octet-stream");
+                            request = setData("update.cgi?type=bar", "octet-stream");
                         request.setHeader(QNetworkRequest::ContentLengthHeader, compressedFile->size());
                         request.setAttribute(QNetworkRequest::DoNotBufferUploadDataAttribute, true);
                         reply = manager->post(request, compressedFile);
@@ -961,6 +961,7 @@ void InstallNet::restoreReply()
                     errorText.chop(2);
                     setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last()+"<br>");
                     setNewLine("&nbsp;&nbsp;Error: " + errorText +"<br>");
+                    setInstalling(false);
                 }
             }
             else if (xml.name() == "Progress")
