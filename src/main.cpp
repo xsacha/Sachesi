@@ -58,10 +58,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
         return 0;
     }
-    // Workaround for Mavericks
-#if defined(__APPLE__)
-    QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
-#endif
 #ifdef BOOTLOADER_ACCESS
     Boot b;
     QThread thread;

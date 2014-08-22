@@ -216,7 +216,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
             else {
                 newFile->close();
 #ifdef _WIN32
-                fixTimeTime(newFile->fileName(), ind.time);
+                fixFileTime(newFile->fileName(), ind.time);
 #endif
                 delete newFile;
             }
