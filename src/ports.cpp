@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QStandardPaths>
 #include <QMessageBox>
-
+#include <QDebug>
 QString capPath(bool temp) {
     QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     QString capPath = QFileInfo(ini.fileName()).absolutePath();
@@ -71,16 +71,16 @@ bool checkCurPath()
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
-    QString curPath = QDir::currentPath();
+    QDir dir(QDir::currentPath());
     // Use .app path instead of binary path. Should really use a different method.
 #ifdef __APPLE__
-    if (curPath.endsWith("Contents/MacOS"))
-        QDir::setCurrent(curPath+"/../../../");
-#endif
-    if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
-        QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
-        return false;
+    if (dir.absolutePath().endsWith("Contents/MacOS")) {
+        while (!dir.absolutePath().endsWith(".app"))
+            dir.cdUp();
+        dir.cdUp();
     }
+    QDir::setCurrent(dir.absolutePath());
+#endif
 
     return true;
 }

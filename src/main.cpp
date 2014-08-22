@@ -92,10 +92,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(&b, SIGNAL(finished()), &b, SLOT(exit()));
     QObject::connect(&i, SIGNAL(newPassword(QString)), &b, SLOT(newPassword(QString)));
     b.start();
+    context->setContextProperty("b", &b); // Boot
 #endif
 
     // Set contexts
-    context->setContextProperty("b", &b); // Boot
     context->setContextProperty("p", &p); // MainNet
     context->setContextProperty("download", p.currentDownload);
     context->setContextProperty("carrierinfo",  &info);
