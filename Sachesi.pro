@@ -3,7 +3,7 @@ win32: QT += sql xmlpatterns
 
 TARGET="Sachesi"
 ICON=sachesi-114.png
-VERSION=1.3.0
+VERSION=1.3.1
 
 # Global specific
 win32:CONFIG(release, debug|release): CONFIG_DIR = $$join(OUT_PWD,,,/release)
