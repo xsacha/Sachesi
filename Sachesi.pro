@@ -55,18 +55,21 @@ mac {
     INCLUDEPATH += /opt/local/include
     LIBS+= -lcrypto -lssl -lz -framework CoreFoundation -framework IOKit -lobjc /opt/local/lib/libusb-1.0.a
 }
-!win32:!mac:!blackberry: {
+!win32:!mac:!blackberry:!bsd {
     android {
         LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so
         INCLUDEPATH += $$P/Android/include/
     } else {
-        LIBS += -ldl -lz -ludev
+        LIBS += -lz -lusb-1.0 -ldl -ludev
         # These should be static for it to be fully portable
         LIBS += -lcrypto
-        !bsd: LIBS += -lusb-1.0
     }
 }
-
+bsd: {
+	# PREFIX
+	isEmpty(PREFIX) { PREFIX = /usr/local/ }
+	LIBS += -lz -lcrypto -lusb
+}
 
 SOURCES += \
     src/main.cpp \
