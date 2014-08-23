@@ -594,7 +594,7 @@ void InstallNet::backupFileFinish()
 {
     _zipFile->write(reply->readAll());
     _zipFile->close();
-    delete _zipFile;
+    _zipFile->deleteLater();
     _zipFile = nullptr;
 
     _back.setCurMode(1);
@@ -618,7 +618,7 @@ void InstallNet::restoreReply()
             if (_zipFile != nullptr) {
                 if (_zipFile->isOpen())
                     _zipFile->close();
-                delete _zipFile;
+                _zipFile->deleteLater();
                 _zipFile = nullptr;
             }
             if (currentBackupZip != nullptr) {
@@ -1105,7 +1105,7 @@ void InstallNet::restoreReply()
         if (_zipFile) {
             if (_zipFile->isOpen())
                 _zipFile->close();
-            delete _zipFile;
+            _zipFile->deleteLater();
             _zipFile = nullptr;
         }
         _back.setCurMode(1);
@@ -1141,15 +1141,15 @@ void InstallNet::restoreSendFile() {
 void InstallNet::resetVars()
 {
     if (manager != nullptr) {
-        delete manager;
+        manager->deleteLater();
         manager = nullptr;
     }
     if (reply != nullptr) {
-        delete reply;
+        reply->deleteLater();
         reply = nullptr;
     }
     if (cookieJar != nullptr) {
-        delete cookieJar;
+        cookieJar->deleteLater();
         cookieJar = nullptr;
     }
     setCompleted(false);
@@ -1161,7 +1161,7 @@ void InstallNet::resetVars()
         currentBackupZip = nullptr;
     }
     if (_zipFile != nullptr) {
-        delete _zipFile;
+        _zipFile->deleteLater();
         _zipFile = nullptr;
     }
     setKnownPIN("");

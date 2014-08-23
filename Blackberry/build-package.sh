@@ -1,8 +1,6 @@
 #!/bin/bash
 # Usage: ./build-package.sh [DEBUG]
 
-cp ../Sachesi .
-
 if [ "$1" == "DEBUG" ]; then
     DEBUG="-devMode -debugToken /home/sacha/debugtoken.bar"
 else

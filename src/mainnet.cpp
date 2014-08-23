@@ -360,7 +360,7 @@ void MainNet::downloadLinks()
             if (replydl != nullptr)
             {
                 replydl->abort();
-                delete replydl;
+                replydl->deleteLater();
                 replydl = nullptr;
             }
             setDownloading(false);
@@ -406,7 +406,7 @@ void MainNet::downloadLinks()
                 if (replydl != nullptr)
                 {
                     replydl->abort();
-                    delete replydl;
+                    replydl->deleteLater();
                     replydl = nullptr;
                 }
                 setDownloading(false);
@@ -465,7 +465,7 @@ void MainNet::abortDL(QNetworkReply::NetworkError error)
         _currentFile.remove();
         if (replydl != nullptr)
         {
-            delete replydl;
+            replydl->deleteLater();
             replydl = nullptr;
         }
     }
