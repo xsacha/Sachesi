@@ -20,9 +20,8 @@ exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
 freebsd-*|openbsd-*: CONFIG += bsd
 
-CONFIG += c++11
-
 greaterThan(QT_MAJOR_VERSION, 4) {
+    CONFIG += c++11
     win32 {
         DEFINES += Q_WS_WIN32
         SOURCES += $$P/ext/zlib-win/*.c
@@ -30,12 +29,13 @@ greaterThan(QT_MAJOR_VERSION, 4) {
         INCLUDEPATH += $$P/ext/zlib-win
     }
 }
+else: QMAKE_CXXFLAGS += -std=c++0x
 
 win32 {
     # Where is your OpenSSL Install? Hardcoded for Win32
     INCLUDEPATH += C:\\openssl\\include
 
-    # Is static?
+    # Is all-in-one binary?
     CONFIG += static
     DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
     contains(CONFIG,static) {
@@ -47,28 +47,27 @@ win32 {
     # Hardcoded lib folder for winsocks
     LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
 }
-blackberry {
+else:blackberry {
     DEFINES += BLACKBERRY
     LIBS += -lbbcascadespickers -lbbsystem -lQtXml #-lcrypto
 }
-mac {
+else:mac {
     INCLUDEPATH += /opt/local/include
     LIBS+= -lcrypto -lssl -lz -framework CoreFoundation -framework IOKit -lobjc /opt/local/lib/libusb-1.0.a
 }
-!win32:!mac:!blackberry:!bsd {
-    android {
-        LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so
-        INCLUDEPATH += $$P/Android/include/
-    } else {
-        LIBS += -lz -lusb-1.0 -ldl -ludev
-        # These should be static for it to be fully portable
-        LIBS += -lcrypto
-    }
+else:bsd {
+    isEmpty(PREFIX): PREFIX = /usr/local/
+    LIBS += -lz -lcrypto -lusb
 }
-bsd: {
-	# PREFIX
-	isEmpty(PREFIX) { PREFIX = /usr/local/ }
-	LIBS += -lz -lcrypto -lusb
+else:android {
+    LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so
+    INCLUDEPATH += $$P/Android/include/
+    ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
+} else {
+    LIBS += -lz -ldl -ludev
+    # These below should be static for it to be fully portable (changing ABIs)
+    LIBS += -lcrypto -lusb-1.0
+    DEFINES += BOOTLOADER_ACCESS
 }
 
 SOURCES += \
@@ -99,11 +98,10 @@ HEADERS += \
         src/backupinfo.h
 }
 
-!win32:!blackberry:!android:!bsd {
-    DEFINES += BOOTLOADER_ACCESS
+# This requires libusb to be linked
+contains(DEFINES, BOOTLOADER_ACCESS) {
     SOURCES += src/boot.cpp
     HEADERS += src/boot.h
-    # This also means libusb needs to be linked
 }
 
 DEFINES += QUAZIP_STATIC
@@ -124,8 +122,6 @@ OTHER_FILES += \
     qml/generic/UI/*.qml \
     qml/bb10/UI/*.qml \
     Android/AndroidManifest.xml
-
-ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
 
 # Useful for adjusting paths and setting icons
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
