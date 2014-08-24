@@ -54,6 +54,7 @@ else:blackberry {
 else:mac {
     INCLUDEPATH += /opt/local/include
     LIBS+= -lcrypto -lssl -lz -framework CoreFoundation -framework IOKit -lobjc /opt/local/lib/libusb-1.0.a
+    DEFINES += BOOTLOADER_ACCESS
 }
 else:bsd {
     isEmpty(PREFIX): PREFIX = /usr/local/

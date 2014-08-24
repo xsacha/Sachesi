@@ -53,7 +53,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     dir.mkpath("/accounts/1000/shared/misc/Sachesi");
     QDir::setCurrent("/accounts/1000/shared/misc/Sachesi");
 #endif
+
     QString curPath = QDir::currentPath();
+    // Use .app path instead of binary path. Should really use a different method.
+#ifdef __APPLE__
+    if (curPath.endsWith("Contents/MacOS")
+        QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
+#endif
     if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
         QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
         return 0;

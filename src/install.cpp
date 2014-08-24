@@ -966,7 +966,7 @@ void InstallNet::restoreReply()
             }
             else if (xml.name() == "Progress")
             {
-                if ((_downgradePos == (_downgradeInfo.count() - 1)))
+                if (_downgradePos == (_downgradeInfo.count() - 1))
                     setDGProgress(50 + element.toInt()/2);
                 else
                     setDGProgress(inProgress ? (50 + element.toInt()/2) : 0);
