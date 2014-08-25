@@ -279,9 +279,9 @@ public slots:
                     b += updateProgress(tmp.size());
                 }
                 tmpFile.at(i)->close();
-                delete tmpFile.at(i);
-                tmpFile.removeAt(i);
             }
+            for(QFile* file: tmpFile)
+                    file->deleteLater();
             tmpFile.clear();
         }
         signedFile->close();
