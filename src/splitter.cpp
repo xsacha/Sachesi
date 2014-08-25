@@ -103,12 +103,9 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
             QString dir = QString(signedFile->read(count));
             if (dir == "." || dir == "..")
                 continue;
+
             qinode ind2 = createNode(inodenum, startPos);
-            // TODO: What does it mean when this happens?
-            if (ind2.sectors.count() == 0) {
-              qDebug() << "Unexpected sector count. File may be corrupt."
-              continue;
-            }
+
             if (ind2.perms & QCFM_IS_DIRECTORY)
             {
                 if (extractApps) {

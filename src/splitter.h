@@ -411,6 +411,11 @@ public slots:
             if (sector != -1)
                 ind.sectors.append(sector);
         }
+        // No sectors appears to be caused by empty files. These need to be extracted
+        if (ind.sectors.count() == 0) {
+            ind.sectors.append(0);
+        }
+
         stream >> ind.tiers;
         return ind;
     }

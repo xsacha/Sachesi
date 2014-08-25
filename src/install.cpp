@@ -962,6 +962,8 @@ void InstallNet::restoreReply()
                     setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last()+"<br>");
                     setNewLine("&nbsp;&nbsp;Error: " + errorText +"<br>");
                     setInstalling(false);
+                    setDGProgress(-1);
+                    setCurDGProgress(-1);
                 }
             }
             else if (xml.name() == "Progress")
