@@ -45,6 +45,11 @@ PageTab {
                 font.pixelSize: config.defaultSubtextSize
             }
         }
+        Text {
+            anchors {bottom: parent.bottom; bottomMargin: 4; horizontalCenter: parent.horizontalCenter }
+            text: "Look at your device for total install percent."
+            font.pixelSize: config.defaultSubtextSize
+        }
         MouseArea {
             anchors.fill: parent
         }

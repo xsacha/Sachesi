@@ -57,7 +57,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QString curPath = QDir::currentPath();
     // Use .app path instead of binary path. Should really use a different method.
 #ifdef __APPLE__
-    if (curPath.endsWith("Contents/MacOS")
+    if (curPath.endsWith("Contents/MacOS"))
         QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
 #endif
     if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {

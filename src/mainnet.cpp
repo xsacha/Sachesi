@@ -256,8 +256,7 @@ void MainNet::cancelSplit()
 
 void MainNet::abortSplit()
 {
-    if (splitThread)
-        splitThread->quit();
+    killSplit();
     cancelSplit();
 }
 

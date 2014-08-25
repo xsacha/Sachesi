@@ -98,7 +98,6 @@ public slots:
         currentZip = nullptr;
     }
 
-    // This should be used from the QML interface but isn't yet
     void killSplit() {
         kill = true;
         die();

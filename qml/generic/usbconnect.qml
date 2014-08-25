@@ -13,7 +13,7 @@ PageTab {
         Text {
             visible: !i.wrongPassBlock
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Searching for USB device"
+            text: "Searching for USB device" + (i.possibleDevices ? ("\nTalking to " + i.possibleDevices + " possible devices.") : "")
             font.pixelSize: config.defaultFontSize
         }
         Circle {

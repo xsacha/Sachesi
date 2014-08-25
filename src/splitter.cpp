@@ -74,6 +74,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
     QDir mainDir;
     if (!extractApps)
         mainDir.mkdir(basedir);
+
     QNXStream stream(signedFile);
     int count;
     qinode ind = createNode(nodenum, startPos);
@@ -109,7 +110,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
             if (ind2.perms & QCFM_IS_DIRECTORY)
             {
                 if (extractApps) {
-                    if (dir == "apps") {
+                    if (dir == "apps" && tier == 0) {
                         mainDir.mkdir(basedir);
                         extractDir(inodenum, basedir, startPos, 1);
                         continue;

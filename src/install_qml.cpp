@@ -15,6 +15,8 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
+// This file is just Qt hooks that don't need to be seen. It should really do this for you anyway.
+
 #include "install.h"
 
 #define SET_QML(type, name) \
@@ -38,6 +40,7 @@
 SET_QML(QString, ip)
 SET_QML(bool, wrongPass)
 SET_QML2(bool, wrongPassBlock, setWrongPassBlock)
+SET_QML2(int, possibleDevices, setPossibleDevices)
 SET_QML(QString, newLine)
 SET_QML(QStringList, firmwareNames)
 SET_QML(QStringList, firmwarePaths)

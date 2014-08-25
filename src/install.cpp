@@ -488,6 +488,8 @@ void InstallNet::login()
         }
     }
     ips.removeDuplicates();
+    // Keep the user updated with how many potential devices we are dealing with here.
+    setPossibleDevices(ips.count());
     if (ips.isEmpty())
         return;
     // Note: Removing fallback IP. Device will have to respond.
