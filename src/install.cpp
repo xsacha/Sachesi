@@ -703,8 +703,8 @@ void InstallNet::restoreReply()
             backup();
         else if (restoring())
             restore();
-        /*else if (_hadPassword)
-            scanProps();*/
+        else if (_hadPassword)
+            scanProps();
         //backupQuery();
     }
     else if (xml.name() == "DynamicProperties")
@@ -763,13 +763,16 @@ void InstallNet::restoreReply()
                     setKnownOS(xml.readElementText());
                 else if (name == "BatteryLevel")
                     setKnownBattery(xml.readElementText().toInt());
+                else if (name == "HardwareID") {
+                    // If the firmware reports the device as unknown (eg. Dev Alpha on 10.3), show the Hardware ID
+                    if (knownHW() == "Unknown")
+                        setKnownHW(xml.readElementText());
+                }
                 /* // DEPRECATED by discovery.cgi
                 else if (name == "DeviceName")
                 {
                     // name that the user calls their phone
-                }
-                else if (name == "HardwareID")
-                    setKnownHW(xml.readElementText());*/
+                }*/
             }
         }
         // No need to show this list anymore, I think
