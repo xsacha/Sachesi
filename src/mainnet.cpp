@@ -559,7 +559,7 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
     switch (server)
     {
     case 1:
-        requestUrl = "https://cse.beta.sl.eval.blackberry.com/cse/srVersionLookup/";
+        requestUrl = "https://beta.sl.eval.blackberry.com/cse/srVersionLookup/";
         break;
     case 0:
     default:

@@ -33,19 +33,21 @@ else: QMAKE_CXXFLAGS += -std=c++0x
 
 win32 {
     # Where is your OpenSSL Install? Hardcoded for Win32
-    INCLUDEPATH += C:\\openssl\\include
+    OPENSSL_PATH = C:\\OpenSSL
+    INCLUDEPATH += $$OPENSSL_PATH\\include
 
     # Is all-in-one binary?
     CONFIG += static
     DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
     contains(CONFIG,static) {
         DEFINES += STATIC STATIC_BUILD
-        LIBS+= -LC:\\openssl\\lib\\VC\\static -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
+        mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
+        else: LIBS += -L$$OPENSSL_PATH\\lib\\VC\\static -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
     } else {
-        LIBS+= -LC:\\openssl\\lib -llibeay32
+        !mingw: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32
     }
     # Hardcoded lib folder for winsocks
-    LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
+    !mingw: LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
 }
 else:blackberry {
     DEFINES += BLACKBERRY
@@ -61,9 +63,11 @@ else:bsd {
     LIBS += -lz -lcrypto -lusb
 }
 else:android {
-    LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so
+    LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so $$P/Android/libusb1.0.so
     INCLUDEPATH += $$P/Android/include/
+    ANDROID_EXTRA_LIBS += $$P/Android/libusb1.0.so
     ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
+    DEFINES += BOOTLOADER_ACCESS
 } else {
     LIBS += -lz -ldl -ludev
     # These below should be static for it to be fully portable (changing ABIs)

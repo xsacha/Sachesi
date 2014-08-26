@@ -1,11 +1,15 @@
-<?xml version='1.0' encoding='utf-8'?>
-<manifest package="com.Qtness.Sachesi" android:versionName="1.2.0" android:installLocation="auto" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1">
+<?xml version="1.0"?>
+<manifest package="com.Qtness.Sachesi" android:versionName="1.4.0" android:installLocation="auto" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1">
     <application android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Sachesi" android:icon="@drawable/icon" android:hardwareAccelerated="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="@string/app_name" android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
             <meta-data android:value="Sachesi" android:name="android.app.lib_name"/>
             <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
             <meta-data android:value="default" android:name="android.app.repository"/>
@@ -33,6 +37,7 @@
             <!-- Splash screen -->
         </activity>
     </application>
+    <uses-feature android:name="android.hardware.usb.host" />
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="14"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -43,4 +48,5 @@
     <!-- %%INSERT_FEATURES -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

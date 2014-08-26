@@ -31,7 +31,10 @@ Boot::Boot() : _bootloaderMode(0xFF), _connecting(false), _command(0), _rebootAf
     bootloaderModeData.append(new QByteArray("RIM-RAMLoader\0\0\0\1", 17));
     bootloaderModeData.append(new QByteArray("RIM UPL\0\0\0\0\0\0\0\0\0\1",       17));
     bootloaderModeData.append(new QByteArray("RIM-BootNUKE\0\0\0\0\1",  17));
-    libusb_init(nullptr);
+
+    // If Android does not have USB permissions, this will fail and we need to handle it.
+    _kill = libusb_init(nullptr) != 0;
+    // Should probably just shut down and notify qml if _kill is false at this stage.
 }
 
 Boot::~Boot()
@@ -257,6 +260,7 @@ void Boot::commandSendLoader(libusb_device_handle *aHandle)
 void Boot::search() {
     if (_kill)
         return;
+
     libusb_device_handle* handle = nullptr;
     libusb_device *dev = nullptr;
     libusb_device **list;
