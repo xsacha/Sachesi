@@ -5,30 +5,20 @@ ICON=sachesi-114.png
 VERSION=1.4.0
 
 # Global specific
-win32:CONFIG(release, debug|release): CONFIG_DIR = $$join(OUT_PWD,,,/release)
-else:win32:CONFIG(debug, debug|release): CONFIG_DIR = $$join(OUT_PWD,,,/debug)
-else:CONFIG_DIR=$$OUT_PWD
-OBJECTS_DIR = $$CONFIG_DIR/.obj/$$TARGET
-MOC_DIR = $$CONFIG_DIR/.moc/$$TARGET
-UI_DIR = $$CONFIG_DIR/.ui/$$TARGET
 P = $$_PRO_FILE_PWD_
+CONFIG += c++11
 INCLUDEPATH += $$P/ext $$P/src
 
 DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
 exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
-freebsd-*|openbsd-*: CONFIG += bsd
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++11
-    win32 {
-        DEFINES += Q_WS_WIN32
-        SOURCES += $$P/ext/zlib-win/*.c
-        HEADERS += $$P/ext/zlib-win/*.h
-        INCLUDEPATH += $$P/ext/zlib-win
-    }
+win32 {
+    DEFINES += Q_WS_WIN32
+    SOURCES += $$P/ext/zlib-win/*.c
+    HEADERS += $$P/ext/zlib-win/*.h
+    INCLUDEPATH += $$P/ext/zlib-win
 }
-else: QMAKE_CXXFLAGS += -std=c++0x
 
 win32 {
     # Where is your OpenSSL Install? Hardcoded for Win32
@@ -37,16 +27,17 @@ win32 {
 
     # Is all-in-one binary?
     CONFIG += static
-    DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
-    contains(CONFIG,static) {
-        DEFINES += STATIC STATIC_BUILD
-        mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
-        else: LIBS += -L$$OPENSSL_PATH\\lib\\VC\\static -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
-    } else {
-        !mingw: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32
+    static: DEFINES += STATIC STATIC_BUILD
+
+    mingw:static: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
+
+    !mingw {
+        DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
+        static: LIBS += -L$$OPENSSL_PATH\\lib\\VC\\static -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
+        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32
+        # Hardcoded lib folder for winsocks
+        LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
     }
-    # Hardcoded lib folder for winsocks
-    !mingw: LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
 }
 else:blackberry {
     DEFINES += BLACKBERRY
@@ -57,7 +48,7 @@ else:mac {
     LIBS+= -lcrypto -lssl -lz -framework CoreFoundation -framework IOKit -lobjc /opt/local/lib/libusb-1.0.a
     DEFINES += BOOTLOADER_ACCESS
 }
-else:bsd {
+else:freebsd-*|openbsd-* {
     isEmpty(PREFIX): PREFIX = /usr/local/
     LIBS += -lz -lcrypto -lusb
 }

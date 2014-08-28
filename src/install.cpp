@@ -158,12 +158,12 @@ void InstallNet::install(QStringList files)
             {
                 if (suffix.contains("_sfi"))
                 {
-                    setNewLine("<b>Installing OS: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b><br>");
+                    setNewLine("<b>Installing OS: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
                     setFirmwareUpdate(true);
                 }
                 if (suffix.contains(".wtr") || suffix.contains("omadm-") || suffix.startsWith("m5730") || suffix.startsWith("qc8960-"))
                 {
-                    setNewLine("<b>Installing Radio: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b><br>");
+                    setNewLine("<b>Installing Radio: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
                     setFirmwareUpdate(true);
                 }
                 _fileNames.append(_fileName + "/" + suffix);
@@ -173,12 +173,12 @@ void InstallNet::install(QStringList files)
             QString suffix = _fileName.split("/").last();
             if (suffix.contains("_sfi"))
             {
-                setNewLine("<b>Installing OS: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b><br>");
+                setNewLine("<b>Installing OS: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
                 setFirmwareUpdate(true);
             }
             if (suffix.contains(".wtr") || suffix.contains("omadm-") || suffix.startsWith("m5730") || suffix.startsWith("qc8960-"))
             {
-                setNewLine("<b>Installing Radio: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b><br>");
+                setNewLine("<b>Installing Radio: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
                 setFirmwareUpdate(true);
             }
             _fileNames.append(_fileName);
@@ -538,11 +538,11 @@ void InstallNet::discoveryReply() {
                     setKnownPIN(QString::number(xml.readElementText().toInt(),16).toUpper());
                 } else if (xml.name() == "SystemMachine") {
                     setKnownName(xml.readElementText());
-                    setNewLine(QString("Connected to %1 at %2.<br>").arg(knownName()).arg(ip()));
+                    setNewLine(QString("Connected to %1 at %2.").arg(knownName()).arg(ip()));
                 } else if (xml.name() == "OsType") {
                     if (xml.readElementText() == "BlackBerry PlayBook OS") {
                         setKnownName("Playbook_QNX6.6.0");
-                        setNewLine(QString("Connected to Playbook at %1.<br>").arg(ip()));
+                        setNewLine(QString("Connected to Playbook at %1.").arg(ip()));
                     }
                 } else if (xml.name() == "PlatformVersion") {
                     setKnownOS(xml.readElementText());
@@ -964,8 +964,8 @@ void InstallNet::restoreReply()
                 {
                     QString errorText = QString(data).split("ErrorDescription>").at(1);
                     errorText.chop(2);
-                    setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last()+"<br>");
-                    setNewLine("&nbsp;&nbsp;Error: " + errorText +"<br>");
+                    setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last());
+                    setNewLine("&nbsp;&nbsp;Error: " + errorText);
                     setInstalling(false);
                     setDGProgress(-1);
                     setCurDGProgress(-1);
@@ -1017,7 +1017,7 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "UpdateEnd") {
         setInstalling(false);
-        setNewLine("Completed Update.<br>");
+        setNewLine("Completed Update.");
         setDGProgress(-1);
         setCurDGProgress(-1);
     }
@@ -1186,8 +1186,11 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
     resetVars();
     if (error == 5) // On purpose
         return;
-    setNewLine("Communication Error: " + ((QNetworkReply*)sender())->errorString() + "<br>");
-    qDebug() << "Error: " << error;
+    QString errString = QString("Communication Error: %1 (%2)")
+        .arg(error)
+        .arg( ((QNetworkReply*)sender())->errorString() );
+    setNewLine(errString);
+    qDebug() << errString;
 }
 
 void InstallNet::logadd(QString logtxt)

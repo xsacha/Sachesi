@@ -795,10 +795,11 @@ void MainNet::serverError(QNetworkReply::NetworkError err)
     setScanning(_scanning-1);
     // Only show error if we are doing single scan or multiscan version is empty.
     if (!_multiscan || (_multiscanVersion == "" && _scanning == 0)) {
-        QString errormsg;
-        errormsg.setNum(err);
-        errormsg.prepend("Error: ");
-        _error = QString::number(err); emit errorChanged();
+        QString errormsg = QString("Error %1 (%2)")
+            .arg(err)
+            .arg( ((QNetworkReply*)sender())->errorString() );
+        _error = errormsg;
+        emit errorChanged();
         _versionRelease = ""; _versionOS = ""; _versionRadio = ""; emit versionChanged();
     }
     if (_scanning == 0)

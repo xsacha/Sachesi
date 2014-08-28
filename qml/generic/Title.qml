@@ -1,13 +1,23 @@
 import QtQuick 2.2
+import QtQuick.Window 2.2
+import Qt.labs.settings 1.0
 import "UI" 1.0
 
-Rectangle {
+Window {
+    id: window
     width: 520
     height: 480
+
+    Settings {
+        property alias x: window.x
+        property alias y: window.y
+        property alias width: window.width
+        property alias height: window.height
+    }
     color: "#868284"
     Config {id:config}
 
-	/*Text {
+    /*Text {
         font.pixelSize: 22
         text: "SACHESI"
         font.letterSpacing: (parent.width - 280) / 6

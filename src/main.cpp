@@ -18,8 +18,8 @@
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlEngine>
-#include <QQuickItem>
-#include <QQuickView>
+#include <QQuickWindow>
+#include <QQmlApplicationEngine>
 
 #include "mainnet.h"
 #ifndef BLACKBERRY
@@ -69,13 +69,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
 
-    QQuickView viewer;
-    viewer.setResizeMode(QQuickView::SizeRootObjectToView);
+    QQmlApplicationEngine engine;
+    QQmlContext *context = engine.rootContext();
     MainNet p;
 
 #ifndef BLACKBERRY
     InstallNet i;
-    viewer.rootContext()->setContextProperty("i",&i);
+    context->setContextProperty("i",&i);
 #endif
 
     if (!checkCurPath())
@@ -83,7 +83,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 #ifdef BOOTLOADER_ACCESS
     Boot b;
-    viewer.rootContext()->setContextProperty("b",&b);
+    context->setContextProperty("b",&b);
 
     QObject::connect(&b, SIGNAL(started()), &b, SLOT(search()));
     QObject::connect(&b, SIGNAL(finished()), &b, SLOT(exit()));
@@ -91,29 +91,27 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     b.start();
 #endif
 
-    viewer.rootContext()->setContextProperty("p",&p);
+    context->setContextProperty("p",&p);
 #ifndef BLACKBERRY
     qmlRegisterType<DropArea>("Drop", 1, 0, "DropArea");
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
 #endif
 
-    viewer.setSource(QUrl("qrc:/qml/generic/Title.qml"));
-    viewer.setMinimumHeight(440);
-    viewer.setMinimumWidth(520);
+    engine.load(QUrl("qrc:/qml/generic/Title.qml"));
+
+    QQuickWindow *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
+    window->setMinimumHeight(440);
+    window->setMinimumWidth(520);
 #if 0
 #ifdef SACHESI_GIT_VERSION
-    viewer.setWindowTitle(QString("Sachesi ") + SACHESI_VERSION + "-" + SACHESI_GIT_VERSION);
+    window->setWindowTitle(QString("Sachesi ") + SACHESI_VERSION + "-" + SACHESI_GIT_VERSION);
 #else
-    viewer.setWindowTitle(QString("Sachesi ") + SACHESI_VERSION);
+    window->setWindowTitle(QString("Sachesi ") + SACHESI_VERSION);
 #endif
 #endif
 
-    QSettings settings("Qtness", "Sachesi");
-#if 0
-    viewer.restoreGeometry(settings.value("geometry").toByteArray());
-#endif
-    viewer.show();
+    window->show();
 
     int ret = app.exec();
 #ifdef BOOTLOADER_ACCESS

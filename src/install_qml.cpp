@@ -120,7 +120,7 @@ void InstallNet::setNewLine(const QString &newLine)
 {
     _newLine = ""; // Otherwise it thinks it didn't change...
     emit newLineChanged();
-    _newLine = newLine;
+    _newLine = newLine + "<br>";
     emit newLineChanged();
 }
 
