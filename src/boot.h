@@ -20,6 +20,7 @@
 #include <QObject>
 #include <QFile>
 #include <QTimer>
+#include <QThread>
 #include <QStringList>
 #include <libusb-1.0/libusb.h>
 
@@ -86,7 +87,7 @@ typedef enum BootloaderMode {
     kBootloaderRimBootNuke               = 0x4 // Wipe User partition
 } BootloaderMode;
 
-class Boot : public QObject
+class Boot : public QThread
 {
     Q_OBJECT
     Q_PROPERTY(bool        connecting READ connecting WRITE setConnecting NOTIFY connectingChanged)

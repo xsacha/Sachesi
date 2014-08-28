@@ -1,4 +1,5 @@
-import QtQuick 1.1
+//import QtQuick 2.2
+import QtQuick 2.2
 
 Item {
     visible: false

@@ -64,28 +64,28 @@ SET_QML2(QString, knownHW, setKnownHW)
 SET_QML2(int,  knownBattery, setKnownBattery)
 
 
-void appendApps(QDeclarativeListProperty<Apps> * property, Apps * app)
+void appendApps(QQmlListProperty<Apps> * property, Apps * app)
 {
     Q_UNUSED(property);
     Q_UNUSED(app);
     //Do nothing. can't add to Apps using this method
 }
-int appsSize(QDeclarativeListProperty<Apps> * property)
+int appsSize(QQmlListProperty<Apps> * property)
 {
     return static_cast< QList<Apps *> *>(property->data)->size();
 }
-Apps* appsAt(QDeclarativeListProperty<Apps> * property, int index)
+Apps* appsAt(QQmlListProperty<Apps> * property, int index)
 {
     return static_cast< QList<Apps *> *>(property->data)->at(index);
 }
-void clearApps(QDeclarativeListProperty<Apps> *property)
+void clearApps(QQmlListProperty<Apps> *property)
 {
     return static_cast< QList<Apps *> *>(property->data)->clear();
 }
 
-QDeclarativeListProperty<Apps> InstallNet::appList()
+QQmlListProperty<Apps> InstallNet::appList()
 {
-    return QDeclarativeListProperty<Apps>(this, &_appList, &appendApps, &appsSize, &appsAt, &clearApps);
+    return QQmlListProperty<Apps>(this, &_appList, &appendApps, &appsSize, &appsAt, &clearApps);
 }
 
 void InstallNet::setIp(const QString &ip)

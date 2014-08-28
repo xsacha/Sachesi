@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.2
 import Style 1.0
 
 BasicButton {

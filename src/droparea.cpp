@@ -15,16 +15,16 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 #include <QDebug>
+#include <QCursor>
 #include "droparea.h"
 
-DropArea::DropArea(QDeclarativeItem *parent)
-        : QDeclarativeItem(parent),
+DropArea::DropArea(QQuickItem *parent)
+        : QQuickItem(parent),
     m_accepting(true)
 {
-    setAcceptDrops(m_accepting);
+    setFlag(QQuickItem::ItemAcceptsDrops);
 }
 
 void DropArea::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -42,7 +42,7 @@ void DropArea::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 void DropArea::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     QStringList files;
-    foreach (QUrl file, event->mimeData()->urls())
+    for(QUrl file : event->mimeData()->urls())
     {
         files += file.toString();
     }
@@ -53,10 +53,10 @@ void DropArea::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void DropArea::setAcceptingDrops(bool accepting)
 {
-    if (accepting == m_accepting)
+    if(accepting == m_accepting)
                 return;
 
     m_accepting = accepting;
-    setAcceptDrops(m_accepting);
+    setFlag(QQuickItem::ItemAcceptsDrops, m_accepting);
     emit acceptingDropsChanged();
 }

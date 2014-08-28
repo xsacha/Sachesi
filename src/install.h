@@ -19,8 +19,7 @@
 
 #include <QtNetwork>
 #include <QDataStream>
-#include <QDeclarativeContext>
-#include <QDeclarativeListProperty>
+#include <QQmlListProperty>
 #include <QCryptographicHash>
 #include <QSettings>
 #include <QFileDialog>
@@ -79,7 +78,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(QString knownName READ knownName WRITE setKnownName NOTIFY knownNameChanged)
     Q_PROPERTY(QString knownHW READ knownHW WRITE setKnownHW NOTIFY knownHWChanged)
     Q_PROPERTY(QString knownPIN READ knownPIN WRITE setKnownPIN NOTIFY knownPINChanged)
-    Q_PROPERTY(QDeclarativeListProperty<Apps> appList READ appList NOTIFY appListChanged)
+    Q_PROPERTY(QQmlListProperty<Apps> appList READ appList NOTIFY appListChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 
     Q_PROPERTY(QString backStatus READ backStatus NOTIFY backStatusChanged)
@@ -146,7 +145,7 @@ public:
     QString knownName() const;
     QString knownHW() const;
     QString knownPIN() const;
-    QDeclarativeListProperty<Apps> appList();
+    QQmlListProperty<Apps> appList();
     int appCount() const { return _appList.count(); }
     BackupInfo* back();
     QString backStatus() const;

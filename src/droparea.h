@@ -17,14 +17,15 @@
 
 #pragma once
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
+#include <QGraphicsSceneDragDropEvent>
 
-class DropArea : public QDeclarativeItem
+class DropArea : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(bool acceptingDrops READ isAcceptingDrops WRITE setAcceptingDrops NOTIFY acceptingDropsChanged)
 public:
-    explicit DropArea(QDeclarativeItem *parent = 0);
+    explicit DropArea(QQuickItem *parent = 0);
     bool isAcceptingDrops() const { return m_accepting; }
     void setAcceptingDrops(bool accepting);
 

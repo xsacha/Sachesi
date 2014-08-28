@@ -1,5 +1,4 @@
-QT += network gui core declarative script
-win32: QT += sql xmlpatterns
+QT += network gui widgets core quick qml
 
 TARGET="Sachesi"
 ICON=sachesi-114.png
@@ -128,6 +127,3 @@ OTHER_FILES += \
     qml/bb10/UI/*.qml \
     Android/AndroidManifest.xml
 
-# Useful for adjusting paths and setting icons
-include(qmlapplicationviewer/qmlapplicationviewer.pri)
-qtcAddDeployment()

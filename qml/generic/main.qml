@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.2
 import "mcc.js" as MCC
 import "UI" 1.0
 
@@ -435,6 +435,7 @@ PageTab {
             contentY: Math.floor(updateScrollBox.val*(contentHeight - height))
             TextEdit {
                 id: updateText
+                textFormat: TextEdit.RichText
                 width: parent.width - 2
                 anchors.left: parent.left; anchors.leftMargin: 3
                 selectByMouse: true

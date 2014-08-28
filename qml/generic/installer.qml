@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.2
 import Drop 1.0
 import AppLibrary 1.0
 import "UI" 1.0
@@ -215,6 +215,7 @@ PageTab {
 
                 TextEdit {
                     id: updateText
+                    textFormat: TextEdit.RichText
                     width: parent.width - 2
                     anchors.left: parent.left; anchors.leftMargin: 3
                     selectByMouse: true

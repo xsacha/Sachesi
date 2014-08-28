@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.2
 
 Rectangle {
     id: root
@@ -31,3 +31,4 @@ Rectangle {
         }
     }
 }
+

@@ -15,10 +15,12 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#include <QApplication>
-#include <QDeclarativeContext>
-#include <QtDeclarative/qdeclarative.h>
-#include "../qmlapplicationviewer/qmlapplicationviewer.h"
+#include <QGuiApplication>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QQuickItem>
+#include <QQuickView>
+
 #include "mainnet.h"
 #ifndef BLACKBERRY
 #include "install.h"
@@ -33,22 +35,10 @@
 // TODO: Make extraction less hacky.
 // TODO: Make extraction handle decent % tracking
 // TODO: Check and improve the USB Loader (Boot).
-// TODO: Handle threading issues, if any, in Boot.
 
-Q_DECL_EXPORT int main(int argc, char *argv[])
+bool checkCurPath()
 {
-#ifdef Q_WS_X11
-    QApplication::setAttribute(Qt::AA_X11InitThreads, true);
-#endif
-    QScopedPointer<QApplication> app(createApplication(argc, argv));
-    QCoreApplication::setOrganizationName("Qtness");
-    QCoreApplication::setApplicationName("Sachesi");
-
-    QmlApplicationViewer viewer;
-    MainNet p;
-#ifndef BLACKBERRY
-    InstallNet i;
-#else
+#ifdef BLACKBERRY
     QDir dir;
     dir.mkpath("/accounts/1000/shared/misc/Sachesi");
     QDir::setCurrent("/accounts/1000/shared/misc/Sachesi");
@@ -59,47 +49,76 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifdef __APPLE__
     if (curPath.endsWith("Contents/MacOS"))
         QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
-#endif
+#endif 
     if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
         QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
-        return 0;
+        return false;
     }
+
+    return true;
+}
+
+Q_DECL_EXPORT int main(int argc, char *argv[])
+{
+#ifdef Q_WS_X11
+    QApplication::setAttribute(Qt::AA_X11InitThreads, true);
+#endif
+
+    QGuiApplication app(argc, argv);
+    app.setOrganizationName("Qtness");
+    app.setOrganizationDomain("qtness.com");
+    app.setApplicationName("Sachesi");
+
+    QQuickView viewer;
+    viewer.setResizeMode(QQuickView::SizeRootObjectToView);
+    MainNet p;
+
+#ifndef BLACKBERRY
+    InstallNet i;
+    viewer.rootContext()->setContextProperty("i",&i);
+#endif
+
+    if (!checkCurPath())
+        return 0;
+
 #ifdef BOOTLOADER_ACCESS
     Boot b;
-    QThread thread;
-    thread.connect(&thread, SIGNAL(started()), &b, SLOT(search()));
-    thread.connect(&thread, SIGNAL(finished()), &b, SLOT(exit()));
-    i.connect(&i, SIGNAL(newPassword(QString)), &b, SLOT(newPassword(QString)));
-    b.moveToThread(&thread);
-    thread.start();
+    viewer.rootContext()->setContextProperty("b",&b);
+
+    QObject::connect(&b, SIGNAL(started()), &b, SLOT(search()));
+    QObject::connect(&b, SIGNAL(finished()), &b, SLOT(exit()));
+    QObject::connect(&i, SIGNAL(newPassword(QString)), &b, SLOT(newPassword(QString)));
+    b.start();
 #endif
+
     viewer.rootContext()->setContextProperty("p",&p);
 #ifndef BLACKBERRY
     qmlRegisterType<DropArea>("Drop", 1, 0, "DropArea");
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
-    viewer.rootContext()->setContextProperty("i",&i);
 #endif
-#ifdef BOOTLOADER_ACCESS
-    viewer.rootContext()->setContextProperty("b",&b);
-#endif
+
     viewer.setSource(QUrl("qrc:/qml/generic/Title.qml"));
     viewer.setMinimumHeight(440);
     viewer.setMinimumWidth(520);
+#if 0
 #ifdef SACHESI_GIT_VERSION
     viewer.setWindowTitle(QString("Sachesi ") + SACHESI_VERSION + "-" + SACHESI_GIT_VERSION);
 #else
     viewer.setWindowTitle(QString("Sachesi ") + SACHESI_VERSION);
 #endif
+#endif
 
     QSettings settings("Qtness", "Sachesi");
+#if 0
     viewer.restoreGeometry(settings.value("geometry").toByteArray());
+#endif
     viewer.show();
 
-    int ret = app->exec();
+    int ret = app.exec();
 #ifdef BOOTLOADER_ACCESS
-    thread.quit();
-    thread.wait(4000);
+    b.quit();
+    b.wait(1000);
 #endif
     return ret;
 }
