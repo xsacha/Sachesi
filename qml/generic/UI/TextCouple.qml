@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 
 Item {
     id: itemroot
@@ -8,15 +9,17 @@ Item {
     property alias subtext: subtextValue.text
     property alias thisid: textValue
     property alias readOnly: textValue.readOnly
-    property alias textColor: textValue.color
+    property alias textColor: textValue.textColor
     property variant before: itemroot
     property variant after: itemroot
     property alias typeOffset: typeText.right
     property alias passMode: textValue.echoMode
+    property alias restrictions: textValue.inputMethodHints
+    property alias maxLength: textValue.maximumLength
     signal clicked();
     signal upArrow();
     signal downArrow();
-    height: config.defaultButtonTextSize * 1.4; width: large ? config.defaultButtonTextSize * 14 : config.defaultButtonTextSize * 7;
+    height: config.defaultButtonTextSize * 1.4; width: large ? config.defaultButtonTextSize * 18 : config.defaultButtonTextSize * 7;
     Text {
         id: typeText
         anchors {left: parent.left; leftMargin: 10}
@@ -29,14 +32,11 @@ Item {
         text: ""
         font.pixelSize: config.defaultSubtextSize; font.bold: true; color: "#404040"
     }
-    Rectangle {
-        anchors {left: parent.left; leftMargin: itemroot.width / 2 - (large ? 10 : -10)}
-        height: itemroot.height; width: large ? (config.defaultSubtextSize + 1) * 7 : (config.defaultSubtextSize) * 3
-        radius: 2
-
-        TextInput {
+    TextField {
             id: textValue
-            width: parent.width
+            width: large ? (config.defaultSubtextSize + 1) * 9 : (config.defaultSubtextSize) * 3
+            anchors {left: parent.left; leftMargin: itemroot.width / 2 - (large ? 40 : -10)}
+            height: itemroot.height;
             anchors {left: parent.left; leftMargin: 5; verticalCenter: parent.verticalCenter }
             font.pixelSize: config.defaultSubtextSize + 1
             text: value
@@ -44,11 +44,8 @@ Item {
             KeyNavigation.priority: KeyNavigation.BeforeItem
             KeyNavigation.tab: after
             KeyNavigation.backtab: before
-            Keys.onReturnPressed: { itemroot.clicked()}
-            Keys.onEnterPressed: { itemroot.clicked()}
-            selectByMouse: true
+            onAccepted: itemrot.clicked()
             Keys.onUpPressed: { itemroot.upArrow()}
             Keys.onDownPressed: { itemroot.downArrow()}
-        }
     }
 }

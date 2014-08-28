@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>qml/generic/main.qml</file>
         <file>qml/generic/mcc.js</file>
-        <file>qml/generic/circle.png</file>
         <file>qml/generic/showpass.png</file>
         <file>qml/generic/section_background_pattern_odd.png</file>
     </qresource>

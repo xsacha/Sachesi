@@ -1,19 +1,14 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 
 Item {
     id: comboBox
     property string type
     property string initialText
-    property alias text: comboButton.text
+    property alias text: comboButton.currentText
     property alias subtext: subtextValue.text
-    property variant listModel
-    property int selectedItem: 0
-    signal expanded()
-    signal closed()
-    function close() {
-        listView.height = 0
-        this.closed()
-    }
+    property alias listModel: comboButton.model
+    property alias selectedItem: comboButton.currentIndex
     SystemPalette {id: pal}
 
     height: config.defaultButtonTextSize * 1.4; width: config.defaultButtonTextSize * 14
@@ -28,7 +23,14 @@ Item {
         text: ""
         font.pixelSize: config.defaultSubtextSize; font.bold: true; color: "#404040"
     }
-    Rectangle {
+    ComboBox {
+        id: comboButton
+        currentIndex: selectedItem
+        anchors {left: parent.left; leftMargin: comboBox.width / 2 - 10}
+        height: comboBox.height; width: (config.defaultSubtextSize + 1) * 9
+        model: [ initialText ]
+    }
+/*    Rectangle {
         id: comboButton
         property string text: initialText
         anchors {left: parent.left; leftMargin: comboBox.width / 2 - 10}
@@ -101,4 +103,5 @@ Item {
 
         Behavior on height { NumberAnimation { duration: 100 } }
     }
+*/
 }

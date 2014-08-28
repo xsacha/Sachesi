@@ -32,6 +32,7 @@ PageTab {
                         id: major
                         type: "Major"
                         value: "2"
+                        restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
                         large: false
                         after: minor.thisid
                         before: build.thisid
@@ -41,6 +42,7 @@ PageTab {
                         id: minor
                         type: "Minor"
                         value: "1"
+                        restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
                         large: false
                         after: build.thisid
                         before: major.thisid
@@ -50,6 +52,7 @@ PageTab {
                         id: build
                         type: "Build"
                         value: "3175"
+                        restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
                         subtext: "Multiple of 3"
                         large: false
                         after: major.thisid
@@ -279,6 +282,8 @@ PageTab {
             type: "Country"
             subtext: "Indonesia"
             value: "510"
+            restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
+            maxLength: 3
             onValueChanged: {
                 if (value.length == 3) subtext = MCC.to_country(value);
                 if (carrier != null) carrier.updateVal();
@@ -309,6 +314,8 @@ PageTab {
             id: carrier
             type: "Carrier"
             value: "01"
+            restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
+            maxLength: 3
             function updateVal() {
                 if (value.length <= 3) subtext = MCC.to_carrier(country.value, ("00" + value).slice(-3)); else subtext = "";
             }
@@ -323,46 +330,44 @@ PageTab {
             z: 11
             selectedItem: 4
             type: "Device"
-            initialText: "Z3"
             listModel: p.advanced ? advancedModel : babyModel
             ListModel {
                 id: advancedModel
-                ListElement { name: "Z30" }
-                ListElement { name: "Z10 OMAP" }
-                ListElement { name: "Z10 QCOM" }
-                ListElement { name: "P9982" }
-                ListElement { name: "Z3" }
-                ListElement { name: "Q30" }
-                ListElement { name: "Q10" }
-                ListElement { name: "Q5" }
-                ListElement { name: "Z5" }
-                ListElement { name: "Q3" }
-                ListElement { name: "Dev Alpha" }
-                ListElement { name: "Playbook" }
-                ListElement { name: "Ontario" }
-                ListElement { name: "Classic" }
-                ListElement { name: "Khan" }
+                ListElement { text: "Z30" }
+                ListElement { text: "Z10 OMAP" }
+                ListElement { text: "Z10 QCOM" }
+                ListElement { text: "P9982" }
+                ListElement { text: "Z3" }
+                ListElement { text: "Q30" }
+                ListElement { text: "Q10" }
+                ListElement { text: "Q5" }
+                ListElement { text: "Z5" }
+                ListElement { text: "Q3" }
+                ListElement { text: "Dev Alpha" }
+                ListElement { text: "Playbook" }
+                ListElement { text: "Ontario" }
+                ListElement { text: "Classic" }
+                ListElement { text: "Khan" }
             }
             ListModel {
                 id: babyModel
-                ListElement { name: "Z30" }
-                ListElement { name: "Z10 OMAP" }
-                ListElement { name: "Z10 QCOM" }
-                ListElement { name: "P9982" }
-                ListElement { name: "Z3" }
-                ListElement { name: "Q30" }
-                ListElement { name: "Q10" }
-                ListElement { name: "Q5" }
+                ListElement { text: "Z30" }
+                ListElement { text: "Z10 OMAP" }
+                ListElement { text: "Z10 QCOM" }
+                ListElement { text: "P9982" }
+                ListElement { text: "Z3" }
+                ListElement { text: "Q30" }
+                ListElement { text: "Q10" }
+                ListElement { text: "Q5" }
             }
-            onExpanded: { mode.close(); variant.close(); }
-            onSelectedItemChanged: {
-                variant.listModel.clear();
+            onSelectedItemChanged: if (variantModel != null) {
+                variantModel.clear() 
                 if (p.variantCount(selectedItem) > 1)
-                    variant.listModel.append({'name': 'Any'});
+                    variantModel.append({ 'text': 'Any'});
                 for (var i = 0; i < p.variantCount(selectedItem); i++)
-                    variant.listModel.append({'name': p.nameFromVariant(selectedItem, i)})
+                    variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
 
-                variant.selectedItem = 0; variant.text = variant.listModel.get(variant.selectedItem).name;
+                variant.selectedItem = 0;
             }
         }
         // How to deal with OMAP STL 100-1? Currently, assume the same carrier does not carry both types.
@@ -372,7 +377,6 @@ PageTab {
             z: 10
             type: "Variant"
             selectedItem: 0
-            initialText: "STJ 100-1"
             subtext: i.knownHW != "" ? "Connected: " + i.knownHW : ""
             onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
                                    else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
@@ -380,44 +384,27 @@ PageTab {
                                    else if (device.text === "Z30" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
                                    else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
 
-            listModel: ListModel { ListElement { name: "STJ 100-1" } }
-            onExpanded: { device.close(); mode.close(); server.close(); }
+            listModel: ListModel { id: variantModel; ListElement { text:  "STJ 100-1" } }
         }
         TextCoupleSelect {
             visible: p.advanced
             id: mode
             z: 9
             type: "Mode"
-            initialText: "Upgrade"
-            listModel: ListModel {
-                ListElement { name: "Upgrade" }
-                ListElement { name: "Debrick" }
-            }
-            onExpanded: { device.close(); variant.close(); server.close(); }
+            listModel: [ "Upgrade", "Debrick" ]
         }
         TextCoupleSelect {
             visible: p.advanced
             id: server
             z: 8
             type: "Server"
-            initialText: "Production"
-            listModel: ListModel {
-                ListElement { name: "Production" }
-                ListElement { name: "Beta" }
-            }
-            onExpanded: { device.close(); mode.close(); variant.close(); }
+            listModel: [ "Production", "Beta" ]
         }
         /*TextCoupleSelect {
             id: version
             z: 7
             type: "API"
-            initialText: "2.1.0"
-            listModel: ListModel {
-                ListElement { name: "2.1.0" }
-                ListElement { name: "2.0.0" }
-                ListElement { name: "1.0.0" }
-            }
-            onExpanded: { device.close(); mode.close(); variant.close(); }
+            listModel: [ "2.1.0", "2.0.0", "1.0.0" ]
         }*/
     }
 
