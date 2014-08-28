@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 import "UI" 1.0
 
 PageTab {
@@ -45,7 +46,7 @@ PageTab {
                 font.pixelSize: config.notificationFontSize
 
             }
-            Circle {
+            BusyIndicator {
                 width: config.notificationFontSize
                 height: config.notificationFontSize
             }

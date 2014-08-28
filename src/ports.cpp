@@ -58,8 +58,9 @@ bool checkCurPath()
 {
 #ifdef BLACKBERRY
     QDir dir;
-    dir.mkpath("/accounts/1000/shared/misc/Sachesi");
-    QDir::setCurrent("/accounts/1000/shared/misc/Sachesi");
+    QString path = QStandardPaths::standardLocations(GenericDataLocation) + "/Sachesi";
+    dir.mkpath(path);
+    QDir::setCurrent(path);
 #endif
 
     QString curPath = QDir::currentPath();

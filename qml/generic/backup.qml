@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 import BackupTools 1.0
 import "UI" 1.0
 
@@ -31,8 +32,9 @@ PageTab {
                         text: "Loading Backup Options"
                         font.pixelSize: config.defaultFontSize
                     }
-                    Circle {
-                        size: parent.height
+                    BusyIndicator {
+                        width: parent.height
+                        height: parent.height
                     }
                 }
 
@@ -101,8 +103,9 @@ PageTab {
                     font.pixelSize: config.notificationFontSize
                     text: i.backStatus + " (" + i.backCurProgress + "%)";
                 }
-                Circle {
-                    size: parent.height
+                BusyIndicator {
+                    width: parent.height
+                    height: parent.height
                 }
             }
         }

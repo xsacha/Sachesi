@@ -1,4 +1,6 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
+
 import "UI" 1.0
 
 PageTab {
@@ -16,10 +18,11 @@ PageTab {
             text: "Searching for USB device" + (i.possibleDevices ? ("\nTalking to " + i.possibleDevices + " possible devices.") : "")
             font.pixelSize: config.defaultFontSize
         }
-        Circle {
+        BusyIndicator {
             visible: !i.wrongPassBlock
             anchors.horizontalCenter: parent.horizontalCenter
-            size: config.defaultFontSize * 2
+            height: config.defaultFontSize * 2
+            width: height
         }
     }
     TextCouple {

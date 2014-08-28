@@ -6,6 +6,8 @@ VERSION=1.4.0
 
 # Global specific
 P = $$_PRO_FILE_PWD_
+OBJECTS_DIR = $$OUT_PWD/.obj/$$TARGET
+MOC_DIR = $$OUT_PWD/.moc/$$TARGET
 CONFIG += c++11
 INCLUDEPATH += $$P/ext $$P/src
 

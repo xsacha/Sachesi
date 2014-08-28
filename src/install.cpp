@@ -154,7 +154,7 @@ void InstallNet::install(QStringList files)
         if (QFileInfo(_fileName).isDir())
         {
             QStringList suffixOnly = QDir(_fileName).entryList(QStringList("*.bar"));
-            foreach (QString suffix, suffixOnly)
+            for(QString suffix : suffixOnly)
             {
                 if (suffix.contains("_sfi"))
                 {
@@ -200,14 +200,11 @@ void InstallNet::install()
         _downgradeInfo = _fileNames;
         emit dgPosChanged();
         emit dgMaxPosChanged();
-        for (int i = 0; i < _downgradeInfo.count(); i++)
-        {
-            nfilesize += QFile(_downgradeInfo.at(i)).size();
-        }
-        QString filesize;
-        filesize.setNum(nfilesize);
+        for(QString filename : _downgradeInfo)
+            nfilesize += QFile(filename).size();
+
         postData.addQueryItem("mode", firmwareUpdate() ? "os" : "bar");
-        postData.addQueryItem("size", filesize);
+        postData.addQueryItem("size", QString::number(nfilesize));
         postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
 }
@@ -234,11 +231,11 @@ void InstallNet::uninstall(QStringList packageids)
 bool InstallNet::uninstallMarked()
 {
     QStringList marked;
-    for (int i = 0; i < _appList.count(); i++) {
-        if (static_cast< QList<Apps *> *>(appList().data)->at(i)->isMarked()) {
-            marked.append(static_cast< QList<Apps *> *>(appList().data)->at(i)->packageId());
-            static_cast< QList<Apps *> *>(appList().data)->at(i)->setIsMarked(false);
-            static_cast< QList<Apps *> *>(appList().data)->at(i)->setType("");
+    for(Apps* app : _appList) {
+        if (app->isMarked()) {
+            marked.append(app->packageId());
+            app->setIsMarked(false);
+            app->setType("");
         }
     }
     if (marked.isEmpty())

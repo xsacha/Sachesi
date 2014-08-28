@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 import "UI" 1.0
 
 PageTab {
@@ -34,8 +35,9 @@ PageTab {
                     text: typeText + ((p.splitting == 5) ? "" : "(" + p.splitProgress + "%)");
                     font.pixelSize: config.notificationFontSize
                 }
-                Circle {
-                    size: parent.height
+                BusyIndicator {
+                    width: parent.height
+                    height: parent.height
                 }
             }
             Text {

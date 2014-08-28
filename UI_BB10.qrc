@@ -7,7 +7,6 @@
         <file>qml/generic/UI/TextCouple.qml</file>
         <file>qml/generic/UI/TextCoupleSelect.qml</file>
         <file>qml/generic/UI/TitleObject.qml</file>
-        <file>qml/generic/UI/Circle.qml</file>
         <file>qml/generic/UI/PageTab.qml</file>
         <file alias="qml/generic/Title.qml">qml/bb10/Title.qml</file>
         <file alias="qml/generic/extract.qml">qml/bb10/extract.qml</file>

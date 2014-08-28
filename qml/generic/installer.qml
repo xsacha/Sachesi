@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 import Drop 1.0
 import AppLibrary 1.0
 import "UI" 1.0
@@ -166,7 +167,7 @@ PageTab {
         scale: delMouse.pressed ? 0.8 : 1.0
         opacity: uninstalling ? 0.6 : 1.0
         Behavior on scale { NumberAnimation { duration: 100 } }
-        Circle {
+        BusyIndicator {
             id: delCircle
             visible: delete_files.uninstalling
             anchors.fill: parent
