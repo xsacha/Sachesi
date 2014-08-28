@@ -19,11 +19,8 @@
 // For portability between platforms and Qt versions.
 // Clears up the code in the more important files.
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QStandardPaths>
-#else
-#include <QDesktopServices>
-#endif
+#include <QMessageBox>
 
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
 #ifdef BLACKBERRY
@@ -53,17 +50,34 @@ QString getSaveDir() {
 #ifdef BLACKBERRY
     return settings.value("splitDir", "/accounts/1000/shared/misc/Sachesi/").toString();
 #else
-#if QT_VERSION >= 0x050000
     return settings.value("splitDir", QStandardPaths::standardLocations(QStandardPaths::DesktopLocation)).toString();
-#else
-    return settings.value("splitDir", QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)).toString();
 #endif
+}
+
+bool checkCurPath()
+{
+#ifdef BLACKBERRY
+    QDir dir;
+    dir.mkpath("/accounts/1000/shared/misc/Sachesi");
+    QDir::setCurrent("/accounts/1000/shared/misc/Sachesi");
 #endif
+
+    QString curPath = QDir::currentPath();
+    // Use .app path instead of binary path. Should really use a different method.
+#ifdef __APPLE__
+    if (curPath.endsWith("Contents/MacOS"))
+        QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
+#endif
+    if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
+        QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
+        return false;
+    }
+
+    return true;
 }
 
 void openFile(QString name) {
     // This could get more complicated
     QDesktopServices::openUrl(QUrl::fromLocalFile(name));
 }
-
 

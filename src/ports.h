@@ -31,12 +31,8 @@
 #include <bb/system/Clipboard>
 #endif
 
-#if QT_VERSION >= 0x050000
 #include <QUrlQuery>
 #define encodedQuery query(QUrl::FullyEncoded).toUtf8
-#else
-typedef QUrl QUrlQuery;
-#endif
 
 #ifdef BLACKBERRY
 typedef bb::cascades::pickers::FilePicker* FileSelect;
@@ -46,4 +42,6 @@ typedef QFileDialog* FileSelect;
 
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt);
 QString getSaveDir();
+bool checkCurPath();
 void openFile(QString name);
+

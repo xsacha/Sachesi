@@ -19,6 +19,8 @@
 
 void InstallNet::requestConfigure()
 {
+    if (!state())
+        return;
     logadd(QString("1. Request Configuration"));
     QByteArray buffer;
     QDataStream config(&buffer, QIODevice::WriteOnly);

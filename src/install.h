@@ -45,7 +45,7 @@ class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
 public:
-    SslNetworkAccessManager();
+    SslNetworkAccessManager() {};
 
 
 protected:

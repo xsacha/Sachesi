@@ -28,7 +28,7 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
     currentBackupZip(nullptr), _zipFile(nullptr)
 {
     resetVars();
-#ifdef WIN32
+#ifdef _MSC_VER
     WSAStartup(MAKEWORD(2,0), &wsadata);
 #endif
     connectTimer = new QTimer();
@@ -62,7 +62,7 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
 }
 InstallNet::~InstallNet()
 {
-#ifdef Q_WS_WIN32
+#ifdef _MSC_VER
     WSACleanup();
 #endif
 }
@@ -492,8 +492,6 @@ void InstallNet::login()
     setPossibleDevices(ips.count());
     if (ips.isEmpty())
         return;
-    // Note: Removing fallback IP. Device will have to respond.
-    //setIp(ips.first());
 
     if (manager == nullptr)
         manager = new SslNetworkAccessManager();
@@ -501,7 +499,7 @@ void InstallNet::login()
         cookieJar = new QNetworkCookieJar(this);
         manager->setCookieJar(cookieJar);
     }
-    foreach(QString ip_addr, ips) {
+    for(QString ip_addr : ips) {
         QNetworkRequest request;
         request.setRawHeader("User-Agent", "QNXWebClient/1.0");
         request.setAttribute(QNetworkRequest::CustomVerbAttribute, ip_addr);
@@ -1235,8 +1233,7 @@ void InstallNet::disconnected()
 
 void InstallNet::connected()
 {
-    if (state())
-        requestConfigure();
+    requestConfigure();
 }
 
 QString InstallNet::appDeltaMsg()
@@ -1253,12 +1250,12 @@ QString InstallNet::appDeltaMsg()
 
 void InstallNet::exportInstalled()
 {
-    QFile installedTxt(getSaveDir() + "installed.txt");
+    QFile installedTxt(getSaveDir() + "/installed.txt");
     installedTxt.open(QIODevice::WriteOnly | QIODevice::Text);
     installedTxt.write("Installed Applications:\n");
     for (int i = 0; i < _appList.count(); i++) {
         if (_appList.at(i)->type() != "") {
-            QString appLine = _appList.at(i)->friendlyName().remove("<b>").remove("</b>").leftJustified(45);
+            QString appLine = _appList.at(i)->friendlyName().remove("<b>").remove("</b>").leftJustified(55);
             appLine.append(_appList.at(i)->version() + "\n");
             installedTxt.write(appLine.toStdString().c_str());
         }
@@ -1266,7 +1263,7 @@ void InstallNet::exportInstalled()
     if (_appRemList.count()) {
         installedTxt.write("\n\nRemoved Applications:\n");
         for (int i = 0; i < _appRemList.count(); i++) {
-            QString appLine = _appRemList.at(i)->friendlyName().remove("<b>").remove("</b>").leftJustified(45);
+            QString appLine = _appRemList.at(i)->friendlyName().remove("<b>").remove("</b>").leftJustified(55);
             appLine.append(_appRemList.at(i)->version() + "\n");
             installedTxt.write(appLine.toStdString().c_str());
         }
@@ -1276,10 +1273,6 @@ void InstallNet::exportInstalled()
 }
 
 //Network Manager
-SslNetworkAccessManager::SslNetworkAccessManager()
-{
-}
-
 QNetworkReply* SslNetworkAccessManager::createRequest(Operation op, const QNetworkRequest& req, QIODevice* outgoingData)
 {
     QNetworkReply* reply = QNetworkAccessManager::createRequest(op, req, outgoingData);

@@ -15,7 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickWindow>
@@ -27,6 +27,7 @@
 #include "droparea.h"
 #include "backupinfo.h"
 #include "apps.h"
+#include "ports.h"
 #endif
 #ifdef BOOTLOADER_ACCESS
 #include "boot.h"
@@ -36,35 +37,12 @@
 // TODO: Make extraction handle decent % tracking
 // TODO: Check and improve the USB Loader (Boot).
 
-bool checkCurPath()
-{
-#ifdef BLACKBERRY
-    QDir dir;
-    dir.mkpath("/accounts/1000/shared/misc/Sachesi");
-    QDir::setCurrent("/accounts/1000/shared/misc/Sachesi");
-#endif
-
-    QString curPath = QDir::currentPath();
-    // Use .app path instead of binary path. Should really use a different method.
-#ifdef __APPLE__
-    if (curPath.endsWith("Contents/MacOS"))
-        QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
-#endif 
-    if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
-        QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");
-        return false;
-    }
-
-    return true;
-}
-
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 #ifdef Q_WS_X11
     QApplication::setAttribute(Qt::AA_X11InitThreads, true);
 #endif
-
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
