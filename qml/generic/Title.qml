@@ -13,6 +13,7 @@ Window {
         property alias y: window.y
         property alias width: window.width
         property alias height: window.height
+        property alias tab: titleRow.curObj
     }
     color: "#868284"
     Config {id:config}

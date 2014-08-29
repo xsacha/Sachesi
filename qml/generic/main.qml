@@ -1,4 +1,6 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 import "mcc.js" as MCC
 import "UI" 1.0
 
@@ -31,7 +33,7 @@ PageTab {
                     TextCouple {
                         id: major
                         type: "Major"
-                        value: "2"
+                        value: "3"
                         restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
                         large: false
                         after: minor.thisid
@@ -41,7 +43,7 @@ PageTab {
                     TextCouple {
                         id: minor
                         type: "Minor"
-                        value: "1"
+                        value: "0"
                         restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
                         large: false
                         after: build.thisid
@@ -51,7 +53,7 @@ PageTab {
                     TextCouple {
                         id: build
                         type: "Build"
-                        value: "3175"
+                        value: "1052"
                         restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
                         subtext: "Multiple of 3"
                         large: false
@@ -174,9 +176,9 @@ PageTab {
     Rectangle {
         visible: p.downloading
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        height: 100 + config.defaultSubtextSize; width: parent.width - 20; radius: 8
+        height: 100 + config.defaultSubtextSize; width: parent.width - 20; radius: 5
+        color: "lightgray"
         z: 5
-        color: "gray"
         opacity: 0.95
         Text {
             text: "Download"
@@ -194,19 +196,21 @@ PageTab {
             anchors {left: dlText.right; leftMargin: 10; verticalCenter: dlText.verticalCenter }
             color: "transparent"
             width: 240; height: 40
-            border.width: 1;
+            border { color: "gray"; width: 1 }
             Rectangle {
                 x: 1; y: 1
                 width: (p.dlProgress / 100) * parent.width - 2
-                height: 30 - 2
-                color: config.darkColor
+                height: 40 - 2
+                color: "lightsteelblue"
             }
             Text {
+                visible: !parent.indeterminate
                 text: p.currentFile
                 anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
                 font.pixelSize: config.defaultSubtextSize
             }
             Text {
+                visible: !parent.indeterminate
                 anchors {bottom: parent.bottom; bottomMargin: 2; horizontalCenter: parent.horizontalCenter }
                 text: "("+p.dlProgress+"%)"
                 font.pixelSize: config.defaultSubtextSize
@@ -216,9 +220,6 @@ PageTab {
             anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter}
             text: "Cancel"
             onClicked: p.abortDL()
-        }
-        MouseArea {
-            anchors.fill: parent
         }
     }
     Column {
@@ -408,57 +409,17 @@ PageTab {
         }*/
     }
 
-    Rectangle {
+    TextArea {
         id: updateMessage
-        anchors {top: parent.top; topMargin: 30; right: parent.right; rightMargin: 44 + Math.floor(parent.width / 100) }
-        color: config.windowColor
-        border.color: config.shadowColor
-        border.width: 2
-        width: parent.width - 100 - parent.width / 5 + Math.floor(parent.width / 100) - 5 * config.defaultFontSize; height: parent.height - 130 - parent.height / 10
-        Flickable {
-            id: updateFlick
-            width: parent.width; height: parent.height
-            contentHeight: updateText.height
-            contentY: Math.floor(updateScrollBox.val*(contentHeight - height))
-            TextEdit {
-                id: updateText
-                textFormat: TextEdit.RichText
-                width: parent.width - 2
-                anchors.left: parent.left; anchors.leftMargin: 3
-                selectByMouse: true
-                wrapMode: TextEdit.WrapAnywhere
-                readOnly: true
-                text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
+        anchors {top: parent.top; topMargin: 30; right: parent.right; rightMargin: 34 }
+        width: parent.width - 200 - parent.width / 8; height: parent.height - 130 - parent.height / 10
+        text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
                       (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
                       (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +
                       "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.url + "<br><b>Files<br></b>" + p.applications + "<br>";
-                font.pixelSize: config.defaultSubtextSize
-            }
-        }
-        clip: true
-    }
-    Rectangle {
-        id: updateScroll
-        anchors.left: updateMessage.right
-        anchors.top: updateMessage.top
-        width: config.defaultFontSize + Math.floor(parent.width / 100); height: updateMessage.height
-        border.width: 2
-        Rectangle {
-            id: updateScrollBox
-            anchors {horizontalCenter: parent.horizontalCenter }
-            width: parent.width - 2; height: 32
-            property double val: (y - 1) / (parent.height - height - 2)
-            y: 1
-            color: config.darkColor
-        }
-        MouseArea {
-            anchors.fill: parent
-            onMouseYChanged: {
-                if (mouseY < 0) updateScrollBox.y = 1
-                else if (mouseY > updateScroll.height - updateScrollBox.height - 1) updateScrollBox.y = updateScroll.height - updateScrollBox.height - 1
-                else updateScrollBox.y = mouseY + 1
-            }
-        }
+        readOnly: true
+        textFormat: TextEdit.RichText
+        selectByKeyboard: true
     }
 
     states: [
@@ -468,7 +429,6 @@ PageTab {
             AnchorChanges { target: variables; anchors.horizontalCenter: parent.horizontalCenter; anchors.left: undefined }
             AnchorChanges { target: scanButton; anchors.horizontalCenter: parent.horizontalCenter; anchors.left: undefined }
             PropertyChanges { target: updateMessage; visible: false; opacity: 0.0; scale: 0.4 }
-            PropertyChanges { target: updateScroll; visible: false; opacity: 0.0; scale: 0.4 }
             PropertyChanges { target: urlLinks; visible: false; opacity: 0.0; scale: 0.4 }
         },
         State {
@@ -477,7 +437,6 @@ PageTab {
             AnchorChanges { target: variables; anchors.horizontalCenter: undefined; anchors.left: parent.left }
             AnchorChanges { target: scanButton; anchors.horizontalCenter: undefined; anchors.left: parent.left }
             PropertyChanges { target: updateMessage; visible: true; opacity: 1.0; scale: 1.0 }
-            PropertyChanges { target: updateScroll; visible: true; opacity: 1.0; scale: 1.0 }
             PropertyChanges { target: urlLinks; visible: true; opacity: 1.0; scale: 1.0 }
         }
     ]
