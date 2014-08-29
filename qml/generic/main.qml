@@ -13,109 +13,57 @@ PageTab {
     Rectangle {
         id: versionLookup
         opacity: 0.9
-        color: "gray"
+        color: "lightgray"
         visible: false
         x: 20; y: 20
-        height: 30 + config.defaultFontSize * 10; width: 50 + config.defaultFontSize * 18; radius: 4
+        height: 12 + config.defaultFontSize * 8; width: 100 + config.defaultFontSize * 18; radius: 4
         z: 5
         MouseArea {
             anchors.fill: parent
             drag.target: versionLookup
             drag.axis: Drag.XandYAxis
-            drag.minimumX: 20
-            drag.maximumX: main.width - versionLookup.width - 20
-            drag.minimumY: 20
-            drag.maximumY: main.height - versionLookup.height - 20
+            drag.minimumX: 15
+            drag.maximumX: main.width - versionLookup.width - 15
+            drag.minimumY: 15
+            drag.maximumY: main.height - versionLookup.height - 15
             Column {
                 anchors {left: parent.left; leftMargin: 20; top: parent.top; topMargin: 20 }
                 spacing: config.defaultFontSize
                 Row {
-                    TextCouple {
-                        id: major
-                        type: "Major"
-                        value: "3"
-                        restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
-                        large: false
-                        after: minor.thisid
-                        before: build.thisid
-                        onClicked: relookup.clicked()
-                    }
-                    TextCouple {
-                        id: minor
-                        type: "Minor"
-                        value: "0"
-                        restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
-                        large: false
-                        after: build.thisid
-                        before: major.thisid
-                        onClicked: relookup.clicked()
-                    }
-                    TextCouple {
-                        id: build
-                        type: "Build"
-                        value: "1052"
-                        restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
-                        subtext: "Multiple of 3"
-                        large: false
-                        after: major.thisid
-                        before: minor.thisid
-                        onClicked: relookup.clicked()
-                        onUpArrow: increase();
-                        onDownArrow: decrease();
-                        function increase() {
-                            if (build.value < 9998) {
-                                build.value -= -3;
-                                relookup.clicked();
-                            }
+                    spacing: config.defaultFontSize - 4
+                    Row {
+                        SpinBox {
+                            id: major
+                            prefix: "10."
+                            value: 3
+                            maximumValue: 255
+                            onEditingFinished: relookup.clicked()
                         }
-                        function decrease() {
-                            if (build.value > 3) {
-                                build.value -= 3;
-                                relookup.clicked();
-                            }
+                        SpinBox {
+                            id: minor
+                            value: 0
+                            maximumValue: 255
+                            onEditingFinished: relookup.clicked()
                         }
-
-                        Column {
-                            spacing: 10
-                            anchors {left: build.right; leftMargin: -5; top: build.top; topMargin: -15 }
-                            Image {
-                                source: "arrow.png"
-                                width: 25; height: 25
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: build.increase();
-                                }
-                            }
-                            Image {
-                                source: "arrow.png"
-                                width: 25; height: 25
-                                rotation: 180
-                                MouseArea {
-                                    id: downMouse
-                                    anchors.fill: parent
-                                    onClicked: build.decrease();
-                                }
-                            }
+                        SpinBox {
+                            id: build
+                            value: 1052
+                            maximumValue: 9999
+                            stepSize: 3
+                            onEditingFinished: relookup.clicked()
                         }
-                    }
-                }
-                Row {
-                    spacing: config.defaultFontSize
-                    Text {
-                        text: "OS: 10." + major.value + "." + minor.value + "." + build.value
-                        font.pixelSize: config.defaultFontSize
                     }
                     RoundButton {
                         id: relookup
                         text: "Lookup"
-                        enabled: major.value.length > 0 && minor.value.length > 0 && build.value.length > 0 && !p.scanning
+                        enabled: !p.scanning
                         onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value);
                     }
                     RoundButton {
                         property bool looking: false
                         text: looking ? "Stop Scan" : "Autoscan"
-                        enabled: major.value.length > 0 && minor.value.length > 0 && build.value.length > 0 && (!p.scanning || looking)
-                        onClicked: { looking = !looking; if (looking) { build.increase(); relookup.clicked(); } }
+                        enabled: !p.scanning || looking
+                        onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
                         Timer {
                             id: autoLookup
                             interval: 10;
@@ -126,7 +74,11 @@ PageTab {
                                 if (downloadPotential.visible) {
                                     parent.looking = false;
                                 } else if (p.softwareRelease == "SR not in system") {
-                                    build.increase();
+                                    if (build.value >= 9998) {
+                                        minor.value++;
+                                        build.value = (build.value+3) % 10000;
+                                    } else
+                                        build.value += 3;
                                     relookup.clicked();
                                 }
                             }
@@ -142,7 +94,7 @@ PageTab {
             }
             Column {
                 anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 10 }
-                spacing: config.defaultFontSize
+                spacing: config.defaultFontSize - 4
                 Row {
                     spacing: config.defaultFontSize
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -362,14 +314,14 @@ PageTab {
                 ListElement { text: "Q5" }
             }
             onSelectedItemChanged: if (variantModel != null) {
-                variantModel.clear() 
-                if (p.variantCount(selectedItem) > 1)
-                    variantModel.append({ 'text': 'Any'});
-                for (var i = 0; i < p.variantCount(selectedItem); i++)
-                    variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
+                                       variantModel.clear()
+                                       if (p.variantCount(selectedItem) > 1)
+                                           variantModel.append({ 'text': 'Any'});
+                                       for (var i = 0; i < p.variantCount(selectedItem); i++)
+                                           variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
 
-                variant.selectedItem = 0;
-            }
+                                       variant.selectedItem = 0;
+                                   }
         }
         // How to deal with OMAP STL 100-1? Currently, assume the same carrier does not carry both types.
         TextCoupleSelect {
@@ -414,9 +366,9 @@ PageTab {
         anchors {top: parent.top; topMargin: 30; right: parent.right; rightMargin: 34 }
         width: parent.width - 200 - parent.width / 8; height: parent.height - 130 - parent.height / 10
         text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
-                      (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
-                      (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +
-                      "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.url + "<br><b>Files<br></b>" + p.applications + "<br>";
+              (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
+              (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +
+              "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.url + "<br><b>Files<br></b>" + p.applications + "<br>";
         readOnly: true
         textFormat: TextEdit.RichText
         selectByKeyboard: true

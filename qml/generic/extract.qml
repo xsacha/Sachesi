@@ -76,17 +76,17 @@ PageTab {
                         enabled: !p.splitting
                         onClicked: if (!p.splitting) p.splitAutoloader(osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
                     }
-                    RadioButton {
+                    CheckBox {
                         id: osSelect
                         text: "OS"
                         checked: true
                     }
-                    RadioButton {
+                    CheckBox {
                         id: radioSelect
                         text: "Radio"
                         checked: true
                     }
-                    RadioButton {
+                    CheckBox {
                         visible: p.advanced
                         id: pinSelect
                         text: "PINList"
@@ -138,12 +138,12 @@ PageTab {
                         enabled: !p.splitting && parent.partValue
                         onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
                     }
-                    RadioButton {
+                    CheckBox {
                         id: corePart
                         checked: true
                         text: "Core"
                     }
-                    RadioButton {
+                    CheckBox {
                         id: userPart
                         checked: true
                         text: "User"
@@ -159,12 +159,12 @@ PageTab {
                         enabled: !p.splitting && parent.imageValue
                         onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
                     }
-                    RadioButton {
+                    CheckBox {
                         id: rcfsImage
                         checked: true
                         text: "RCFS"
                     }
-                    RadioButton {
+                    CheckBox {
                         id: qnxImage
                         text: "QNX6"
                     }

@@ -33,7 +33,7 @@ PageTab {
                 onClicked: b.setCommandMode(4, postReboot.checked);
             }
         }
-        RadioButton {
+        CheckBox {
             id: postReboot
             text: "Reboot after"
         }

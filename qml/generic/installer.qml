@@ -231,7 +231,7 @@ PageTab {
                             }
                             opacity: 0.2
                         }
-                        RadioButton {
+                        CheckBox {
                             text: friendlyName
                             checked: isMarked
                             onCheckedChanged: isMarked = checked;
