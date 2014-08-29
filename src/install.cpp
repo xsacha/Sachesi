@@ -555,6 +555,9 @@ void InstallNet::discoveryReply() {
 }
 
 bool InstallNet::checkLogin() {
+    if (!_state)
+        return false;
+
     if (!_completed) {
         getQuery("login.cgi?request_version=1", "x-www-form-urlencoded");
         return false;

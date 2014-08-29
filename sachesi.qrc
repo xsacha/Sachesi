@@ -7,15 +7,14 @@
         <file>qml/generic/UI/TextCoupleSelect.qml</file>
         <file>qml/generic/UI/TitleObject.qml</file>
         <file>qml/generic/Title.qml</file>
+        <file>qml/generic/USBConnect.qml</file>
         <file>qml/generic/installer.qml</file>
         <file>qml/generic/backup.qml</file>
         <file>qml/generic/downloader.qml</file>
-        <file>qml/generic/usbconnect.qml</file>
         <file>qml/generic/text.png</file>
         <file>qml/generic/trash.png</file>
         <file>qml/generic/boot.qml</file>
         <file>qml/generic/extract.qml</file>
-        <file>qml/generic/arrow.png</file>
         <file>qml/generic/mcc.js</file>
         <file>qml/generic/showpass.png</file>
     </qresource>

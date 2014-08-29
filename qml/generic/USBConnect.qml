@@ -3,8 +3,9 @@ import QtQuick.Controls 1.2
 
 import "UI" 1.0
 
-TabView {
+Item {
     id:main
+    visible: i.knownBattery < 0
     property string password: passText.value
 
     Column {

@@ -8,7 +8,7 @@ import "UI" 1.0
 ApplicationWindow {
     id: window
     // TODO: Send version from C++
-    title: "Sachesi 1.4.9"
+    title: "Sachesi 1.5.0"
     width: 520
     height: 480
     minimumHeight: 520
@@ -52,7 +52,6 @@ ApplicationWindow {
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
         currentIndex: 3
-        frameVisible: true
         Component.onCompleted: {
             addTab("Extract", Qt.createComponent("extract.qml"));
             //if (p.hasBootAccess)
