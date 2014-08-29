@@ -17,7 +17,7 @@ Item {
             visible: !i.wrongPassBlock
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Searching for USB device" + (i.possibleDevices ? ("\nTalking to " + i.possibleDevices + " possible devices.") : "")
-            font.pixelSize: config.defaultFontSize
+            font.pointSize: 12
         }
         BusyIndicator {
             visible: !i.wrongPassBlock
@@ -68,7 +68,7 @@ Item {
         Column {
             Text {
                 text: "There was an issue connecting."
-                font.pixelSize: config.defaultSubtextSize;
+                font.pointSize: 10
             }
             Button {
                 text: "Try Again"
@@ -80,6 +80,6 @@ Item {
     Text {
         anchors {horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 50 }
         text: "These tools require a USB connection"
-        font.pixelSize: config.defaultFontSize
+        font.pointSize: 12
     }
 }

@@ -4,7 +4,6 @@
         <file>qml/generic/UI/Config.qml</file>
         <file>qml/generic/UI/TextCouple.qml</file>
         <file>qml/generic/UI/TextCoupleSelect.qml</file>
-        <file>qml/generic/UI/TitleObject.qml</file>
         <file>qml/generic/Title.qml</file>
         <file>qml/generic/USBConnect.qml</file>
         <file>qml/generic/installer.qml</file>

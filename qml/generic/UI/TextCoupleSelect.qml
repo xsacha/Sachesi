@@ -18,7 +18,7 @@ Item {
     }
     Label {
         id: subtextValue
-        anchors {left: parent.left; leftMargin: 15; top: parent.top; topMargin: parent.height - 2}
+        anchors {left: parent.left; leftMargin: 15; top: parent.top; topMargin: parent.height + 5}
         text: ""
     }
     ComboBox {

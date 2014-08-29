@@ -81,7 +81,7 @@ TabView {
             Row {
                 Text {
                     text: "Software Release: " + p.softwareRelease
-                    font.pixelSize: config.defaultFontSize
+                    font.pointSize: 12
                 }
             }
         }
@@ -125,7 +125,7 @@ TabView {
         opacity: 0.95
         Text {
             text: "Download"
-            font.pixelSize: config.defaultSubtextSize
+            font.pointSize: 10
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Text {
@@ -133,7 +133,7 @@ TabView {
             anchors {top: parent.top; topMargin: 40; left: parent.left; leftMargin: 10 }
             property int thisId: p.currentId + 1
             text: "Downloading (" + thisId + " of " + p.maxId + "): "
-            font.pixelSize: config.defaultSubtextSize
+            font.pointSize: 10
         }
         Rectangle {
             anchors {left: dlText.right; leftMargin: 10; verticalCenter: dlText.verticalCenter }
@@ -149,12 +149,12 @@ TabView {
             Text {
                 text: p.currentFile
                 anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
-                font.pixelSize: config.defaultSubtextSize
+                font.pointSize: 10
             }
             Text {
                 anchors {bottom: parent.bottom; bottomMargin: 2; horizontalCenter: parent.horizontalCenter }
                 text: "("+p.dlProgress+"%)"
-                font.pixelSize: config.defaultSubtextSize
+                font.pointSize: 10
             }
         }
         Button {
@@ -244,7 +244,7 @@ TabView {
                     id: wikiLink
                     anchors.centerIn: parent
                     text: "?"
-                    font.pixelSize: config.defaultFontSize
+                    font.pointSize: 8
                     MouseArea {
                         anchors.fill: parent
                         onClicked: Qt.openUrlExternally("https://en.wikipedia.org/w/index.php?title=Mobile_country_code");
