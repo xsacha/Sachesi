@@ -567,6 +567,8 @@ bool InstallNet::checkLogin() {
 
 void InstallNet::installProgress(qint64 pread, qint64)
 {
+    if (pread == 0)
+        return;
     _dlBytes = 50*pread;
     setDGProgress(qMin((int)50, (int)(_dlBytes / _dlTotal)));
 }
