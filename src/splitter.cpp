@@ -82,8 +82,9 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
     {
         for (int i = 0; i < 0x80; i++)
         {
-            if (kill) return die();
-            updateProgress(1400);
+            if (kill)
+                return die();
+
             signedFile->seek(findSector(num, startPos) + (i * 0x20));
             READ_TMP(int, inodenum);
             if (inodenum == 0)
@@ -192,6 +193,7 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
                     int len = sectorSize;
                     if (section == sections.last() && (ind2.size % sectorSize))
                         len = ind2.size % sectorSize;
+                    updateProgress(len);
                     QByteArray tmp = signedFile->read(len);
                     if (extractApps)
                     {
@@ -313,6 +315,7 @@ void Splitter::processExtractQNX6() {
     progressChanged(0);
     QString baseName = selectedFile;
     baseName.chop(5);
+    maxSize = signedFile->size();
     processQStart(0, baseName);
     signedFile->close();
     delete signedFile;
@@ -320,7 +323,6 @@ void Splitter::processExtractQNX6() {
 }
 
 int Splitter::processQStart(qint64 startPos, QString startDir) {
-    maxSize += 42000000; // Big hack!
     QNXStream stream(signedFile);
     signedFile->seek(startPos+8);
     READ_TMP(unsigned char, typeQNX); // 0x10 = no offset; 0x08 = has offset
@@ -486,6 +488,9 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     if (hasApps && (extractTypes & 2)) {
         int qnxcounter = 0;
         char qnx6Sig[] = {(char)0xEB, 0x10, (char)0x90, 0x0};
+        if (!extractImage) {
+            maxSize += (signedFile->size() - partitionOffsets[0]) * 0.58; // Guesstimate. I think the real size is in the header
+        }
         for (int i = 0; i < partitionOffsets.count(); i++) {
             signedFile->seek(partitionOffsets[i]);
             if (signedFile->read(4) == QByteArray(qnx6Sig,4)) {

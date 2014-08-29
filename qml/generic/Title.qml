@@ -11,6 +11,8 @@ ApplicationWindow {
     title: "Sachesi 1.4.9"
     width: 520
     height: 480
+    minimumHeight: 520
+    minimumWidth: 440
 
     Settings {
         property alias x: window.x
@@ -66,12 +68,9 @@ ApplicationWindow {
         visible: !hasDonated
         width: parent.width; height: 30
         anchors.bottom: parent.bottom
-        color: "black"
-        Text {
+        Label {
             anchors.centerIn: parent
             text: "If you enjoy using this tool. Please consider donating."
-            font.pixelSize: 14
-            color: "yellow"
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {

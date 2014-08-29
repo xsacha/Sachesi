@@ -79,8 +79,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     engine.load(QUrl("qrc:/qml/generic/Title.qml"));
 
     QQuickWindow *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
-    window->setMinimumHeight(440);
-    window->setMinimumWidth(520);
 #if 0
 #ifdef SACHESI_GIT_VERSION
     window->setWindowTitle(QString("Sachesi ") + SACHESI_VERSION + "-" + SACHESI_GIT_VERSION);
