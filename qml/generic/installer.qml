@@ -35,7 +35,7 @@ TabView {
                 color: config.darkColor
             }
             Text {
-                text: i.currentInstallName
+                text: i.curInstallName
                 anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
                 font.pixelSize: config.defaultSubtextSize
             }

@@ -35,33 +35,32 @@
     } \
     }
 
+#define WRITE_QML(type, name, caps) \
+    void InstallNet::caps(const type &var) { \
+    if (var != _ ## name) { \
+    _ ## name = var; \
+    emit name ## Changed(); \
+    } \
+    }
+
 // _()
 
-SET_QML(QString, ip)
-SET_QML(bool, wrongPass)
-SET_QML2(bool, wrongPassBlock, setWrongPassBlock)
-SET_QML2(int, possibleDevices, setPossibleDevices)
-SET_QML(QString, newLine)
-SET_QML(QStringList, firmwareNames)
-SET_QML(QStringList, firmwarePaths)
-SET_QML2(int,  state,     setState)
-int InstallNet::dgPos() const {
-    return _downgradePos;
-}
+WRITE_QML(bool, wrongPassBlock, setWrongPassBlock)
+WRITE_QML(int, possibleDevices, setPossibleDevices)
+WRITE_QML(int,  state,     setState)
 int InstallNet::dgMaxPos() const {
     return _downgradeInfo.count();
 }
-SET_QML2(int,  dgProgress, setDGProgress)
-SET_QML2(int,  curDGProgress, setCurDGProgress)
-SET_QML2(QString, currentInstallName, setCurrentInstallName)
-SET_QML(bool, completed)
-SET_QML2(bool, installing,setInstalling)
-SET_QML2(bool, firmwareUpdate, setFirmwareUpdate)
-SET_QML2(QString, knownName, setKnownName)
-SET_QML2(QString, knownOS, setKnownOS)
-SET_QML2(QString, knownPIN, setKnownPIN)
-SET_QML2(QString, knownHW, setKnownHW)
-SET_QML2(int,  knownBattery, setKnownBattery)
+WRITE_QML(int,  dgProgress, setDGProgress)
+WRITE_QML(int,  curDGProgress, setCurDGProgress)
+WRITE_QML(QString, curInstallName, setCurInstallName)
+WRITE_QML(bool, installing, setInstalling)
+WRITE_QML(bool, firmwareUpdate, setFirmwareUpdate)
+WRITE_QML(QString, knownOS, setKnownOS)
+WRITE_QML(int,  knownBattery, setKnownBattery)
+WRITE_QML(QString, knownName, setKnownName)
+WRITE_QML(QString, knownHW, setKnownHW)
+WRITE_QML(QString, knownPIN, setKnownPIN)
 
 
 void appendApps(QQmlListProperty<Apps> * property, Apps * app)
@@ -156,10 +155,6 @@ int InstallNet::backMethods() const {
     return _back.numMethods();
 }
 
-bool InstallNet::backing() const {
-    return _backing;
-}
-
 void InstallNet::setBacking(const bool &backing) {
     _backing = backing;
     emit backingChanged();
@@ -173,10 +168,6 @@ void InstallNet::setBacking(const bool &backing) {
     }
 }
 
-bool InstallNet::restoring() const {
-    return _restoring;
-}
-
 void InstallNet::setRestoring(const bool &restoring) {
     _restoring = restoring;
     emit restoringChanged();
@@ -187,10 +178,6 @@ void InstallNet::setRestoring(const bool &restoring) {
         _back.setSize(0);
         _back.setMaxSize(1);
     }
-}
-
-QString InstallNet::password() const {
-    return _password;
 }
 
 // Note: not overly secure if user is specifically targeted.

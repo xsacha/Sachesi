@@ -244,8 +244,8 @@ public slots:
         for (int i = 0; i < files; i++) {
             offsets.append(0); dataStream >> offsets[i];
         }
-
         offsets.append(signedFile->size()); // End of file
+
         // Create sizes and files
         QString baseName = selectedFile;
         baseName.chop(4);

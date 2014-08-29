@@ -70,7 +70,7 @@ InstallNet::~InstallNet()
 QNetworkRequest InstallNet::setData(QString page, QString contentType) {
     QNetworkRequest request = QNetworkRequest();
     request.setRawHeader("User-Agent", "QNXWebClient/1.0");
-    request.setUrl(QUrl("https://" + ip() + "/cgi-bin/" + page));
+    request.setUrl(QUrl("https://" + _ip + "/cgi-bin/" + page));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/" + contentType);
     return request;
 }
@@ -203,7 +203,7 @@ void InstallNet::install()
         for(QString filename : _downgradeInfo)
             nfilesize += QFile(filename).size();
 
-        postData.addQueryItem("mode", firmwareUpdate() ? "os" : "bar");
+        postData.addQueryItem("mode", _firmwareUpdate ? "os" : "bar");
         postData.addQueryItem("size", QString::number(nfilesize));
         postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
     }
@@ -455,7 +455,7 @@ void InstallNet::setActionProperty(QString name, QString value) {
 
 void InstallNet::login()
 {
-    if (state() || wrongPassBlock())
+    if (_state || _wrongPassBlock)
         return;
 
     QStringList ips;
@@ -513,7 +513,7 @@ void InstallNet::discoveryReply() {
     QNetworkRequest request = replyTemp->request();
     QString ip_addr = request.attribute(QNetworkRequest::CustomVerbAttribute).toString();
     // Just to prevent fighting between two devices
-    if (state() /*&& ip_addr != ip()*/)
+    if (_state /*&& ip_addr != _ip*/)
         return;
     QByteArray data = replyTemp->readAll();
     //qDebug() << "Message:\n" << QString(data).simplified().left(3000);
@@ -533,11 +533,11 @@ void InstallNet::discoveryReply() {
                     setKnownPIN(QString::number(xml.readElementText().toInt(),16).toUpper());
                 } else if (xml.name() == "SystemMachine") {
                     setKnownName(xml.readElementText());
-                    setNewLine(QString("Connected to %1 at %2.").arg(knownName()).arg(ip()));
+                    setNewLine(QString("Connected to %1 at %2.").arg(_knownName).arg(_ip));
                 } else if (xml.name() == "OsType") {
                     if (xml.readElementText() == "BlackBerry PlayBook OS") {
                         setKnownName("Playbook_QNX6.6.0");
-                        setNewLine(QString("Connected to Playbook at %1.").arg(ip()));
+                        setNewLine(QString("Connected to Playbook at %1.").arg(_ip));
                     }
                 } else if (xml.name() == "PlatformVersion") {
                     setKnownOS(xml.readElementText());
@@ -555,7 +555,7 @@ void InstallNet::discoveryReply() {
 }
 
 bool InstallNet::checkLogin() {
-    if (!completed()) {
+    if (!_completed) {
         getQuery("login.cgi?request_version=1", "x-www-form-urlencoded");
         return false;
     }
@@ -610,7 +610,7 @@ void InstallNet::restoreReply()
     QByteArray data = reply->readAll();
     //for (int s = 0; s < data.size(); s+=3000) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3000);
     if (data.size() == 0) {
-        if (restoring()) {
+        if (_restoring) {
             QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
             if (_zipFile != nullptr) {
                 if (_zipFile->isOpen())
@@ -657,7 +657,7 @@ void InstallNet::restoreReply()
         QByteArray result = HashPass(challenger, QByteArray::fromHex(saltHex), iCount);
 
         QNetworkRequest request = reply->request();
-        request.setUrl(QUrl("https://"+ip()+":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=1"));
+        request.setUrl(QUrl("https://"+ _ip +":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=1"));
 
         reply = manager->get(request);
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -694,11 +694,11 @@ void InstallNet::restoreReply()
         }
         setCompleted(true);
 
-        if (installing())
+        if (_installing)
             install();
-        else if (backing())
+        else if (_backing)
             backup();
-        else if (restoring())
+        else if (_restoring)
             restore();
         else if (_hadPassword)
             scanProps();
@@ -762,7 +762,7 @@ void InstallNet::restoreReply()
                     setKnownBattery(xml.readElementText().toInt());
                 else if (name == "HardwareID") {
                     // If the firmware reports the device as unknown (eg. Dev Alpha on 10.3), show the Hardware ID
-                    if (knownHW() == "Unknown")
+                    if (_knownHW == "Unknown")
                         setKnownHW(xml.readElementText());
                 }
                 /* // DEPRECATED by discovery.cgi
@@ -869,9 +869,9 @@ void InstallNet::restoreReply()
             QString literal_name = compressedFile->fileName().split('/').last();
             QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
             if (literal_name.contains("_sfi"))
-                setCurrentInstallName("Sending " + fileParts.at(1) + " Core OS");
+                setCurInstallName("Sending " + fileParts.at(1) + " Core OS");
             else
-                setCurrentInstallName("Sending " + fileParts.at(0));
+                setCurInstallName("Sending " + fileParts.at(0));
 
             if (literal_name.contains(".wtr") || literal_name.contains("omadm-") || literal_name.startsWith("m5730") || literal_name.startsWith("qc8960-"))
                 reply = manager->post(setData("update.cgi?type=radio", "octet-stream"), compressedFile);
@@ -920,7 +920,7 @@ void InstallNet::restoreReply()
                 else if (element == "Success")
                 {
                     inProgress = false;
-                    setCurrentInstallName(currentInstallName() + " Sent.");
+                    setCurInstallName(_curInstallName + " Sent.");
                     _downgradePos++;
                     emit dgPosChanged();
                     if (_downgradePos == _downgradeInfo.count())
@@ -939,9 +939,9 @@ void InstallNet::restoreReply()
                         QString literal_name = compressedFile->fileName().split('/').last();
                         QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
                         if (literal_name.contains("_sfi"))
-                            setCurrentInstallName("Sending " + fileParts.at(1) + " Core OS");
+                            setCurInstallName("Sending " + fileParts.at(1) + " Core OS");
                         else
-                            setCurrentInstallName("Sending " + fileParts.at(0));
+                            setCurInstallName("Sending " + fileParts.at(0));
 
                         QNetworkRequest request;
                         if (literal_name.contains(".wtr") || literal_name.contains("omadm-") || literal_name.startsWith("m5730") || literal_name.startsWith("qc8960-"))
@@ -973,7 +973,7 @@ void InstallNet::restoreReply()
                 else
                     setDGProgress(inProgress ? (50 + element.toInt()/2) : 0);
                 bool resend = false;
-                if (knownOS().startsWith("2."))
+                if (_knownOS.startsWith("2."))
                     resend = !data.contains("100");
                 else
                     resend = inProgress;
@@ -993,7 +993,7 @@ void InstallNet::restoreReply()
             if (xml.isStartElement()) {
                 if (xml.name() == "Status") {
                     if (xml.readElementText() == "Error") {
-                        if (backing()) {
+                        if (_backing) {
                             setBacking(false);
                             if (currentBackupZip != nullptr) {
                                 currentBackupZip->close();
@@ -1185,9 +1185,9 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
     QNetworkRequest request = ((QNetworkReply*)sender())->request();
     QString ip_addr = request.attribute(QNetworkRequest::CustomVerbAttribute).toString();
     // If it's a discovery pong, the IP will be 169.x.x.x (at least 9 chars)
-    QString this_ip = (ip_addr.length()) >= 9 ? ip_addr : ip();
+    QString this_ip = (ip_addr.length()) >= 9 ? ip_addr : _ip;
 
-    if (state() && ip_addr == ip()) {
+    if (_state && ip_addr == _ip) {
         resetVars();
     }
     QString errString = QString("Communication Error: %1 (%2) from %3")
@@ -1207,7 +1207,7 @@ void InstallNet::logadd(QString logtxt)
 QByteArray InstallNet::HashPass(QByteArray challenge, QByteArray salt, int iterations)
 {
     /* Create Hashed Password */
-    QByteArray hashedData = QByteArray(password().toLatin1());
+    QByteArray hashedData = QByteArray(_password.toLatin1());
     int count = 0;
     bool challenger = true;
     do {

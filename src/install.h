@@ -45,8 +45,7 @@ class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
 public:
-    SslNetworkAccessManager() {};
-
+    SslNetworkAccessManager() {}
 
 protected:
     QNetworkReply* createRequest(Operation op, const QNetworkRequest & req, QIODevice * outgoingData = 0);
@@ -54,31 +53,31 @@ protected:
 
 class InstallNet : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-    Q_PROPERTY(bool wrongPass READ wrongPass WRITE setWrongPass NOTIFY wrongPassChanged)
-    Q_PROPERTY(bool wrongPassBlock READ wrongPassBlock WRITE setWrongPassBlock NOTIFY wrongPassBlockChanged)
-    Q_PROPERTY(int possibleDevices READ possibleDevices WRITE setPossibleDevices NOTIFY possibleDevicesChanged)
-    Q_PROPERTY(QString ip       READ ip       WRITE setIp       NOTIFY ipChanged)
-    Q_PROPERTY(QString newLine  READ newLine  WRITE setNewLine  NOTIFY newLineChanged)
-    Q_PROPERTY(int     state    READ state    NOTIFY stateChanged)
-    Q_PROPERTY(int     dgPos READ dgPos NOTIFY dgPosChanged)
-    Q_PROPERTY(int     dgMaxPos READ dgMaxPos NOTIFY dgMaxPosChanged)
-    Q_PROPERTY(int     dgProgress READ dgProgress WRITE setDGProgress NOTIFY dgProgressChanged)
-    Q_PROPERTY(int     curDGProgress READ curDGProgress WRITE setCurDGProgress NOTIFY curDGProgressChanged)
-    Q_PROPERTY(QString currentInstallName READ currentInstallName WRITE setCurrentInstallName NOTIFY currentInstallNameChanged)
-    Q_PROPERTY(bool    completed READ completed NOTIFY completedChanged)
-    Q_PROPERTY(bool    installing READ installing WRITE setInstalling NOTIFY installingChanged)
-    Q_PROPERTY(bool    restoring READ restoring NOTIFY restoringChanged)
-    Q_PROPERTY(bool    backing READ backing NOTIFY backingChanged)
-    Q_PROPERTY(bool    firmwareUpdate READ firmwareUpdate WRITE setFirmwareUpdate NOTIFY firmwareUpdateChanged)
-    Q_PROPERTY(QStringList firmwareNames READ firmwareNames NOTIFY firmwareNamesChanged)
-    Q_PROPERTY(QStringList firmwarePaths READ firmwarePaths NOTIFY firmwarePathsChanged)
-    Q_PROPERTY(QString knownOS READ knownOS WRITE setKnownOS NOTIFY knownOSChanged)
-    Q_PROPERTY(int knownBattery READ knownBattery WRITE setKnownBattery NOTIFY knownBatteryChanged)
-    Q_PROPERTY(QString knownName READ knownName WRITE setKnownName NOTIFY knownNameChanged)
-    Q_PROPERTY(QString knownHW READ knownHW WRITE setKnownHW NOTIFY knownHWChanged)
-    Q_PROPERTY(QString knownPIN READ knownPIN WRITE setKnownPIN NOTIFY knownPINChanged)
-    Q_PROPERTY(QQmlListProperty<Apps> appList READ appList NOTIFY appListChanged)
+    Q_PROPERTY(QString password         MEMBER _password        WRITE setPassword         NOTIFY passwordChanged)
+    Q_PROPERTY(bool wrongPass           MEMBER _wrongPass       WRITE setWrongPass        NOTIFY wrongPassChanged)
+    Q_PROPERTY(bool wrongPassBlock      MEMBER _wrongPassBlock  WRITE setWrongPassBlock   NOTIFY wrongPassBlockChanged)
+    Q_PROPERTY(int possibleDevices      MEMBER _possibleDevices WRITE setPossibleDevices  NOTIFY possibleDevicesChanged)
+    Q_PROPERTY(QString ip               MEMBER _ip              WRITE setIp               NOTIFY ipChanged)
+    Q_PROPERTY(QString newLine          MEMBER _newLine         WRITE setNewLine          NOTIFY newLineChanged)
+    Q_PROPERTY(int     state            MEMBER _state           WRITE setState            NOTIFY stateChanged)
+    Q_PROPERTY(int     dgPos            MEMBER _downgradePos                              NOTIFY dgPosChanged)
+    Q_PROPERTY(int     dgMaxPos         READ dgMaxPos                                     NOTIFY dgMaxPosChanged)
+    Q_PROPERTY(int     dgProgress       MEMBER _dgProgress      WRITE setDGProgress       NOTIFY dgProgressChanged)
+    Q_PROPERTY(int     curDGProgress    MEMBER _curDGProgress   WRITE setCurDGProgress    NOTIFY curDGProgressChanged)
+    Q_PROPERTY(QString curInstallName   MEMBER _curInstallName  WRITE setCurInstallName   NOTIFY curInstallNameChanged)
+    Q_PROPERTY(bool    completed        MEMBER _completed                                 NOTIFY completedChanged)
+    Q_PROPERTY(bool    installing       MEMBER _installing      WRITE setInstalling       NOTIFY installingChanged)
+    Q_PROPERTY(bool    restoring        MEMBER _restoring       WRITE setRestoring        NOTIFY restoringChanged)
+    Q_PROPERTY(bool    backing          MEMBER _backing         WRITE setBacking          NOTIFY backingChanged)
+    Q_PROPERTY(bool    firmwareUpdate   MEMBER _firmwareUpdate  WRITE setFirmwareUpdate   NOTIFY firmwareUpdateChanged)
+    Q_PROPERTY(QStringList firmwareNames MEMBER _firmwareNames                            NOTIFY firmwareNamesChanged)
+    Q_PROPERTY(QStringList firmwarePaths MEMBER _firmwarePaths                            NOTIFY firmwarePathsChanged)
+    Q_PROPERTY(QString knownOS          MEMBER _knownOS         WRITE setKnownOS          NOTIFY knownOSChanged)
+    Q_PROPERTY(int knownBattery         MEMBER _knownBattery    WRITE setKnownBattery     NOTIFY knownBatteryChanged)
+    Q_PROPERTY(QString knownName        MEMBER _knownName       WRITE setKnownName        NOTIFY knownNameChanged)
+    Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
+    Q_PROPERTY(QString knownPIN         MEMBER _knownPIN        WRITE setKnownPIN         NOTIFY knownPINChanged)
+    Q_PROPERTY(QQmlListProperty<Apps> appList READ appList                                NOTIFY appListChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 
     Q_PROPERTY(QString backStatus READ backStatus NOTIFY backStatusChanged)
@@ -122,29 +121,8 @@ public:
     void logadd(QString logtxt);
     void AESEncryptSend(QByteArray &plain, int code);
     QString password() const;
-    bool wrongPass() const;
-    bool wrongPassBlock() const;
-    int possibleDevices() const;
-    QString ip() const;
-    QString newLine() const;
-    int state() const;
-    int dgPos() const;
     int dgMaxPos() const;
-    int dgProgress() const;
     int curDGProgress() const;
-    QString currentInstallName() const;
-    bool completed() const;
-    bool installing() const;
-    bool restoring() const;
-    bool backing() const;
-    bool firmwareUpdate() const;
-    QStringList firmwareNames() const;
-    QStringList firmwarePaths() const;
-    QString knownOS() const;
-    int knownBattery() const;
-    QString knownName() const;
-    QString knownHW() const;
-    QString knownPIN() const;
     QQmlListProperty<Apps> appList();
     int appCount() const { return _appList.count(); }
     BackupInfo* back();
@@ -164,7 +142,7 @@ public:
     void setState(const int &state);
     void setDGProgress(const int &progress);
     void setCurDGProgress(const int &progress);
-    void setCurrentInstallName(const QString &name);
+    void setCurInstallName(const QString &name);
     void setCompleted(const bool &exists);
     void setInstalling(const bool &installing);
     void setRestoring(const bool &restoring);
@@ -189,7 +167,7 @@ signals:
     void dgMaxPosChanged();
     void dgProgressChanged();
     void curDGProgressChanged();
-    void currentInstallNameChanged();
+    void curInstallNameChanged();
     void installingChanged();
     void restoringChanged();
     void backingChanged();
@@ -269,7 +247,7 @@ private:
     quint64 _dlTotal;
     int _dgProgress;
     int _curDGProgress;
-    QString _currentInstallName;
+    QString _curInstallName;
     BackupInfo _back;
     bool _completed;
     bool _firmwareUpdate;

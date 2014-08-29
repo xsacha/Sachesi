@@ -19,7 +19,7 @@
 
 void InstallNet::requestConfigure()
 {
-    if (!state())
+    if (!_state)
         return;
     logadd(QString("1. Request Configuration"));
     QByteArray buffer;
