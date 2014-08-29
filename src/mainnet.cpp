@@ -149,7 +149,7 @@ void MainNet::combineAutoloader(QStringList selectedFiles)
 #endif
     if (!capFile.exists())
     {
-        QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.6.exe";
+        QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.11.exe";
         QNetworkAccessManager* mNetworkManager = new QNetworkAccessManager(this);
         QObject::connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(capNetworkReply(QNetworkReply*)));
         /*QNetworkReply* reply =*/ mNetworkManager->get(QNetworkRequest(capUrl));

@@ -382,8 +382,7 @@ void Splitter::processExtractSigned()
     extracting = true;
     signedFile = new QFile(selectedFile);
     if (!signedFile->open(QIODevice::ReadOnly)) {
-        QMessageBox::information(nullptr, "Error", "Could not open " + selectedFile);
-        return die();
+        return die("Could not open " + selectedFile);
     }
     QString baseName = selectedFile;
     baseName.chop(7);

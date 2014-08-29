@@ -102,7 +102,7 @@ public slots:
         kill = true;
         die();
     }
-    void die() {
+    void die(QString message = "") {
         qDebug() << "Tool terminated early due to unforseen circumstances.";
         if (extracting) {
             if (signedFile != nullptr) {
@@ -128,6 +128,8 @@ public slots:
         extracting = false;
         combining = false;
         splitting = false;
+        if (!message.isEmpty())
+            QMessageBox::information(nullptr, "Error", message);
         emit finished();
     }
 
@@ -209,20 +211,35 @@ public slots:
             for (int i = 0; i < BUFFER_LEN - 12; i++) {
                 if (tmp.at(i) == (char)0x9C && tmp.at(i+1) == (char)0xD5 && tmp.at(i+2) == (char)0xC5 && tmp.at(i+3) == (char)0x97 &&
                         tmp.at(i+8) == (char)0x9C && tmp.at(i+9) == (char)0xD5 && tmp.at(i+10) == (char)0xC5 && tmp.at(i+11) == (char)0x97) {
-                    findHeader = b+i+12;
+                    findHeader = b+i+20;
                 }
             }
             b += tmp.size();
         }
         if (!findHeader) {
-            QMessageBox::information(nullptr, "Error", "Was not a Blackberry Autoloader file.");
-            die();
+            return die("Was not a Blackberry Autoloader file.");
         }
+
         qint64 files;
         QList<qint64> offsets;
         QNXStream dataStream(signedFile);
         signedFile->seek(findHeader);
-        dataStream >> files;
+
+        // Search for offset table
+        for (int attempts = 0; attempts < 32; attempts++) {
+            qint64 tmp;
+            dataStream >> tmp;
+            if ((tmp - signedFile->pos()) < 500) {
+                signedFile->seek(signedFile->pos() - 16);
+                dataStream >> files;
+                break;
+            }
+        }
+
+        if (files < 1 || files > 20) {
+            return die("Unknown Blackberry Autoloader file.");
+        }
+
         // Collect offsets
         for (int i = 0; i < files; i++) {
             offsets.append(0); dataStream >> offsets[i];
