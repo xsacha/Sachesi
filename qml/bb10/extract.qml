@@ -76,17 +76,17 @@ PageTab {
                         enabled: !p.splitting
                         onClicked: if (!p.splitting) p.splitAutoloader(osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
                     }
-                    SelectionText {
+                    RadioButton {
                         id: osSelect
                         text: "OS"
                         checked: true
                     }
-                    SelectionText {
+                    RadioButton {
                         id: radioSelect
                         text: "Radio"
                         checked: true
                     }
-                    SelectionText {
+                    RadioButton {
                         visible: p.advanced
                         id: pinSelect
                         text: "PINList"
@@ -120,12 +120,12 @@ PageTab {
                         enabled: !p.splitting && parent.partValue
                         onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
                     }
-                    SelectionText {
+                    RadioButton {
                         id: corePart
                         checked: true
                         text: "Core"
                     }
-                    SelectionText {
+                    RadioButton {
                         id: userPart
                         checked: true
                         text: "User"
@@ -141,12 +141,12 @@ PageTab {
                         enabled: !p.splitting && parent.imageValue
                         onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
                     }
-                    SelectionText {
+                    RadioButton {
                         id: rcfsImage
                         checked: true
                         text: "RCFS"
                     }
-                    SelectionText {
+                    RadioButton {
                         id: qnxImage
                         text: "QNX6"
                     }

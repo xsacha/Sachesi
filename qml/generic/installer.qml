@@ -107,10 +107,10 @@ PageTab {
                 }
             }
         }
-        Label {
+        Text {
             id: helpText
             text: "To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b>."
-            //font.pixelSize: config.defaultSubtextSize
+            font.pixelSize: config.defaultSubtextSize
         }
         Row {
             visible: p.advanced
@@ -231,7 +231,7 @@ PageTab {
                             }
                             opacity: 0.2
                         }
-                        SelectionText {
+                        RadioButton {
                             text: friendlyName
                             checked: isMarked
                             onCheckedChanged: isMarked = checked;

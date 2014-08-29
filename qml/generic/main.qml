@@ -230,11 +230,11 @@ PageTab {
         Row {
             spacing: 10
             anchors.horizontalCenter: parent.horizontalCenter
-            SelectionText {
+            /*RadioButton {
                 id: delta
                 visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 text: "Delta"
-            }
+            }*/
             RoundButton {
                 id: searchButton
                 enabled: !p.scanning
