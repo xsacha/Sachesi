@@ -1,14 +1,14 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.2
-import QtQuick.Layouts 1.0
+// This might be a tough sell. It's very nice but not included in package
 import Qt.labs.settings 1.0
 import "UI" 1.0
 
 ApplicationWindow {
     id: window
     // TODO: Send version from C++
-    title: "Sachesi 1.4.0"
+    title: "Sachesi 1.4.9"
     width: 520
     height: 480
 
@@ -19,10 +19,11 @@ ApplicationWindow {
         property alias height: window.height
         property alias tab: titleRow.currentIndex
     }
-    //color: "#868284"
+
     Config {id:config}
 
     Text {
+        id: title
         font.pixelSize: 22
         text: "SACHESI"
         font.letterSpacing: (parent.width - 280) / 6
@@ -47,7 +48,7 @@ ApplicationWindow {
     TabView {
         id: titleRow
         width: parent.width
-        anchors {top: parent.top; topMargin: 14; bottom: parent.bottom }
+        anchors {top: title.bottom; bottom: parent.bottom }
         currentIndex: 3
         frameVisible: true
         Component.onCompleted: {

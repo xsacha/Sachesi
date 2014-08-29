@@ -336,8 +336,7 @@ void InstallNet::selectRestore(int options)
         dir = QDir::homePath() + "/My Documents/Blackberry/Backup";
     FileSelect finder = selectFiles("Restore Backup", dir, "Blackberry Backup", "*.bbb");
 
-#ifdef BLACKBERRY
-#else
+#ifndef BLACKBERRY
     if (finder->exec())
         _fileNames = finder->selectedFiles();
     finder->deleteLater();
@@ -485,6 +484,7 @@ void InstallNet::login()
         }
     }
     ips.removeDuplicates();
+
     // Keep the user updated with how many potential devices we are dealing with here.
     setPossibleDevices(ips.count());
     if (ips.isEmpty())
@@ -1178,12 +1178,22 @@ void InstallNet::resetVars()
 
 void InstallNet::restoreError(QNetworkReply::NetworkError error)
 {
-    resetVars();
     if (error == 5) // On purpose
         return;
-    QString errString = QString("Communication Error: %1 (%2)")
+
+    // This is only if it's a discovery pong. Otherwise it will be empty string.
+    QNetworkRequest request = ((QNetworkReply*)sender())->request();
+    QString ip_addr = request.attribute(QNetworkRequest::CustomVerbAttribute).toString();
+    // If it's a discovery pong, the IP will be 169.x.x.x (at least 9 chars)
+    QString this_ip = (ip_addr.length()) >= 9 ? ip_addr : ip();
+
+    if (state() && ip_addr == ip()) {
+        resetVars();
+    }
+    QString errString = QString("Communication Error: %1 (%2) from %3")
         .arg(error)
-        .arg( ((QNetworkReply*)sender())->errorString() );
+        .arg( ((QNetworkReply*)sender())->errorString() )
+        .arg(this_ip);
     setNewLine(errString);
     qDebug() << errString;
 }
