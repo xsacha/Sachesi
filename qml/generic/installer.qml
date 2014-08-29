@@ -75,7 +75,7 @@ PageTab {
             if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>" }
             else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete<br>" }
             else { i.install(text); }
-            tabs.curObj = 1
+            tabs.currentIndex = 1
         }
     }
     Column {
@@ -92,25 +92,25 @@ PageTab {
                 id: install_folder
                 text: "Folder"
                 onClicked: {
-                    if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.curObj = 1; }
-                    else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.curObj = 1; }
-                    else { if(i.selectInstallFolder()) tabs.curObj = 1; }
+                    if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.currentIndex = 1; }
+                    else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.currentIndex = 1; }
+                    else { if(i.selectInstallFolder()) tabs.currentIndex = 1; }
                 }
             }
             RoundButton {
                 id: install_files
                 text: ".bar(s)"
                 onClicked: {
-                    if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.curObj = 1; }
-                    else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.curObj = 1; }
-                    else { if (i.selectInstall()) tabs.curObj = 1; }
+                    if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.currentIndex = 1; }
+                    else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.currentIndex = 1; }
+                    else { if (i.selectInstall()) tabs.currentIndex = 1; }
                 }
             }
         }
-        Text {
+        Label {
             id: helpText
             text: "To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b>."
-            font.pixelSize: config.defaultSubtextSize
+            //font.pixelSize: config.defaultSubtextSize
         }
         Row {
             visible: p.advanced
@@ -133,199 +133,116 @@ PageTab {
         }
     }
 
-    Row {
+    TabView {
         id: tabs
-        spacing: 10
-        property int curObj: 0
         anchors { top: toolsColumn.bottom; topMargin: 15; left: toolsColumn.left }
-        TabObject {
-            obj: 0
-            text: "Apps"
-        }
-        TabObject {
-            obj: 1
-            text: "Log"
-        }
+        height: parent.height - (p.advanced ? 150 : 115) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 30; z: 2;
         RoundButton {
+            anchors { top: parent.top; topMargin:-height; right: parent.right }
             id: list_files
             text: "Refresh"
             onClicked: i.scanProps();
         }
-    }
-
-    Image {
-        visible: tabs.curObj == 0 && appView.count > 0
-        id: delete_files
-        anchors.right: tabs.left; anchors.rightMargin: -3
-        anchors.top: tabs.bottom
-        property bool uninstalling: false
-        enabled: !i.installing
-        onEnabledChanged: if (enabled && uninstalling) { uninstalling = false; }
-        source: "trash.png"
-        smooth: true
-        width: config.notificationFontSize; height: config.notificationFontSize
-        scale: delMouse.pressed ? 0.8 : 1.0
-        opacity: uninstalling ? 0.6 : 1.0
-        Behavior on scale { NumberAnimation { duration: 100 } }
-        BusyIndicator {
-            id: delCircle
-            visible: delete_files.uninstalling
-            anchors.fill: parent
-        }
-        MouseArea {
-            id: delMouse
-            anchors.fill: parent
-            onClicked: { if (i.uninstallMarked()) delete_files.uninstalling = true; }
-        }
-    }
-    Image {
-        visible: tabs.curObj == 0 && appView.count > 0
-        id: export_files
-        anchors.right: tabs.left; anchors.rightMargin: -3
-        anchors.bottom: log_window.bottom
-        source: "text.png"
-        smooth: true
-        width: config.notificationFontSize - 2; height: config.notificationFontSize - 2
-        scale: exportMouse.pressed ? 0.8 : 1.0
-        MouseArea {
-            id: exportMouse
-            anchors.fill: parent
-            onClicked: { i.exportInstalled(); }
-        }
+        Component.onCompleted: { addTab("Apps", app_tab); addTab("Log", log_tab); }
     }
 
     // Log
-    Item {
-        id: log_window
-        visible: tabs.curObj == 1
-        anchors {top: tabs.bottom; left: tabs.left; }
-        height: parent.height - (p.advanced ? 190 : 155) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 40; z: 2;
-        Rectangle {
+    Component {
+        id: log_tab
+        TextArea {
             id: updateMessage
-            anchors.left: parent.left
-            height: parent.height; width: parent.width - updateScroll.w;
-            color: config.windowColor
-            border.color: config.shadowColor
-            border.width: 2
-            Flickable {
-                id: updateFlick
-                property int real_height: contentHeight - height
-                width: parent.width; height: parent.height
-                //contentHeight: updateText.height
-                //contentY: Math.floor(updateScrollBox.val*real_height)
-
-                TextEdit {
-                    id: updateText
-                    textFormat: TextEdit.RichText
-                    width: parent.width - 2
-                    anchors.left: parent.left; anchors.leftMargin: 3
-                    selectByMouse: true
-                    wrapMode: TextEdit.WrapAnywhere
-                    readOnly: true
-                    text: details
-                    font.pixelSize: config.defaultSubtextSize
-                }
-            }
-            clip: true
-        }
-        Rectangle {
-            visible: updateFlick.real_height > 0
-            property int w: visible ? width : 0
-            id: updateScroll
-            anchors.left: updateMessage.right
-            anchors.top: updateMessage.top
-            width: 14 + Math.floor(parent.width / 100); height: updateMessage.height
-            border.width: 2
-            Rectangle {
-                id: updateScrollBox
-                anchors {left: parent.left; leftMargin: 1 }
-                width: parent.width - 2; height: 32
-                y: 1 + Math.min(updateFlick.real_height, Math.max(updateFlick.contentY,1)) / (updateFlick.real_height) * (updateScroll.height - height - 2)
-                color: config.darkColor
-            }
-            MouseArea {
-                anchors.fill: parent
-                onMouseYChanged: {
-                    if (mouseY < 0) updateFlick.contentY = 1
-                    else if (mouseY > updateScroll.height - updateScrollBox.height - 1) updateFlick.contentY = updateFlick.real_height
-                    else updateFlick.contentY = mouseY / (updateScroll.height - updateScrollBox.height - 1) * (updateFlick.real_height)
-                }
-            }
+            width: tabs.width; height: tabs.height
+            textFormat: TextEdit.RichText
+            selectByKeyboard: true
+            wrapMode: TextEdit.WrapAnywhere
+            readOnly: true
+            text: details
         }
     }
 
     // Applications
-    Rectangle {
-        id: appList
-        visible: tabs.curObj == 0
-        anchors {top: tabs.bottom; left: tabs.left; }
-        height: parent.height - (p.advanced ? 190 : 155) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 40; z: 2;
-        color: config.windowColor
-        border.width: 2
-        border.color: config.shadowColor
-        Text {
-            visible: appView.count == 0
-            anchors.centerIn: parent
-            font.pixelSize: config.notificationFontSize
-            text: "Use 'Refresh' to update list"
-        }
-
-        ListView {
-            id: appView
-            property int real_height: contentHeight - height
-            anchors {left: parent.left; leftMargin: 5; bottom: parent.bottom }
-            width: parent.width - 23; height: parent.height;
-            spacing: 3
-            clip: true
-            model: i.appList
-            delegate: Item {
-                visible: type !== "";
-                width: parent.width
-                height: type === "" ? 0 : config.notificationFontSize
-                Rectangle {
+    Component {
+        id: app_tab
+        Item {
+            Image {
+                visible: appView.count > 0
+                id: delete_files
+                anchors {right: parent.left; rightMargin: -2; top: parent.top }
+                property bool uninstalling: false
+                enabled: !i.installing
+                onEnabledChanged: if (enabled && uninstalling) { uninstalling = false; }
+                source: "trash.png"
+                smooth: true
+                width: config.notificationFontSize; height: config.notificationFontSize
+                scale: delMouse.pressed ? 0.8 : 1.0
+                opacity: uninstalling ? 0.6 : 1.0
+                Behavior on scale { NumberAnimation { duration: 100 } }
+                BusyIndicator {
+                    id: delCircle
+                    visible: delete_files.uninstalling
                     anchors.fill: parent
-                    color: { switch(type) {
-                        case "os": return "red";
-                        case "radio": return "maroon";
-                        case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
-                        default: return "transparent";
-                           }
-                    }
-                    opacity: 0.2
                 }
-                SelectionText {
-                    text: friendlyName
-                    checked: isMarked
-                    onCheckedChanged: isMarked = checked;
-                }
-                Text {
-                    anchors.right: parent.right
-                    text: version
-                    font.pixelSize: config.defaultFontSize;
-                    clip: true
+                MouseArea {
+                    id: delMouse
+                    anchors.fill: parent
+                    onClicked: { if (i.uninstallMarked()) delete_files.uninstalling = true; }
                 }
             }
-        }
-        Rectangle {
-            id: appScroll
-            visible: appView.count != 0
-            anchors.left: appView.right
-            anchors.top: appView.top
-            width: 14 + Math.floor(parent.width / 100); height: appView.height
-            border.width: 2
-            Rectangle {
-                id: appScrollBox
-                anchors {left: parent.left; leftMargin: 1 }
-                width: parent.width - 2; height: 32
-                y: 1 + Math.min(appView.real_height,Math.max(appView.contentY,1)) / (appView.real_height) * (appScroll.height - height - 2)
-                color: config.darkColor
+            Image {
+                visible: appView.count > 0
+                id: export_files
+                anchors {right: parent.left; rightMargin: -1; bottom: parent.bottom }
+                source: "text.png"
+                smooth: true
+                width: config.notificationFontSize - 2; height: config.notificationFontSize - 2
+                scale: exportMouse.pressed ? 0.8 : 1.0
+                MouseArea {
+                    id: exportMouse
+                    anchors.fill: parent
+                    onClicked: { i.exportInstalled(); }
+                }
             }
-            MouseArea {
+            Text {
+                visible: appView.count == 0
+                anchors.centerIn: parent
+                font.pixelSize: config.notificationFontSize
+                text: "Use 'Refresh' to update list"
+            }
+            ScrollView {
                 anchors.fill: parent
-                onMouseYChanged: {
-                    if (mouseY < 0) appView.contentY = 1
-                    else if (mouseY > appScroll.height - appScrollBox.height - 1) appView.contentY = appView.real_height
-                    else appView.contentY = mouseY / (appScroll.height - appScrollBox.height - 1) * (appView.real_height)
+                ListView {
+                    id: appView
+                    anchors.fill: parent
+                    spacing: 3
+                    clip: true
+                    model: i.appList
+                    delegate: Item {
+                        visible: type !== "";
+                        width: parent.width
+                        height: type === "" ? 0 : config.notificationFontSize
+                        Rectangle {
+                            anchors.fill: parent
+                            color: { switch(type) {
+                                case "os": return "red";
+                                case "radio": return "maroon";
+                                case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
+                                default: return "transparent";
+                                }
+                            }
+                            opacity: 0.2
+                        }
+                        SelectionText {
+                            text: friendlyName
+                            checked: isMarked
+                            onCheckedChanged: isMarked = checked;
+                        }
+                        Text {
+                            anchors.right: parent.right
+                            text: version
+                            font.pixelSize: config.defaultFontSize;
+                            clip: true
+                        }
+                    }
                 }
             }
         }

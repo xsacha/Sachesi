@@ -76,7 +76,6 @@ PageTab {
         }
     }
 
-
     Text {
         anchors {horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 50 }
         text: "These tools require a USB connection"

@@ -45,7 +45,7 @@ Window {
         id: titleRow
         anchors.verticalCenter: parent.verticalCenter
         anchors.top: parent.top; anchors.topMargin: 7
-        spacing: (parent.width - title1.w - title2.w - title3.w - title4.w - title5.w - title6.w) / (p.advanced ? 5 : 3)
+        spacing: (parent.width - title1.w - title2.w - title3.w - title4.w - title5.w - title6.w) / (p.advanced ? 4 : 3)
 
         property int curObj: 3;
         TitleObject {
@@ -55,7 +55,7 @@ Window {
             property int w: visible ? width : 0
         }
         TitleObject {
-            visible: p.advanced && p.hasBootAccess
+            visible: false; //p.advanced && p.hasBootAccess
             id: title2
             obj: 1
             text: "Tools"
