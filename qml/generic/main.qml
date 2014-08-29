@@ -4,7 +4,7 @@ import QtQuick.Controls.Styles 1.2
 import "mcc.js" as MCC
 import "UI" 1.0
 
-PageTab {
+TabView {
     id: main
     property bool init: p.versionRelease === ""
     property bool isMobile: false
@@ -57,7 +57,7 @@ PageTab {
                         id: relookup
                         text: "Lookup"
                         enabled: !p.scanning
-                        onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value);
+                        onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, 0/*server.selectedItem*/, "10." + major.value + "." + minor.value + "." + build.value);
                     }
                     RoundButton {
                         property bool looking: false
@@ -191,7 +191,7 @@ PageTab {
                 id: searchButton
                 enabled: !p.scanning
                 text: p.scanning ? "Searching..." : "Search"
-                onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem/*, version.selectedItem*/) }
+                onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, 0/*server.selectedItem*/  /*, version.selectedItem*/) }
             }
 
         }
@@ -346,13 +346,15 @@ PageTab {
             type: "Mode"
             listModel: [ "Upgrade", "Debrick" ]
         }
-        TextCoupleSelect {
+        // Disabled until new Beta server code is in
+        /*TextCoupleSelect {
             visible: p.advanced
             id: server
             z: 8
             type: "Server"
             listModel: [ "Production", "Beta" ]
-        }
+        }*/
+
         /*TextCoupleSelect {
             id: version
             z: 7

@@ -2,7 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 import "UI" 1.0
 
-PageTab {
+TabView {
     id:main
     Rectangle {
         visible: p.splitting

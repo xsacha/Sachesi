@@ -1,10 +1,14 @@
 import QtQuick 2.2
+import QtQuick.Controls 1.2
 import QtQuick.Window 2.2
+import QtQuick.Layouts 1.0
 import Qt.labs.settings 1.0
 import "UI" 1.0
 
-Window {
+ApplicationWindow {
     id: window
+    // TODO: Send version from C++
+    title: "Sachesi 1.4.0"
     width: 520
     height: 480
 
@@ -26,7 +30,7 @@ Window {
         smooth: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: (parent.width - 280) / 12
-	}*/
+    }*/
 
     Rectangle {
         anchors { right: parent.right; rightMargin: 1; top: parent.top; topMargin: 1 }
@@ -117,7 +121,7 @@ Window {
         anchors.topMargin: 15 + config.notificationFontSize
         width: parent.width;
         height: parent.height - 5 - config.notificationFontSize;
-		source: "main.qml"
+        source: "main.qml"
     }
     Loader {
         visible: titleRow.curObj == 4 && (i.knownBattery > -1 && !i.wrongPassBlock)
@@ -142,9 +146,9 @@ Window {
         width: parent.width;
         height: parent.height - 5 - config.notificationFontSize;
         source: "usbconnect.qml"
-	}
-	/*Rectangle {
-		visible: !hasDonated
+    }
+    /*Rectangle {
+        visible: !hasDonated
         width: parent.width; height: 30
         anchors.bottom: parent.bottom
         color: "black"
@@ -161,5 +165,16 @@ Window {
                 }
             }
         }
-	}*/
+    }*/
+    statusBar: StatusBar {
+        visible: i.knownBattery > -1
+        Label {
+            property bool hasSpace: window.width > 700
+            text: "<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : "");
+        }
+        Label {
+            anchors.right: parent.right
+            text: "<b>[</b>"+i.knownHW+"<b>]</b>"
+        }
+    }
 }

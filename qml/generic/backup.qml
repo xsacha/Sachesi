@@ -3,7 +3,7 @@ import QtQuick.Controls 1.2
 import BackupTools 1.0
 import "UI" 1.0
 
-PageTab {
+TabView {
     id: main
     Timer {
         id: attemptLookup

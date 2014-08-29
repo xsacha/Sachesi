@@ -3,7 +3,6 @@ import QtQuick 2.2
 Item {
     visible: false
     SystemPalette {id: pal}
-    property string windowColor: "#EEEEEE" //pal.window
     property string textColor: "black" //pal.windowText
     property string shadowColor: "#AAAAAA" //pal.shadow
     property string topColor: "#C0C0C0" //pal.mid

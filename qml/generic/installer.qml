@@ -4,12 +4,11 @@ import Drop 1.0
 import AppLibrary 1.0
 import "UI" 1.0
 
-PageTab {
-    id:main
+TabView {
+    id: main
     property string newLine: i.newLine
     property string details: ""
     property string lasterror: "\n"
-    property bool connected: i.knownBattery > -1
     onNewLineChanged: details += i.newLine
 
     Rectangle {
@@ -54,19 +53,6 @@ PageTab {
         MouseArea {
             anchors.fill: parent
         }
-    }
-
-    Text {
-        anchors { bottom: parent.bottom; left: parent.left; leftMargin: 20; bottomMargin: 12 }
-        text: "<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS" + i.knownOS + "<b>]</b>" + (parent.width > 700 ? (" <b>[</b>" + i.knownName + "<b>]</b>") : "");
-        font.pixelSize: config.defaultSubtextSize
-    }
-
-    Text {
-        anchors { bottom: parent.bottom; right: parent.right; rightMargin: 20; bottomMargin: 12 }
-        z: 2
-        text: "<b>[</b>"+i.knownHW+"<b>]</b>"
-        font.pixelSize: config.defaultSubtextSize
     }
 
     DropArea {
@@ -136,7 +122,7 @@ PageTab {
     TabView {
         id: tabs
         anchors { top: toolsColumn.bottom; topMargin: 15; left: toolsColumn.left }
-        height: parent.height - (p.advanced ? 150 : 115) /*parent.height - 100 - parent.height / 5*/; width: parent.width - 30; z: 2;
+        height: parent.height - (p.advanced ? 135 : 100); width: parent.width - 30; z: 2;
         RoundButton {
             anchors { top: parent.top; topMargin:-height; right: parent.right }
             id: list_files
@@ -218,7 +204,7 @@ PageTab {
                     model: i.appList
                     delegate: Item {
                         visible: type !== "";
-                        width: parent.width
+                        width: parent.width - 3
                         height: type === "" ? 0 : config.notificationFontSize
                         Rectangle {
                             anchors.fill: parent

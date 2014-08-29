@@ -2,8 +2,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 import "UI" 1.0
 
-PageTab {
-    id:main
+TabView {
+    id: main
     Rectangle {
         visible: p.splitting
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }

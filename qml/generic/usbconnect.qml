@@ -3,7 +3,7 @@ import QtQuick.Controls 1.2
 
 import "UI" 1.0
 
-PageTab {
+TabView {
     id:main
     property string password: passText.value
 
