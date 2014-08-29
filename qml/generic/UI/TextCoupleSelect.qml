@@ -11,21 +11,19 @@ Item {
     property alias selectedItem: comboButton.currentIndex
 
     height: config.defaultButtonTextSize * 1.4; width: config.defaultButtonTextSize * 14
-    Text {
+    Label {
         anchors {left: parent.left; leftMargin: 10}
         text: type
-        font.pixelSize: config.defaultButtonTextSize; font.bold: true
+        font.bold: true
     }
-    Text {
+    Label {
         id: subtextValue
         anchors {left: parent.left; leftMargin: 15; top: parent.top; topMargin: parent.height - 2}
         text: ""
-        font.pixelSize: config.defaultSubtextSize; font.bold: true; color: "#404040"
     }
     ComboBox {
         id: comboButton
         currentIndex: selectedItem
         anchors { left: parent.left; leftMargin: comboBox.width / 2 - 10}
-        height: comboBox.height; width: (config.defaultSubtextSize + 1) * 9
     }
 }

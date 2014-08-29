@@ -42,18 +42,18 @@ TabView {
                 Text {
                     text: i.curInstallName
                     anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
-                    font.pixelSize: config.defaultSubtextSize
+                    font.pointSize: 10
                 }
                 Text {
                     anchors {bottom: parent.bottom; bottomMargin: 2; horizontalCenter: parent.horizontalCenter }
                     text: "("+i.dgProgress+"%)"
-                    font.pixelSize: config.defaultSubtextSize
+                    font.pointSize: 10
                 }
             }
             Text {
                 anchors {bottom: parent.bottom; bottomMargin: 4; horizontalCenter: parent.horizontalCenter }
                 text: "Look at your device for total install percent."
-                font.pixelSize: config.defaultSubtextSize
+                font.pointSize: 10
             }
             MouseArea {
                 anchors.fill: parent
@@ -77,9 +77,9 @@ TabView {
                 spacing: 15
                 Text {
                     text: "Install:"
-                    font.pixelSize: config.defaultFontSize
+                    font.pointSize: 12
                 }
-                RoundButton {
+                Button {
                     id: install_folder
                     text: "Folder"
                     onClicked: {
@@ -88,7 +88,7 @@ TabView {
                         else { if(i.selectInstallFolder()) tabs.currentIndex = 1; }
                     }
                 }
-                RoundButton {
+                Button {
                     id: install_files
                     text: ".bar(s)"
                     onClicked: {
@@ -101,22 +101,22 @@ TabView {
             Text {
                 id: helpText
                 text: "To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b>."
-                font.pixelSize: config.defaultSubtextSize
+                font.pointSize: 10
             }
             Row {
                 visible: p.advanced
                 spacing: 15
-                RoundButton {
+                Button {
                     id: wipe
                     text: "Wipe"
                     onClicked: i.wipe();
                 }
-                RoundButton {
+                Button {
                     id: factorywipe
                     text: "Factory"
                     onClicked: i.factorywipe();
                 }
-                RoundButton {
+                Button {
                     id: reboot
                     text: "Reboot"
                     onClicked: i.reboot();
@@ -128,7 +128,7 @@ TabView {
             id: tabs
             anchors { top: toolsColumn.bottom; topMargin: 15; left: toolsColumn.left }
             height: parent.height - (p.advanced ? 135 : 100); width: parent.width - 30; z: 2;
-            RoundButton {
+            Button {
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
                 id: list_files
                 text: "Refresh"
@@ -196,7 +196,7 @@ TabView {
                 Text {
                     visible: appView.count == 0
                     anchors.centerIn: parent
-                    font.pixelSize: config.notificationFontSize
+                    font.pointSize: 14
                     text: "Use 'Refresh' to update list"
                 }
                 ScrollView {
@@ -227,11 +227,10 @@ TabView {
                                 checked: isMarked
                                 onCheckedChanged: isMarked = checked;
                             }
-                            Text {
+                            Label {
                                 anchors.right: parent.right
                                 text: version
-                                font.pixelSize: config.defaultFontSize;
-                                clip: true
+                                font.pointSize: 12;
                             }
                         }
                     }

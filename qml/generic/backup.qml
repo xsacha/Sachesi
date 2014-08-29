@@ -23,7 +23,7 @@ TabView {
                 spacing: 10
                 Text {
                     text: "Options"
-                    font.pixelSize: config.defaultFontSize
+                    font.pointSize: 14
                     font.bold: true
                 }
                 Column {
@@ -35,7 +35,7 @@ TabView {
                         spacing: 10
                         Text {
                             text: "Loading Backup Options"
-                            font.pixelSize: config.defaultFontSize
+                            font.pointSize: 12
                         }
                         BusyIndicator {
                             width: parent.height
@@ -62,12 +62,12 @@ TabView {
                         id: totalText
                         property int totalVal: 0
                         text: "Total: " + totalVal + " MB"
-                        font.pixelSize: config.defaultFontSize
+                        font.pointSize: 12
                     }
                 }
             }
 
-            RoundButton {
+            Button {
                 visible: !i.backMethods && !attemptLookup.running
                 text: "Load Backup Options"
                 onClicked: { totalText.totalVal = 0; attemptLookup.start(); i.backupQuery() }
@@ -76,12 +76,12 @@ TabView {
             Row {
                 visible: i.backMethods
                 spacing: 20
-                RoundButton {
+                Button {
                     text: "Create backup"
                     enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
                     onClicked: i.selectBackup(options.value)
                 }
-                RoundButton {
+                Button {
                     text: "Restore backup"
                     enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
                     onClicked: i.selectRestore(options.value)
@@ -99,13 +99,13 @@ TabView {
             Column {
                 anchors {verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: parent.width / 2 - 150 }
                 Text {
-                    font.pixelSize: config.notificationFontSize
+                    font.pointSize: 12
                     text: (i.backing ? "Creating" : "Restoring") + " Backup (" + i.backProgress + "%)";
                 }
                 Row {
                     spacing: 10
                     Text {
-                        font.pixelSize: config.notificationFontSize
+                        font.pointSize: 12
                         text: i.backStatus + " (" + i.backCurProgress + "%)";
                     }
                     BusyIndicator {

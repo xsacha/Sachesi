@@ -19,6 +19,7 @@
 // For portability between platforms and Qt versions.
 // Clears up the code in the more important files.
 
+#include <QApplication>
 #include <QStandardPaths>
 #include <QMessageBox>
 

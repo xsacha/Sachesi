@@ -70,7 +70,7 @@ Item {
                 text: "There was an issue connecting."
                 font.pixelSize: config.defaultSubtextSize;
             }
-            RoundButton {
+            Button {
                 text: "Try Again"
                 onClicked: i.wrongPassBlock = false
             }

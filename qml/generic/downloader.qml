@@ -13,11 +13,11 @@ TabView {
         /*
         Text {
             text: "#1. Change PIN (Requires OS10.2)"
-            font.pixelSize: config.defaultFontSize
+            font.pointSize: 12
         }
         Column {
             spacing: 20
-            RoundButton {
+            Button {
                 text: "Sign NVRAM"
                 enabled: i.completed
                 onClicked: i.resignNVRAM();
@@ -25,7 +25,7 @@ TabView {
             Text {
                 x: 10
                 text: "<b>Current PIN</b> " + i.knownPIN
-                font.pixelSize: config.defaultButtonTextSize
+                font.pointSize: 10
             }
             Row {
                 spacing: 20
@@ -34,7 +34,7 @@ TabView {
                     type: "New PIN"
                     value: "2CCC0000"
                 }
-                    RoundButton {
+                    Button {
                         text: "Reassign"
                         enabled: i.completed
                         onClicked: i.newPin(repin.value);
@@ -43,9 +43,9 @@ TabView {
         }*/
         Text {
             text: "#1. Start RTAS (Requires OS10.2)"
-            font.pixelSize: config.defaultFontSize
+            font.pointSize: 12
         }
-        RoundButton {
+        Button {
             text: "Start RTAS"
             enabled: i.completed
             onClicked: i.startRTAS();

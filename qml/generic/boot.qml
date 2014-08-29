@@ -11,24 +11,24 @@ TabView {
         spacing: 15
         Text {
             text: "Boot Communication"
-            font.pixelSize: config.defaultFontSize
+            font.pointSize: 14
             font.bold: true
         }
         Row {
             spacing: 20
-            RoundButton {
+            Button {
                 text: "Info"
                 onClicked: b.setCommandMode(1, postReboot.checked);
             }
-            RoundButton {
+            Button {
                 text: "RimBoot"
                 onClicked: b.setCommandMode(2, postReboot.checked);
             }
-            RoundButton {
+            Button {
                 text: "Nuke"
                 onClicked: b.setCommandMode(3, postReboot.checked);
             }
-            RoundButton {
+            Button {
                 text: "Debug Mode"
                 onClicked: b.setCommandMode(4, postReboot.checked);
             }
@@ -43,14 +43,14 @@ TabView {
             spacing: 15
             Text {
                 text: "Connecting to bootrom"
-                font.pixelSize: config.notificationFontSize
+                font.pointSize: 10
 
             }
             BusyIndicator {
                 width: config.notificationFontSize
                 height: config.notificationFontSize
             }
-            RoundButton {
+            Button {
                 text: "Cancel"
                 onClicked: b.disconnect();
             }
@@ -66,20 +66,15 @@ TabView {
                 height: config.defaultFontSize
                 text: "Detected devices"
                 font.bold: true
-                font.pixelSize: config.defaultFontSize
+                font.pointSize: 12
             }
 
             delegate: Text {
                 width: parent.width
                 height: config.defaultFontSize
                 text: "Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)"));
-                font.pixelSize: config.defaultFontSize
+                font.pointSize: 10
             }
         }
-    }
-
-    Text {
-        anchors {bottom: parent.bottom; bottomMargin: 100; horizontalCenter: parent.horizontalCenter }
-        font.pixelSize: config.notificationFontSize + 6
     }
 }

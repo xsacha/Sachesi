@@ -47,7 +47,7 @@ TabView {
             }
         }
 
-        RoundButton {
+        Button {
             z: 6;
             visible: p.splitting == 2
             anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter}
@@ -63,18 +63,22 @@ TabView {
             spacing: 15
             Text {
                 text: "Autoloader Tools"
-                font.pixelSize: config.defaultFontSize
+                font.pointSize: 14
                 font.bold: true
             }
             Column {
                 spacing: 30
                 Row {
                     spacing: 20
-                    RoundButton {
+                    Button {
                         text: "Split";
-                        subtext: "Split signed images from autoloaders"
                         enabled: !p.splitting
                         onClicked: if (!p.splitting) p.splitAutoloader(osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
+                        Label {
+                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
+                            text: "Split signed images from autoloaders"
+                            font.bold: true;
+                        }
                     }
                     CheckBox {
                         id: osSelect
@@ -97,20 +101,20 @@ TabView {
                     spacing: 10
                     Text {
                         text: "Combine:"
-                        font.pixelSize: config.defaultFontSize
-                        Text {
-                            id: subtextValue
-                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height}
+                        font.pointSize: 12
+                        font.bold: true;
+                        Label {
+                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
                             text: "Combine signed images in to an autoloader"
-                            font.pixelSize: config.defaultSubtextSize; font.bold: true; color: "#404040"
+                            font.bold: true;
                         }
                     }
-                    RoundButton {
+                    Button {
                         text: "Folder";
                         enabled: !p.splitting
                         onClicked: if (!p.splitting) p.combineFolder();
                     }
-                    RoundButton {
+                    Button {
                         text: ".signed(s)";
                         enabled: !p.splitting
                         onClicked: if (!p.splitting) p.combineFiles();
@@ -123,7 +127,7 @@ TabView {
             spacing: 15
             Text {
                 text: "Signed Image Tools"
-                font.pixelSize: config.defaultFontSize
+                font.pointSize: 14
                 font.bold: true
             }
             Column {
@@ -132,11 +136,15 @@ TabView {
                     visible: p.advanced
                     spacing: 20
                     property int partValue: corePart.checked * 1 + userPart.checked * 2
-                    RoundButton {
+                    Button {
                         text: "Dump Contents"
-                        subtext: "Dump file contents"
                         enabled: !p.splitting && parent.partValue
                         onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
+                        Label {
+                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
+                            text: "Dump file contents"
+                            font.bold: true;
+                        }
                     }
                     CheckBox {
                         id: corePart
@@ -153,11 +161,15 @@ TabView {
                     visible: p.advanced
                     spacing: 20
                     property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2
-                    RoundButton {
+                    Button {
                         text: "Extract Image"
-                        subtext: "Extracts filesystem image"
                         enabled: !p.splitting && parent.imageValue
                         onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
+                        Label {
+                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
+                            text: "Extracts filesystem image"
+                            font.bold: true;
+                        }
                     }
                     CheckBox {
                         id: rcfsImage
@@ -171,11 +183,15 @@ TabView {
                 }
                 Row {
                     spacing: 20
-                    RoundButton {
+                    Button {
                         text: "Extract Apps"
-                        subtext: "Extract all bar archives"
                         enabled: !p.splitting
                         onClicked: if (!p.splitting) p.extractImage(2, 2);
+                        Label {
+                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
+                            text: "Extract all bar archives"
+                            font.bold: true;
+                        }
                     }
                 }
             }

@@ -20,25 +20,22 @@ Item {
     signal upArrow();
     signal downArrow();
     height: config.defaultButtonTextSize * 1.4; width: large ? config.defaultButtonTextSize * 18 : config.defaultButtonTextSize * 7;
-    Text {
+    Label {
         id: typeText
         anchors {left: parent.left; leftMargin: 10}
         text: type
-        font.pixelSize: config.defaultButtonTextSize; font.bold: true
+        font.bold: true
     }
-    Text {
+    Label {
         id: subtextValue
         anchors {left: parent.left; leftMargin: 15; top: parent.top; topMargin: parent.height - 2}
         text: ""
-        font.pixelSize: config.defaultSubtextSize; font.bold: true; color: "#404040"
     }
     TextField {
             id: textValue
             width: large ? (config.defaultSubtextSize + 1) * 9 : (config.defaultSubtextSize) * 3
-            anchors {left: parent.left; leftMargin: itemroot.width / 2 - (large ? 40 : -10)}
+            anchors {left: parent.left; leftMargin: itemroot.width / 2 - (large ? 40 : -10); verticalCenter: parent.verticalCenter}
             height: itemroot.height;
-            anchors {left: parent.left; leftMargin: 5; verticalCenter: parent.verticalCenter }
-            font.pixelSize: config.defaultSubtextSize + 1
             text: value
             onTextChanged: if (!large && text.length > 4) text = text.substring(0,4)
             KeyNavigation.priority: KeyNavigation.BeforeItem

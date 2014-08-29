@@ -1,5 +1,4 @@
 Config 1.0 Config.qml
-RoundButton 1.0 RoundButton.qml
 TextCouple 1.0 TextCouple.qml
 TextCoupleSelect 1.0 TextCoupleSelect.qml
 TitleObject 1.0 TitleObject.qml

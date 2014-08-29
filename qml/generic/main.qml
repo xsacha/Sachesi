@@ -46,13 +46,13 @@ TabView {
                         onEditingFinished: relookup.clicked()
                     }
                 }
-                RoundButton {
+                Button {
                     id: relookup
                     text: "Lookup"
                     enabled: !p.scanning
                     onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, 0/*server.selectedItem*/, "10." + major.value + "." + minor.value + "." + build.value);
                 }
-                RoundButton {
+                Button {
                     property bool looking: false
                     text: looking ? "Stop Scan" : "Autoscan"
                     enabled: !p.scanning || looking
@@ -91,7 +91,7 @@ TabView {
             Row {
                 spacing: config.defaultFontSize
                 anchors.horizontalCenter: parent.horizontalCenter
-                RoundButton {
+                Button {
                     id: downloadPotential
                     visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
                     property string osVersion: ""
@@ -100,7 +100,7 @@ TabView {
                     text: "Download"
                     onClicked: p.downloadPotentialLink(p.softwareRelease, osVersion)
                 }
-                RoundButton {
+                Button {
                     visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
                     property string osVersion: ""
                     onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
@@ -109,7 +109,7 @@ TabView {
                     onClicked: p.grabPotentialLinks(p.softwareRelease, osVersion)
                 }
             }
-            RoundButton {
+            Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "Hide"
                 onClicked: versionLookup.visible = false;
@@ -157,7 +157,7 @@ TabView {
                 font.pixelSize: config.defaultSubtextSize
             }
         }
-        RoundButton {
+        Button {
             anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter}
             text: "Cancel"
             onClicked: p.abortDL()
@@ -176,7 +176,7 @@ TabView {
                 visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 text: "Delta"
             }*/
-            RoundButton {
+            Button {
                 id: searchButton
                 enabled: !p.scanning
                 text: p.scanning ? "Searching..." : "Search"
@@ -184,7 +184,7 @@ TabView {
             }
 
         }
-        RoundButton {
+        Button {
             text: "Version Lookup"
             onClicked: versionLookup.visible = !versionLookup.visible
         }
@@ -193,11 +193,11 @@ TabView {
         spacing: 10
         id: urlLinks
         anchors { right: parent.right; rightMargin: 60; bottom: parent.bottom; bottomMargin: 60 }
-        RoundButton {
+        Button {
             text: isMobile ? "Copy Links" : "Grab Links"
             onClicked: p.grabLinks()
         }
-        RoundButton {
+        Button {
             text: "Download All"
             onClicked: {p.dlProgress = -1; p.downloadLinks() }
         }
