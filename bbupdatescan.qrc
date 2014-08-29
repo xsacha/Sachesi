@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/generic/main.qml</file>
-        <file>qml/generic/mcc.js</file>
-        <file>qml/generic/showpass.png</file>
-    </qresource>
-</RCC>

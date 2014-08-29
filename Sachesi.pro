@@ -18,7 +18,6 @@ exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
 
 win32 {
-    DEFINES += Q_WS_WIN32
     SOURCES += $$P/ext/zlib-win/*.c
     HEADERS += $$P/ext/zlib-win/*.h
     INCLUDEPATH += $$P/ext/zlib-win
@@ -107,13 +106,7 @@ DEFINES += QUAZIP_STATIC
 SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
 HEADERS += $$P/ext/quazip/*.h
 
-RESOURCES += bbupdatescan.qrc
-blackberry {
-    RESOURCES += UI_bb10.qrc
-} else {
-    RESOURCES += UI_generic.qrc
-}
-
+RESOURCES += sachesi.qrc
 OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \

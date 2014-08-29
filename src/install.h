@@ -30,7 +30,7 @@
 #include <openssl/evp.h>
 #include <openssl/sha.h>
 #include <openssl/pem.h>
-#ifndef Q_WS_WIN32
+#ifndef _WIN32
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -236,7 +236,7 @@ private:
     QByteArray hashedPassword;
     QTimer* connectTimer;
     QProcess proc;
-#ifdef Q_WS_WIN32
+#ifdef _MSC_VER
     WSADATA wsadata;
 #endif
     QNetworkAccessManager* dlmanager;

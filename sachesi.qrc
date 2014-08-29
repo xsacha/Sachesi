@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>qml/generic/main.qml</file>
         <file>qml/generic/UI/Config.qml</file>
         <file>qml/generic/UI/RoundButton.qml</file>
         <file>qml/generic/UI/TextCouple.qml</file>
@@ -15,5 +16,7 @@
         <file>qml/generic/boot.qml</file>
         <file>qml/generic/extract.qml</file>
         <file>qml/generic/arrow.png</file>
+        <file>qml/generic/mcc.js</file>
+        <file>qml/generic/showpass.png</file>
     </qresource>
 </RCC>
