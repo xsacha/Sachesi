@@ -42,7 +42,7 @@ PageTab {
                     Repeater {
                         model: i.backMethods
                         delegate: Row {
-                            SelectionText {
+                            RadioButton {
                                 text: i.backNames[index] + " (" + i.backSizes[index] + " MB)" // index
                                 onCheckedChanged: {
                                     if (checked) options.value += 1 << index; else options.value -= 1 << index;

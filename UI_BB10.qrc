@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file alias="qml/generic/UI/Config.qml">qml/bb10/UI/Config.qml</file>
         <file>qml/generic/UI/RoundButton.qml</file>
-        <file>qml/generic/UI/TabObject.qml</file>
         <file>qml/generic/UI/TextCouple.qml</file>
         <file>qml/generic/UI/TextCoupleSelect.qml</file>
         <file>qml/generic/UI/TitleObject.qml</file>
