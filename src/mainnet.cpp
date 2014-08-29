@@ -350,7 +350,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
 
 void MainNet::downloadLinks()
 {
-    if (dlProgress() < 0 && !downloading())
+    if (_dlProgress < 0 && !_downloading)
     {
         if (_currentFile.isOpen())
         {
@@ -393,7 +393,7 @@ void MainNet::downloadLinks()
         connect(replydl, SIGNAL(readyRead()), this, SLOT(downloadLinks()));
         connect(replydl, SIGNAL(finished()), this, SLOT(downloadFinish()));
     }
-    else if (downloading()) {
+    else if (_downloading) {
         QByteArray data = replydl->readAll();
         if (_dlBytes == 0)
         {
@@ -419,7 +419,7 @@ void MainNet::downloadLinks()
 }
 void MainNet::downloadFinish()
 {
-    if (!downloading())
+    if (!_downloading)
         return;
     if (_dlBytes == _dlTotal)
     {
@@ -548,7 +548,7 @@ void MainNet::downloadPotentialLink(QString softwareRelease, QString osVersion) 
 
 void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver)
 {
-    if (scanning())
+    if (_scanning)
         return;
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
     setScanning(1);

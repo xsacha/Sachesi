@@ -23,26 +23,26 @@
 
 class MainNet : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString softwareRelease READ softwareRelease NOTIFY softwareReleaseChanged) // from reverse lookup
-    Q_PROPERTY(QString versionRelease READ versionRelease NOTIFY versionChanged)
-    Q_PROPERTY(QString versionOS READ versionOS NOTIFY versionChanged)
-    Q_PROPERTY(QString versionRadio READ versionRadio NOTIFY versionChanged)
-    Q_PROPERTY(QString variant READ variant NOTIFY variantChanged)
-    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
-    Q_PROPERTY(QString url READ url NOTIFY urlChanged)
-    Q_PROPERTY(QString applications READ applications NOTIFY applicationsChanged)
-    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
-    Q_PROPERTY(QString multiscanVersion READ multiscanVersion NOTIFY versionChanged)
-    Q_PROPERTY(bool    advanced READ advanced WRITE setAdvanced NOTIFY advancedChanged)
-    Q_PROPERTY(bool    downloading READ downloading WRITE setDownloading NOTIFY downloadingChanged)
-    Q_PROPERTY(bool    hasBootAccess READ hasBootAccess NOTIFY hasBootAccessChanged)
-    Q_PROPERTY(bool    multiscan READ multiscan WRITE setMultiscan NOTIFY multiscanChanged)
-    Q_PROPERTY(int     scanning READ scanning WRITE setScanning NOTIFY scanningChanged)
-    Q_PROPERTY(int     dlProgress READ dlProgress WRITE setDLProgress NOTIFY dlProgressChanged)
-    Q_PROPERTY(int     currentId READ currentId NOTIFY currentIdChanged)
-    Q_PROPERTY(int     maxId READ maxId NOTIFY maxIdChanged)
-    Q_PROPERTY(int     splitting READ splitting NOTIFY splittingChanged)
-    Q_PROPERTY(int     splitProgress READ splitProgress WRITE setSplitProgress NOTIFY splitProgressChanged)
+    Q_PROPERTY(QString softwareRelease MEMBER _softwareRelease NOTIFY softwareReleaseChanged) // from reverse lookup
+    Q_PROPERTY(QString versionRelease MEMBER _versionRelease NOTIFY versionChanged)
+    Q_PROPERTY(QString versionOS MEMBER _versionOS NOTIFY versionChanged)
+    Q_PROPERTY(QString versionRadio MEMBER _versionRadio NOTIFY versionChanged)
+    Q_PROPERTY(QString variant MEMBER _variant NOTIFY variantChanged)
+    Q_PROPERTY(QString description MEMBER _description NOTIFY descriptionChanged)
+    Q_PROPERTY(QString url MEMBER _url NOTIFY urlChanged)
+    Q_PROPERTY(QString applications MEMBER _applications NOTIFY applicationsChanged)
+    Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
+    Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY versionChanged)
+    Q_PROPERTY(bool    advanced MEMBER _advanced WRITE setAdvanced NOTIFY advancedChanged)
+    Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
+    Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
+    Q_PROPERTY(bool    multiscan MEMBER _multiscan WRITE setMultiscan NOTIFY multiscanChanged)
+    Q_PROPERTY(int     scanning MEMBER _scanning WRITE setScanning NOTIFY scanningChanged)
+    Q_PROPERTY(int     dlProgress MEMBER _dlProgress WRITE setDLProgress NOTIFY dlProgressChanged)
+    Q_PROPERTY(int     currentId MEMBER _currentId NOTIFY currentIdChanged)
+    Q_PROPERTY(int     maxId MEMBER _maxId NOTIFY maxIdChanged)
+    Q_PROPERTY(int     splitting MEMBER _splitting NOTIFY splittingChanged)
+    Q_PROPERTY(int     splitProgress MEMBER _splitProgress WRITE setSplitProgress NOTIFY splitProgressChanged)
     Q_PROPERTY(QString currentFile READ currentFile NOTIFY currentFileChanged)
 
 public:
@@ -64,18 +64,6 @@ public:
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE unsigned int variantCount(unsigned int device);
-    QString softwareRelease()const { return _softwareRelease; }
-    QString versionRelease() const { return _versionRelease; }
-    QString versionOS()      const { return _versionOS; }
-    QString versionRadio()   const { return _versionRadio; }
-    QString variant()        const { return _variant; }
-    QString description()    const { return _description; }
-    QString url()            const { return _url; }
-    QString applications()   const { return _applications; }
-    QString error()          const { return _error; }
-    QString multiscanVersion() const { return _multiscanVersion; }
-    bool    advanced()       const { return _advanced; }
-    bool    downloading()    const { return _downloading; }
     bool    hasBootAccess()  const { return
 #ifdef BOOTLOADER_ACCESS
                 true;
@@ -83,13 +71,6 @@ public:
                 false;
 #endif
                                    }
-    bool    multiscan()      const { return _multiscan; }
-    int     scanning()       const { return _scanning; }
-    int     dlProgress()     const { return _dlProgress; }
-    int     currentId()      const { return _currentId; }
-    int     maxId()          const { return _maxId; }
-    int     splitting()      const { return _splitting; }
-    int     splitProgress()  const { return _splitProgress; }
     void    setMultiscan(const bool &multiscan);
     void    setScanning(const int &scanning);
     void    setDLProgress(const int &progress);
