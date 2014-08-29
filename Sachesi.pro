@@ -1,9 +1,9 @@
 QT += network gui widgets quick qml
 
 TARGET="Sachesi"
-win32: RC_ICONS += $$P/assets/sachesi-114.ico
-else:mac: ICON = $$P/assets/sachesi-114.icns
-else: ICON = $$P/assets/sachesi-114.png
+win32: RC_ICONS += assets/sachesi-114.ico
+else:mac: ICON = assets/sachesi-114.icns
+else: ICON = assets/sachesi-114.png
 VERSION = 1.5.0
 
 # Global specific

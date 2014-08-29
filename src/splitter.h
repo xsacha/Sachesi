@@ -198,7 +198,7 @@ public slots:
     void scanAutoloader() {
         // We hardcode this only to speed it up. It isn't required and may cause issues later on.
 #define START_CAP_SEARCH 0x400000
-#define END_CAP_SEARCH 0x800000
+#define END_CAP_SEARCH 0x1000000
         signedFile = new QFile(selectedFile);
         signedFile->open(QIODevice::ReadOnly);
         read = 0;
@@ -216,6 +216,7 @@ public slots:
             }
             b += tmp.size();
         }
+
         if (!findHeader) {
             return die("Was not a Blackberry Autoloader file.");
         }
@@ -229,7 +230,7 @@ public slots:
         for (int attempts = 0; attempts < 32; attempts++) {
             qint64 tmp;
             dataStream >> tmp;
-            if ((tmp - signedFile->pos()) < 500) {
+            if (std::abs(tmp - signedFile->pos()) < 500) {
                 signedFile->seek(signedFile->pos() - 16);
                 dataStream >> files;
                 break;
