@@ -23,6 +23,6 @@ echo "Building for Blackberry ${BB_OS}"
  
 blackberry-nativepackager \
     -package Sachesi.bar \
-    blackberry-tablet.xml Sachesi $DEBUG \
-    -e ../sachesi-114.png res/sachesi-114.png
+    bar-descriptor.xml Sachesi $DEBUG \
+    -e ../assets/sachesi-114.png res/sachesi-114.png
 
