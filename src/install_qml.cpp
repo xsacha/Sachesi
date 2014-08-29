@@ -67,7 +67,7 @@ void appendApps(QQmlListProperty<Apps> * property, Apps * app)
 {
     Q_UNUSED(property);
     Q_UNUSED(app);
-    //Do nothing. can't add to Apps using this method
+    //Do nothing. Can't add to Apps using this method
 }
 int appsSize(QQmlListProperty<Apps> * property)
 {

@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
+import QtQuick.Window 2.2
 import "mcc.js" as MCC
 import "UI" 1.0
 
@@ -10,121 +11,111 @@ TabView {
     property bool isMobile: false
     state: "initing"
 
-    Rectangle {
+    Window {
         id: versionLookup
-        opacity: 0.9
-        color: "lightgray"
+        x: window.x + (window.width - width) / 2
+        y: window.y + (window.height - height) / 2
+        title: window.title + " - Version Lookup"
         visible: false
-        x: 20; y: 20
-        height: 12 + config.defaultFontSize * 8; width: 100 + config.defaultFontSize * 18; radius: 4
-        z: 5
-        MouseArea {
-            anchors.fill: parent
-            drag.target: versionLookup
-            drag.axis: Drag.XandYAxis
-            drag.minimumX: 15
-            drag.maximumX: main.width - versionLookup.width - 15
-            drag.minimumY: 15
-            drag.maximumY: main.height - versionLookup.height - 15
-            Column {
-                anchors {left: parent.left; leftMargin: 20; top: parent.top; topMargin: 20 }
-                spacing: config.defaultFontSize
+        height: 12 + config.defaultFontSize * 8;
+        width: 100 + config.defaultFontSize * 18;
+        Column {
+            anchors { left: parent.left; leftMargin: 20; top: parent.top; topMargin: 20 }
+            spacing: config.defaultFontSize
+            Row {
+                spacing: config.defaultFontSize - 4
                 Row {
-                    spacing: config.defaultFontSize - 4
-                    Row {
-                        SpinBox {
-                            id: major
-                            prefix: "10."
-                            value: 3
-                            maximumValue: 255
-                            onEditingFinished: relookup.clicked()
-                        }
-                        SpinBox {
-                            id: minor
-                            value: 0
-                            maximumValue: 255
-                            onEditingFinished: relookup.clicked()
-                        }
-                        SpinBox {
-                            id: build
-                            value: 1052
-                            maximumValue: 9999
-                            stepSize: 3
-                            onEditingFinished: relookup.clicked()
-                        }
+                    SpinBox {
+                        id: major
+                        prefix: "10."
+                        value: 3
+                        maximumValue: 255
+                        onEditingFinished: relookup.clicked()
                     }
-                    RoundButton {
-                        id: relookup
-                        text: "Lookup"
-                        enabled: !p.scanning
-                        onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, 0/*server.selectedItem*/, "10." + major.value + "." + minor.value + "." + build.value);
+                    SpinBox {
+                        id: minor
+                        value: 0
+                        maximumValue: 255
+                        onEditingFinished: relookup.clicked()
                     }
-                    RoundButton {
-                        property bool looking: false
-                        text: looking ? "Stop Scan" : "Autoscan"
-                        enabled: !p.scanning || looking
-                        onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
-                        Timer {
-                            id: autoLookup
-                            interval: 10;
-                            running: parent.looking && !p.scanning
-                            onTriggered: {
-                                if (p.scanning > 0)
-                                    return;
-                                if (downloadPotential.visible) {
-                                    parent.looking = false;
-                                } else if (p.softwareRelease == "SR not in system") {
-                                    if (build.value >= 9998) {
-                                        minor.value++;
-                                        build.value = (build.value+3) % 10000;
-                                    } else
-                                        build.value += 3;
-                                    relookup.clicked();
-                                }
+                    SpinBox {
+                        id: build
+                        value: 1052
+                        maximumValue: 9999
+                        stepSize: 3
+                        onEditingFinished: relookup.clicked()
+                    }
+                }
+                RoundButton {
+                    id: relookup
+                    text: "Lookup"
+                    enabled: !p.scanning
+                    onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, 0/*server.selectedItem*/, "10." + major.value + "." + minor.value + "." + build.value);
+                }
+                RoundButton {
+                    property bool looking: false
+                    text: looking ? "Stop Scan" : "Autoscan"
+                    enabled: !p.scanning || looking
+                    onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
+                    Timer {
+                        id: autoLookup
+                        interval: 10;
+                        running: parent.looking && !p.scanning
+                        onTriggered: {
+                            if (p.scanning > 0)
+                                return;
+                            if (downloadPotential.visible) {
+                                parent.looking = false;
+                            } else if (p.softwareRelease == "SR not in system") {
+                                if (build.value >= 9998) {
+                                    minor.value++;
+                                    build.value = (build.value+3) % 10000;
+                                } else
+                                    build.value += 3;
+                                relookup.clicked();
                             }
                         }
                     }
                 }
-                Row {
-                    Text {
-                        text: "Software Release: " + p.softwareRelease
-                        font.pixelSize: config.defaultFontSize
-                    }
-                }
             }
-            Column {
-                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 10 }
-                spacing: config.defaultFontSize - 4
-                Row {
-                    spacing: config.defaultFontSize
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    RoundButton {
-                        id: downloadPotential
-                        visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
-                        property string osVersion: ""
-                        onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
-                        enabled: true // Exists?
-                        text: "Download"
-                        onClicked: p.downloadPotentialLink(p.softwareRelease, osVersion)
-                    }
-                    RoundButton {
-                        visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
-                        property string osVersion: ""
-                        onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
-                        enabled: true // Exists?
-                        text: isMobile ? "Copy Links" : "Grab Links"
-                        onClicked: p.grabPotentialLinks(p.softwareRelease, osVersion)
-                    }
-                }
-                RoundButton {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Hide"
-                    onClicked: versionLookup.visible = false;
+            Row {
+                Text {
+                    text: "Software Release: " + p.softwareRelease
+                    font.pixelSize: config.defaultFontSize
                 }
             }
         }
+        Column {
+            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 10 }
+            spacing: config.defaultFontSize - 4
+            Row {
+                spacing: config.defaultFontSize
+                anchors.horizontalCenter: parent.horizontalCenter
+                RoundButton {
+                    id: downloadPotential
+                    visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
+                    property string osVersion: ""
+                    onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
+                    enabled: true // Exists?
+                    text: "Download"
+                    onClicked: p.downloadPotentialLink(p.softwareRelease, osVersion)
+                }
+                RoundButton {
+                    visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
+                    property string osVersion: ""
+                    onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
+                    enabled: true // Exists?
+                    text: isMobile ? "Copy Links" : "Grab Links"
+                    onClicked: p.grabPotentialLinks(p.softwareRelease, osVersion)
+                }
+            }
+            RoundButton {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Hide"
+                onClicked: versionLookup.visible = false;
+            }
+        }
     }
-
     Rectangle {
         visible: p.downloading
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
@@ -156,13 +147,11 @@ TabView {
                 color: "lightsteelblue"
             }
             Text {
-                visible: !parent.indeterminate
                 text: p.currentFile
                 anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
                 font.pixelSize: config.defaultSubtextSize
             }
             Text {
-                visible: !parent.indeterminate
                 anchors {bottom: parent.bottom; bottomMargin: 2; horizontalCenter: parent.horizontalCenter }
                 text: "("+p.dlProgress+"%)"
                 font.pixelSize: config.defaultSubtextSize
