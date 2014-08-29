@@ -33,7 +33,7 @@ TabView {
                     }
 
                     text: typeText + ((p.splitting == 5) ? "" : "(" + p.splitProgress + "%)");
-                    font.pixelSize: config.notificationFontSize
+                    font.pointSize: 14
                 }
                 BusyIndicator {
                     width: parent.height
@@ -43,7 +43,7 @@ TabView {
             Text {
                 visible: p.splitProgress > 100
                 text: "Percentages are not entirely accurate."
-                font.pixelSize: config.defaultSubtextSize
+                font.pointSize: 10
             }
         }
 

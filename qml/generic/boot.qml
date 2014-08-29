@@ -66,14 +66,14 @@ TabView {
                 height: config.defaultFontSize
                 text: "Detected devices"
                 font.bold: true
-                font.pointSize: 12
+                font.pointSize: 14
             }
 
             delegate: Text {
                 width: parent.width
                 height: config.defaultFontSize
                 text: "Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)"));
-                font.pointSize: 10
+                font.pointSize: 12
             }
         }
     }

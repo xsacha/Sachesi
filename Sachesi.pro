@@ -1,15 +1,13 @@
-QT += network gui widgets core quick qml
+QT += network gui widgets quick qml
 
 TARGET="Sachesi"
-win32: RC_ICONS += assets/sachesi-114.ico
-else:mac: ICON = assets/sachesi-114.icns
-else: ICON = assets/sachesi-114.png
+win32: RC_ICONS += $$P/assets/sachesi-114.ico
+else:mac: ICON = $$P/assets/sachesi-114.icns
+else: ICON = $$P/assets/sachesi-114.png
 VERSION = 1.5.0
 
 # Global specific
 P = $$_PRO_FILE_PWD_
-OBJECTS_DIR = $$OUT_PWD/.obj/$$TARGET
-MOC_DIR = $$OUT_PWD/.moc/$$TARGET
 CONFIG += c++11
 INCLUDEPATH += $$P/ext $$P/src
 
@@ -106,7 +104,7 @@ DEFINES += QUAZIP_STATIC
 SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
 HEADERS += $$P/ext/quazip/*.h
 
-RESOURCES += sachesi.qrc
+RESOURCES += $$P/UI.qrc
 OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \

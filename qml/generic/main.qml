@@ -244,7 +244,7 @@ TabView {
                     id: wikiLink
                     anchors.centerIn: parent
                     text: "?"
-                    font.pointSize: 8
+                    font.pointSize: 12
                     MouseArea {
                         anchors.fill: parent
                         onClicked: Qt.openUrlExternally("https://en.wikipedia.org/w/index.php?title=Mobile_country_code");
