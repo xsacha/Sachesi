@@ -53,7 +53,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 #ifndef BLACKBERRY
     InstallNet i;
-    context->setContextProperty("i",&i);
+    context->setContextProperty("i", &i);
 #endif
 
     if (!checkCurPath())
@@ -61,7 +61,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 #ifdef BOOTLOADER_ACCESS
     Boot b;
-    context->setContextProperty("b",&b);
+    context->setContextProperty("b", &b);
 
     QObject::connect(&b, SIGNAL(started()), &b, SLOT(search()));
     QObject::connect(&b, SIGNAL(finished()), &b, SLOT(exit()));
@@ -69,24 +69,21 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     b.start();
 #endif
 
-    context->setContextProperty("p",&p);
+    context->setContextProperty("p", &p);
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
 #endif
 
-    engine.load(QUrl("qrc:/qml/generic/Title.qml"));
-
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
-#if 0
-#ifdef SACHESI_GIT_VERSION
-    window->setWindowTitle(QString("Sachesi ") + SACHESI_VERSION + "-" + SACHESI_GIT_VERSION);
-#else
-    window->setWindowTitle(QString("Sachesi ") + SACHESI_VERSION);
-#endif
-#endif
-
-    window->show();
+    engine.addImportPath("qrc:/qml/");
+    QQmlComponent* comp = new QQmlComponent(&engine);
+    comp->loadUrl(QUrl("qrc:/qml/generic/Title.qml"));
+    if (comp->status() == QQmlComponent::Error) {
+        QMessageBox::information(NULL, "Error", qPrintable(comp->errorString()), QMessageBox::Ok);
+    } else {
+        QQuickWindow *window = qobject_cast<QQuickWindow *>(comp->create());
+        window->show();
+    }
 
     int ret = app.exec();
 #ifdef BOOTLOADER_ACCESS

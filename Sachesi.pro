@@ -9,14 +9,11 @@ VERSION = 1.5.0
 # Global specific
 CONFIG += c++11
 INCLUDEPATH += ext src
-
-DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
-exists(.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
-!isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
+P = $$_PRO_FILE_PWD_
 
 win32 {
-    SOURCES += ext/zlib-win/*.c
-    HEADERS += ext/zlib-win/*.h
+    SOURCES += $$P/ext/zlib-win/*.c
+    HEADERS += $$P/ext/zlib-win/*.h
     INCLUDEPATH += ext/zlib-win
 }
 
@@ -98,10 +95,11 @@ contains(DEFINES, BOOTLOADER_ACCESS) {
 }
 
 DEFINES += QUAZIP_STATIC
-SOURCES += ext/quazip/*.cpp ext/quazip/*.c
-HEADERS += ext/quazip/*.h
+SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
+HEADERS += $$P/ext/quazip/*.h
 
 RESOURCES += UI.qrc
+static: RESOURCES += QML.qrc
 OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \

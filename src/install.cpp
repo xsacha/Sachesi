@@ -150,7 +150,12 @@ void InstallNet::install(QStringList files)
     foreach(QString _fileName, files)
     {
         if (_fileName.startsWith("file://"))
-            _fileName.remove(0,7);
+        {
+            _fileName.remove(0, 7);
+            // Windows, for some reason, has 3 slashes!
+            if (_fileName.at(2) == ':')
+                _fileName.remove(0, 1);
+        }
         if (QFileInfo(_fileName).isDir())
         {
             QStringList suffixOnly = QDir(_fileName).entryList(QStringList("*.bar"));
