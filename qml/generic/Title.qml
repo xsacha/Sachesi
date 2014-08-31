@@ -51,7 +51,7 @@ ApplicationWindow {
         id: titleRow
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
-        currentIndex: 3
+        currentIndex: 1 + p.hasBootAccess
         Component.onCompleted: {
             addTab("Extract", Qt.createComponent("extract.qml"));
             //if (p.hasBootAccess)
@@ -61,6 +61,7 @@ ApplicationWindow {
             addTab("Search", Qt.createComponent("main.qml"));
             addTab("Backup", Qt.createComponent("backup.qml"));
             addTab("Install", Qt.createComponent("installer.qml"));
+            forceActiveFocus(0);
         }
     }
     /*Rectangle {
