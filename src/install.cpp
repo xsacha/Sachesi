@@ -710,7 +710,9 @@ void InstallNet::restoreReply()
             restore();
         else if (_hadPassword)
             scanProps();
-        //backupQuery();
+        // This can take up to 5 seconds to respond and all communication on device is Blocking!
+        // backupQuery();
+        // For example: if Link is talking to the device at the same time, comms will fail and vice-versa
     }
     else if (xml.name() == "DynamicProperties")
     {
@@ -766,12 +768,21 @@ void InstallNet::restoreReply()
                 }
                 else if (name == "PlatformVersion")
                     setKnownOS(xml.readElementText());
+                else if (name == "RadioVersion")
+                    setKnownRadio(xml.readElementText());
                 else if (name == "BatteryLevel")
                     setKnownBattery(xml.readElementText().toInt());
                 else if (name == "HardwareID") {
                     // If the firmware reports the device as unknown (eg. Dev Alpha on 10.3), show the Hardware ID
-                    if (_knownHW == "Unknown")
-                        setKnownHW(xml.readElementText());
+                    if (_knownHW == "Unknown") {
+                        QString name = xml.readElementText().remove(0, 2);
+                        // If we already know the name, make it nicer
+                        if (name == "8d00270a")
+                            name = "Dev Alpha C";
+                        else if (name == "4002607")
+                            name = "Dev Alpha";
+                        setKnownHW(name);
+                    }
                 }
                 /* // DEPRECATED by discovery.cgi
                 else if (name == "DeviceName")
@@ -981,7 +992,7 @@ void InstallNet::restoreReply()
                 else
                     setDGProgress(inProgress ? (50 + element.toInt()/2) : 0);
                 bool resend = false;
-                if (_knownOS.startsWith("2."))
+                if (_knownOS.startsWith("2.")) // Playbook OS support
                     resend = !data.contains("100");
                 else
                     resend = inProgress;
@@ -1176,6 +1187,7 @@ void InstallNet::resetVars()
     }
     setKnownPIN("");
     setKnownOS("");
+    setKnownRadio("N/A");
     setKnownBattery(-1);
     setState(0);
     setDGProgress(-1);

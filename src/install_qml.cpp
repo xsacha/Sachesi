@@ -19,22 +19,6 @@
 
 #include "install.h"
 
-#define SET_QML(type, name) \
-    type InstallNet::name() const { \
-    return _ ## name; \
-    } \
-
-#define SET_QML2(type, name, caps) \
-    type InstallNet::name() const { \
-    return _ ## name; \
-    } \
-    void InstallNet::caps(const type &var) { \
-    if (var != _ ## name) { \
-    _ ## name = var; \
-    emit name ## Changed(); \
-    } \
-    }
-
 #define WRITE_QML(type, name, caps) \
     void InstallNet::caps(const type &var) { \
     if (var != _ ## name) { \
@@ -57,6 +41,7 @@ WRITE_QML(QString, curInstallName, setCurInstallName)
 WRITE_QML(bool, installing, setInstalling)
 WRITE_QML(bool, firmwareUpdate, setFirmwareUpdate)
 WRITE_QML(QString, knownOS, setKnownOS)
+WRITE_QML(QString, knownRadio, setKnownRadio)
 WRITE_QML(int,  knownBattery, setKnownBattery)
 WRITE_QML(QString, knownName, setKnownName)
 WRITE_QML(QString, knownHW, setKnownHW)

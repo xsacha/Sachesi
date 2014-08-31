@@ -73,6 +73,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(QStringList firmwareNames MEMBER _firmwareNames                            NOTIFY firmwareNamesChanged)
     Q_PROPERTY(QStringList firmwarePaths MEMBER _firmwarePaths                            NOTIFY firmwarePathsChanged)
     Q_PROPERTY(QString knownOS          MEMBER _knownOS         WRITE setKnownOS          NOTIFY knownOSChanged)
+    Q_PROPERTY(QString knownRadio       MEMBER _knownRadio      WRITE setKnownRadio       NOTIFY knownRadioChanged)
     Q_PROPERTY(int knownBattery         MEMBER _knownBattery    WRITE setKnownBattery     NOTIFY knownBatteryChanged)
     Q_PROPERTY(QString knownName        MEMBER _knownName       WRITE setKnownName        NOTIFY knownNameChanged)
     Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
@@ -149,6 +150,7 @@ public:
     void setBacking(const bool &backing);
     void setFirmwareUpdate(const bool &firmwareUpdate);
     void setKnownOS(const QString &OS);
+    void setKnownRadio(const QString &Radio);
     void setKnownBattery(const int &battery);
     void setKnownName(const QString &Name);
     void setKnownHW(const QString &HW);
@@ -180,6 +182,7 @@ signals:
     void firmwareNamesChanged();
     void firmwarePathsChanged();
     void knownOSChanged();
+    void knownRadioChanged();
     void knownBatteryChanged();
     void knownNameChanged();
     void knownHWChanged();
@@ -225,6 +228,7 @@ private:
     QStringList _firmwareNames;
     QStringList _firmwarePaths;
     QString _knownOS;
+    QString _knownRadio;
     int _knownBattery;
     QString _knownName;
     QString _knownHW;

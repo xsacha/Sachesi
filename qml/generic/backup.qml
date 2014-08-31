@@ -47,7 +47,7 @@ TabView {
                         Repeater {
                             model: i.backMethods
                             delegate: Row {
-                                RadioButton {
+                                CheckBox {
                                     text: i.backNames[index] + " (" + i.backSizes[index] + " MB)" // index
                                     onCheckedChanged: {
                                         if (checked) options.value += 1 << index; else options.value -= 1 << index;
