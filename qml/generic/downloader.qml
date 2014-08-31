@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.1
 import "UI" 1.0
 
 // This page is hidden for now as it is not very useful.

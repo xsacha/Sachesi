@@ -1,6 +1,6 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Window 2.2
+import QtQuick.Controls 1.1
+import QtQuick.Window 2.1
 // This might be a tough sell. It's very nice but not included in package
 import Qt.labs.settings 1.0
 import "UI" 1.0
