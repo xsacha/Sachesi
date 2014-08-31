@@ -186,6 +186,9 @@ void InstallNet::install(QStringList files)
     }
     if (_fileNames.isEmpty())
         return;
+    setNewLine(QString("Installing <b>%1</b> file%2.")
+               .arg(_fileNames.count())
+               .arg(_fileNames.count() == 1 ? "" : "s"));
     install();
 }
 

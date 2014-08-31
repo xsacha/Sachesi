@@ -1,6 +1,5 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
-import Drop 1.0
 import AppLibrary 1.0
 import "UI" 1.0
 
@@ -62,11 +61,20 @@ TabView {
 
         DropArea {
             anchors.fill: parent
-            onFileDrop: {
-                if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>" }
-                else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete<br>" }
-                else { i.install(text); }
-                tabs.currentIndex = 1
+            onDropped: {
+                if (drop.hasUrls) {
+                    if (i.installing) {
+                        details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"
+                    } else if (i.backing || i.restoring) {
+                        details += "Error: Your device can only process one task at a time. Please wait for backup process to complete<br>"
+                    } else {
+                        var fileList = []
+                        for (var url in drop.urls)
+                            fileList[url] = drop.urls[url]
+                        i.install(fileList);
+                    }
+                    tabs.currentIndex = 1
+                }
             }
         }
         Column {
@@ -83,18 +91,28 @@ TabView {
                     id: install_folder
                     text: "Folder"
                     onClicked: {
-                        if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.currentIndex = 1; }
-                        else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.currentIndex = 1; }
-                        else { if(i.selectInstallFolder()) tabs.currentIndex = 1; }
+                        if (i.installing) {
+                            details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>";
+                        } else if (i.backing || i.restoring) {
+                            details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>";
+                        } else {
+                            i.selectInstallFolder()
+                        }
+                        tabs.currentIndex = 1;
                     }
                 }
                 Button {
                     id: install_files
                     text: ".bar(s)"
                     onClicked: {
-                        if (i.installing) { details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.currentIndex = 1; }
-                        else if (i.backing || i.restoring) { details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.currentIndex = 1; }
-                        else { if (i.selectInstall()) tabs.currentIndex = 1; }
+                        if (i.installing) {
+                            details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>"; tabs.currentIndex = 1;
+                        } else if (i.backing || i.restoring) {
+                            details += "Error: Your device can only process one task at a time. Please wait for backup process to complete.<br>"; tabs.currentIndex = 1;
+                        } else {
+                            i.selectInstall()
+                        }
+                        tabs.currentIndex = 1;
                     }
                 }
             }

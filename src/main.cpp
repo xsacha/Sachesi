@@ -16,6 +16,7 @@
 // http://github.com/xsacha/Sachesi
 
 #include <QApplication>
+#include <QtQml>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickWindow>
@@ -24,7 +25,6 @@
 #include "mainnet.h"
 #ifndef BLACKBERRY
 #include "install.h"
-#include "droparea.h"
 #include "backupinfo.h"
 #include "apps.h"
 #include "ports.h"
@@ -71,7 +71,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     context->setContextProperty("p",&p);
 #ifndef BLACKBERRY
-    qmlRegisterType<DropArea>("Drop", 1, 0, "DropArea");
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
 #endif

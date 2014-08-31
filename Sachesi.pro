@@ -7,18 +7,17 @@ else: ICON = assets/sachesi-114.png
 VERSION = 1.5.0
 
 # Global specific
-P = $$_PRO_FILE_PWD_
 CONFIG += c++11
-INCLUDEPATH += $$P/ext $$P/src
+INCLUDEPATH += ext src
 
 DEFINES += SACHESI_VERSION='\\"$$VERSION\\"'
-exists($$P/.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
+exists(.git): GIT_VERSION = '\\"$$system(git rev-list HEAD --count)-$$system(git describe --always)\\"'
 !isEmpty(GIT_VERSION): DEFINES += SACHESI_GIT_VERSION=\"$$GIT_VERSION\"
 
 win32 {
-    SOURCES += $$P/ext/zlib-win/*.c
-    HEADERS += $$P/ext/zlib-win/*.h
-    INCLUDEPATH += $$P/ext/zlib-win
+    SOURCES += ext/zlib-win/*.c
+    HEADERS += ext/zlib-win/*.h
+    INCLUDEPATH += ext/zlib-win
 }
 
 win32 {
@@ -54,10 +53,10 @@ else:freebsd-*|openbsd-* {
     LIBS += -lz -lcrypto -lusb
 }
 else:android {
-    LIBS += $$P/Android/libcrypto.so $$P/Android/libssl.so $$P/Android/libusb1.0.so
-    INCLUDEPATH += $$P/Android/include/
-    ANDROID_EXTRA_LIBS += $$P/Android/libusb1.0.so
-    ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
+    LIBS += Android/libcrypto.so Android/libssl.so Android/libusb1.0.so
+    INCLUDEPATH += Android/include/
+    ANDROID_EXTRA_LIBS += Android/libusb1.0.so
+    ANDROID_PACKAGE_SOURCE_DIR = Android
     DEFINES += BOOTLOADER_ACCESS
 } else {
     LIBS += -lz -ldl -ludev
@@ -85,11 +84,9 @@ HEADERS += \
         src/install_establish.cpp \
         src/install_qml.cpp \
         src/apps.cpp \
-        src/droparea.cpp \
         src/backupinfo.cpp
     HEADERS += \
         src/install.h \
-        src/droparea.h \
         src/apps.h \
         src/backupinfo.h
 }
@@ -101,10 +98,10 @@ contains(DEFINES, BOOTLOADER_ACCESS) {
 }
 
 DEFINES += QUAZIP_STATIC
-SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
-HEADERS += $$P/ext/quazip/*.h
+SOURCES += ext/quazip/*.cpp ext/quazip/*.c
+HEADERS += ext/quazip/*.h
 
-RESOURCES += $$P/UI.qrc
+RESOURCES += UI.qrc
 OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \
