@@ -75,7 +75,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
 #endif
 
+#ifdef _WIN32
     engine.addImportPath("qrc:/qml/");
+#endif
     QQmlComponent* comp = new QQmlComponent(&engine);
     comp->loadUrl(QUrl("qrc:/qml/generic/Title.qml"));
     if (comp->status() == QQmlComponent::Error) {

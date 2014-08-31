@@ -15,6 +15,7 @@ ApplicationWindow {
     minimumWidth: 440
 
     Settings {
+        id: settings
         property alias x: window.x
         property alias y: window.y
         property alias width: window.width
@@ -61,7 +62,9 @@ ApplicationWindow {
             addTab("Search", Qt.createComponent("main.qml"));
             addTab("Backup", Qt.createComponent("backup.qml"));
             addTab("Install", Qt.createComponent("installer.qml"));
-            forceActiveFocus(0);
+            // On Windows and OSX it appears to not show any tab. This seems to help.
+            if (settings.tab == 1 + p.hasBootAccess)
+                currentIndex = 1 + p.hasBootAccess
         }
     }
     /*Rectangle {

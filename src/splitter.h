@@ -230,7 +230,7 @@ public slots:
         for (int attempts = 0; attempts < 32; attempts++) {
             qint64 tmp;
             dataStream >> tmp;
-            if (std::abs(tmp - signedFile->pos()) < 500) {
+            if (abs(tmp - signedFile->pos()) < 500) {
                 signedFile->seek(signedFile->pos() - 16);
                 dataStream >> files;
                 break;

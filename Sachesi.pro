@@ -99,6 +99,7 @@ SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
 HEADERS += $$P/ext/quazip/*.h
 
 RESOURCES += UI.qrc
+# Why is this needed? Strange..
 static: RESOURCES += QML.qrc
 OTHER_FILES += \
     qml/generic/mcc.js \

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="qml/Qt/labs/settings/qmldir">C:\Qt\Static\5.3.1\qml\Qt\labs\settings\qmldir</file>
+        <file alias="qml/QtQuick/Controls/qmldir">C:\Qt\Static\5.3.1\qml\QtQuick\Controls\qmldir</file>
+        <file alias="qml/QtQuick/Layouts/qmldir">C:\Qt\Static\5.3.1\qml\QtQuick\Layouts\qmldir</file>
+        <file alias="qml/QtQuick/Window.2/qmldir">C:\Qt\Static\5.3.1\qml\QtQuick\Window.2\qmldir</file>
+        <file alias="qml/QtQuick.2/qmldir">C:\Qt\Static\5.3.1\qml\QtQuick.2\qmldir</file>
+    </qresource>
+</RCC>
