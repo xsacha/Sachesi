@@ -87,7 +87,7 @@ class InstallNet : public QObject {
 
     Q_PROPERTY(int     backMethods READ backMethods NOTIFY backMethodsChanged)
     Q_PROPERTY(QStringList backNames READ backNames NOTIFY backMethodsChanged)
-    Q_PROPERTY(QStringList backSizes READ backSizes NOTIFY backMethodsChanged)
+    Q_PROPERTY(QList<double> backSizes READ backSizes NOTIFY backMethodsChanged)
 public:
     InstallNet(QObject* parent = 0);
     ~InstallNet();
@@ -132,7 +132,7 @@ public:
     int backCurProgress() const;
     int backMethods() const;
     QStringList backNames() const;
-    QStringList backSizes() const;
+    QList<double> backSizes() const;
 
     void setIp(const QString &ip);
     void setPassword(const QString &password);

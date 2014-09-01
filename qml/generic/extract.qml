@@ -58,10 +58,10 @@ TabView {
     }
 
     ColumnLayout {
-        height: parent.height / 2
-        width: parent.width
-        Layout.columnSpan: 4
+        anchors { fill: parent; topMargin: 20; leftMargin: 20; bottomMargin: 20 }
+        Layout.fillHeight: true
         ColumnLayout {
+            Layout.alignment: Qt.AlignTop | Qt.AlignLeft
             Text {
                 text: "Autoloader Tools"
                 font.pointSize: 14
@@ -115,15 +115,14 @@ TabView {
                 font.bold: true;
             }
         }
+        // Implicit spacing by breaking layout
         ColumnLayout {
-            height: parent.height / 2
-            width: parent.width
-            Layout.columnSpan: 4
             Text {
                 text: "Signed Image Tools"
                 font.pointSize: 14
                 font.bold: true
             }
+            // Dump Contents
             ColumnLayout {
                 visible: p.advanced
                 RowLayout {
@@ -145,10 +144,11 @@ TabView {
                     }
                 }
                 Label {
-                    text: "Dump file contents"
+                    text: "Dump all file contents"
                     font.bold: true;
                 }
             }
+            // Extract Image
             ColumnLayout {
                 visible: p.advanced
                 RowLayout {

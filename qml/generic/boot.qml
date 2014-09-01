@@ -43,8 +43,6 @@ TabView {
             spacing: 15
             Text {
                 text: "Connecting to bootrom"
-                font.pointSize: 10
-
             }
             BusyIndicator {
                 width: config.notificationFontSize

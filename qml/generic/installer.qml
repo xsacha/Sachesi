@@ -150,43 +150,29 @@ TabView {
         Component {
             id: app_tab
             Item {
-                Image {
+                Button {
                     visible: appView.count > 0
-                    id: delete_files
-                    anchors {right: parent.left; rightMargin: -2; top: parent.top }
                     property bool uninstalling: false
+                    anchors {right: parent.left; rightMargin: -2; top: parent.top }
                     enabled: !i.installing
                     onEnabledChanged: if (enabled && uninstalling) { uninstalling = false; }
-                    source: "trash.png"
-                    smooth: true
+                    iconSource: "trash.png"
+                    tooltip: "Uninstall Marked"
                     width: config.notificationFontSize; height: config.notificationFontSize
-                    scale: delMouse.pressed ? 0.8 : 1.0
                     opacity: uninstalling ? 0.6 : 1.0
-                    Behavior on scale { NumberAnimation { duration: 100 } }
+                    onClicked: { if (i.uninstallMarked()) uninstalling = true; }
                     BusyIndicator {
-                        id: delCircle
-                        visible: delete_files.uninstalling
+                        visible: parent.uninstalling
                         anchors.fill: parent
-                    }
-                    MouseArea {
-                        id: delMouse
-                        anchors.fill: parent
-                        onClicked: { if (i.uninstallMarked()) delete_files.uninstalling = true; }
                     }
                 }
-                Image {
+                Button {
                     visible: appView.count > 0
-                    id: export_files
                     anchors {right: parent.left; rightMargin: -1; bottom: parent.bottom }
-                    source: "text.png"
-                    smooth: true
+                    iconSource: "text.png"
+                    tooltip: "Show Installed Apps"
                     width: config.notificationFontSize - 2; height: config.notificationFontSize - 2
-                    scale: exportMouse.pressed ? 0.8 : 1.0
-                    MouseArea {
-                        id: exportMouse
-                        anchors.fill: parent
-                        onClicked: { i.exportInstalled(); }
-                    }
+                    onClicked: i.exportInstalled();
                 }
                 Text {
                     visible: appView.count == 0
