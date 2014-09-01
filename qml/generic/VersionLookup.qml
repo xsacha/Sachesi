@@ -15,6 +15,7 @@ Window {
     ColumnLayout {
         height: parent.height
         width: parent.width
+        anchors { left: parent.left; leftMargin: 10 }
         RowLayout {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             Row {

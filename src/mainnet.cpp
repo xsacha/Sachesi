@@ -303,26 +303,34 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
 
     // Lambda function to append link for signed bars
     // Arch hardcoded to armv7
+    auto appendNewHeader = [&potentialText] (QString name, QString devices) {
+        potentialText.append("\n" + name + ": " + devices + " (Debrick + Core OS)\n");
+    };
     auto appendNewLink = [&potentialText, &hashval] (QString linkType, bool OS, bool OMAP, QString hwType, QString version) {
-        potentialText.append(linkType + (OS ? " OS" : " Radio"));
-        potentialText.append("\nhttp://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + (OS ? "coreos.qcfm.os." : "qcfm.radio."));
+        if (!OS)
+            potentialText.append(linkType + " Radio\n");
+        potentialText.append("http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + (OS ? "coreos.qcfm.os." : "qcfm.radio."));
 
         if (OMAP) // Old Playbook style
             potentialText.append("factory" + hwType + "/" + version + "/winchester.factory_sfi" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
         else
             potentialText.append(hwType + "/" + version + "/" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
     };
-    // Qualcomm (Everyone)
+    appendNewHeader("QC8974", "Blackberry Passport");
+    appendNewLink("Debrick", true, false, "qc8974.factory_sfi.desktop", osVersion);
+    appendNewLink("Core",    true, false, "qc8974.factory_sfi", osVersion);
+
+    appendNewHeader("QC8960", "Blackberry Z3/Z10/Z30/Q10");
     appendNewLink("Debrick", true, false, "qc8960.factory_sfi.desktop", osVersion);
     appendNewLink("Core",    true, false, "qc8960.factory_sfi", osVersion);
 
-    // OMAP (STL 100-1)
-    appendNewLink("STL100-1 Debrick", true, true, ".desktop", osVersion);
-    appendNewLink("STL100-1 Core",    true, true, "", osVersion);
+    appendNewHeader("OMAP", "Blackberry Z10 STL 100-1");
+    appendNewLink("Debrick", true, true, ".desktop", osVersion);
+    appendNewLink("Core",    true, true, "", osVersion);
 
-    // Verizon (STL 100-4)
-    appendNewLink("Verizon Debrick", true, false, "qc8960.verizon_sfi.desktop", osVersion);
-    appendNewLink("Verizon Core",    true, false, "qc8960.verizon_sfi", osVersion);
+    appendNewHeader("QC8960 Verizon", "Blackberry Z10 STL 100-4");
+    appendNewLink("Debrick", true, false, "qc8960.verizon_sfi.desktop", osVersion);
+    appendNewLink("Core",    true, false, "qc8960.verizon_sfi", osVersion);
 
     potentialText.append("\n\n* Radios *\n");
     appendNewLink("Z3 (Jakarta)", false, false, "qc8930.wtr5", radioVersion);
@@ -331,6 +339,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Z10 (STL 100-4)", false, false, "qc8960.omadm", radioVersion);
     appendNewLink("Z30", false, false, "qc8960.wtr5", radioVersion);
     appendNewLink("Q10", false, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);
 
 
     QFile updates(getSaveDir() + "/versionlookup.txt");
