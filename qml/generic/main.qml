@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 import "mcc.js" as MCC
 import "UI" 1.0
@@ -16,13 +17,14 @@ TabView {
         y: window.y + (window.height - height) / 2
         title: window.title + " - Version Lookup"
         visible: false
-        height: 12 + config.defaultFontSize * 8;
-        width: 100 + config.defaultFontSize * 18;
-        Column {
-            anchors { left: parent.left; leftMargin: 20; top: parent.top; topMargin: 20 }
-            spacing: config.defaultFontSize
-            Row {
-                spacing: config.defaultFontSize - 4
+        height: 170;
+        width: 400
+        ColumnLayout {
+              width: parent.width
+              height: parent.height
+            RowLayout {
+                width: parent.width
+                height: parent.height
                 Row {
                     SpinBox {
                         id: major
@@ -83,10 +85,6 @@ TabView {
                     font.pointSize: 12
                 }
             }
-        }
-        Column {
-            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 10 }
-            spacing: config.defaultFontSize - 4
             Row {
                 spacing: config.defaultFontSize
                 anchors.horizontalCenter: parent.horizontalCenter

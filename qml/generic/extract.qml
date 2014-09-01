@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Layouts 1.1
 import "UI" 1.0
 
 TabView {
@@ -56,95 +57,81 @@ TabView {
         }
     }
 
-    Column {
-        spacing: (parent.height - 380) / 4
-        anchors { left: parent.left; leftMargin: 20; top: parent.top; topMargin: 20 }
-        Column {
-            spacing: 15
+    ColumnLayout {
+        height: parent.height / 2
+        width: parent.width
+        Layout.columnSpan: 4
+        ColumnLayout {
             Text {
                 text: "Autoloader Tools"
                 font.pointSize: 14
                 font.bold: true
             }
-            Column {
-                spacing: 30
-                Row {
-                    spacing: 20
-                    Button {
-                        text: "Split";
-                        enabled: !p.splitting
-                        onClicked: if (!p.splitting) p.splitAutoloader(osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
-                        Label {
-                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
-                            text: "Split signed images from autoloaders"
-                            font.bold: true;
-                        }
-                    }
-                    CheckBox {
-                        id: osSelect
-                        text: "OS"
-                        checked: true
-                    }
-                    CheckBox {
-                        id: radioSelect
-                        text: "Radio"
-                        checked: true
-                    }
-                    CheckBox {
-                        visible: p.advanced
-                        id: pinSelect
-                        text: "PINList"
-                    }
+            RowLayout {
+                Button {
+                    text: "Split";
+                    enabled: !p.splitting
+                    onClicked: if (!p.splitting) p.splitAutoloader(osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
                 }
-
-                Row {
-                    spacing: 10
-                    Text {
-                        text: "Combine:"
-                        font.pointSize: 12
-                        font.bold: true;
-                        Label {
-                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
-                            text: "Combine signed images in to an autoloader"
-                            font.bold: true;
-                        }
-                    }
-                    Button {
-                        text: "Folder";
-                        enabled: !p.splitting
-                        onClicked: if (!p.splitting) p.combineFolder();
-                    }
-                    Button {
-                        text: ".signed(s)";
-                        enabled: !p.splitting
-                        onClicked: if (!p.splitting) p.combineFiles();
-                    }
+                CheckBox {
+                    id: osSelect
+                    text: "OS"
+                    checked: true
+                }
+                CheckBox {
+                    id: radioSelect
+                    text: "Radio"
+                    checked: true
+                }
+                CheckBox {
+                    visible: p.advanced
+                    id: pinSelect
+                    text: "PINList"
                 }
             }
+            Label {
+                text: "Split signed images from autoloaders"
+                font.bold: true;
+            }
+            RowLayout {
+                Text {
+                    text: "Combine:"
+                    font.pointSize: 12
+                    font.bold: true;
+                }
+                Button {
+                    text: "Folder";
+                    enabled: !p.splitting
+                    onClicked: if (!p.splitting) p.combineFolder();
+                }
+                Button {
+                    text: ".signed(s)";
+                    enabled: !p.splitting
+                    onClicked: if (!p.splitting) p.combineFiles();
+                }
+            }
+            Label {
+                text: "Combine signed images in to an autoloader"
+                font.bold: true;
+            }
         }
-        Rectangle { color: "transparent"; width: 1; height: 20 }
-        Column {
-            spacing: 15
+        ColumnLayout {
+            height: parent.height / 2
+            width: parent.width
+            Layout.columnSpan: 4
             Text {
                 text: "Signed Image Tools"
                 font.pointSize: 14
                 font.bold: true
             }
-            Column {
-                spacing: 30
-                Row {
-                    visible: p.advanced
-                    spacing: 20
+            ColumnLayout {
+                visible: p.advanced
+                RowLayout {
                     property int partValue: corePart.checked * 1 + userPart.checked * 2
                     Button {
                         text: "Dump Contents"
                         enabled: !p.splitting && parent.partValue
                         onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
-                        Label {
-                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
-                            text: "Dump file contents"
-                            font.bold: true;
-                        }
                     }
                     CheckBox {
                         id: corePart
@@ -157,19 +144,19 @@ TabView {
                         text: "User"
                     }
                 }
-                Row {
-                    visible: p.advanced
-                    spacing: 20
+                Label {
+                    text: "Dump file contents"
+                    font.bold: true;
+                }
+            }
+            ColumnLayout {
+                visible: p.advanced
+                RowLayout {
                     property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2
                     Button {
                         text: "Extract Image"
                         enabled: !p.splitting && parent.imageValue
                         onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
-                        Label {
-                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
-                            text: "Extracts filesystem image"
-                            font.bold: true;
-                        }
                     }
                     CheckBox {
                         id: rcfsImage
@@ -181,18 +168,20 @@ TabView {
                         text: "QNX6"
                     }
                 }
-                Row {
-                    spacing: 20
-                    Button {
-                        text: "Extract Apps"
-                        enabled: !p.splitting
-                        onClicked: if (!p.splitting) p.extractImage(2, 2);
-                        Label {
-                            anchors {left: parent.left; leftMargin: 0; top: parent.top; topMargin: parent.height + 5}
-                            text: "Extract all bar archives"
-                            font.bold: true;
-                        }
-                    }
+                Label {
+                    text: "Extracts filesystem image"
+                    font.bold: true;
+                }
+            }
+            ColumnLayout {
+                Button {
+                    text: "Extract Apps"
+                    enabled: !p.splitting
+                    onClicked: if (!p.splitting) p.extractImage(2, 2);
+                }
+                Label {
+                    text: "Extract all bar archives"
+                    font.bold: true;
                 }
             }
         }
