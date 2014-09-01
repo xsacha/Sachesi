@@ -1,85 +1,78 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
-
-import "UI" 1.0
+import QtQuick.Layouts 1.1
 
 Item {
     id:main
     visible: i.knownBattery < 0
-    property string password: passText.value
+    anchors.fill: parent
 
-    Column {
+    ColumnLayout {
         id: develText
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: -100
-        spacing: 10
-        Text {
-            visible: !i.wrongPassBlock
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Searching for USB device" + (i.possibleDevices ? ("\nTalking to " + i.possibleDevices + " possible devices.") : "")
-            font.pointSize: 12
+        height: parent.height / 2
+        Label {
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            text: "These tools require a USB connection"
         }
-        BusyIndicator {
-            visible: !i.wrongPassBlock
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: config.defaultFontSize * 2
-            width: height
-        }
-    }
-    TextCouple {
-        property bool showing: false
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: develText.bottom; topMargin: 40
-        }
-        id: passText
-        type: "Password"
-        property string pass_init: i.password
-        value: pass_init;
-        onValueChanged: {
-            if (i.password !== value && value !== "")
-                i.password = value
-        }
-        textColor: i.wrongPass ? "red" : "black"
-        subtext: i.wrongPass ? "Incorrect" : ""
-        passMode: showing ? TextInput.Normal : TextInput.Password
-    }
-    Rectangle {
-        width: 30; height: 30
-        color: passText.showing ? "gray" : "transparent"
-        anchors { left: passText.right; leftMargin: 10; verticalCenter: passText.verticalCenter }
-        Image {
-            source: "showpass.png"
-            anchors.fill: parent
-            smooth: true
-            MouseArea {
-                anchors.fill: parent
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+            ColumnLayout {
+                Label {
+                    text: "Password:"
+                }
+                Label {
+                    id: subtextValue
+                    visible: i.wrongPass
+                    text: "Incorrect"
+                    color: "red"
+                }
+            }
+            TextField {
+                id: passText
+                property bool showing: false
+                property string pass_init: i.password
+                text: pass_init;
+                onTextChanged: {
+                    if (i.password !== text && text !== "")
+                        i.password = text
+                }
+                echoMode: showing ? TextInput.Normal : TextInput.Password
+            }
+            Button {
+                tooltip: passText.showing ? "Hide password" : "Show password"
+                anchors { left: passText.right; leftMargin: 10; verticalCenter: passText.verticalCenter }
+                iconSource: "showpass.png"
                 onClicked: passText.showing = !passText.showing
             }
         }
-    }
-
-    Row {
-        visible: i.wrongPassBlock
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: develText.bottom; topMargin: 80
-        }
-        Column {
-            Text {
+        ColumnLayout {
+            visible: i.wrongPassBlock
+            Label {
                 text: "There was an issue connecting."
-                font.pointSize: 10
             }
             Button {
                 text: "Try Again"
                 onClicked: i.wrongPassBlock = false
             }
         }
-    }
-
-    Text {
-        anchors {horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 50 }
-        text: "These tools require a USB connection"
-        font.pointSize: 12
+        RowLayout {
+            Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
+            ColumnLayout {
+                Label {
+                    visible: !i.wrongPassBlock
+                    text: "Searching for USB device"
+                }
+                Label {
+                    visible: i.possibleDevices
+                    text: "Talking to " + i.possibleDevices + " possible devices."
+                }
+            }
+            BusyIndicator {
+                visible: !i.wrongPassBlock
+                height: parent.implicitHeight + 7
+                width: height
+            }
+        }
     }
 }

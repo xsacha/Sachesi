@@ -50,10 +50,10 @@ else:freebsd-*|openbsd-* {
     LIBS += -lz -lcrypto -lusb
 }
 else:android {
-    LIBS += Android/libcrypto.so Android/libssl.so Android/libusb1.0.so
-    INCLUDEPATH += Android/include/
-    ANDROID_EXTRA_LIBS += Android/libusb1.0.so
-    ANDROID_PACKAGE_SOURCE_DIR = Android
+    LIBS += -L $$P/Android -lcrypto -lssl -lusb1.0
+    INCLUDEPATH += $$P/Android/include/
+    ANDROID_EXTRA_LIBS += $$P/Android/libusb1.0.so
+    ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
     DEFINES += BOOTLOADER_ACCESS
 } else {
     LIBS += -lz -ldl -ludev
@@ -109,3 +109,7 @@ OTHER_FILES += \
     qml/bb10/UI/*.qml \
     Android/AndroidManifest.xml
 
+# Qt Workaround for having install.cpp file
+phony.depends = install uninstall
+phony.target = .PHONY
+QMAKE_EXTRA_TARGETS += phony

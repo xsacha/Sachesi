@@ -50,12 +50,12 @@ void InstallNet::requestChallenge()
 void InstallNet::replyChallenge()
 {
     logadd(QString("5. Reply Challenge"));
-    const char QCONNDOOR_PERMISSIONS[] = {3, 4, 118, -125, 1};
+    const unsigned char QCONNDOOR_PERMISSIONS[] = {3, 4, 118, -125, 1};
     const char EMSA_SHA1_HASH[] = {48, 33, 48, 9, 6, 5, 43, 14, 3, 2, 26, 5, 0, 4, 20};
     QCryptographicHash sha1(QCryptographicHash::Sha1);
 
     /* Encrypt challenge */
-    QByteArray challengeBuffer = QByteArray((char*)serverChallenge, 30).append(QCONNDOOR_PERMISSIONS,5);
+    QByteArray challengeBuffer = QByteArray((char*)serverChallenge, 30).append((const char*)QCONNDOOR_PERMISSIONS, 5);
     sha1.addData(challengeBuffer);
     QByteArray hash = QByteArray(EMSA_SHA1_HASH, 15).append(sha1.result());
     QByteArray signature(128, 0);
