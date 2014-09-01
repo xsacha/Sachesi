@@ -36,12 +36,12 @@
 // TODO: Make extraction less hacky.
 // TODO: Make extraction handle decent % tracking
 // TODO: Check and improve the USB Loader (Boot).
+// TODO: Use CircleProgress in every progress section. Pass a class to QML that contains file count, current and total progress
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-#ifdef Q_WS_X11
     QApplication::setAttribute(Qt::AA_X11InitThreads, true);
-#endif
+
     QApplication app(argc, argv);
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");

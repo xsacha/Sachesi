@@ -70,7 +70,7 @@ libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     libusb_detach_kernel_driver(handle, 0);
     int err = libusb_claim_interface(handle, 0);
     if (err < 0) {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         QMessageBox::information(nullptr, "Error", "Please reboot your device manually.");
         return nullptr;
 #else

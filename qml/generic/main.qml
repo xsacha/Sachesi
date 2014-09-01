@@ -234,7 +234,7 @@ TabView {
             onClicked: searchButton.clicked();
 
             Rectangle {
-                color: config.shadowColor
+                color: "#AAAAAA"
                 anchors.left: country.typeOffset
                 anchors.leftMargin: 5
                 width: wikiLink.width; height: wikiLink.height

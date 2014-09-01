@@ -42,7 +42,7 @@ ApplicationWindow {
         radius: height
         color: p.advanced ? "#999999" : "transparent"
         border.width: 2
-        smooth: true
+        antialiasing: true
         MouseArea {
             anchors.fill: parent
             onClicked: p.advanced = !p.advanced

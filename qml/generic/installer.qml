@@ -18,44 +18,21 @@ TabView {
         Rectangle {
             visible: i.dgProgress >= 0
             anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-            height: 100 + config.defaultSubtextSize; width: parent.width - 20; radius: 8
+            width: parent.width / 3; height: Math.min(parent.height / 2, width + 20); radius: 8
             z: 5
-            color: "gray"
-            opacity: 0.95
+            color: "lightgray"
+            opacity: 0.6
             Text {
+                id: titleText
                 text: i.firmwareUpdate ? "Firmware Update" : "Install"
                 font.pointSize: 14
                 anchors.horizontalCenter: parent.horizontalCenter
             }
-            Rectangle {
-                anchors {left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
-                color: "transparent"
-                width: parent.width - 20; height: 50
-                border.width: 1;
-                Rectangle {
-                    x: 1; y: 1
-                    width: (i.dgProgress / 100) * parent.width - 2
-                    height: 50 - 2
-                    color: config.darkColor
-                }
-                Text {
-                    text: i.curInstallName
-                    anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
-                    font.pointSize: 10
-                }
-                Text {
-                    anchors {bottom: parent.bottom; bottomMargin: 2; horizontalCenter: parent.horizontalCenter }
-                    text: "("+i.dgProgress+"%)"
-                    font.pointSize: 10
-                }
-            }
-            Text {
-                anchors {bottom: parent.bottom; bottomMargin: 4; horizontalCenter: parent.horizontalCenter }
-                text: "Look at your device for total install percent."
-                font.pointSize: 10
-            }
-            MouseArea {
-                anchors.fill: parent
+            CircleProgress {
+                width: parent.width - 10; height: Math.min(parent.height - 20, width);
+                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
+                currentValue: i.dgProgress
+                text: i.curInstallName
             }
         }
 

@@ -26,7 +26,7 @@ win32 {
     CONFIG += static
     static: DEFINES += STATIC STATIC_BUILD
 
-    mingw:static: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
+    mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
 
     !mingw {
         DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
