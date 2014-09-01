@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Layouts 1.1
 
 Item {
     id: comboBox
@@ -10,20 +11,27 @@ Item {
     property alias listModel: comboButton.model
     property alias selectedItem: comboButton.currentIndex
 
-    height: config.defaultButtonTextSize * 1.4; width: config.defaultButtonTextSize * 14
-    Label {
-        anchors {left: parent.left; leftMargin: 10}
-        text: type
-        font.bold: true
-    }
-    Label {
-        id: subtextValue
-        anchors {left: parent.left; leftMargin: 15; top: parent.top; topMargin: parent.height + 5}
-        text: ""
-    }
-    ComboBox {
-        id: comboButton
-        currentIndex: selectedItem
-        anchors { left: parent.left; leftMargin: comboBox.width / 2 - 10}
+    // Evil: hardcoded width/height
+    height: (14.5) * 1.4
+    width: (14.5) * 14
+    ColumnLayout {
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                id: typeText
+                text: type
+                font.bold: true
+            }
+            ComboBox {
+                id: comboButton
+                currentIndex: selectedItem
+                anchors { left: parent.left; leftMargin: comboBox.width / 2 - 10}
+            }
+        }
+        Label {
+            id: subtextValue
+            anchors {left: parent.left; leftMargin: 10}
+            text: ""
+        }
     }
 }

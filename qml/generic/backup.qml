@@ -87,7 +87,7 @@ TabView {
             id: progressBar
             visible: i.backing || i.restoring
             anchors {bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
-            height: 40 + config.notificationFontSize; width: parent.width - parent.width / 4; radius: 8
+            height: 66; width: parent.width - parent.width / 4; radius: 8
             z: 5;
             color: "gray"
             opacity: 0.95

@@ -11,112 +11,14 @@ TabView {
     property bool isMobile: false
     state: "initing"
 
-    Window {
+    VersionLookup {
         id: versionLookup
-        x: window.x + (window.width - width) / 2
-        y: window.y + (window.height - height) / 2
-        title: window.title + " - Version Lookup"
-        visible: false
-        height: 170;
-        width: 400
-        ColumnLayout {
-              width: parent.width
-              height: parent.height
-            RowLayout {
-                width: parent.width
-                height: parent.height
-                Row {
-                    SpinBox {
-                        id: major
-                        prefix: "10."
-                        value: 3
-                        maximumValue: 255
-                        onEditingFinished: relookup.clicked()
-                    }
-                    SpinBox {
-                        id: minor
-                        value: 0
-                        maximumValue: 255
-                        onEditingFinished: relookup.clicked()
-                    }
-                    SpinBox {
-                        id: build
-                        value: 1052
-                        maximumValue: 9999
-                        stepSize: 3
-                        onEditingFinished: relookup.clicked()
-                    }
-                }
-                Button {
-                    id: relookup
-                    text: "Lookup"
-                    enabled: !p.scanning
-                    onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, 0/*server.selectedItem*/, "10." + major.value + "." + minor.value + "." + build.value);
-                }
-                Button {
-                    property bool looking: false
-                    text: looking ? "Stop Scan" : "Autoscan"
-                    enabled: !p.scanning || looking
-                    onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
-                    Timer {
-                        id: autoLookup
-                        interval: 10;
-                        running: parent.looking && !p.scanning
-                        onTriggered: {
-                            if (p.scanning > 0)
-                                return;
-                            if (downloadPotential.visible) {
-                                parent.looking = false;
-                            } else if (p.softwareRelease == "SR not in system") {
-                                if (build.value >= 9998) {
-                                    minor.value++;
-                                    build.value = (build.value+3) % 10000;
-                                } else
-                                    build.value += 3;
-                                relookup.clicked();
-                            }
-                        }
-                    }
-                }
-            }
-            Row {
-                Text {
-                    text: "Software Release: " + p.softwareRelease
-                    font.pointSize: 12
-                }
-            }
-            Row {
-                spacing: config.defaultFontSize
-                anchors.horizontalCenter: parent.horizontalCenter
-                Button {
-                    id: downloadPotential
-                    visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
-                    property string osVersion: ""
-                    onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
-                    enabled: true // Exists?
-                    text: "Download"
-                    onClicked: p.downloadPotentialLink(p.softwareRelease, osVersion)
-                }
-                Button {
-                    visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
-                    property string osVersion: ""
-                    onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
-                    enabled: true // Exists?
-                    text: isMobile ? "Copy Links" : "Grab Links"
-                    onClicked: p.grabPotentialLinks(p.softwareRelease, osVersion)
-                }
-            }
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Hide"
-                onClicked: versionLookup.visible = false;
-            }
-        }
     }
+
     Rectangle {
         visible: p.downloading
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        height: 100 + config.defaultSubtextSize; width: parent.width - 20; radius: 5
+        height: 115; width: parent.width - 20; radius: 5
         color: "lightgray"
         z: 5
         opacity: 0.95
@@ -185,6 +87,13 @@ TabView {
             text: "Version Lookup"
             onClicked: versionLookup.visible = !versionLookup.visible
         }
+        Text {
+            property string message: p.error
+            visible: message.length > 1
+            Layout.alignment: Qt.AlignHCenter
+            font.bold: true
+            text: (message.length < 5) ? "Server did not respond as expected [" + message + "]." : (message === "Success" ? "Success. No updates were available." : message)
+        }
     }
     Column {
         spacing: 10
@@ -199,23 +108,13 @@ TabView {
             onClicked: {p.dlProgress = -1; p.downloadLinks() }
         }
     }
-    Rectangle {
-        anchors { horizontalCenter: parent.horizontalCenter; top: scanButton.bottom; topMargin: 1.2 * config.defaultSubtextSize }
-        width: 400
-        Text {
-            anchors { horizontalCenter: parent.horizontalCenter; }
-            property string message: p.error
-            visible: message.length > 1
-            font.bold: true
-            font.pointSize: config.defaultSubtextSize
-            text: (message.length < 5) ? "Server did not respond as expected [" + message + "]." : (message === "Success" ? "Success. No updates were available." : message)
-        }
-    }
-    Column {
+    ColumnLayout {
         id: variables
-        spacing: 4 + (parent.height - config.defaultFontSize * 10 - 90) / 7
         anchors.top: parent.top
         anchors.topMargin: 30
+        anchors.leftMargin: 10
+        Layout.fillHeight: true
+        height: (parent.height * 4) / 6
         TextCouple {
             id: country
             type: "Country"
@@ -227,27 +126,24 @@ TabView {
                 if (value.length == 3) subtext = MCC.to_country(value);
                 if (carrier != null) carrier.updateVal();
             }
-            before: carrier.thisid
-            after: carrier.thisid
             onClicked: searchButton.clicked();
 
-            Rectangle {
+            /*Rectangle {
                 color: "#AAAAAA"
                 anchors.left: country.typeOffset
                 anchors.leftMargin: 5
-                width: wikiLink.width; height: wikiLink.height
+                width: children.implicitWidth
+                height: children.implicitHeight
                 radius: 4
-                Text {
-                    id: wikiLink
+                Label {
                     anchors.centerIn: parent
                     text: "?"
-                    font.pointSize: 12
                     MouseArea {
                         anchors.fill: parent
                         onClicked: Qt.openUrlExternally("https://en.wikipedia.org/w/index.php?title=Mobile_country_code");
                     }
                 }
-            }
+            }*/
         }
         TextCouple {
             id: carrier
@@ -260,8 +156,6 @@ TabView {
             }
 
             onValueChanged: updateVal();
-            before: country.thisid
-            after: country.thisid
             onClicked: searchButton.clicked();
         }
         TextCoupleSelect {

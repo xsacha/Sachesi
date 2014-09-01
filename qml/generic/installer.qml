@@ -158,7 +158,7 @@ TabView {
                     onEnabledChanged: if (enabled && uninstalling) { uninstalling = false; }
                     iconSource: "trash.png"
                     tooltip: "Uninstall Marked"
-                    width: config.notificationFontSize; height: config.notificationFontSize
+                    width: 26; height: 26
                     opacity: uninstalling ? 0.6 : 1.0
                     onClicked: { if (i.uninstallMarked()) uninstalling = true; }
                     BusyIndicator {
@@ -171,7 +171,7 @@ TabView {
                     anchors {right: parent.left; rightMargin: -1; bottom: parent.bottom }
                     iconSource: "text.png"
                     tooltip: "Show Installed Apps"
-                    width: config.notificationFontSize - 2; height: config.notificationFontSize - 2
+                    width: 24; height: 24
                     onClicked: i.exportInstalled();
                 }
                 Text {
@@ -191,7 +191,7 @@ TabView {
                         delegate: Item {
                             visible: type !== "";
                             width: parent.width - 3
-                            height: type === "" ? 0 : config.notificationFontSize
+                            height: type === "" ? 0 : 26
                             Rectangle {
                                 anchors.fill: parent
                                 color: { switch(type) {

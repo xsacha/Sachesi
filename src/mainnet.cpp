@@ -299,30 +299,39 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
         radioVersion += parts.at(i) + ".";
     radioVersion += QString::number(build);
 
-    QString server = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/";
+    QString potentialText = QString("* Operating Systems *\n");
 
-    QString potentialText = QString(
-                "* Operating Systems *\n"
-                "OMAP Devices (STL 100-1)\n"
-                "Debrick OS: " + server + hashval + "/com.qnx.coreos.qcfm.os.factory.desktop/" + osVersion + "/winchester.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "Core OS   : " + server + hashval + "/com.qnx.coreos.qcfm.os.factory/" + osVersion + "/winchester.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "\n"
-                "Qualcomm Devices (Everyone else)\n"
-                "Debrick OS: " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi.desktop/" + osVersion + "/qc8960.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "Core OS   : " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi/" + osVersion + "/qc8960.factory_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "\n"
-                "Verizon Devices\n"
-                "Debrick OS: " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi.desktop/" + osVersion + "/qc8960.verizon_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "Core OS   : " + server + hashval + "/com.qnx.coreos.qcfm.os.qc8960.verizon_sfi/" + osVersion + "/qc8960.verizon_sfi-" + osVersion + "-nto+armle-v7+signed.bar\n"
-                "\n\n"
-                "* Radios *\n"
-                "Z10 (-1): " + server + hashval + "/com.qnx.qcfm.radio.m5730/" + radioVersion + "/m5730-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z10 (-2/3) and P9982 (Porsche): " + server + hashval + "/com.qnx.qcfm.radio.qc8960/" + radioVersion + "/qc8960-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z10 (-4): " + server + hashval + "/com.qnx.qcfm.radio.qc8960.omadm/" + radioVersion + "/qc8960.omadm-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z30: " + server + hashval + "/com.qnx.qcfm.radio.qc8960.wtr5/" + radioVersion + "/qc8960.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Q10: " + server + hashval + "/com.qnx.qcfm.radio.qc8960.wtr/" + radioVersion + "/qc8960.wtr-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "Z3 (Jakarta): " + server + hashval + "/com.qnx.qcfm.radio.qc8930.wtr5/" + radioVersion + "/qc8930.wtr5-" + radioVersion + "-nto+armle-v7+signed.bar\n"
-                "");
+    // Lambda function to append link for signed bars
+    // Arch hardcoded to armv7
+    auto appendNewLink = [&potentialText, &hashval] (QString linkType, bool OS, bool OMAP, QString hwType, QString version) {
+        potentialText.append(linkType + (OS ? " OS" : " Radio"));
+        potentialText.append("\nhttp://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + (OS ? "coreos.qcfm.os." : "qcfm.radio."));
+
+        if (OMAP) // Old Playbook style
+            potentialText.append("factory" + hwType + "/" + version + "/winchester.factory_sfi" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
+        else
+            potentialText.append(hwType + "/" + version + "/" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
+    };
+    // Qualcomm (Everyone)
+    appendNewLink("Debrick", true, false, "qc8960.factory_sfi.desktop", osVersion);
+    appendNewLink("Core",    true, false, "qc8960.factory_sfi", osVersion);
+
+    // OMAP (STL 100-1)
+    appendNewLink("STL100-1 Debrick", true, true, ".desktop", osVersion);
+    appendNewLink("STL100-1 Core",    true, true, "", osVersion);
+
+    // Verizon (STL 100-4)
+    appendNewLink("Verizon Debrick", true, false, "qc8960.verizon_sfi.desktop", osVersion);
+    appendNewLink("Verizon Core",    true, false, "qc8960.verizon_sfi", osVersion);
+
+    potentialText.append("\n\n* Radios *\n");
+    appendNewLink("Z3 (Jakarta)", false, false, "qc8930.wtr5", radioVersion);
+    appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
+    appendNewLink("Z10 (STL 100-2, STL 100-3) and Porsche P9982", false, false, "qc8960", radioVersion);
+    appendNewLink("Z10 (STL 100-4)", false, false, "qc8960.omadm", radioVersion);
+    appendNewLink("Z30", false, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Q10", false, false, "qc8960.wtr5", radioVersion);
+
 
     QFile updates(getSaveDir() + "/versionlookup.txt");
 

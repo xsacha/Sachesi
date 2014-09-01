@@ -23,8 +23,6 @@ ApplicationWindow {
         property alias tab: titleRow.currentIndex
     }
 
-    Config {id:config}
-
     Text {
         id: title
         font.pixelSize: 22

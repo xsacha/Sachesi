@@ -45,33 +45,29 @@ TabView {
                 text: "Connecting to bootrom"
             }
             BusyIndicator {
-                width: config.notificationFontSize
-                height: config.notificationFontSize
+                height: parent.implicitHeight
+                width: height
             }
             Button {
                 text: "Cancel"
                 onClicked: b.disconnect();
             }
         }
-        ListView {
-            width: parent.width
-            height: 50
-            model: b.devices
-            spacing: 3
-            clip: true
-            header: Text {
-                width: parent.width
-                height: config.defaultFontSize
-                text: "Detected devices"
-                font.bold: true
-                font.pointSize: 14
-            }
+        GroupBox {
+            title: "Detected devices:"
+            ScrollView {
+                frameVisible: true
+                ListView {
+                    width: parent.width
+                    height: 50
+                    model: b.devices
+                    spacing: 3
 
-            delegate: Text {
-                width: parent.width
-                height: config.defaultFontSize
-                text: "Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)"));
-                font.pointSize: 12
+                    delegate: Label {
+                        text: "Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)"));
+                        font.pointSize: 12
+                    }
+                }
             }
         }
     }
