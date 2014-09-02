@@ -35,6 +35,7 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
     _splitProgress = 0;
     _downloading = false;
     _dlProgress = -1;
+    _hasPotentialLinks = false;
     QSettings settings("Qtness","Sachesi");
 #ifdef BLACKBERRY
     setAdvanced(true);
@@ -277,7 +278,7 @@ void MainNet::grabLinks()
     clipboard.insert("text/plain", _links.toLocal8Bit());
     return;
 #endif
-/*#if defined(BLACKBERRY)
+    /*#if defined(BLACKBERRY)
     QVariantMap data;
     data["title"] = "Links";
     bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
@@ -293,13 +294,15 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     QString hashval = QString(hash.result().toHex());
 
     QStringList parts = osVersion.split('.');
+    // Just a guess that the Radio is +1. In some carrier builds this isn't true.
     int build = parts.last().toInt() + 1;
     QString radioVersion = "";
     for (int i = 0; i < 3; i++)
         radioVersion += parts.at(i) + ".";
     radioVersion += QString::number(build);
 
-    QString potentialText = QString("* Operating Systems *\n");
+    QString potentialText = QString("Potential OS and Radio links for SR" + softwareRelease + " (OS:" + osVersion + " + Radio:" + radioVersion + ")\n\n"
+                                    "* Operating Systems *\n");
 
     // Lambda function to append link for signed bars
     // Arch hardcoded to armv7
@@ -356,7 +359,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     clipboard.insert("text/plain", potentialText.toLocal8Bit());
     return;
 #endif
-/*#if defined(BLACKBERRY)
+    /*#if defined(BLACKBERRY)
     QVariantMap data;
     data["title"] = "Links";
     bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
@@ -555,20 +558,12 @@ unsigned int MainNet::variantCount(unsigned int device) {
     return dev[device*2].count();
 }
 
-void MainNet::downloadPotentialLink(QString softwareRelease, QString osVersion) {
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    hash.addData(softwareRelease.toLocal8Bit());
-    QDesktopServices::openUrl("http://cdn.fs.sl.blackberry.com/fs/qnx/production/"
-                              + QString(hash.result().toHex())
-                              + "/com.qnx.coreos.qcfm.os.qc8960.factory_sfi.desktop/"
-                              + osVersion + "/qc8960.factory_sfi.desktop-" + osVersion + "-nto+armle-v7+signed.bar");
-}
-
 void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver)
 {
     if (_scanning)
         return;
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
+    _hasPotentialLinks = false; emit hasPotentialLinksChanged();
     setScanning(1);
     QString id = hwidFromVariant(device, variant);
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
@@ -611,14 +606,41 @@ void MainNet::reverseLookupReply() {
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
     QXmlStreamReader xml(data);
+    bool foundNewSR = false;
     while(!xml.atEnd() && !xml.hasError()) {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
-            if (xml.name() == "softwareReleaseVersion")
+            if (xml.name() == "softwareReleaseVersion") {
                 _softwareRelease = xml.readElementText(); emit softwareReleaseChanged();
+                foundNewSR = true;
+                // Setting it to true first in case there was an error with confirmation
+                _hasPotentialLinks = true; emit hasPotentialLinksChanged();
+            }
         }
         xml.readNext();
     }
     setScanning(0);
+    sender()->deleteLater();
+
+    // Now verify the link
+    if (foundNewSR) {
+        QCryptographicHash hash(QCryptographicHash::Sha1);
+        hash.addData(_softwareRelease.toLocal8Bit());
+        QString url = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + QString(hash.result().toHex());
+        QNetworkRequest request;
+        request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
+        request.setUrl(QUrl(url));
+        reply = manager->get(request);
+        connect(reply, SIGNAL(finished()), this, SLOT(confirmNewSR()));
+    }
+}
+
+void MainNet::confirmNewSR()
+{
+    QNetworkReply* reply = (QNetworkReply*)sender();
+    // Seems to give 301 redirect if it's real
+    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404) {
+        _hasPotentialLinks = false; emit hasPotentialLinksChanged();
+    }
     sender()->deleteLater();
 }
 
@@ -673,25 +695,25 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         setMultiscan(true);
     for (int i = start; i < end; i++) {
         QString query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
-            "<clientProperties>"
-            "<hardware>"
-            "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, i)+"</id><isBootROMSecure>true</isBootROMSecure>"
-            "</hardware>"
-            "<network>"
-            "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
-            "</network>"
-            "<software>"
-            "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
-            "</software>"
-            "</clientProperties>"
-            "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
-            "<pollType>manual</pollType>"
-            "<resultPackageSetCriteria>"
-            "<softwareRelease softwareReleaseVersion=\"latest\" />"
-            "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
-            "</resultPackageSetCriteria>" + delta +
-            "</updateDetailRequest>";
+                "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
+                "<clientProperties>"
+                "<hardware>"
+                "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, i)+"</id><isBootROMSecure>true</isBootROMSecure>"
+                "</hardware>"
+                "<network>"
+                "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
+                "</network>"
+                "<software>"
+                "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
+                "</software>"
+                "</clientProperties>"
+                "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
+                "<pollType>manual</pollType>"
+                "<resultPackageSetCriteria>"
+                "<softwareRelease softwareReleaseVersion=\"latest\" />"
+                "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
+                "</resultPackageSetCriteria>" + delta +
+                "</updateDetailRequest>";
         _error = ""; emit errorChanged();
         // Pass the variant in the request so it can be retrieved out-of-order
         QNetworkRequest request;
@@ -700,7 +722,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         request.setAttribute(QNetworkRequest::CustomVerbAttribute, nameFromVariant(device, i));
         QNetworkReply* reply = manager->post(request, query.toUtf8());
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(serverError(QNetworkReply::NetworkError)));
+                this, SLOT(serverError(QNetworkReply::NetworkError)));
         connect(reply, SIGNAL(finished()), this, SLOT(serverReply()));
     }
 }
@@ -814,8 +836,8 @@ void MainNet::serverError(QNetworkReply::NetworkError err)
     // Only show error if we are doing single scan or multiscan version is empty.
     if (!_multiscan || (_multiscanVersion == "" && _scanning == 0)) {
         QString errormsg = QString("Error %1 (%2)")
-            .arg(err)
-            .arg( ((QNetworkReply*)sender())->errorString() );
+                .arg(err)
+                .arg( ((QNetworkReply*)sender())->errorString() );
         _error = errormsg;
         emit errorChanged();
         _versionRelease = ""; _versionOS = ""; _versionRadio = ""; emit versionChanged();

@@ -59,7 +59,7 @@ Window {
                     onTriggered: {
                         if (p.scanning > 0)
                             return;
-                        if (downloadPotential.visible) {
+                        if (grabPotential.visible) {
                             parent.looking = false;
                         } else if (p.softwareRelease == "SR not in system") {
                             if (build.value >= 9998) {
@@ -86,14 +86,9 @@ Window {
                 visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
                 onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
                 Button {
-                    id: downloadPotential
-                    enabled: true // Exists?
-                    text: "Test"
-                    onClicked: p.downloadPotentialLink(p.softwareRelease, parent.osVersion)
-                }
-                Button {
-                    enabled: true // Exists?
-                    text: isMobile ? "Copy Links" : "Grab Links"
+                    id: grabPotential
+                    enabled: p.hasPotentialLinks // Exists?
+                    text: enabled ? (isMobile ? "Copy Public Links" : "Grab Public Links") : "No Links Available"
                     onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion)
                 }
             }

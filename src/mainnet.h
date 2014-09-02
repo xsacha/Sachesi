@@ -35,6 +35,7 @@ class MainNet : public QObject {
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY versionChanged)
     Q_PROPERTY(bool    advanced MEMBER _advanced WRITE setAdvanced NOTIFY advancedChanged)
     Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
+    Q_PROPERTY(bool    hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
     Q_PROPERTY(bool    multiscan MEMBER _multiscan WRITE setMultiscan NOTIFY multiscanChanged)
     Q_PROPERTY(int     scanning MEMBER _scanning WRITE setScanning NOTIFY scanningChanged)
@@ -60,7 +61,7 @@ public:
     Q_INVOKABLE void abortDL(QNetworkReply::NetworkError error = (QNetworkReply::NetworkError)0);
     Q_INVOKABLE void abortSplit();
     Q_INVOKABLE void reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver);
-    Q_INVOKABLE void downloadPotentialLink(QString softwareRelease, QString osVersion);
+
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE unsigned int variantCount(unsigned int device);
@@ -80,6 +81,7 @@ public:
 public slots:
     void    setSplitProgress(const int &progress);
     void    capNetworkReply(QNetworkReply* reply);
+    void    confirmNewSR();
 signals:
     void softwareReleaseChanged();
     void versionChanged();
@@ -92,6 +94,7 @@ signals:
     void multiscanChanged();
     void scanningChanged();
     void downloadingChanged();
+    void hasPotentialLinksChanged();
     void hasBootAccessChanged();
     void dlProgressChanged();
     void currentIdChanged();
@@ -128,6 +131,7 @@ private:
     QString _error;
     QString _multiscanVersion;
     bool _advanced, _downloading, _multiscan;
+    bool _hasPotentialLinks;
     int _scanning;
     QFile _currentFile;
     QList<int> _sizes;
