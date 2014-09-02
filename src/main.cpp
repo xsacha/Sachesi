@@ -47,6 +47,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
+    QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();

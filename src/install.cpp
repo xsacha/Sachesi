@@ -498,8 +498,10 @@ void InstallNet::login()
     if (ips.isEmpty())
         return;
 
-    if (manager == nullptr)
+    if (manager == nullptr) {
         manager = new SslNetworkAccessManager();
+        manager->setProxy(QNetworkProxy::NoProxy);
+    }
     if (cookieJar == nullptr) {
         cookieJar = new QNetworkCookieJar(this);
         manager->setCookieJar(cookieJar);
