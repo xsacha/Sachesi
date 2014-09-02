@@ -91,3 +91,29 @@ void openFile(QString name) {
     QDesktopServices::openUrl(QUrl::fromLocalFile(name));
 }
 
+void writeDisplayFile(QString name, QByteArray data) {
+    QFile displayFile(getSaveDir() + "/" + name);
+
+    if (!displayFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    displayFile.write(data);
+    openFile(displayFile.fileName());
+    displayFile.close();
+
+#ifdef BLACKBERRY
+    bb::system::Clipboard clipboard;
+    clipboard.clear();
+    clipboard.insert("text/plain", data);
+
+    // Cascades code is not working
+/*#if defined(BLACKBERRY)
+    QVariantMap data;
+    data["title"] = "Links";
+    bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
+                bb::cascades::InvokeQuery::create().invokeActionId("bb.action.SHARE").metadata(data).uri("file:///accounts/1000/shared/misc/updates.txt").invokeTargetId(
+                                "sys.pim.remember.composer"));
+    connect(invocation, SIGNAL(finished()), invocation, SLOT(deleteLater()));
+*/
+    #endif
+}
+

@@ -274,10 +274,9 @@ void Boot::search() {
             _devices.append(QString::number(desc.idProduct,16));
             if (connecting()) {
                 _found = desc.idProduct;
-                if (desc.idProduct == 0x1) {
-                    handle = openDevice(list[i]);
-                } else {
-                    handle = openDevice(list[i]);
+                handle = openDevice(list[i]);
+                // We need to reboot it to talk to it
+                if (desc.idProduct != 0x1) {
                     if (handle != nullptr) {
                         commandReboot(handle);
                         closeDevice(handle);
@@ -396,6 +395,3 @@ void Boot::setCommandMode(int mode, bool rebootAfter) {
 
 SET_QML2(bool, connecting, setConnecting)
 SET_QML2(int,  command, setCommand)
-QStringList Boot::devices() const {
-    return _devices;
-}

@@ -263,29 +263,7 @@ void MainNet::abortSplit()
 
 void MainNet::grabLinks()
 {
-    QFile updates(getSaveDir() + "/updates.txt");
-
-    if (!updates.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    updates.write(_links.toLatin1());
-    updates.close();
-
-    openFile(updates.fileName());
-
-#ifdef BLACKBERRY
-    bb::system::Clipboard clipboard;
-    clipboard.clear();
-    clipboard.insert("text/plain", _links.toLocal8Bit());
-    return;
-#endif
-    /*#if defined(BLACKBERRY)
-    QVariantMap data;
-    data["title"] = "Links";
-    bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
-                bb::cascades::InvokeQuery::create().invokeActionId("bb.action.SHARE").metadata(data).uri("file:///accounts/1000/shared/misc/updates.txt").invokeTargetId(
-                                "sys.pim.remember.composer"));
-    connect(invocation, SIGNAL(finished()), invocation, SLOT(deleteLater()));
-*/
+    writeDisplayFile("updates.txt", _links.toLocal8Bit());
 }
 
 void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
@@ -345,28 +323,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);
 
 
-    QFile updates(getSaveDir() + "/versionlookup.txt");
-
-    if (!updates.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    updates.write(potentialText.toLocal8Bit());
-    openFile(updates.fileName());
-    updates.close();
-
-#ifdef BLACKBERRY
-    bb::system::Clipboard clipboard;
-    clipboard.clear();
-    clipboard.insert("text/plain", potentialText.toLocal8Bit());
-    return;
-#endif
-    /*#if defined(BLACKBERRY)
-    QVariantMap data;
-    data["title"] = "Links";
-    bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
-                bb::cascades::InvokeQuery::create().invokeActionId("bb.action.SHARE").metadata(data).uri("file:///accounts/1000/shared/misc/updates.txt").invokeTargetId(
-                                "sys.pim.remember.composer"));
-    connect(invocation, SIGNAL(finished()), invocation, SLOT(deleteLater()));
-*/
+    writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
 }
 
 void MainNet::downloadLinks()

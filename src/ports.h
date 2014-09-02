@@ -44,4 +44,4 @@ FileSelect selectFiles(QString title, QString dir, QString nameString, QString n
 QString getSaveDir();
 bool checkCurPath();
 void openFile(QString name);
-
+void writeDisplayFile(QString name, QByteArray data);

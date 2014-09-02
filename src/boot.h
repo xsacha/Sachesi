@@ -92,7 +92,7 @@ class Boot : public QThread
     Q_OBJECT
     Q_PROPERTY(bool        connecting READ connecting WRITE setConnecting NOTIFY connectingChanged)
     Q_PROPERTY(int         command READ command WRITE setCommand NOTIFY commandChanged)
-    Q_PROPERTY(QStringList devices READ devices NOTIFY devicesChanged)
+    Q_PROPERTY(QStringList devices MEMBER _devices NOTIFY devicesChanged)
 public:
     Boot();
     ~Boot();
@@ -111,7 +111,6 @@ public:
 
     bool connecting() const;
     int command() const;
-    QStringList devices() const;
     void setCommand(const int &command);
     void setConnecting(const bool &connecting);
 signals:

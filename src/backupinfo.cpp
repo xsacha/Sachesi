@@ -136,13 +136,10 @@ void BackupInfo::setCurSize(const qint64 &val) {
 }
 
 qint64 BackupInfo::curMaxSize() const {
-    if (_curMode == _numMethods)
+    if (_curMode == _numMethods || _numMethods <= _curMode)
         return 1;
 
-    if (_numMethods > _curMode)
-        return _curMaxSize[_curMode];
-    else
-        return 1;
+    return _curMaxSize[_curMode];
 }
 
 void BackupInfo::setCurMaxSize(const qint64 &val) {
