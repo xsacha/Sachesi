@@ -34,7 +34,7 @@ Item {
                 property string pass_init: i.password
                 text: pass_init;
                 onTextChanged: {
-                    if (i.password !== text && text !== "")
+                    if (i.password !== text)
                         i.password = text
                 }
                 echoMode: showing ? TextInput.Normal : TextInput.Password

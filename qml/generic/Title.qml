@@ -8,7 +8,7 @@ import "UI" 1.0
 ApplicationWindow {
     id: window
     // TODO: Send version from C++
-    title: "Sachesi 1.5.0"
+    title: "Sachesi 1.6.0"
     width: 520
     height: 480
     minimumHeight: 520
@@ -61,7 +61,7 @@ ApplicationWindow {
             addTab("Backup", Qt.createComponent("backup.qml"));
             addTab("Install", Qt.createComponent("installer.qml"));
             // On Windows and OSX it appears to not show any tab. This seems to help.
-            if (settings.tab == 1 + p.hasBootAccess)
+            if (settings.tab === 1 + p.hasBootAccess)
                 currentIndex = 1 + p.hasBootAccess
         }
     }
