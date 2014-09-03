@@ -84,6 +84,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     comp->loadUrl(QUrl("qrc:/qml/generic/Title.qml"));
     if (comp->status() == QQmlComponent::Error) {
         QMessageBox::information(NULL, "Error", qPrintable(comp->errorString()), QMessageBox::Ok);
+        return 0;
     } else {
         QQuickWindow *window = qobject_cast<QQuickWindow *>(comp->create());
         window->show();

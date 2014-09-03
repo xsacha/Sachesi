@@ -120,11 +120,7 @@ int Boot::receiveControlMessage(libusb_device_handle* aHandle, ControlMessageHea
     int ret = libusb_bulk_transfer(aHandle, _found == 0x1 ? 0x82 : 0x81, (unsigned char*)buffer.data(), BUFFER_SIZE, &transferred, 1000);
     if (ret == -7) {
         if (_found != 0x1) {
-#ifdef _WIN32
-            QMessageBox::information(nullptr, "Error", "Make sure the device is in 'Windows' mode.");
-#else
-            QMessageBox::information(nullptr, "Error", "Make sure the device is in 'Mac' mode.");
-#endif
+            QMessageBox::information(nullptr, "Error", "Try rebooting your device manually.");
         } else {
             QMessageBox::information(nullptr, "Error", "The connected device did not respond as expected.");
         }
