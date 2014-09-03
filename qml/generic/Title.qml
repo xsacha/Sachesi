@@ -46,24 +46,37 @@ ApplicationWindow {
             onClicked: p.advanced = !p.advanced
         }
     }
+    VersionLookup {
+        id: versionLookup
+    }
     TabView {
         id: titleRow
+        currentIndex: 1 + p.hasBootAccess
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
-        currentIndex: 1 + p.hasBootAccess
-        Component.onCompleted: {
-            addTab("Extract", Qt.createComponent("extract.qml"));
-            //if (p.hasBootAccess)
-            //    addTab("Tools", Qt.createComponent("downloader.qml"));
-            if (p.hasBootAccess)
-                addTab("Boot", Qt.createComponent("boot.qml"));
-            addTab("Search", Qt.createComponent("main.qml"));
-            addTab("Backup", Qt.createComponent("backup.qml"));
-            addTab("Install", Qt.createComponent("installer.qml"));
-            // On Windows and OSX it appears to not show any tab. This seems to help.
-            if (settings.tab === 1 + p.hasBootAccess)
-                currentIndex = 1 + p.hasBootAccess
+
+        Tab {
+            title: "Extract";
+            Extract { anchors.fill: parent }
         }
+        Tab {
+            title: "Search"
+            Search { anchors.fill: parent }
+        }
+        Tab {
+            title: "Backup";
+            Backup { anchors.fill: parent }
+        }
+        Tab {
+            title: "Install";
+            Installer { anchors.fill: parent }
+        }
+        Component.onCompleted: {
+            if (p.hasBootAccess)
+                titleRow.addTab("Boot", Qt.createComponent("Boot.qml") )
+        }
+
+        USBConnect { anchors.fill: parent }
     }
     /*Rectangle {
         visible: !hasDonated

@@ -1,19 +1,14 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
-import QtQuick.Window 2.1
 import "mcc.js" as MCC
 import "UI" 1.0
 
-TabView {
-    id: main
+
+Item {
     property bool init: p.versionRelease === ""
     property bool isMobile: false
     state: "initing"
-
-    VersionLookup {
-        id: versionLookup
-    }
 
     Rectangle {
         visible: p.downloading

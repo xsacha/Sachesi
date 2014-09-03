@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 
 Item {
     id:main
-    visible: i.knownBattery < 0
+    visible: titleRow.currentIndex > (1 + p.hasBootAccess) && i.knownBattery < 0
     anchors.fill: parent
 
     ColumnLayout {

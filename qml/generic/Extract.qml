@@ -3,8 +3,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 import "UI" 1.0
 
-TabView {
-    id: main
+Item {
     Rectangle {
         visible: p.splitting
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }

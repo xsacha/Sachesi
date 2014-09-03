@@ -1,16 +1,16 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/generic/main.qml</file>
+        <file>qml/generic/Search.qml</file>
         <file>qml/generic/UI/CircleProgress.qml</file>
         <file>qml/generic/UI/TextCouple.qml</file>
         <file>qml/generic/UI/TextCoupleSelect.qml</file>
         <file>qml/generic/Title.qml</file>
         <file>qml/generic/USBConnect.qml</file>
-        <file>qml/generic/installer.qml</file>
-        <file>qml/generic/backup.qml</file>
-        <file>qml/generic/downloader.qml</file>
-        <file>qml/generic/boot.qml</file>
-        <file>qml/generic/extract.qml</file>
+        <file>qml/generic/Installer.qml</file>
+        <file>qml/generic/Backup.qml</file>
+        <file>qml/generic/Downloader.qml</file>
+        <file>qml/generic/Boot.qml</file>
+        <file>qml/generic/Extract.qml</file>
         <file>qml/generic/VersionLookup.qml</file>
         <file>qml/generic/mcc.js</file>
         <file>qml/generic/showpass.png</file>
