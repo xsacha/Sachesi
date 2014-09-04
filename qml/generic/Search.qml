@@ -198,7 +198,7 @@ Item {
                                        variant.selectedItem = 0;
                                    }
         }
-        // How to deal with OMAP STL 100-1? Currently, assume the same carrier does not carry both types.
+
         TextCoupleSelect {
             visible: p.advanced
             id: variant
@@ -243,8 +243,8 @@ Item {
 
     TextArea {
         id: updateMessage
-        anchors {top: parent.top; topMargin: 30; right: parent.right; rightMargin: 34 }
-        width: parent.width - 200 - parent.width / 8; height: parent.height - 130 - parent.height / 10
+        anchors {top: parent.top; bottom: parent.bottom; left: variables.right; right: parent.right; margins: 30; }
+        //width: parent.width - 200; height: parent.height - 130
         text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
               (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
               (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +

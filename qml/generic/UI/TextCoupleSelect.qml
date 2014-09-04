@@ -12,8 +12,8 @@ Item {
     property alias selectedItem: comboButton.currentIndex
 
     // Evil: hardcoded width/height
-    height: (14.5) * 1.4
-    width: (14.5) * 14
+    height: (14.5) * 1.5
+    width: (14.5) * 15
     ColumnLayout {
         RowLayout {
             Layout.fillWidth: true

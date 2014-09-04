@@ -25,16 +25,17 @@ ApplicationWindow {
         id: title
         font.pixelSize: 22
         text: "SACHESI"
-        font.letterSpacing: (parent.width - 280) / 6
+        font.letterSpacing: (parent.width - 280) / text.length
         font.weight: Font.DemiBold
         smooth: true
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: (parent.width - 280) / 12
+        anchors.horizontalCenterOffset: font.letterSpacing / 2
     }
 
     Rectangle {
+        id: advanced_toggle
         anchors { right: parent.right; rightMargin: 1; top: parent.top; topMargin: 1 }
-        width: 28; height: 28
+        height: title.height; width: height
         radius: height
         color: p.advanced ? "#999999" : "transparent"
         border.width: 2

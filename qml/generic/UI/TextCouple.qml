@@ -14,8 +14,8 @@ Item {
     property alias maxLength: textValue.maximumLength
     signal clicked();
     // Evil: hardcoded width/height
-    height: (14.5) * 1.4
-    width: (14.5) * 18
+    height: (14.5) * 1.5
+    width: (14.5) * 15
     ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
@@ -26,7 +26,7 @@ Item {
             }
             TextField {
                 id: textValue
-                anchors {left: parent.left; leftMargin: itemroot.width / 2 - 40}
+                anchors {left: parent.left; leftMargin: itemroot.width / 2 - 10}
                 text: value
                 onAccepted: itemroot.clicked()
             }
