@@ -7,7 +7,7 @@ import "UI" 1.0
 ApplicationWindow {
     id: window
     // TODO: Send version from C++
-    title: "Sachesi 1.6.0"
+    title: "Sachesi 1.6.1"
     width: 520
     height: 480
     minimumHeight: 520
