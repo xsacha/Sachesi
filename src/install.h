@@ -47,6 +47,12 @@ enum BarType {
     OSType,
 };
 
+struct BarInfo {
+    QString name;
+    QString version;
+    BarType type;
+};
+
 class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
@@ -216,7 +222,7 @@ private:
     QNetworkRequest setData(QString page, QString contentType);
     QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
     QNetworkReply* getQuery(QString page, QString contentType);
-    BarType checkInstallableType(QString name);
+    BarInfo checkInstallableInfo(QString name);
     QTcpSocket* sock;
     unsigned char* serverChallenge;
     RSA* privkey;
@@ -263,7 +269,7 @@ private:
     BackupInfo _back;
     bool _completed;
     bool _firmwareUpdate;
-    QList<QPair<QString, BarType> > _fileNames;
+    QList<BarInfo> _installInfo;
     QString _backupFileName;
     QStringList _currentApps;
     bool _installing;

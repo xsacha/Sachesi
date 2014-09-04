@@ -141,52 +141,50 @@ bool InstallNet::selectInstall()
     return false;
 }
 
-BarType InstallNet::checkInstallableType(QString name)
+BarInfo InstallNet::checkInstallableInfo(QString name)
 {
-    BarType barType = NotInstallableType;
+    BarInfo barInfo = {name, "", NotInstallableType};
     QuaZipFile manifest(name, "META-INF/MANIFEST.MF", QuaZip::csSensitive);
-    if (!manifest.open(QIODevice::WriteOnly))
-        return NotInstallableType;
-    QString type, version, system;
+    if (!manifest.open(QIODevice::ReadOnly))
+        return barInfo;
+    QString appName, type, system;
     while (!manifest.atEnd()) {
         QByteArray newLine = manifest.readLine();
-        if (newLine.startsWith("Package-Type")) {
+        if (newLine.startsWith("Package-Name:")) {
+            appName = newLine.split(':').last().simplified();
+        }
+        else if (newLine.startsWith("Package-Type:")) {
             type = newLine.split(':').last().simplified();
-            if (type != "system")
+            if (type == "system" && barInfo.type == NotInstallableType)
+                barInfo.type = OSType;
+            else
                 break;
         }
-        else if (newLine.startsWith("Package-Version")) {
-            version = newLine.split(':').last().simplified();
+        else if (newLine.startsWith("Package-Version:")) {
+            barInfo.version = newLine.split(':').last().simplified();
         }
-        else if (newLine.startsWith("System-Type")) {
-            system = newLine.split(':').last().simplified();
+        else if (newLine.startsWith("System-Type:")) {
+            if (newLine.split(':').last().simplified() == "radio")
+                barInfo.type = RadioType;
             break;
         }
     }
     if (type == "system") {
-        if (system == "radio") {
-            barType = RadioType;
-        }
-        else {
-            barType = OSType;
-            system = "OS";
-        }
         // Only if installing
-        setNewLine("<b>Installing " + system + ": " + version +"</b>");
+        setNewLine("<b>Installing " + system + ": " + barInfo.version +"</b>");
         setFirmwareUpdate(true);
-    }
-    else if (!type.isEmpty())
-        barType = ApplicationType;
+    } else if (!type.isEmpty())
+        barInfo.type = ApplicationType;
 
     manifest.close();
-    return barType;
+    return barInfo;
 }
 
 void InstallNet::install(QStringList files)
 {
     if (files.isEmpty())
         return;
-    _fileNames.clear();
+    _installInfo.clear();
     setFirmwareUpdate(false);
     foreach(QString _fileName, files)
     {
@@ -202,21 +200,21 @@ void InstallNet::install(QStringList files)
             QStringList barFiles = QDir(_fileName).entryList(QStringList("*.bar"));
             for(QString barFile : barFiles)
             {
-                BarType type = checkInstallableType(_fileName + "/" + barFile);
-                if (type != NotInstallableType)
-                    _fileNames.append(qMakePair(_fileName + "/" + barFile, type));
+                BarInfo info = checkInstallableInfo(_fileName + "/" + barFile);
+                if (info.type != NotInstallableType)
+                    _installInfo.append(info);
             }
-        } else /*if (_fileName.endsWith(".bar"))*/ {
-            BarType type = checkInstallableType(_fileName);
-            if (type != NotInstallableType)
-                _fileNames.append(qMakePair(_fileName, type));
+        } else {
+            BarInfo info = checkInstallableInfo(_fileName);
+            if (info.type != NotInstallableType)
+                _installInfo.append(info);
         }
     }
-    if (_fileNames.isEmpty())
+    if (_installInfo.isEmpty())
         return;
     setNewLine(QString("Installing <b>%1</b> file%2.")
-               .arg(_fileNames.count())
-               .arg(_fileNames.count() == 1 ? "" : "s"));
+               .arg(_installInfo.count())
+               .arg(_installInfo.count() == 1 ? "" : "s"));
     install();
 }
 
@@ -228,8 +226,9 @@ void InstallNet::install()
         QUrlQuery postData;
         int nfilesize = 0;
         _downgradePos = 0;
-        for (auto filePair : _fileNames)
-            _downgradeInfo.append(filePair.first);
+        _downgradeInfo.clear();
+        for (auto filePair : _installInfo)
+            _downgradeInfo.append(filePair.name);
 
         emit dgPosChanged();
         emit dgMaxPosChanged();
@@ -250,7 +249,7 @@ void InstallNet::uninstall(QStringList packageids)
     if (checkLogin())
     {
         QUrlQuery postData;
-        _fileNames.clear();
+        _installInfo.clear();
         _downgradePos = 0;
         _downgradeInfo = packageids;
         emit dgPosChanged();
@@ -375,7 +374,7 @@ void InstallNet::selectRestore(int options)
     if (finder->exec())
         _backupFileName = finder->selectedFiles().first();
     finder->deleteLater();
-    if (_fileNames.isEmpty())
+    if (_installInfo.isEmpty())
         return;
     if (!QFile::exists(_backupFileName))
         return;
@@ -920,21 +919,25 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "UpdateStart")
     {
-        if (_fileNames.count()) {
+        if (_installInfo.count()) {
             compressedFile = new QFile(_downgradeInfo.at(_downgradePos));
             compressedFile->open(QIODevice::ReadOnly);
             _dlBytes = 0;
             _dlTotal = compressedFile->size();
 
-            // TODO: Extract naming from bar too
-            QString literal_name = compressedFile->fileName().split('/').last();
-            QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-            if (_fileNames.at(_downgradePos).second == OSType)
-                setCurInstallName("Sending " + fileParts.at(1) + " Core OS");
-            else
+            BarInfo info = _installInfo.at(_downgradePos);
+            if (info.type == OSType)
+                setCurInstallName("Sending " + info.version + " Core OS");
+            else if (info.type == RadioType)
+                setCurInstallName("Sending " + info.version + " Radio");
+            else {
+                // TODO: Extract naming from bar too, if possible
+                QString literal_name = compressedFile->fileName().split('/').last();
+                QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
                 setCurInstallName("Sending " + fileParts.at(0));
+            }
 
-            if (_fileNames.at(_downgradePos).second == RadioType)
+            if (info.type == RadioType)
                 reply = manager->post(setData("update.cgi?type=radio", "octet-stream"), compressedFile);
             else
                 reply = manager->post(setData("update.cgi?type=bar", "octet-stream"), compressedFile);
@@ -997,15 +1000,20 @@ void InstallNet::restoreReply()
                         compressedFile->open(QIODevice::ReadOnly);
                         _dlBytes = 0;
                         _dlTotal = compressedFile->size();
-                        QString literal_name = compressedFile->fileName().split('/').last();
-                        QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-                        if (_fileNames.at(_downgradePos).second == OSType)
-                            setCurInstallName("Sending " + fileParts.at(1) + " Core OS");
-                        else
+
+                        BarInfo info = _installInfo.at(_downgradePos);
+                        if (info.type == OSType)
+                            setCurInstallName("Sending " + info.version + " Core OS");
+                        else if (info.type == RadioType)
+                            setCurInstallName("Sending " + info.version + " Radio");
+                        else {
+                            QString literal_name = compressedFile->fileName().split('/').last();
+                            QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
                             setCurInstallName("Sending " + fileParts.at(0));
+                        }
 
                         QNetworkRequest request;
-                        if (_fileNames.at(_downgradePos).second == RadioType)
+                        if (info.type == RadioType)
                             request = setData("update.cgi?type=radio", "octet-stream");
                         else
                             request = setData("update.cgi?type=bar", "octet-stream");
