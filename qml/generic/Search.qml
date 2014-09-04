@@ -221,14 +221,14 @@ Item {
             type: "Mode"
             listModel: [ "Upgrade", "Debrick" ]
         }
-        // Disabled until new Beta server code is in
-        /*TextCoupleSelect {
+
+        TextCoupleSelect {
             visible: p.advanced
             id: server
             z: 8
             type: "Server"
             listModel: [ "Production", "Beta" ]
-        }*/
+        }
 
         /*TextCoupleSelect {
             id: version
@@ -236,6 +236,9 @@ Item {
             type: "API"
             listModel: [ "2.1.0", "2.0.0", "1.0.0" ]
         }*/
+    }
+    VersionLookup {
+        id: versionLookup
     }
 
     TextArea {

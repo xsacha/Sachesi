@@ -529,7 +529,7 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
     switch (server)
     {
     case 1:
-        requestUrl = "https://beta.sl.eval.blackberry.com/cse/srVersionLookup/";
+        requestUrl = "https://beta.sl.eval.blackberry.com/slscse/srVersionLookup/";
         break;
     case 0:
     default:
@@ -608,7 +608,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     switch (server)
     {
     case 1:
-        requestUrl = "https://cse.beta.sl.eval.blackberry.com/cse/updateDetails/";
+        requestUrl = "https://cse.beta.sl.eval.blackberry.com/slscse/updateDetails/";
         break;
     case 0:
     default:
@@ -629,7 +629,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         requestUrl += "2.1.0/";
         break;
     }*/
-    requestUrl += "2.2.0/";
+    requestUrl += "2.2/";
 
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
 

@@ -44,9 +44,6 @@ ApplicationWindow {
             onClicked: p.advanced = !p.advanced
         }
     }
-    VersionLookup {
-        id: versionLookup
-    }
     TabView {
         id: titleRow
         currentIndex: 1 + p.hasBootAccess
