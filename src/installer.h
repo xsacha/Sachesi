@@ -42,7 +42,7 @@
 
 enum BarType {
     NotInstallableType = 0,
-    ApplicationType,
+    AppType,
     RadioType,
     OSType,
 };

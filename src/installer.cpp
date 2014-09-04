@@ -134,7 +134,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
         setNewLine("<b>Installing " + system + ": " + barInfo.version +"</b>");
         setFirmwareUpdate(true);
     } else if (!type.isEmpty())
-        barInfo.type = ApplicationType;
+        barInfo.type = AppType;
 
     manifest.close();
     return barInfo;
