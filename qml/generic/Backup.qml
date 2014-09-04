@@ -1,6 +1,8 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
+import Qt.labs.settings 1.0
 import BackupTools 1.0
 import "UI" 1.0
 
@@ -14,6 +16,10 @@ Item {
         id: attemptLookup
         running: false
         interval: 12000
+    }
+    Settings {
+        id: settings
+        property alias backupFolder: backup_files.folder
     }
 
     ColumnLayout {
@@ -70,15 +76,25 @@ Item {
 
         RowLayout {
             visible: i.backMethods
+            FileDialog {
+                id: backup_files
+                title: "Choose backup file"
+                onAccepted: {
+                    i.backup(backup_files.fileUrls[0], options.value)
+                }
+
+                nameFilters: [ "Blackberry Backup (*.bbb)" ]
+            }
+
             Button {
                 text: "Create backup"
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
-                onClicked: i.selectBackup(options.value)
+                onClicked: { backup_files.selectExisting = false; backup_files.open(); }
             }
             Button {
                 text: "Restore backup"
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
-                onClicked: i.selectRestore(options.value)
+                onClicked: { backup_files.selectExisting = true; backup_files.open(); }
             }
         }
     }

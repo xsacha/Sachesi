@@ -15,7 +15,7 @@ Item {
     anchors.fill: parent
     Settings {
         id: settings
-        property alias folder: install_files.folder
+        property alias installFolder: install_files.folder
     }
 
     Rectangle {

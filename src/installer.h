@@ -108,10 +108,8 @@ public:
     Q_INVOKABLE void install(QList<QUrl> files);
     Q_INVOKABLE void uninstall(QStringList packageids);
     Q_INVOKABLE bool uninstallMarked();
-    Q_INVOKABLE void restore();
-    Q_INVOKABLE void selectRestore(int options);
-    Q_INVOKABLE void backup();
-    Q_INVOKABLE void selectBackup(int options);
+    Q_INVOKABLE void restore(QUrl url, int options);
+    Q_INVOKABLE void backup(QUrl url, int options);
     Q_INVOKABLE void wipe();
     Q_INVOKABLE void startRTAS();
     Q_INVOKABLE void newPin(QString pin);
@@ -219,8 +217,10 @@ private:
     QNetworkRequest setData(QString page, QString contentType);
     QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
     QNetworkReply* getQuery(QString page, QString contentType);
-    void install();
     BarInfo checkInstallableInfo(QString name);
+    void install();
+    void restore();
+    void backup();
     QTcpSocket* sock;
     unsigned char* serverChallenge;
     RSA* privkey;

@@ -229,10 +229,7 @@ bool InstallNet::uninstallMarked()
     return true;
 }
 
-void InstallNet::selectBackup(int options)
-{
-    QString dir = QDir::homePath();
-#ifdef _WIN32
+/*#ifdef _WIN32
     QFile linkSettings(QDir::homePath()+"/AppData/Roaming/Research In Motion/BlackBerry 10 Desktop/Settings.config");
     linkSettings.open(QIODevice::WriteOnly);
     QXmlStreamReader xml(&linkSettings);
@@ -244,24 +241,7 @@ void InstallNet::selectBackup(int options)
         }
     }
     linkSettings.close();
-#endif
-    FileSelect finder = selectFiles("Create Backup", dir, "Blackberry Backup", "*.bbb");
-#ifdef BLACKBERRY
-    //
-#else
-    finder->setAcceptMode(QFileDialog::AcceptSave);
-    if (finder->exec())
-        _backupFileName = finder->selectedFiles().first();
-    if (_backupFileName.isEmpty())
-        return;
-    if (!_backupFileName.endsWith(".bbb"))
-        _backupFileName.append(".bbb");
-    _back.setMode(options);
-    _back.setCurMode(0);
-    backup();
-    finder->deleteLater();
-#endif
-}
+#endif*/
 
 void InstallNet::backup()
 {
@@ -302,6 +282,16 @@ void InstallNet::backup()
     }
 }
 
+void InstallNet::backup(QUrl url, int options)
+{
+    _backupFileName = url.toLocalFile();
+    if (_backupFileName.isEmpty())
+        return;
+    _back.setMode(options);
+    _back.setCurMode(0);
+    backup();
+}
+
 void InstallNet::backupQuery() {
     if (checkLogin())
     {
@@ -312,22 +302,22 @@ void InstallNet::backupQuery() {
     }
 }
 
-void InstallNet::selectRestore(int options)
+void InstallNet::restore()
 {
-    QString dir = QDir::homePath();
-    QDir docs(QDir::homePath());
-    if (docs.exists("Documents/Blackberry/Backup"))
-        dir = QDir::homePath() + "/Documents/Blackberry/Backup";
-    else if (docs.exists("My Documents/Blackberry/Backup"))
-        dir = QDir::homePath() + "/My Documents/Blackberry/Backup";
-    FileSelect finder = selectFiles("Restore Backup", dir, "Blackberry Backup", "*.bbb");
+    setRestoring(true);
+    if (checkLogin())
+    {
+        QUrlQuery postData;
+        postData.addQueryItem("action", "restore");
+        postData.addQueryItem("mode", _back.modeString());
+        postData.addQueryItem("totalsize", QString::number(_back.maxSize()));
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
+    }
+}
 
-#ifndef BLACKBERRY
-    if (finder->exec())
-        _backupFileName = finder->selectedFiles().first();
-    finder->deleteLater();
-    if (_installInfo.isEmpty())
-        return;
+void InstallNet::restore(QUrl url, int options)
+{
+    _backupFileName = url.toLocalFile();
     if (!QFile::exists(_backupFileName))
         return;
     currentBackupZip = new QuaZip(_backupFileName);
@@ -355,25 +345,11 @@ void InstallNet::selectRestore(int options)
             }
         }
     }
-    if (options) {
-        _back.setMode(options);
-        _back.setCurMode(0);
-        restore();
-    }
-#endif
-}
-
-void InstallNet::restore()
-{
-    setRestoring(true);
-    if (checkLogin())
-    {
-        QUrlQuery postData;
-        postData.addQueryItem("action", "restore");
-        postData.addQueryItem("mode", _back.modeString());
-        postData.addQueryItem("totalsize", QString::number(_back.maxSize()));
-        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
-    }
+    if (!options)
+        return;
+    _back.setMode(options);
+    _back.setCurMode(0);
+    restore();
 }
 
 void InstallNet::wipe() {
