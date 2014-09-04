@@ -14,11 +14,14 @@ ApplicationWindow {
     minimumWidth: 440
 
     Settings {
+        id: settings
         property alias x: window.x
         property alias y: window.y
         property alias width: window.width
         property alias height: window.height
         property alias tab: titleRow.currentIndex
+        property url installFolder
+        property url backupFolder
     }
 
     Text {

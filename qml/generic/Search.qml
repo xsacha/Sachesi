@@ -248,7 +248,7 @@ Item {
         text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
               (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
               (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +
-              "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.url + "<br><b>Files<br></b>" + p.applications + "<br>";
+              "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.updateUrl + "<br><b>Files<br></b>" + p.applications + "<br>";
         readOnly: true
         textFormat: TextEdit.RichText
         selectByKeyboard: true

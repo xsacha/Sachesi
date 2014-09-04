@@ -285,6 +285,8 @@ void InstallNet::backup()
 void InstallNet::backup(QUrl url, int options)
 {
     _backupFileName = url.toLocalFile();
+    if(!_backupFileName.endsWith(".bbb"))
+        _backupFileName.append(".bbb");
     if (_backupFileName.isEmpty())
         return;
     _back.setMode(options);

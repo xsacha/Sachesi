@@ -1,7 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
-import Qt.labs.settings 1.0
 import AppLibrary 1.0
 import "UI" 1.0
 
@@ -13,10 +12,6 @@ Item {
     onNewLineChanged: details += i.newLine
     visible: i.knownBattery > -1
     anchors.fill: parent
-    Settings {
-        id: settings
-        property alias installFolder: install_files.folder
-    }
 
     Rectangle {
         visible: i.dgProgress >= 0
@@ -61,9 +56,11 @@ Item {
             FileDialog {
                 id: install_files
                 title: "Select files and folders"
+                folder: settings.installFolder
                 onAccepted: {
-                    i.install(install_files.fileUrls)
+                    i.install(fileUrls)
                     tabs.currentIndex = 1
+                    settings.installFolder = folder;
                 }
 
                 selectMultiple: true

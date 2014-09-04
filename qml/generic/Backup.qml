@@ -17,10 +17,6 @@ Item {
         running: false
         interval: 12000
     }
-    Settings {
-        id: settings
-        property alias backupFolder: backup_files.folder
-    }
 
     ColumnLayout {
         ColumnLayout {
@@ -79,8 +75,10 @@ Item {
             FileDialog {
                 id: backup_files
                 title: "Choose backup file"
+                folder: settings.backupFolder
                 onAccepted: {
-                    i.backup(backup_files.fileUrls[0], options.value)
+                    i.backup(fileUrl, options.value)
+                    settings.backupFolder = folder;
                 }
 
                 nameFilters: [ "Blackberry Backup (*.bbb)" ]

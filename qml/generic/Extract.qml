@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
+import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
 import "UI" 1.0
 
@@ -67,10 +68,22 @@ Item {
                 font.bold: true
             }
             RowLayout {
+                FileDialog {
+                    id: split_files
+                    title: "Split Autoloader"
+                    folder: settings.installFolder
+                    onAccepted: {
+                        p.splitAutoloader(fileUrl, osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
+                        settings.installFolder = folder;
+                    }
+
+                    nameFilters: [ "Signed Containers (*.exe *.bar *.zip)" ]
+                }
+
                 Button {
                     text: "Split";
                     enabled: !p.splitting
-                    onClicked: if (!p.splitting) p.splitAutoloader(osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
+                    onClicked: split_files.open()
                 }
                 CheckBox {
                     id: osSelect
@@ -89,28 +102,30 @@ Item {
                 }
             }
             Label {
-                text: "Split signed images from autoloaders"
+                text: "Split signed images from autoloader .exe, .bar or .zip"
                 font.bold: true;
             }
             RowLayout {
-                Text {
-                    text: "Combine:"
-                    font.pointSize: 12
-                    font.bold: true;
+                FileDialog {
+                    id: combine_files
+                    title: "Combine Autoloader"
+                    folder: settings.installFolder
+                    onAccepted: {
+                        p.combineAutoloader(fileUrls);
+                        settings.installFolder = folder;
+                    }
+                    selectMultiple: true
+
+                    nameFilters: [ "Signed Images (*.signed)" ]
                 }
                 Button {
-                    text: "Folder";
+                    text: "Combine";
                     enabled: !p.splitting
-                    onClicked: if (!p.splitting) p.combineFolder();
-                }
-                Button {
-                    text: ".signed(s)";
-                    enabled: !p.splitting
-                    onClicked: if (!p.splitting) p.combineFiles();
+                    onClicked: combine_files.open()
                 }
             }
             Label {
-                text: "Combine signed images in to an autoloader"
+                text: "Combine .signed images in to an autoloader .exe"
                 font.bold: true;
             }
         }

@@ -49,29 +49,16 @@ MainNet::~MainNet()
 {
 }
 
-void MainNet::splitAutoloader(int options)
-{
-    QSettings settings("Qtness","Sachesi");
-    _options = options;
-    FileSelect finder = selectFiles("Split Autoloader", getSaveDir(), "Signed Container", "*.exe *.bar *.zip");
-#ifdef BLACKBERRY
-    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(splitAutoloaderSlot(const QStringList&)));
-#else
-    if (finder->exec())
-        splitAutoloaderSlot(finder->selectedFiles());
-    finder->deleteLater();
-#endif
-}
-
-void MainNet::splitAutoloaderSlot(const QStringList& fileNames) {
-    QSettings settings("Qtness","Sachesi");
-    if (fileNames.isEmpty())
+void MainNet::splitAutoloader(QUrl url, int options) {
+    if (url.isEmpty())
         return;
-    QFileInfo fileInfo(fileNames.first());
-    settings.setValue("splitDir", fileInfo.absolutePath());
+    QString fileName = url.toLocalFile();
+    _options = options;
+
+    QFileInfo fileInfo(fileName);
     _splitting = 1; emit splittingChanged();
     splitThread = new QThread();
-    Splitter* splitter = new Splitter(fileNames.first(), _options);
+    Splitter* splitter = new Splitter(fileName, _options);
     splitter->moveToThread(splitThread);
     if (fileInfo.suffix() == "exe")
         connect(splitThread, SIGNAL(started()), splitter, SLOT(processSplitAutoloader()));
@@ -85,39 +72,11 @@ void MainNet::splitAutoloaderSlot(const QStringList& fileNames) {
     splitThread->start();
 }
 
-void MainNet::combineFolder()
+void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
 {
-    FileSelect finder = selectFiles("Combine Folder of Signed", getSaveDir(), "Signed Images", "*.signed");
-#ifdef BLACKBERRY
-    // TODO: Directory?
-    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
-#else
-    finder->setFileMode(QFileDialog::Directory);
-    if (finder->exec())
-        combineAutoloader(finder->selectedFiles());
-    finder->deleteLater();
-#endif
-}
-
-void MainNet::combineFiles()
-{
-    FileSelect finder = selectFiles("Combine Signed Files", getSaveDir(), "Signed Images", "*.signed");
-#ifdef BLACKBERRY
-    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(combineAutoloader(const QStringList&)));
-#else
-    if (finder->exec())
-        combineAutoloader(finder->selectedFiles());
-    finder->deleteLater();
-#endif
-}
-
-void MainNet::combineAutoloader(QStringList selectedFiles)
-{
-    QSettings settings("Qtness","Sachesi");
-    QFileInfo fileInfo(selectedFiles.first());
-    settings.setValue("splitDir", fileInfo.absolutePath());
     QStringList splitFiles = QStringList();
-    foreach(QString fileName, selectedFiles) {
+    foreach(QUrl url, selectedFiles) {
+        QString fileName = url.toLocalFile();
         if (QFileInfo(fileName).isDir())
         {
             QStringList suffixOnly = QDir(fileName).entryList(QStringList("*.signed"));
@@ -129,7 +88,6 @@ void MainNet::combineAutoloader(QStringList selectedFiles)
     }
     if (splitFiles.isEmpty())
         return;
-    settings.setValue("splitDir", QFileInfo(selectedFiles.first()).absolutePath());
     splitThread = new QThread;
     _splitting = 2; emit splittingChanged();
     Splitter* splitter = new Splitter(splitFiles);
@@ -771,7 +729,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         _multiscanVersion = ver;
         _versionRelease = ver; emit versionChanged();
         _description = desc; emit descriptionChanged();
-        _url = addr; emit urlChanged();
+        _updateUrl = addr; emit updateUrlChanged();
         _applications = apps; emit applicationsChanged();
         _sizes = sizes;
         _dlTotal = 0;

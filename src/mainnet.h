@@ -29,7 +29,7 @@ class MainNet : public QObject {
     Q_PROPERTY(QString versionRadio MEMBER _versionRadio NOTIFY versionChanged)
     Q_PROPERTY(QString variant MEMBER _variant NOTIFY variantChanged)
     Q_PROPERTY(QString description MEMBER _description NOTIFY descriptionChanged)
-    Q_PROPERTY(QString url MEMBER _url NOTIFY urlChanged)
+    Q_PROPERTY(QString updateUrl MEMBER _updateUrl NOTIFY updateUrlChanged)
     Q_PROPERTY(QString applications MEMBER _applications NOTIFY applicationsChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY versionChanged)
@@ -51,10 +51,8 @@ public:
     ~MainNet();
     Q_INVOKABLE void updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server/*, int version*/);
     Q_INVOKABLE void downloadLinks();
-    Q_INVOKABLE void splitAutoloader(int options);
-    Q_INVOKABLE void combineFolder();
-    Q_INVOKABLE void combineFiles();
-    Q_INVOKABLE void combineAutoloader(QStringList selectedFiles);
+    Q_INVOKABLE void splitAutoloader(QUrl, int options);
+    Q_INVOKABLE void combineAutoloader(QList<QUrl> selectedFiles);
     Q_INVOKABLE void extractImage(int type, int options);
     Q_INVOKABLE void grabLinks();
     Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion);
@@ -87,7 +85,7 @@ signals:
     void versionChanged();
     void variantChanged();
     void descriptionChanged();
-    void urlChanged();
+    void updateUrlChanged();
     void applicationsChanged();
     void errorChanged();
     void advancedChanged();
@@ -111,7 +109,6 @@ private slots:
     void downloadFinish();
     void cancelSplit();
 // Blackberry
-	void splitAutoloaderSlot(const QStringList& fileNames);
 	void extractImageSlot(const QStringList& selectedFiles);
 
 private:
@@ -125,7 +122,7 @@ private:
     QString _versionRelease, _versionOS, _versionRadio;
     QString _variant;
     QString _description;
-    QString _url;
+    QString _updateUrl;
     QString _applications;
     QString _links;
     QString _error;

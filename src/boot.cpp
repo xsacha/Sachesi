@@ -17,7 +17,7 @@
 
 #include "ports.h"
 #include "boot.h"
-#include "install.h"
+#include "installer.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <QProcess>
