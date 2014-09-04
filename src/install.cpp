@@ -141,11 +141,52 @@ bool InstallNet::selectInstall()
     return false;
 }
 
+BarType InstallNet::checkInstallableType(QString name)
+{
+    BarType barType = NotInstallableType;
+    QuaZipFile manifest(name, "META-INF/MANIFEST.MF", QuaZip::csSensitive);
+    if (!manifest.open(QIODevice::WriteOnly))
+        return NotInstallableType;
+    QString type, version, system;
+    while (!manifest.atEnd()) {
+        QByteArray newLine = manifest.readLine();
+        if (newLine.startsWith("Package-Type")) {
+            type = newLine.split(':').last().simplified();
+            if (type != "system")
+                break;
+        }
+        else if (newLine.startsWith("Package-Version")) {
+            version = newLine.split(':').last().simplified();
+        }
+        else if (newLine.startsWith("System-Type")) {
+            system = newLine.split(':').last().simplified();
+            break;
+        }
+    }
+    if (type == "system") {
+        if (system == "radio") {
+            barType = RadioType;
+        }
+        else {
+            barType = OSType;
+            system = "OS";
+        }
+        // Only if installing
+        setNewLine("<b>Installing " + system + ": " + version +"</b>");
+        setFirmwareUpdate(true);
+    }
+    else if (!type.isEmpty())
+        barType = ApplicationType;
+
+    manifest.close();
+    return barType;
+}
+
 void InstallNet::install(QStringList files)
 {
     if (files.isEmpty())
         return;
-    _fileNames = QStringList();
+    _fileNames.clear();
     setFirmwareUpdate(false);
     foreach(QString _fileName, files)
     {
@@ -158,35 +199,17 @@ void InstallNet::install(QStringList files)
         }
         if (QFileInfo(_fileName).isDir())
         {
-            QStringList suffixOnly = QDir(_fileName).entryList(QStringList("*.bar"));
-            for(QString suffix : suffixOnly)
+            QStringList barFiles = QDir(_fileName).entryList(QStringList("*.bar"));
+            for(QString barFile : barFiles)
             {
-                if (suffix.contains("_sfi"))
-                {
-                    setNewLine("<b>Installing OS: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
-                    setFirmwareUpdate(true);
-                }
-                if (suffix.contains(".wtr") || suffix.contains("omadm-") || suffix.startsWith("m5730") || suffix.startsWith("qc8960-"))
-                {
-                    setNewLine("<b>Installing Radio: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
-                    setFirmwareUpdate(true);
-                }
-                _fileNames.append(_fileName + "/" + suffix);
+                BarType type = checkInstallableType(_fileName + "/" + barFile);
+                if (type != NotInstallableType)
+                    _fileNames.append(qMakePair(_fileName + "/" + barFile, type));
             }
-        } else if (_fileName.endsWith(".bar"))
-        {
-            QString suffix = _fileName.split("/").last();
-            if (suffix.contains("_sfi"))
-            {
-                setNewLine("<b>Installing OS: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
-                setFirmwareUpdate(true);
-            }
-            if (suffix.contains(".wtr") || suffix.contains("omadm-") || suffix.startsWith("m5730") || suffix.startsWith("qc8960-"))
-            {
-                setNewLine("<b>Installing Radio: " + suffix.split("-", QString::SkipEmptyParts).at(1)+"</b>");
-                setFirmwareUpdate(true);
-            }
-            _fileNames.append(_fileName);
+        } else /*if (_fileName.endsWith(".bar"))*/ {
+            BarType type = checkInstallableType(_fileName);
+            if (type != NotInstallableType)
+                _fileNames.append(qMakePair(_fileName, type));
         }
     }
     if (_fileNames.isEmpty())
@@ -205,7 +228,9 @@ void InstallNet::install()
         QUrlQuery postData;
         int nfilesize = 0;
         _downgradePos = 0;
-        _downgradeInfo = _fileNames;
+        for (auto filePair : _fileNames)
+            _downgradeInfo.append(filePair.first);
+
         emit dgPosChanged();
         emit dgMaxPosChanged();
         for(QString filename : _downgradeInfo)
@@ -225,6 +250,7 @@ void InstallNet::uninstall(QStringList packageids)
     if (checkLogin())
     {
         QUrlQuery postData;
+        _fileNames.clear();
         _downgradePos = 0;
         _downgradeInfo = packageids;
         emit dgPosChanged();
@@ -274,11 +300,11 @@ void InstallNet::selectBackup(int options)
 #else
     finder->setAcceptMode(QFileDialog::AcceptSave);
     if (finder->exec())
-        _fileNames = finder->selectedFiles();
-    if (_fileNames.isEmpty())
+        _backupFileName = finder->selectedFiles().first();
+    if (_backupFileName.isEmpty())
         return;
-    if (!_fileNames.first().endsWith(".bbb"))
-        _fileNames.first().append(".bbb");
+    if (!_backupFileName.endsWith(".bbb"))
+        _backupFileName.append(".bbb");
     _back.setMode(options);
     _back.setCurMode(0);
     backup();
@@ -291,10 +317,11 @@ void InstallNet::backup()
     setBacking(true);
     if (checkLogin())
     {
-        currentBackupZip = new QuaZip(_fileNames.first());
+        currentBackupZip = new QuaZip(_backupFileName);
+        currentBackupZip->setZip64Enabled(true);
         currentBackupZip->open(QuaZip::mdCreate);
         if (!currentBackupZip->isOpen()) {
-            QMessageBox::critical(nullptr, "Error", "Unable to write backup. Please ensure you have permission to write to " + _fileNames.first());
+            QMessageBox::critical(nullptr, "Error", "Unable to write backup. Please ensure you have permission to write to " + _backupFileName);
             delete currentBackupZip;
             currentBackupZip = nullptr;
             setBacking(false);
@@ -346,13 +373,13 @@ void InstallNet::selectRestore(int options)
 
 #ifndef BLACKBERRY
     if (finder->exec())
-        _fileNames = finder->selectedFiles();
+        _backupFileName = finder->selectedFiles().first();
     finder->deleteLater();
     if (_fileNames.isEmpty())
         return;
-    if (!QFile::exists(_fileNames.first()))
+    if (!QFile::exists(_backupFileName))
         return;
-    currentBackupZip = new QuaZip(_fileNames.first());
+    currentBackupZip = new QuaZip(_backupFileName);
     currentBackupZip->open(QuaZip::mdUnzip);
     if (!currentBackupZip->isOpen()) {
         QMessageBox::critical(nullptr, "Error", "Could not open backup file.");
@@ -893,20 +920,21 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "UpdateStart")
     {
-        if (_downgradeInfo.at(_downgradePos).endsWith(".bar")) {
+        if (_fileNames.count()) {
             compressedFile = new QFile(_downgradeInfo.at(_downgradePos));
             compressedFile->open(QIODevice::ReadOnly);
             _dlBytes = 0;
             _dlTotal = compressedFile->size();
 
+            // TODO: Extract naming from bar too
             QString literal_name = compressedFile->fileName().split('/').last();
             QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-            if (literal_name.contains("_sfi"))
+            if (_fileNames.at(_downgradePos).second == OSType)
                 setCurInstallName("Sending " + fileParts.at(1) + " Core OS");
             else
                 setCurInstallName("Sending " + fileParts.at(0));
 
-            if (literal_name.contains(".wtr") || literal_name.contains("omadm-") || literal_name.startsWith("m5730") || literal_name.startsWith("qc8960-"))
+            if (_fileNames.at(_downgradePos).second == RadioType)
                 reply = manager->post(setData("update.cgi?type=radio", "octet-stream"), compressedFile);
             else
                 reply = manager->post(setData("update.cgi?type=bar", "octet-stream"), compressedFile);
@@ -971,13 +999,13 @@ void InstallNet::restoreReply()
                         _dlTotal = compressedFile->size();
                         QString literal_name = compressedFile->fileName().split('/').last();
                         QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-                        if (literal_name.contains("_sfi"))
+                        if (_fileNames.at(_downgradePos).second == OSType)
                             setCurInstallName("Sending " + fileParts.at(1) + " Core OS");
                         else
                             setCurInstallName("Sending " + fileParts.at(0));
 
                         QNetworkRequest request;
-                        if (literal_name.contains(".wtr") || literal_name.contains("omadm-") || literal_name.startsWith("m5730") || literal_name.startsWith("qc8960-"))
+                        if (_fileNames.at(_downgradePos).second == RadioType)
                             request = setData("update.cgi?type=radio", "octet-stream");
                         else
                             request = setData("update.cgi?type=bar", "octet-stream");
@@ -1032,7 +1060,7 @@ void InstallNet::restoreReply()
                                 currentBackupZip->close();
                                 delete currentBackupZip;
                                 currentBackupZip = nullptr;
-                                QFile::remove(_fileNames.first());
+                                QFile::remove(_backupFileName);
                             }
                         } else
                             _hadPassword = false;

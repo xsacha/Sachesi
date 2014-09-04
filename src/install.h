@@ -40,6 +40,13 @@
 #include "apps.h"
 #include "backupinfo.h"
 
+enum BarType {
+    NotInstallableType = 0,
+    ApplicationType,
+    RadioType,
+    OSType,
+};
+
 class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
@@ -209,6 +216,7 @@ private:
     QNetworkRequest setData(QString page, QString contentType);
     QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
     QNetworkReply* getQuery(QString page, QString contentType);
+    BarType checkInstallableType(QString name);
     QTcpSocket* sock;
     unsigned char* serverChallenge;
     RSA* privkey;
@@ -255,7 +263,8 @@ private:
     BackupInfo _back;
     bool _completed;
     bool _firmwareUpdate;
-    QStringList _fileNames;
+    QList<QPair<QString, BarType> > _fileNames;
+    QString _backupFileName;
     QStringList _currentApps;
     bool _installing;
     bool _restoring;
