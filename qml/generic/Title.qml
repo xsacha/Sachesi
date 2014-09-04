@@ -14,7 +14,6 @@ ApplicationWindow {
     minimumWidth: 440
 
     Settings {
-        id: settings
         property alias x: window.x
         property alias y: window.y
         property alias width: window.width

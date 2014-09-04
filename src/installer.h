@@ -105,10 +105,7 @@ public:
     ~InstallNet();
     Q_INVOKABLE void keepAlive();
     Q_INVOKABLE void scanProps();
-    Q_INVOKABLE bool selectInstallFolder();
-    Q_INVOKABLE bool selectInstall();
-    Q_INVOKABLE void install();
-    Q_INVOKABLE void install(QStringList files);
+    Q_INVOKABLE void install(QList<QUrl> files);
     Q_INVOKABLE void uninstall(QStringList packageids);
     Q_INVOKABLE bool uninstallMarked();
     Q_INVOKABLE void restore();
@@ -222,6 +219,7 @@ private:
     QNetworkRequest setData(QString page, QString contentType);
     QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
     QNetworkReply* getQuery(QString page, QString contentType);
+    void install();
     BarInfo checkInstallableInfo(QString name);
     QTcpSocket* sock;
     unsigned char* serverChallenge;

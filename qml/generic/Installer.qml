@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
+import Qt.labs.settings 1.0
 import AppLibrary 1.0
 import "UI" 1.0
 
@@ -12,6 +13,10 @@ Item {
     onNewLineChanged: details += i.newLine
     visible: i.knownBattery > -1
     anchors.fill: parent
+    Settings {
+        id: settings
+        property alias folder: install_files.folder
+    }
 
     Rectangle {
         visible: i.dgProgress >= 0
@@ -38,10 +43,7 @@ Item {
         anchors.fill: parent
         onDropped: {
             if (drop.hasUrls) {
-                var fileList = []
-                for (var url in drop.urls)
-                    fileList[url] = drop.urls[url]
-                i.install(fileList);
+                i.install(drop.urls);
                 tabs.currentIndex = 1
             }
         }
@@ -56,20 +58,26 @@ Item {
                 text: "Install:"
                 font.pointSize: 12
             }
-            Button {
-                id: install_folder
-                text: "Folder"
-                onClicked: {
-                    i.selectInstallFolder()
+            FileDialog {
+                id: install_files
+                title: "Select files and folders"
+                onAccepted: {
+                    i.install(install_files.fileUrls)
                     tabs.currentIndex = 1
                 }
+
+                selectMultiple: true
+                nameFilters: [ "Blackberry Installable (*.bar)" ]
             }
             Button {
-                id: install_files
-                text: ".bar(s)"
+                text: "Choose folders and .bar(s)"
                 onClicked: {
-                    i.selectInstall()
-                    tabs.currentIndex = 1
+                    if (i.installing)
+                        details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;"
+                    else if (i.backing || i.restoring)
+                        details += "Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>"
+                    else
+                        install_files.open();
                 }
             }
         }

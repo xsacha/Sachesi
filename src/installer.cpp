@@ -100,46 +100,6 @@ void InstallNet::scanProps()
         postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData);
     }
 }
-bool InstallNet::selectInstallFolder()
-{
-    QSettings settings("Qtness", "Sachesi");
-    FileSelect finder = selectFiles("Install Folder of Bar Files", getSaveDir(), "Blackberry Installable", "*.bar");
-#ifdef BLACKBERRY
-//    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallFolderSlot(const QStringList&)));
-    return false;
-#else
-    finder->setFileMode(QFileDialog::Directory);
-    if (finder->exec()) {
-        QFileInfo fileInfo(finder->selectedFiles().first());
-        settings.setValue("installDir", fileInfo.absolutePath());
-        install(finder->selectedFiles());
-        finder->deleteLater();
-        return true;
-    }
-    finder->deleteLater();
-#endif
-    return false;
-}
-
-bool InstallNet::selectInstall()
-{
-    QSettings settings("Qtness", "Sachesi");
-    FileSelect finder = selectFiles("Install Folder of Bar Files", getSaveDir(), "Blackberry Installable", "*.bar");
-#ifdef BLACKBERRY
-//    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(selectInstallSlot(const QStringList&)));
-    return false;
-#else
-    if (finder->exec()) {
-        QFileInfo fileInfo(finder->selectedFiles().first());
-        settings.setValue("installDir", fileInfo.absolutePath());
-        install(finder->selectedFiles());
-        finder->deleteLater();
-        return true;
-    }
-    finder->deleteLater();
-#endif
-    return false;
-}
 
 BarInfo InstallNet::checkInstallableInfo(QString name)
 {
@@ -180,48 +140,33 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     return barInfo;
 }
 
-void InstallNet::install(QStringList files)
+void InstallNet::install(QList<QUrl> files)
 {
-    if (files.isEmpty())
-        return;
-    if (_installing) {
-        setNewLine("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>");
-        return;
-    } else if (_backing || _restoring) {
-        setNewLine("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>");
-        return;
-    }
     _installInfo.clear();
     setFirmwareUpdate(false);
-    foreach(QString _fileName, files)
+    foreach(QUrl url, files)
     {
-        if (_fileName.startsWith("file://"))
+        QString name = url.toLocalFile();
+
+        if (QFileInfo(name).isDir())
         {
-            _fileName.remove(0, 7);
-            // Windows, for some reason, has 3 slashes!
-            if (_fileName.at(2) == ':')
-                _fileName.remove(0, 1);
-        }
-        if (QFileInfo(_fileName).isDir())
-        {
-            QStringList barFiles = QDir(_fileName).entryList(QStringList("*.bar"));
+            QStringList barFiles = QDir(name).entryList(QStringList("*.bar"));
             for(QString barFile : barFiles)
             {
-                BarInfo info = checkInstallableInfo(_fileName + "/" + barFile);
+                BarInfo info = checkInstallableInfo(name + "/" + barFile);
                 if (info.type != NotInstallableType)
                     _installInfo.append(info);
             }
         } else {
-            BarInfo info = checkInstallableInfo(_fileName);
+            BarInfo info = checkInstallableInfo(name);
             if (info.type != NotInstallableType)
                 _installInfo.append(info);
         }
     }
     if (_installInfo.isEmpty())
         return;
-    setNewLine(QString("Installing <b>%1</b> file%2.")
-               .arg(_installInfo.count())
-               .arg(_installInfo.count() == 1 ? "" : "s"));
+    setNewLine(QString("Installing <b>%1</b> .bar(s).")
+               .arg(_installInfo.count()));
     install();
 }
 
