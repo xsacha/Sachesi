@@ -75,8 +75,8 @@ QNetworkRequest InstallNet::setData(QString page, QString contentType) {
     return request;
 }
 
-QNetworkReply* InstallNet::postQuery(QString page, QString contentType, const QByteArray& query) {
-    reply = manager->post(setData(page, contentType), query);
+QNetworkReply* InstallNet::postQuery(QString page, QString contentType, const QUrlQuery& query) {
+    reply = manager->post(setData(page, contentType), query.encodedQuery());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(restoreError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
@@ -97,7 +97,7 @@ void InstallNet::scanProps()
     {
         QUrlQuery postData;
         postData.addQueryItem("Get Dynamic Properties","Get Dynamic Properties");
-        postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData);
     }
 }
 bool InstallNet::selectInstallFolder()
@@ -213,7 +213,7 @@ void InstallNet::install()
 
         postData.addQueryItem("mode", _firmwareUpdate ? "os" : "bar");
         postData.addQueryItem("size", QString::number(nfilesize));
-        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("update.cgi", "x-www-form-urlencoded", postData);
     }
 }
 
@@ -232,7 +232,7 @@ void InstallNet::uninstall(QStringList packageids)
         postData.addQueryItem("mode", "app");
         postData.addQueryItem("size", "0");
 
-        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("update.cgi", "x-www-form-urlencoded", postData);
     }
 }
 
@@ -320,7 +320,7 @@ void InstallNet::backup()
         QUrlQuery postData;
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("mode", _back.modeString());
-        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
     }
 }
 
@@ -330,7 +330,7 @@ void InstallNet::backupQuery() {
         QUrlQuery postData;
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("query", "list");
-        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
     }
 }
 
@@ -394,7 +394,7 @@ void InstallNet::restore()
         postData.addQueryItem("action", "restore");
         postData.addQueryItem("mode", _back.modeString());
         postData.addQueryItem("totalsize", QString::number(_back.maxSize()));
-        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
     }
 }
 
@@ -403,26 +403,26 @@ void InstallNet::wipe() {
         return;
     QUrlQuery postData;
     postData.addQueryItem("wipe", "wipe");
-    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::startRTAS() {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "start_rtas");
-    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::newPin(QString pin) {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "pin");
     postData.addQueryItem("newpin", pin.left(8));
-    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::resignNVRAM() {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "re_sign");
-    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::factorywipe() {
@@ -432,25 +432,25 @@ void InstallNet::factorywipe() {
     postData.addQueryItem("wipe", "wipe");
     postData.addQueryItem("factorywipe", "1");
     postData.addQueryItem("nopoweroff", "1");
-    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::reboot() {
     QUrlQuery postData;
     postData.addQueryItem("reset", "true");
-    postQuery("reset.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("reset.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::getPIN() {
     QUrlQuery postData;
     postData.addQueryItem("wipe", "getpin");
-    postQuery("wipe.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("wipe.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::dumpLogs() {
     QUrlQuery postData;
     postData.addQueryItem("facility", "dumplog");
-    postQuery("support.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("support.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::setActionProperty(QString name, QString value) {
@@ -458,7 +458,7 @@ void InstallNet::setActionProperty(QString name, QString value) {
     postData.addQueryItem("action", "set");
     postData.addQueryItem("name", name);
     postData.addQueryItem("value", value);
-    postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("dynamicProperties.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::login()
@@ -624,7 +624,7 @@ void InstallNet::backupFileFinish()
         _back.setProgress(0);
         postData.addQueryItem("type", _back.curMode());
     }
-    postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+    postQuery("backup.cgi", "x-www-form-urlencoded", postData);
 }
 
 void InstallNet::restoreReply()
@@ -877,7 +877,7 @@ void InstallNet::restoreReply()
     {
         postData.addQueryItem("type", "bar");
         postData.addQueryItem("packageid", _downgradeInfo.at(_downgradePos));
-        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("update.cgi", "x-www-form-urlencoded", postData);
     }
     else if (xml.name() == "DeleteProgress")
     {
@@ -889,7 +889,7 @@ void InstallNet::restoreReply()
             postData.addQueryItem("status", "success");
         else
             postData.addQueryItem("packageid", _downgradeInfo.at(_downgradePos));
-        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("update.cgi", "x-www-form-urlencoded", postData);
     }
     else if (xml.name() == "UpdateStart")
     {
@@ -939,7 +939,7 @@ void InstallNet::restoreReply()
                 }
             }
         }
-        postQuery("update.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("update.cgi", "x-www-form-urlencoded", postData);
     }
     else if (xml.name() == "UpdateProgress")
     {
@@ -1064,7 +1064,7 @@ void InstallNet::restoreReply()
                 this, SLOT(restoreError(QNetworkReply::NetworkError)));
         } else {
             postData.addQueryItem("status", "success");
-            postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+            postQuery("backup.cgi", "x-www-form-urlencoded", postData);
             currentBackupZip->close();
             delete currentBackupZip;
             currentBackupZip = nullptr;
@@ -1090,7 +1090,7 @@ void InstallNet::restoreReply()
         }
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("type", _back.curMode());
-        postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
     }
     else if (xml.name() == "BackupStartActivity")
     {
@@ -1146,7 +1146,7 @@ void InstallNet::restoreReply()
         _back.setCurMode(1);
         if (_back.curMode() == "complete") {
             postData.addQueryItem("status", "success");
-            postQuery("backup.cgi", "x-www-form-urlencoded", postData.encodedQuery());
+            postQuery("backup.cgi", "x-www-form-urlencoded", postData);
 
             setRestoring(false);
             currentBackupZip->close();

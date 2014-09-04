@@ -46,7 +46,6 @@ void InstallNet::requestChallenge()
     delete privkey_mod;
 }
 
-
 void InstallNet::replyChallenge()
 {
     logadd(QString("5. Reply Challenge"));

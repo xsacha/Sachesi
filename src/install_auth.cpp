@@ -54,6 +54,8 @@ void InstallNet::AESEncryptSend(QByteArray &plain, int code)
     FrameHead << qint16(6 + buffer.length()) << qint16(2) << qint16(code);
     buffer.prepend(header);
     sock->write(buffer);
+    delete [] iv;
+    delete [] encrypt;
 }
 
 void InstallNet::authorise()

@@ -28,7 +28,6 @@
 #include <openssl/bn.h>
 #include <openssl/rand.h>
 #include <openssl/evp.h>
-#include <openssl/sha.h>
 #include <openssl/pem.h>
 #ifndef _WIN32
 #include <sys/types.h>
@@ -208,7 +207,7 @@ private slots:
     void setActionProperty(QString name, QString value);
 private:
     QNetworkRequest setData(QString page, QString contentType);
-    QNetworkReply* postQuery(QString page, QString contentType, const QByteArray& query);
+    QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
     QNetworkReply* getQuery(QString page, QString contentType);
     QTcpSocket* sock;
     unsigned char* serverChallenge;
