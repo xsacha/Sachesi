@@ -68,22 +68,24 @@ SOURCES += \
     src/splitter.cpp \
     src/lzo.cpp \
     src/ports.cpp
+
 HEADERS += \
     src/mainnet.h \
     src/splitter.h \
     src/lzo.h \
     src/ports.h
 
+# Welcome to the only OS that won't give network access to USB device
 !blackberry {
     SOURCES += \
-        src/install.cpp \
-        src/install_auth.cpp \
-        src/install_establish.cpp \
-        src/install_qml.cpp \
+        src/installer.cpp \
+        src/installer_qml.cpp \
+        src/installer_establish.cpp \
+        src/installer_auth.cpp \
         src/apps.cpp \
         src/backupinfo.cpp
     HEADERS += \
-        src/install.h \
+        src/installer.h \
         src/apps.h \
         src/backupinfo.h
 }
@@ -99,17 +101,10 @@ SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
 HEADERS += $$P/ext/quazip/*.h
 
 RESOURCES += UI.qrc
-# Why is this needed? Strange..
+# The qmldir is built in for dynamic libs but not static.
 static: RESOURCES += QML.qrc
 OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \
-    qml/bb10/*.qml \
     qml/generic/UI/*.qml \
-    qml/bb10/UI/*.qml \
     Android/AndroidManifest.xml
-
-# Qt Workaround for having install.cpp file
-phony.depends = install uninstall
-phony.target = .PHONY
-QMAKE_EXTRA_TARGETS += phony

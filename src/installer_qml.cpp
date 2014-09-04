@@ -17,7 +17,7 @@
 
 // This file is just Qt hooks that don't need to be seen. It should really do this for you anyway.
 
-#include "install.h"
+#include "installer.h"
 
 #define WRITE_QML(type, name, caps) \
     void InstallNet::caps(const type &var) { \

@@ -65,7 +65,7 @@ Item {
                 }
                 Label {
                     visible: i.possibleDevices
-                    text: "Talking to " + i.possibleDevices + " possible devices."
+                    text: "Talking to " + i.possibleDevices + " possible device(s)."
                 }
             }
             BusyIndicator {

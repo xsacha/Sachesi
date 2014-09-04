@@ -15,7 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#include "install.h"
+#include "installer.h"
 #include "ports.h"
 #include <QAbstractListModel>
 #include <QDebug>
@@ -184,6 +184,13 @@ void InstallNet::install(QStringList files)
 {
     if (files.isEmpty())
         return;
+    if (_installing) {
+        setNewLine("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>");
+        return;
+    } else if (_backing || _restoring) {
+        setNewLine("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>");
+        return;
+    }
     _installInfo.clear();
     setFirmwareUpdate(false);
     foreach(QString _fileName, files)

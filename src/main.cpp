@@ -24,7 +24,7 @@
 
 #include "mainnet.h"
 #ifndef BLACKBERRY
-#include "install.h"
+#include "installer.h"
 #include "backupinfo.h"
 #include "apps.h"
 #include "ports.h"

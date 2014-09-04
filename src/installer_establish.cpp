@@ -15,7 +15,7 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#include "install.h"
+#include "installer.h"
 
 void InstallNet::requestConfigure()
 {
