@@ -555,6 +555,13 @@ void InstallNet::discoveryReply() {
                     setKnownBattery(xml.readElementText().toInt());
                 } else if (xml.name() == "ModelName") {
                     setKnownHW(xml.readElementText());
+                } else if (xml.name() == "MinSupportedProtocolVersion") {
+                    // Min comes before max
+                    if (xml.readElementText().toInt() == 1)
+                        _knownProtocol = 1;
+                } else if (xml.name() == "MaxSupportedProtocolVersion") {
+                    if (xml.readElementText().toInt() >= 3)
+                        _knownProtocol = 3;
                 }
             }
         }
@@ -569,7 +576,7 @@ bool InstallNet::checkLogin() {
         return false;
 
     if (!_completed) {
-        getQuery("login.cgi?request_version=1", "x-www-form-urlencoded");
+        getQuery(QString("login.cgi?request_version=%1").arg(_knownProtocol), "x-www-form-urlencoded");
         return false;
     }
     return true;
@@ -672,7 +679,7 @@ void InstallNet::restoreReply()
         QByteArray result = HashPass(challenger, QByteArray::fromHex(saltHex), iCount);
 
         QNetworkRequest request = reply->request();
-        request.setUrl(QUrl("https://"+ _ip +":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=1"));
+        request.setUrl(QUrl("https://"+ _ip +":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=" + QString::number(_knownProtocol)));
 
         reply = manager->get(request);
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),

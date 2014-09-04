@@ -233,6 +233,7 @@ private:
     QString _knownName;
     QString _knownHW;
     QString _knownPIN;
+    int _knownProtocol;
 
     QStringList _firmwareInfo;
     QStringList _downgradeInfo;
