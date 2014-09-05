@@ -99,7 +99,7 @@ class InstallNet : public QObject {
 
     Q_PROPERTY(int     backMethods READ backMethods NOTIFY backMethodsChanged)
     Q_PROPERTY(QStringList backNames READ backNames NOTIFY backMethodsChanged)
-    Q_PROPERTY(QList<double> backSizes READ backSizes NOTIFY backMethodsChanged)
+    Q_PROPERTY(QList<qreal> backSizes READ backSizes NOTIFY backMethodsChanged)
 public:
     InstallNet(QObject* parent = 0);
     ~InstallNet();

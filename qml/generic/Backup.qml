@@ -74,7 +74,7 @@ Item {
             visible: i.backMethods
             FileDialog {
                 id: backup_files
-                title: "Choose backup file"
+                title: "Choose backup filename"
                 folder: settings.backupFolder
                 onAccepted: {
                     i.backup(fileUrl, options.value)
@@ -83,16 +83,28 @@ Item {
 
                 nameFilters: [ "Blackberry Backup (*.bbb)" ]
             }
+            FileDialog {
+                id: restore_files
+                title: "Select restore file"
+                folder: settings.backupFolder
+                onAccepted: {
+                    i.restore(fileUrl, options.value)
+                    settings.backupFolder = folder;
+                }
+                selectExisting: true
+
+                nameFilters: [ "Blackberry Backup (*.bbb)" ]
+            }
 
             Button {
                 text: "Create backup"
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
-                onClicked: { backup_files.selectExisting = false; backup_files.open(); }
+                onClicked: backup_files.open();
             }
             Button {
                 text: "Restore backup"
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
-                onClicked: { backup_files.selectExisting = true; backup_files.open(); }
+                onClicked: restore_files.open();
             }
         }
     }

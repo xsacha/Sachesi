@@ -146,6 +146,8 @@ void InstallNet::install(QList<QUrl> files)
     setFirmwareUpdate(false);
     foreach(QUrl url, files)
     {
+        if (!url.isLocalFile())
+            continue;
         QString name = url.toLocalFile();
 
         if (QFileInfo(name).isDir())
@@ -284,6 +286,8 @@ void InstallNet::backup()
 
 void InstallNet::backup(QUrl url, int options)
 {
+    if (!url.isLocalFile())
+        return;
     _backupFileName = url.toLocalFile();
     if(!_backupFileName.endsWith(".bbb"))
         _backupFileName.append(".bbb");
@@ -319,6 +323,8 @@ void InstallNet::restore()
 
 void InstallNet::restore(QUrl url, int options)
 {
+    if (!url.isLocalFile())
+        return;
     _backupFileName = url.toLocalFile();
     if (!QFile::exists(_backupFileName))
         return;
