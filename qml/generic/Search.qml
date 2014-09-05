@@ -60,24 +60,27 @@ Item {
     Column {
         id: scanButton
         anchors { bottom: parent.bottom; bottomMargin: 60; leftMargin: 60 }
-        RowLayout {
+        ColumnLayout {
             anchors.horizontalCenter: parent.horizontalCenter
-            /*RadioButton {
+            RowLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                /*RadioButton {
                 id: delta
                 visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 text: "Delta"
             }*/
-            Button {
-                id: searchButton
-                enabled: !p.scanning
-                text: p.scanning ? "Searching..." : "Search"
-                onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, 0/*server.selectedItem*/  /*, version.selectedItem*/) }
-            }
+                Button {
+                    id: searchButton
+                    enabled: !p.scanning
+                    text: p.scanning ? "Searching..." : "Search"
+                    onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
+                }
 
-        }
-        Button {
-            text: "Version Lookup"
-            onClicked: versionLookup.visible = !versionLookup.visible
+            }
+            Button {
+                text: "Version Lookup"
+                onClicked: versionLookup.visible = !versionLookup.visible
+            }
         }
         Text {
             property string message: p.error

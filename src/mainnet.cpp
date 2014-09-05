@@ -276,7 +276,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
     appendNewLink("Z10 (STL 100-2, STL 100-3) and Porsche P9982", false, false, "qc8960", radioVersion);
     appendNewLink("Z10 (STL 100-4)", false, false, "qc8960.omadm", radioVersion);
-    appendNewLink("Z30", false, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Z30", false, false, "qc8960.wtr", radioVersion);
     appendNewLink("Q10", false, false, "qc8960.wtr5", radioVersion);
     appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);
 
@@ -477,6 +477,7 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
 {
     if (_scanning)
         return;
+
     _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
     _hasPotentialLinks = false; emit hasPotentialLinksChanged();
     setScanning(1);
@@ -526,9 +527,11 @@ void MainNet::reverseLookupReply() {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
             if (xml.name() == "softwareReleaseVersion") {
                 _softwareRelease = xml.readElementText(); emit softwareReleaseChanged();
-                foundNewSR = true;
-                // Setting it to true first in case there was an error with confirmation
-                _hasPotentialLinks = true; emit hasPotentialLinksChanged();
+                if (_softwareRelease.at(0).isDigit()) {
+                    foundNewSR = true;
+                    // Setting it to true first in case there was an error with confirmation
+                    _hasPotentialLinks = true; emit hasPotentialLinksChanged();
+                }
             }
         }
         xml.readNext();
@@ -540,12 +543,16 @@ void MainNet::reverseLookupReply() {
     if (foundNewSR) {
         QCryptographicHash hash(QCryptographicHash::Sha1);
         hash.addData(_softwareRelease.toLocal8Bit());
-        QString url = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + QString(hash.result().toHex());
+        QString server = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/";
+        if (reply->url().host().startsWith("beta")) {
+            server = "http://cdn.fs.sl.blackberry.com/fs/qnx/beta/";
+        }
+        QString url = server + QString(hash.result().toHex());
         QNetworkRequest request;
         request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
         request.setUrl(QUrl(url));
-        reply = manager->get(request);
-        connect(reply, SIGNAL(finished()), this, SLOT(confirmNewSR()));
+        QNetworkReply* replyTmp = manager->get(request);
+        connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSR()));
     }
 }
 
@@ -566,7 +573,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     switch (server)
     {
     case 1:
-        requestUrl = "https://cse.beta.sl.eval.blackberry.com/slscse/updateDetails/";
+        requestUrl = "https://beta.sl.eval.blackberry.com/slscse/updateDetails/";
         break;
     case 0:
     default:

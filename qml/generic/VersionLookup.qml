@@ -48,7 +48,7 @@ Window {
                 id: relookup
                 text: "Lookup"
                 enabled: !p.scanning
-                onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, 0/*server.selectedItem*/, "10." + major.value + "." + minor.value + "." + build.value);
+                onClicked: p.reverseLookup(country.value, carrier.value, device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value);
             }
             Button {
                 property bool looking: false
