@@ -228,15 +228,34 @@ bool QuaZip::open(Mode mode, zlib_filefunc_def* ioApi)
       ioDevice = new QFile(p->zipName);
     }
   }
+  unsigned flags = 0;
   switch(mode) {
     case mdUnzip:
       if (ioApi == NULL) {
-          p->unzFile_f=unzOpen2_64(ioDevice, NULL);
+          if (p->autoClose)
+              flags |= UNZ_AUTO_CLOSE;
+          p->unzFile_f=unzOpenInternal(ioDevice, NULL, 1, flags);
       } else {
           // QuaZIP pre-zip64 compatibility mode
           p->unzFile_f=unzOpen2(ioDevice, ioApi);
+          if (p->unzFile_f != NULL) {
+              if (p->autoClose) {
+                  unzSetFlags(p->unzFile_f, UNZ_AUTO_CLOSE);
+              } else {
+                  unzClearFlags(p->unzFile_f, UNZ_AUTO_CLOSE);
+              }
+          }
       }
       if(p->unzFile_f!=NULL) {
+        if (ioDevice->isSequential()) {
+            unzClose(p->unzFile_f);
+            if (!p->zipName.isEmpty())
+                delete ioDevice;
+            qWarning("QuaZip::open(): "
+                     "only mdCreate can be used with "
+                     "sequential devices");
+            return false;
+        }
         p->mode=mode;
         p->ioDevice = ioDevice;
         return true;
@@ -250,11 +269,15 @@ bool QuaZip::open(Mode mode, zlib_filefunc_def* ioApi)
     case mdAppend:
     case mdAdd:
       if (ioApi == NULL) {
-          p->zipFile_f=zipOpen2_64(ioDevice,
+          if (p->autoClose)
+              flags |= ZIP_AUTO_CLOSE;
+          if (p->dataDescriptorWritingEnabled)
+              flags |= ZIP_WRITE_DATA_DESCRIPTOR;
+          p->zipFile_f=zipOpen3(ioDevice,
               mode==mdCreate?APPEND_STATUS_CREATE:
               mode==mdAppend?APPEND_STATUS_CREATEAFTER:
               APPEND_STATUS_ADDINZIP,
-              NULL, NULL);
+              NULL, NULL, flags);
       } else {
           // QuaZIP pre-zip64 compatibility mode
           p->zipFile_f=zipOpen2(ioDevice,
@@ -263,12 +286,22 @@ bool QuaZip::open(Mode mode, zlib_filefunc_def* ioApi)
               APPEND_STATUS_ADDINZIP,
               NULL,
               ioApi);
+          if (p->zipFile_f != NULL) {
+              zipSetFlags(p->zipFile_f, flags);
+          }
       }
       if(p->zipFile_f!=NULL) {
-        if (p->autoClose) {
-            zipSetFlags(p->zipFile_f, ZIP_AUTO_CLOSE);
-        } else {
-            zipClearFlags(p->zipFile_f, ZIP_AUTO_CLOSE);
+        if (ioDevice->isSequential()) {
+            if (mode != mdCreate) {
+                zipClose(p->zipFile_f, NULL);
+                qWarning("QuaZip::open(): "
+                        "only mdCreate can be used with "
+                         "sequential devices");
+                if (!p->zipName.isEmpty())
+                    delete ioDevice;
+                return false;
+            }
+            zipSetFlags(p->zipFile_f, ZIP_SEQUENTIAL);
         }
         p->mode=mode;
         p->ioDevice = ioDevice;
@@ -714,7 +747,7 @@ QList<QuaZipFileInfo64> QuaZip::getFileInfoList64() const
 Qt::CaseSensitivity QuaZip::convertCaseSensitivity(QuaZip::CaseSensitivity cs)
 {
   if (cs == csDefault) {
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
       return Qt::CaseInsensitive;
 #else
       return Qt::CaseSensitive;

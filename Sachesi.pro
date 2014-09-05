@@ -97,8 +97,7 @@ contains(DEFINES, BOOTLOADER_ACCESS) {
 }
 
 DEFINES += QUAZIP_STATIC
-SOURCES += $$P/ext/quazip/*.cpp $$P/ext/quazip/*.c
-HEADERS += $$P/ext/quazip/*.h
+include(ext/quazip/quazip.pri)
 
 RESOURCES += UI.qrc
 # The qmldir is built in for dynamic libs but not static.

@@ -187,6 +187,7 @@ typedef struct
     int encrypted;
 
     int isZip64;
+    unsigned flags;
 
 #    ifndef NOUNCRYPT
     unsigned long keys[3];     /* keys defining the pseudo-random sequence */
@@ -583,9 +584,9 @@ local ZPOS64_T unz64local_SearchCentralDir64(const zlib_filefunc64_32_def* pzlib
      Else, the return value is a unzFile Handle, usable with other function
        of this unzip package.
 */
-local unzFile unzOpenInternal (voidpf file,
+extern unzFile unzOpenInternal (voidpf file,
                                zlib_filefunc64_32_def* pzlib_filefunc64_32_def,
-                               int is64bitOpenFunction)
+                               int is64bitOpenFunction, unsigned flags)
 {
     unz64_s us;
     unz64_s *s;
@@ -605,6 +606,7 @@ local unzFile unzOpenInternal (voidpf file,
     if (unz_copyright[0]!=' ')
         return NULL;
 
+    us.flags = flags;
     us.z_filefunc.zseek32_file = NULL;
     us.z_filefunc.ztell32_file = NULL;
     if (pzlib_filefunc64_32_def==NULL)
@@ -743,7 +745,10 @@ local unzFile unzOpenInternal (voidpf file,
 
     if (err!=UNZ_OK)
     {
-        ZCLOSE64(us.z_filefunc, us.filestream);
+        if ((us.flags & UNZ_AUTO_CLOSE) != 0)
+            ZCLOSE64(us.z_filefunc, us.filestream);
+        else
+            ZFAKECLOSE64(us.z_filefunc, us.filestream);
         return NULL;
     }
 
@@ -771,10 +776,10 @@ extern unzFile ZEXPORT unzOpen2 (voidpf file,
     {
         zlib_filefunc64_32_def zlib_filefunc64_32_def_fill;
         fill_zlib_filefunc64_32_def_from_filefunc32(&zlib_filefunc64_32_def_fill,pzlib_filefunc32_def);
-        return unzOpenInternal(file, &zlib_filefunc64_32_def_fill, 0);
+        return unzOpenInternal(file, &zlib_filefunc64_32_def_fill, 0, UNZ_DEFAULT_FLAGS);
     }
     else
-        return unzOpenInternal(file, NULL, 0);
+        return unzOpenInternal(file, NULL, 0, UNZ_DEFAULT_FLAGS);
 }
 
 extern unzFile ZEXPORT unzOpen2_64 (voidpf file,
@@ -786,20 +791,20 @@ extern unzFile ZEXPORT unzOpen2_64 (voidpf file,
         zlib_filefunc64_32_def_fill.zfile_func64 = *pzlib_filefunc_def;
         zlib_filefunc64_32_def_fill.ztell32_file = NULL;
         zlib_filefunc64_32_def_fill.zseek32_file = NULL;
-        return unzOpenInternal(file, &zlib_filefunc64_32_def_fill, 1);
+        return unzOpenInternal(file, &zlib_filefunc64_32_def_fill, 1, UNZ_DEFAULT_FLAGS);
     }
     else
-        return unzOpenInternal(file, NULL, 1);
+        return unzOpenInternal(file, NULL, 1, UNZ_DEFAULT_FLAGS);
 }
 
 extern unzFile ZEXPORT unzOpen (voidpf file)
 {
-    return unzOpenInternal(file, NULL, 0);
+    return unzOpenInternal(file, NULL, 0, UNZ_DEFAULT_FLAGS);
 }
 
 extern unzFile ZEXPORT unzOpen64 (voidpf file)
 {
-    return unzOpenInternal(file, NULL, 1);
+    return unzOpenInternal(file, NULL, 1, UNZ_DEFAULT_FLAGS);
 }
 
 /*
@@ -817,7 +822,10 @@ extern int ZEXPORT unzClose (unzFile file)
     if (s->pfile_in_zip_read!=NULL)
         unzCloseCurrentFile(file);
 
-    ZCLOSE64(s->z_filefunc, s->filestream);
+    if ((s->flags & UNZ_AUTO_CLOSE) != 0)
+        ZCLOSE64(s->z_filefunc, s->filestream);
+    else
+        ZFAKECLOSE64(s->z_filefunc, s->filestream);
     TRYFREE(s);
     return UNZ_OK;
 }
@@ -1040,33 +1048,33 @@ local int unz64local_GetCurrentFileInfoInternal (unzFile file,
             /* ZIP64 extra fields */
             if (headerId == 0x0001)
             {
-                                                        uLong uL;
+                uLong uL;
 
-                                                                if(file_info.uncompressed_size == (ZPOS64_T)(unsigned long)-1)
-                                                                {
-                                                                        if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info.uncompressed_size) != UNZ_OK)
-                                                                                        err=UNZ_ERRNO;
-                                                                }
+                if(file_info.uncompressed_size == (ZPOS64_T)0xFFFFFFFFu)
+                {
+                    if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info.uncompressed_size) != UNZ_OK)
+                        err=UNZ_ERRNO;
+                }
 
-                                                                if(file_info.compressed_size == (ZPOS64_T)(unsigned long)-1)
-                                                                {
-                                                                        if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info.compressed_size) != UNZ_OK)
-                                                                                  err=UNZ_ERRNO;
-                                                                }
+                if(file_info.compressed_size == (ZPOS64_T)0xFFFFFFFFu)
+                {
+                    if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info.compressed_size) != UNZ_OK)
+                        err=UNZ_ERRNO;
+                }
 
-                                                                if(file_info_internal.offset_curfile == (ZPOS64_T)(unsigned long)-1)
-                                                                {
-                                                                        /* Relative Header offset */
-                                                                        if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info_internal.offset_curfile) != UNZ_OK)
-                                                                                err=UNZ_ERRNO;
-                                                                }
+                if(file_info_internal.offset_curfile == (ZPOS64_T)0xFFFFFFFFu)
+                {
+                    /* Relative Header offset */
+                    if (unz64local_getLong64(&s->z_filefunc, s->filestream,&file_info_internal.offset_curfile) != UNZ_OK)
+                        err=UNZ_ERRNO;
+                }
 
-                                                                if(file_info.disk_num_start == (unsigned long)-1)
-                                                                {
-                                                                        /* Disk Start Number */
-                                                                        if (unz64local_getLong(&s->z_filefunc, s->filestream,&uL) != UNZ_OK)
-                                                                                err=UNZ_ERRNO;
-                                                                }
+                if(file_info.disk_num_start == 0xFFFFFFFFu)
+                {
+                    /* Disk Start Number */
+                    if (unz64local_getLong(&s->z_filefunc, s->filestream,&uL) != UNZ_OK)
+                        err=UNZ_ERRNO;
+                }
 
             }
             else
@@ -2122,4 +2130,26 @@ extern int ZEXPORT unzSetOffset64(unzFile file, ZPOS64_T pos)
 extern int ZEXPORT unzSetOffset (unzFile file, uLong pos)
 {
     return unzSetOffset64(file,pos);
+}
+
+
+int ZEXPORT unzSetFlags(unzFile file, unsigned flags)
+{
+    unz64_s* s;
+    if (file == NULL)
+        return UNZ_PARAMERROR;
+    s = (unz64_s*)file;
+    s->flags |= flags;
+    return UNZ_OK;
+}
+
+
+int ZEXPORT unzClearFlags(unzFile file, unsigned flags)
+{
+    unz64_s* s;
+    if (file == NULL)
+        return UNZ_PARAMERROR;
+    s = (unz64_s*)file;
+    s->flags &= ~flags;
+    return UNZ_OK;
 }

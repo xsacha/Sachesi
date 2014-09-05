@@ -181,6 +181,12 @@ class QUAZIP_EXPORT QuaZip {
      * because due to the backwards compatibility issues it can be used to
      * provide a 32-bit API only.
      *
+     * \note If the \ref QuaZip::setAutoClose() "no-auto-close" feature is used,
+     * then the \a ioApi argument \em should be NULL because the old API
+     * doesn't support the 'fake close' operation, causing slight memory leaks
+     * and other possible troubles (like closing the output device in case
+     * when an error occurs during opening).
+     *
      * In short: just forget about the \a ioApi argument and you'll be
      * fine.
      **/
@@ -427,10 +433,14 @@ class QUAZIP_EXPORT QuaZip {
 
       The data descriptor writing mode is enabled by default.
 
+      Note that if the ZIP archive is written into a QIODevice for which
+      QIODevice::isSequential() returns \c true, then the data descriptor
+      is mandatory and will be written even if this flag is set to false.
+
       \param enabled If \c true, enable local descriptor writing,
       disable it otherwise.
 
-      \sa QuaZipFile::setDataDescriptorWritingEnabled()
+      \sa QuaZipFile::isDataDescriptorWritingEnabled()
       */
     void setDataDescriptorWritingEnabled(bool enabled);
     /// Returns the data descriptor default writing mode.
