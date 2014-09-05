@@ -111,8 +111,8 @@ Item {
         TextCouple {
             id: country
             type: "Country"
-            subtext: "Indonesia"
-            value: "510"
+            subtext: "Germany"
+            value: "262"
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
             onValueChanged: {
@@ -120,28 +120,12 @@ Item {
                 if (carrier != null) carrier.updateVal();
             }
             onClicked: searchButton.clicked();
-
-            /*Rectangle {
-                color: "#AAAAAA"
-                anchors.left: country.typeOffset
-                anchors.leftMargin: 5
-                width: children.implicitWidth
-                height: children.implicitHeight
-                radius: 4
-                Label {
-                    anchors.centerIn: parent
-                    text: "?"
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: Qt.openUrlExternally("https://en.wikipedia.org/w/index.php?title=Mobile_country_code");
-                    }
-                }
-            }*/
+            helpLink: "https://en.wikipedia.org/w/index.php?title=Mobile_country_code"
         }
         TextCouple {
             id: carrier
             type: "Carrier"
-            value: "01"
+            value: "001"
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
             function updateVal() {
@@ -154,7 +138,7 @@ Item {
         TextCoupleSelect {
             id: device
             z: 11
-            selectedItem: 4
+            selectedItem: 6
             type: "Device"
             listModel: p.advanced ? advancedModel : babyModel
             ListModel {

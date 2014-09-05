@@ -95,5 +95,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     b.quit();
     b.wait(1000);
 #endif
+    // OS Cleanup
+    exit(0);
     return ret;
 }

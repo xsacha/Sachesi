@@ -60,8 +60,22 @@ Item {
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
             ColumnLayout {
                 Label {
-                    visible: !i.wrongPassBlock
+                    visible: !i.wrongPassBlock && !detected.visible
                     text: "Searching for USB device"
+                }
+                Label {
+                    id: detected
+                    property int numDevices: typeof b != 'undefined' ? b.devices.length : 0
+                    property int deviceType: numDevices ? b.devices[0] : 0
+                    property string deviceName: switch(deviceType) {
+                                                case 1: return "Bootloader"
+                                                case 8012: return "Windows"
+                                                case 8013: return "Unix"
+                                                default: return ""
+                                                }
+
+                    visible: numDevices
+                    text: "Detected " + numDevices + " Blackberry USB device(s) in " + deviceName + " mode."
                 }
                 Label {
                     visible: i.possibleDevices

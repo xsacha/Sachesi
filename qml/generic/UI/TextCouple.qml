@@ -9,9 +9,9 @@ Item {
     property alias subtext: subtextValue.text
     property alias thisid: textValue
     property alias textColor: textValue.textColor
-    property alias typeOffset: typeText.right
     property alias restrictions: textValue.inputMethodHints
     property alias maxLength: textValue.maximumLength
+    property string helpLink
     signal clicked();
     // Evil: hardcoded width/height
     height: (14.5) * 1.5
@@ -20,9 +20,24 @@ Item {
         RowLayout {
             Layout.fillWidth: true
             Label {
-                id: typeText
                 text: type
                 font.bold: true
+                Rectangle {
+                    visible: helpLink.length > 0
+                    color: "#AAAAAA"
+                    anchors { left: parent.right; leftMargin: 5 }
+                    width: childrenRect.width
+                    height: childrenRect.height
+                    radius: 4
+                    Label {
+                        text: "?"
+                        font.bold: true
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: Qt.openUrlExternally(helpLink);
+                        }
+                    }
+                }
             }
             TextField {
                 id: textValue
