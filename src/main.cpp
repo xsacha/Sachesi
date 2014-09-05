@@ -80,22 +80,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifdef _WIN32
     engine.addImportPath("qrc:/qml/");
 #endif
-    QQmlComponent* comp = new QQmlComponent(&engine);
+    QScopedPointer<QQmlComponent> comp(new QQmlComponent(&engine));
     comp->loadUrl(QUrl("qrc:/qml/generic/Title.qml"));
     if (comp->status() == QQmlComponent::Error) {
         QMessageBox::information(NULL, "Error", qPrintable(comp->errorString()), QMessageBox::Ok);
         return 0;
-    } else {
-        QQuickWindow *window = qobject_cast<QQuickWindow *>(comp->create());
-        window->show();
     }
+    QQuickWindow *window = qobject_cast<QQuickWindow *>(comp->create());
+    window->show();
 
     int ret = app.exec();
 #ifdef BOOTLOADER_ACCESS
     b.quit();
     b.wait(1000);
 #endif
-    // OS Cleanup
-    exit(0);
+    delete window;
     return ret;
 }

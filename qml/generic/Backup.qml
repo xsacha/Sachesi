@@ -80,6 +80,7 @@ Item {
                     i.backup(fileUrl, options.value)
                     settings.backupFolder = folder;
                 }
+                selectExisting: false
 
                 nameFilters: [ "Blackberry Backup (*.bbb)" ]
             }
@@ -91,7 +92,6 @@ Item {
                     i.restore(fileUrl, options.value)
                     settings.backupFolder = folder;
                 }
-                selectExisting: true
 
                 nameFilters: [ "Blackberry Backup (*.bbb)" ]
             }
