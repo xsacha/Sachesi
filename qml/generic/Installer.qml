@@ -49,13 +49,9 @@ Item {
         spacing: 10
         Row {
             spacing: 15
-            Text {
-                text: "Install:"
-                font.pointSize: 12
-            }
             FileDialog {
                 id: install_files
-                title: "Select files and folders"
+                title: "Install applications to device"
                 folder: settings.installFolder
                 onAccepted: {
                     i.install(fileUrls)
@@ -67,14 +63,32 @@ Item {
                 nameFilters: [ "Blackberry Installable (*.bar)" ]
             }
             Button {
-                text: "Choose folders and .bar(s)"
+                text: "Install Folder"
                 onClicked: {
                     if (i.installing)
                         details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;"
                     else if (i.backing || i.restoring)
                         details += "Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>"
-                    else
+                    else {
+                        install_files.title = "Select Folder"
+                        install_files.selectFolder = true;
                         install_files.open();
+                    }
+                }
+            }
+            Button {
+                text: "Install Files"
+                onClicked: {
+                    if (i.installing)
+                        details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;"
+                    else if (i.backing || i.restoring)
+                        details += "Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>"
+                    else {
+                        install_files.title = "Select Files"
+                        install_files.selectFolder = false;
+                        install_files.selectMultiple = true;
+                        install_files.open();
+                    }
                 }
             }
         }

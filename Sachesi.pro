@@ -108,3 +108,9 @@ OTHER_FILES += \
     qml/generic/*.qml \
     qml/generic/UI/*.qml \
     Android/AndroidManifest.xml
+
+# Qt Workaround for having install.cpp file
+phony.depends = install uninstall
+phony.target = .PHONY
+QMAKE_EXTRA_TARGETS += phony
+

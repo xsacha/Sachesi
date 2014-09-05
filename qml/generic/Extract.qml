@@ -114,14 +114,25 @@ Item {
                         p.combineAutoloader(fileUrls);
                         settings.installFolder = folder;
                     }
-                    selectMultiple: true
 
                     nameFilters: [ "Signed Images (*.signed)" ]
                 }
                 Button {
-                    text: "Combine";
+                    text: "Combine Folder"
                     enabled: !p.splitting
-                    onClicked: combine_files.open()
+                    onClicked: {
+                        combine_files.selectFolder = true
+                        combine_files.open()
+                    }
+                }
+                Button {
+                    text: "Combine Files";
+                    enabled: !p.splitting
+                    onClicked: {
+                        combine_files.selectFolder = false
+                        combine_files.selectMultiple = true
+                        combine_files.open()
+                    }
                 }
             }
             Label {

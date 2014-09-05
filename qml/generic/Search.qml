@@ -59,11 +59,8 @@ Item {
     }
     Column {
         id: scanButton
-        anchors { bottom: parent.bottom; bottomMargin: 60 }
-        anchors.leftMargin: 60
-        spacing: 10
-        Row {
-            spacing: 10
+        anchors { bottom: parent.bottom; bottomMargin: 60; leftMargin: 60 }
+        RowLayout {
             anchors.horizontalCenter: parent.horizontalCenter
             /*RadioButton {
                 id: delta
@@ -90,15 +87,16 @@ Item {
             text: (message.length < 5) ? "Server did not respond as expected [" + message + "]." : (message === "Success" ? "Success. No updates were available." : message)
         }
     }
-    Column {
-        spacing: 10
+    ColumnLayout {
         id: urlLinks
         anchors { right: parent.right; rightMargin: 60; bottom: parent.bottom; bottomMargin: 60 }
         Button {
+            Layout.alignment: Qt.AlignHCenter
             text: isMobile ? "Copy Links" : "Grab Links"
             onClicked: p.grabLinks()
         }
         Button {
+            Layout.alignment: Qt.AlignHCenter
             text: "Download All"
             onClicked: {p.dlProgress = -1; p.downloadLinks() }
         }
@@ -243,7 +241,7 @@ Item {
 
     TextArea {
         id: updateMessage
-        anchors {top: parent.top; bottom: parent.bottom; left: variables.right; right: parent.right; margins: 30; }
+        anchors {top: parent.top; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 30; }
         //width: parent.width - 200; height: parent.height - 130
         text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
               (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +

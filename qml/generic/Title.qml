@@ -26,7 +26,7 @@ ApplicationWindow {
 
     Text {
         id: title
-        font.pixelSize: 22
+        font.pointSize: 22
         text: "SACHESI"
         font.letterSpacing: (parent.width - 280) / text.length
         font.weight: Font.DemiBold
