@@ -7,7 +7,7 @@ import "UI" 1.0
 ApplicationWindow {
     id: window
     // TODO: Send version from C++
-    title: "Sachesi 1.6.1"
+    title: "Sachesi 1.6.2"
     width: 520
     height: 480
     minimumHeight: 520
@@ -19,7 +19,6 @@ ApplicationWindow {
         property alias y: window.y
         property alias width: window.width
         property alias height: window.height
-        property alias tab: titleRow.currentIndex
         property url installFolder
         property url backupFolder
     }
@@ -70,6 +69,8 @@ ApplicationWindow {
             title: "Install";
             Installer { anchors.fill: parent }
         }
+        // HACK: Reset tab with timer otherwise it has no tab on Windows
+        Timer { running: true;  onTriggered: titleRow.currentIndex = 1 + p.hasBootAccess }
         Component.onCompleted: {
             if (p.hasBootAccess)
                 titleRow.addTab("Boot", Qt.createComponent("Boot.qml") )

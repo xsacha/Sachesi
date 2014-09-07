@@ -4,7 +4,7 @@ TARGET="Sachesi"
 win32: RC_ICONS += assets/sachesi-114.ico
 else:mac: ICON = assets/sachesi-114.icns
 else: ICON = assets/sachesi-114.png
-VERSION = 1.6.1
+VERSION = 1.6.2
 
 # Global specific
 CONFIG += c++11
@@ -30,8 +30,8 @@ win32 {
 
     !mingw {
         DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
-        static: LIBS += -L$$OPENSSL_PATH\\lib\\VC\\static -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
-        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32
+        static: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
+        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lGDI32
         # Hardcoded lib folder for winsocks
         LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
     }
