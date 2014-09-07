@@ -279,9 +279,8 @@ void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 
             } else {
                 for (qint64 i = node.size; i > 0;) {
                     qint64 read_len = qMin(BUFFER_LEN, i);
-                    QByteArray tmp = signedFile->read(read_len);
-                    newFile.write(tmp);
-                    i -= updateProgress(tmp.size());
+                    qint64 written_size = newFile.write(signedFile->read(read_len));
+                    i -= updateProgress(written_size);
                 }
             }
             newFile.close();

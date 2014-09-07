@@ -70,7 +70,7 @@ ApplicationWindow {
             Installer { anchors.fill: parent }
         }
         // HACK: Reset tab with timer otherwise it has no tab on Windows
-        Timer { running: true;  onTriggered: titleRow.currentIndex = 1 + p.hasBootAccess }
+        Timer { running: true; onTriggered: titleRow.currentIndex = 1 + p.hasBootAccess }
         Component.onCompleted: {
             if (p.hasBootAccess)
                 titleRow.addTab("Boot", Qt.createComponent("Boot.qml") )

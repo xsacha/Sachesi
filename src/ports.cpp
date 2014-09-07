@@ -23,6 +23,12 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 
+QString capPath() {
+    QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    QString capPath = QFileInfo(ini.fileName()).absolutePath();
+    return capPath + "/cap.exe";
+}
+
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
 #ifdef BLACKBERRY
     FileSelect finder = new bb::cascades::pickers::FilePicker();

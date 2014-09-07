@@ -31,6 +31,7 @@
 #include <QMessageBox>
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
+#include "ports.h"
 
 #define PACKED_FILE_OS      (1 << 0)
 #define PACKED_FILE_RADIO   (1 << 1)
@@ -321,43 +322,44 @@ public slots:
 
     void processCombine() {
         combining = true;
-        QFileInfo fileInfo(selectedFiles.first());
+        int largest = 0;
+        qint64 largest_size = 0;
+        for (int i = 0; i < selectedFiles.count(); i++) {
+            if (QFileInfo(selectedFiles[i]).size() > largest_size) {
+                largest_size = QFileInfo(selectedFiles[i]).size();
+                largest = i;
+            }
+        }
+        QFileInfo fileInfo(selectedFiles[largest]);
         // Fix up names
         QString baseDir = fileInfo.absolutePath();
         QString baseName = fileInfo.fileName().split('.').first();
-        if (baseName.contains('-'))
-        {
-            QStringList baseList = baseName.split('-');
-            baseName = baseList.at(baseList.count() - 2);
-        }
-        else if (baseName.contains('_'))
-            baseName = baseName.split('_').last();
-        if (!baseName.contains("autoloader", Qt::CaseInsensitive))
-            baseName.prepend("Autoloader-");
         // Find potential file
         int f = 0;
         for (f = 0; QFile::exists(baseDir + "/" + baseName + (f == 0 ? "" : QString("-%1").arg(f)) + ".exe"); f++);
         // Open the new cap and append to it
 
-        QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-        QString capPath = QFileInfo(ini.fileName()).absolutePath()+"/Sachesi/cap.exe";
         QFile newAutoloader(baseDir + "/" + baseName + (f == 0 ? "" : QString("-%1").arg(f)) + ".exe");
         newAutoloader.open(QIODevice::WriteOnly);
-        appendFile(capPath, &newAutoloader);
-        QByteArray dataHeader = QByteArray(56, 0);
-        QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
+        appendFile(capPath(), &newAutoloader);
         // This code is used as a separator
-        dataStream << QByteArray::fromHex("9CD5C5979CD5C5979CD5C597") << (quint64)selectedFiles.count();
-        quint64 counter = newAutoloader.pos()+52;
+        newAutoloader.write(QByteArray::fromBase64("at9dFE5LT0dJSE5JTk1TDRAMBRceERhTLUY8T0crSzk5OVNOT1FNT09RTU9RSEhwnNXFl5zVxZec1cWX").constData(), 60);
+        // This is a placeholder for a password
+        newAutoloader.write(QByteArray(80, 0), 80);
+        QByteArray dataHeader;
+        QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
+        dataStream << (quint64)selectedFiles.count();
+        quint64 counter = newAutoloader.pos()+64;
         read = 100 * counter;
         foreach (QString fileInfo, selectedFiles)
         {
             dataStream << counter;
-            QFileInfo tmpFileInfo(fileInfo);
-            counter += tmpFileInfo.size();
+            counter += QFileInfo(fileInfo).size();
         }
+        for (int i = selectedFiles.count() - 1; i < 6; i++)
+            dataStream << (qint64)0;
         maxSize = counter;
-        newAutoloader.write(dataHeader.right(52));
+        newAutoloader.write(dataHeader);
         foreach (QString file, selectedFiles)
             appendFile(file, &newAutoloader);
         newAutoloader.close();
@@ -366,7 +368,7 @@ public slots:
     qint64 findIndexFromSig(unsigned char* signature, int startFrom, int distanceFrom, int num = 4, int skip = 1) {
         if (startFrom != -1)
             signedFile->seek(startFrom);
-        int readlen = 4096;
+        int readlen = BUFFER_LEN;
         if (skip == 0x1000)
             readlen = num;
         while (!signedFile->atEnd())
@@ -404,7 +406,7 @@ public slots:
         rinode ind;
         stream >> ind.mode >> ind.nameoffset >> ind.offset >> ind.size >> ind.time;
         signedFile->seek(ind.nameoffset + startPos);
-        ind.name = QString(signedFile->readLine(128));
+        ind.name = QString(signedFile->readLine(510)); // QNX6 maximum filename length
         if (ind.name == "")
             ind.name = ".";
         return ind;
@@ -447,7 +449,9 @@ public slots:
     void processExtractRCFS();
     void processExtractQNX6();
 
-    quint64 updateProgress(quint64 delta) {
+    quint64 updateProgress(qint64 delta) {
+        if (delta < 0)
+            return 0;
         read += 100 * delta;
         emit progressChanged((int)(read / maxSize));
         return delta;

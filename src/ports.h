@@ -40,6 +40,7 @@ typedef bb::cascades::pickers::FilePicker* FileSelect;
 typedef QFileDialog* FileSelect;
 #endif
 
+QString capPath();
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt);
 QString getSaveDir();
 bool checkCurPath();

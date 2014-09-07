@@ -100,13 +100,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
     connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
 
     // Download required files.
-#ifdef BLACKBERRY
-    QFileInfo capFile("/accounts/1000/shared/misc/Sachesi/cap.exe");
-#else
-    QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    QFileInfo capFile(QFileInfo(ini.fileName()).absolutePath()+"/cap.exe");
-#endif
-    if (!capFile.exists())
+    if (!QFileInfo(capPath()).exists())
     {
         QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.11.exe";
         QNetworkAccessManager* mNetworkManager = new QNetworkAccessManager(this);
@@ -121,13 +115,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
 void MainNet::capNetworkReply(QNetworkReply* reply) {
     if(reply->error() == QNetworkReply::NoError) {
         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() == 200) {
-            QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-#ifdef BLACKBERRY
-            QString capPath = "/accounts/1000/shared/misc/Sachesi";
-#else
-            QString capPath = QFileInfo(ini.fileName()).absolutePath();
-#endif
-            QFile capFile(capPath+"/cap.exe");
+            QFile capFile(capPath());
             capFile.open(QIODevice::WriteOnly);
             capFile.write(reply->readAll());
             capFile.close();
