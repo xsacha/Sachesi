@@ -26,12 +26,14 @@ win32 {
     CONFIG += static
     static: DEFINES += STATIC STATIC_BUILD
 
-    mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
+    !contains(QT_CONFIG, openssl-linked) {
+        mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
+        static: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
+        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lGDI32
+    }
 
     !mingw {
         DEFINES += NOMINMAX _CRT_SECURE_NO_WARNINGS
-        static: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
-        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lGDI32
         # Hardcoded lib folder for winsocks
         LIBS+= -L"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86" -lWSock32 -lUser32 -lCrypt32
     }
@@ -56,6 +58,8 @@ else:android {
     ANDROID_PACKAGE_SOURCE_DIR = $$P/Android
     DEFINES += BOOTLOADER_ACCESS
 } else {
+    shared_quazip: LIBS += -lquazip
+    shared_lzo2: LIBS += -llzo2
     LIBS += -lz -ldl -ludev
     # These below should be static for it to be fully portable (changing ABIs)
     LIBS += -lcrypto -lusb-1.0
@@ -66,13 +70,11 @@ SOURCES += \
     src/main.cpp \
     src/mainnet.cpp \
     src/splitter.cpp \
-    src/lzo.cpp \
     src/ports.cpp
 
 HEADERS += \
     src/mainnet.h \
     src/splitter.h \
-    src/lzo.h \
     src/ports.h
 
 # Welcome to the only OS that won't give network access to USB device
@@ -96,8 +98,14 @@ contains(DEFINES, BOOTLOADER_ACCESS) {
     HEADERS += src/boot.h
 }
 
-DEFINES += QUAZIP_STATIC
-include(ext/quazip/quazip.pri)
+!shared_quazip {
+    DEFINES += QUAZIP_STATIC
+    include(ext/quazip/quazip.pri)
+}
+!shared_lzo2 {
+    SOURCES += src/lzo.cpp
+    HEADERS += src/lzo.h
+}
 
 RESOURCES += UI.qrc
 # The qmldir is built in for dynamic libs but not static.

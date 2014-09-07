@@ -68,7 +68,7 @@ static const unsigned char lzop_magic[] = {
 #define HEADER_HAS_FILTER	0x00000800L
 
 int lzo1x_decompress_safe(const unsigned char *in, size_t in_len,
-              unsigned char *out, size_t *out_len)
+              unsigned char *out, size_t *out_len, void* wrkmem)
 {
     unsigned char *op;
     const unsigned char *ip;

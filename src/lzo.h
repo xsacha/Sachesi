@@ -1,6 +1,6 @@
 #pragma once
 
-int lzo1x_decompress_safe(const unsigned char *in, size_t in_len, unsigned char *out, size_t *out_len);
+int lzo1x_decompress_safe(const unsigned char *in, size_t in_len, unsigned char *out, size_t *out_len, void* wrkmem /* NOT USED */);
 
 #define M2_MAX_OFFSET   0x0800
 

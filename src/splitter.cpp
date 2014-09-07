@@ -270,7 +270,7 @@ void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 
                     char* readData = new char[size];
                     signedFile->read(readData, size);
                     size_t write_len = 0x4000;
-                    lzo1x_decompress_safe(reinterpret_cast<const unsigned char*>(readData), size, reinterpret_cast<unsigned char*>(buffer), &write_len);
+                    lzo1x_decompress_safe(reinterpret_cast<const unsigned char*>(readData), size, reinterpret_cast<unsigned char*>(buffer), &write_len, nullptr);
                     newFile.write(buffer, (qint64)write_len);
                     updateProgress(size);
                     delete [] readData;
