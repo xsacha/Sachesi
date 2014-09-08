@@ -57,6 +57,67 @@ public:
     }
 };
 
+class AutoloaderWriter: public QFile {
+    Q_OBJECT
+public:
+    AutoloaderWriter(QList<QFileInfo> selectedInfo)
+        : _infos(selectedInfo)
+    {
+    }
+    void create(QString name) {
+        // Find potential file
+        QString append = ".exe";
+        for (int f = 0; QFile::exists(name + append); f++) {
+            append = QString("-%1.exe").arg(f);
+        }
+        // Start the autoloader as a cap file
+        QFile::copy(capPath(), name + append);
+        setFileName(name + append);
+        open(QIODevice::WriteOnly | QIODevice::Append);
+        // This code is used as a separator
+        write(QByteArray::fromBase64("at9dFE5LT0dJSE5JTk1TDRAMBRceERhTLUY8T0crSzk5OVNOT1FNT09RTU9RSEhwnNXFl5zVxZec1cWX").constData(), 60);
+        // This is a placeholder for a password
+        write(QByteArray(80, 0), 80);
+
+        QByteArray dataHeader;
+        QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
+        dataStream << (quint64)_infos.count();
+        quint64 counter = pos() + 64;
+        for (QFileInfo info: _infos)
+        {
+            dataStream << counter;
+            counter += info.size();
+        }
+        for (int i = _infos.count() - 1; i < 6; i++)
+            dataStream << (qint64)0;
+        write(dataHeader);
+        _read = 100 * pos();
+        _maxSize = counter;
+        for (QFileInfo file: _infos)
+            appendFile(file.filePath());
+        close();
+    }
+
+    void appendFile(QString fileName) {
+        QFile file(fileName);
+        file.open(QIODevice::ReadOnly);
+        while (!file.atEnd())
+        {
+            QByteArray tmp = file.read(BUFFER_LEN);
+            if (tmp.size() < 0)
+                break;
+            _read += 100 * write(tmp);
+            emit newProgress((int)(_read / _maxSize));
+        }
+        file.close();
+    }
+signals:
+    void newProgress(int percent);
+private:
+    qint64 _read, _maxSize;
+    QList<QFileInfo> _infos;
+};
+
 struct qinode {
     int size;
     QList<int> sectors;
@@ -83,6 +144,7 @@ public:
     Splitter(QString file) : selectedFile(file) { reset(); }
     Splitter(QString file, int options) : option(options), selectedFile(file)  { reset(); }
     Splitter(QStringList files) : selectedFiles(files)  { reset(); }
+    Splitter(QList<QFileInfo> info) : selectedInfo(info)  { reset(); }
     ~Splitter() { }
     bool extractApps, extractImage;
     int extractTypes;
@@ -150,7 +212,7 @@ public slots:
         QuaZip barFile(selectedFile);
         barFile.open(QuaZip::mdUnzip);
         foreach (QString signedName, barFile.getFileNameList()) {
-            if (signedName.endsWith("signed")) {
+            if (QFileInfo(signedName).suffix() == "signed") {
                 signedFile = new QuaZipFile(&barFile);
                 barFile.setCurrentFile(signedName);
                 signedFile->open(QIODevice::ReadOnly);
@@ -257,7 +319,7 @@ public slots:
             QString filename = baseName;
             qint64 size = offsets[i+1] - offsets[i];
             int type = 0;
-            if (size > 1024*1024*100) {
+            if (size > 1024*1024*120) {
                 type = PACKED_FILE_OS;
                 filename += QString("-OS.%1").arg(i);
             } else if (size > 1024*1024*5) {
@@ -306,63 +368,21 @@ public slots:
         delete signedFile;
         signedFile = nullptr;
     }
-    void appendFile(QString fileName, QFile* target) {
-        QFile file(fileName);
-        file.open(QIODevice::ReadOnly);
-        while (!file.atEnd())
-        {
-            QByteArray tmp = file.read(BUFFER_LEN);
-            if (tmp.size() < 0)
-                break;
-            target->write(tmp);
-            updateProgress(tmp.size());
-        }
-        file.close();
-    }
 
     void processCombine() {
         combining = true;
-        int largest = 0;
-        qint64 largest_size = 0;
-        for (int i = 0; i < selectedFiles.count(); i++) {
-            if (QFileInfo(selectedFiles[i]).size() > largest_size) {
-                largest_size = QFileInfo(selectedFiles[i]).size();
-                largest = i;
+        QFileInfo largestInfo;
+        qint64 largestSize = 0;
+        for(QFileInfo info: selectedInfo) {
+            if (info.size() > largestSize) {
+                largestSize = info.size();
+                largestInfo = info;
             }
         }
-        QFileInfo fileInfo(selectedFiles[largest]);
-        // Fix up names
-        QString baseDir = fileInfo.absolutePath();
-        QString baseName = fileInfo.fileName().split('.').first();
-        // Find potential file
-        int f = 0;
-        for (f = 0; QFile::exists(baseDir + "/" + baseName + (f == 0 ? "" : QString("-%1").arg(f)) + ".exe"); f++);
-        // Open the new cap and append to it
-
-        QFile newAutoloader(baseDir + "/" + baseName + (f == 0 ? "" : QString("-%1").arg(f)) + ".exe");
-        newAutoloader.open(QIODevice::WriteOnly);
-        appendFile(capPath(), &newAutoloader);
-        // This code is used as a separator
-        newAutoloader.write(QByteArray::fromBase64("at9dFE5LT0dJSE5JTk1TDRAMBRceERhTLUY8T0crSzk5OVNOT1FNT09RTU9RSEhwnNXFl5zVxZec1cWX").constData(), 60);
-        // This is a placeholder for a password
-        newAutoloader.write(QByteArray(80, 0), 80);
-        QByteArray dataHeader;
-        QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
-        dataStream << (quint64)selectedFiles.count();
-        quint64 counter = newAutoloader.pos()+64;
-        read = 100 * counter;
-        foreach (QString fileInfo, selectedFiles)
-        {
-            dataStream << counter;
-            counter += QFileInfo(fileInfo).size();
-        }
-        for (int i = selectedFiles.count() - 1; i < 6; i++)
-            dataStream << (qint64)0;
-        maxSize = counter;
-        newAutoloader.write(dataHeader);
-        foreach (QString file, selectedFiles)
-            appendFile(file, &newAutoloader);
-        newAutoloader.close();
+        // Create new Autoloader object
+        AutoloaderWriter newAutoloader(selectedInfo);
+        connect(&newAutoloader, &AutoloaderWriter::newProgress, [=](int percent) { emit this->progressChanged(percent); });
+        newAutoloader.create(largestInfo.absolutePath() + "/" + largestInfo.completeBaseName());
         emit finished();
     }
     qint64 findIndexFromSig(unsigned char* signature, int startFrom, int distanceFrom, int num = 4, int skip = 1) {
@@ -469,6 +489,7 @@ private:
     int option;
     QString selectedFile;
     QStringList selectedFiles;
+    QList<QFileInfo> selectedInfo;
     QList<QFile*> tmpFile;
     QIODevice* signedFile;
     quint16 sectorSize;   // For extracting

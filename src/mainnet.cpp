@@ -74,17 +74,17 @@ void MainNet::splitAutoloader(QUrl url, int options) {
 
 void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
 {
-    QStringList splitFiles = QStringList();
+    QList<QFileInfo> splitFiles;
     foreach(QUrl url, selectedFiles) {
-        QString fileName = url.toLocalFile();
-        if (QFileInfo(fileName).isDir())
+        QFileInfo fileInfo = QFileInfo(url.toLocalFile());
+        if (fileInfo.isDir())
         {
-            QStringList suffixOnly = QDir(fileName).entryList(QStringList("*.signed"));
+            QStringList suffixOnly = fileInfo.absoluteDir().entryList(QStringList("*.signed"));
             foreach (QString suffix, suffixOnly) {
-                splitFiles.append(fileName + "/" + suffix);
+                splitFiles.append(QFileInfo(fileInfo.absoluteFilePath() + "/" + suffix));
             }
-        } else if (fileName.endsWith(".signed"))
-            splitFiles.append(fileName);
+        } else if (fileInfo.suffix() == "signed")
+            splitFiles.append(fileInfo);
     }
     if (splitFiles.isEmpty())
         return;
@@ -105,7 +105,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.11.exe";
         QNetworkAccessManager* mNetworkManager = new QNetworkAccessManager(this);
         QObject::connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(capNetworkReply(QNetworkReply*)));
-        /*QNetworkReply* reply =*/ mNetworkManager->get(QNetworkRequest(capUrl));
+        mNetworkManager->get(QNetworkRequest(capUrl));
         _splitting = 5; emit splittingChanged();
         return;
     }
@@ -119,12 +119,12 @@ void MainNet::capNetworkReply(QNetworkReply* reply) {
             capFile.open(QIODevice::WriteOnly);
             capFile.write(reply->readAll());
             capFile.close();
-        } else
-            splitThread->deleteLater();
-    } else
-        splitThread->deleteLater();
-    _splitting = 2; emit splittingChanged();
-    splitThread->start();
+            _splitting = 2; emit splittingChanged();
+            splitThread->start();
+            return;
+        }
+    }
+    splitThread->deleteLater();
 }
 
 void MainNet::extractImage(int type, int options)
@@ -247,7 +247,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Debrick", true, false, "qc8974.factory_sfi.desktop", osVersion);
     appendNewLink("Core",    true, false, "qc8974.factory_sfi", osVersion);
 
-    appendNewHeader("QC8960", "Blackberry Z3/Z10/Z30/Q10");
+    appendNewHeader("QC8960", "Blackberry Z3/Z10/Z30/Q5/Q10");
     appendNewLink("Debrick", true, false, "qc8960.factory_sfi.desktop", osVersion);
     appendNewLink("Core",    true, false, "qc8960.factory_sfi", osVersion);
 
@@ -265,7 +265,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Z10 (STL 100-2, STL 100-3) and Porsche P9982", false, false, "qc8960", radioVersion);
     appendNewLink("Z10 (STL 100-4)", false, false, "qc8960.omadm", radioVersion);
     appendNewLink("Z30", false, false, "qc8960.wtr", radioVersion);
-    appendNewLink("Q10", false, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Q5 and Q10", false, false, "qc8960.wtr5", radioVersion);
     appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);
 
 
@@ -408,12 +408,9 @@ static QStringList dev[] = {
     // 1 = Z10 (L Series) OMAP
     QStringList() << "STL 100-1",
     QStringList() << "4002607",
-    // 2 = Z10 (L Series) Qualcomm
-    QStringList() << "STL 100-2" << "STL 100-3" << "STL 100-4",
-    QStringList() << "8700240A" << "8500240A" << "8400240A",
-    // 2 = P9982  (K Series)
-    QStringList() << "STK 100-1" << "STK 100-2",
-    QStringList() << "A500240A" << "A600240A",
+    // 2 = Z10 (L Series) Qualcomm + P9982  (K Series)
+    QStringList() << "STL 100-2" << "STL 100-3" << "STL 100-4" << "STK 100-1" << "STK 100-2",
+    QStringList() << "8700240A" << "8500240A" << "8400240A" << "A500240A" << "A600240A",
     // 3 = Z3  (J Series)
     QStringList() << "STJ 100-1",
     QStringList() << "04002E07",
