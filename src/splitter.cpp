@@ -445,30 +445,23 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     }
     partitionSizes.append(signedPos + signedSize - partitionOffsets.last());
 
-
     // Detect if RCFS exists in this file
-    QNXStream stream(signedFile);
     if (!extractApps && (extractTypes & 1)) {
         for (int i = 0; i < partitionOffsets.count(); i++) {
             signedFile->seek(partitionOffsets[i]);
-            QByteArray header = signedFile->read(4);
-            char unknownSig[] = {0x0,0x10,0x0,0x0};
-            if (header == QByteArray("rimh",4) || header == QByteArray(unknownSig,4)) {
+            if (signedFile->read(4) == QByteArray("rimh", 4)) {
                 startPos = partitionOffsets[i];
                 QString rcfsTypeString = "";
-                if (header == QByteArray("rimh",4)) {
-                    READ_TMP(int, rcfsType);
-                    rcfsTypeString = signedFile->readLine(8);
-                    qDebug() << rcfsTypeString;
-                    if (rcfsTypeString.startsWith("fs-radio"))
-                        rcfsTypeString = "Radio";
-                    else if (rcfsTypeString.startsWith("fs-os"))
-                        rcfsTypeString = "OS";
-                    if (baseName.contains(rcfsTypeString))
-                        rcfsTypeString = "";
-                    else
-                        rcfsTypeString.prepend("-");
-                }
+                signedFile->read(4); // rcfsType (2)
+                rcfsTypeString = signedFile->readLine(8);
+                if (rcfsTypeString.startsWith("fs-radio"))
+                    rcfsTypeString = "Radio";
+                else if (rcfsTypeString.startsWith("fs-os"))
+                    rcfsTypeString = "OS";
+                if (baseName.contains(rcfsTypeString))
+                    rcfsTypeString = "";
+                else
+                    rcfsTypeString.prepend("-");
                 maxSize += partitionSizes[i];
                 signedFile->seek(startPos);
                 if (!extractImage) {
