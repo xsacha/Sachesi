@@ -141,7 +141,7 @@ Item {
         TextCoupleSelect {
             id: device
             z: 11
-            selectedItem: 6
+            selectedItem: 5
             type: "Device"
             listModel: p.advanced ? advancedModel : babyModel
             ListModel {
@@ -149,7 +149,6 @@ Item {
                 ListElement { text: "Z30" }
                 ListElement { text: "Z10 OMAP" }
                 ListElement { text: "Z10 QCOM" }
-                ListElement { text: "P9982" }
                 ListElement { text: "Z3" }
                 ListElement { text: "Q30" }
                 ListElement { text: "Q10" }
@@ -167,7 +166,6 @@ Item {
                 ListElement { text: "Z30" }
                 ListElement { text: "Z10 OMAP" }
                 ListElement { text: "Z10 QCOM" }
-                ListElement { text: "P9982" }
                 ListElement { text: "Z3" }
                 ListElement { text: "Q30" }
                 ListElement { text: "Q10" }

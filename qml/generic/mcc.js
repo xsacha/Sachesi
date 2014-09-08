@@ -268,7 +268,7 @@ function to_country(value) {
     case "623": subtext = "Central African Republic"; break;
     case "622": subtext = "Chad"; break;
     case "730": subtext = "Chile"; break;
-    case "460": subtext = "China"; break;
+    case "460": case "461": subtext = "China"; break;
     case "732": subtext = "Columbia"; break;
     case "654": subtext = "Comoros"; break;
     case "629": subtext = "Congo"; break;
@@ -315,7 +315,8 @@ function to_country(value) {
     case "454": subtext = "Hong Kong"; break;
     case "216": subtext = "Hungary"; break;
     case "274": subtext = "Iceland"; break;
-    case "404": case "405": subtext = "India"; break;
+    case "404": case "405":
+    case "406": subtext = "India"; break;
     case "510": subtext = "Indonesia"; break;
     case "432": subtext = "Iran"; break;
     case "418": subtext = "Iraq"; break;
@@ -434,7 +435,10 @@ function to_country(value) {
     case "255": subtext = "Ukraine"; break;
     case "424": subtext = "United Arab Emirates"; break;
     case "234": case "235": subtext = "United Kingdom"; break;
-    case "310": case "311": subtext = "United States of America"; break;
+    case "310": case "311":
+    case "312": case "313":
+    case "314": case "315":
+    case "316": subtext = "United States of America"; break;
     case "748": subtext = "Uruguay"; break;
     case "434": subtext = "Uzbekistan"; break;
     case "541": subtext = "Vanuatu"; break;

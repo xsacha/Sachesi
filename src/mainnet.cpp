@@ -155,7 +155,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     QFileInfo fileInfo(selectedFiles.first());
     if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
         QString errorMsg = "You can only extract apps from debrick OS images.";
-        if (fileInfo.size() < 50 * 1024 * 1024)
+        if (fileInfo.size() < 120 * 1024 * 1024)
             errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
         QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
@@ -379,9 +379,8 @@ void MainNet::downloadFinish()
     }
 }
 
-void MainNet::abortDL(QNetworkReply::NetworkError error)
+void MainNet::abortDL(QNetworkReply::NetworkError)
 {
-    Q_UNUSED(error);
     if (_currentFile.isOpen())
     {
         _currentFile.close();
@@ -397,7 +396,7 @@ void MainNet::abortDL(QNetworkReply::NetworkError error)
 
 QString MainNet::NPCFromLocale(int carrier, int country) {
     QString homeNPC;
-    homeNPC.sprintf("%03d%03d%d",carrier, country, carrier ? 30 : 60);
+    homeNPC.sprintf("%03d%03d%d", carrier, country, carrier ? 30 : 60);
     return homeNPC;
 }
 
@@ -458,7 +457,7 @@ unsigned int MainNet::variantCount(unsigned int device) {
     return dev[device*2].count();
 }
 
-void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver)
+void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver, bool skip)
 {
     if (_scanning)
         return;
@@ -496,6 +495,7 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     request.setUrl(QUrl(requestUrl));
+    request.setAttribute(QNetworkRequest::CustomVerbAttribute, skip);
     QNetworkReply* reply = manager->post(request, query.toUtf8());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(serverError(QNetworkReply::NetworkError)));
@@ -504,30 +504,25 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
 
 void MainNet::reverseLookupReply() {
     QNetworkReply* reply = (QNetworkReply*)sender();
+    bool skip = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toBool();
+    QString swRelease;
     QByteArray data = reply->readAll();
     //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
     QXmlStreamReader xml(data);
-    bool foundNewSR = false;
     while(!xml.atEnd() && !xml.hasError()) {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
             if (xml.name() == "softwareReleaseVersion") {
-                _softwareRelease = xml.readElementText(); emit softwareReleaseChanged();
-                if (_softwareRelease.at(0).isDigit()) {
-                    foundNewSR = true;
-                    // Setting it to true first in case there was an error with confirmation
-                    _hasPotentialLinks = true; emit hasPotentialLinksChanged();
-                }
+                swRelease = xml.readElementText();
             }
         }
         xml.readNext();
     }
-    setScanning(0);
     sender()->deleteLater();
 
     // Now verify the link
-    if (foundNewSR) {
+    if (swRelease.at(0).isDigit()) {
         QCryptographicHash hash(QCryptographicHash::Sha1);
-        hash.addData(_softwareRelease.toLocal8Bit());
+        hash.addData(swRelease.toLocal8Bit());
         QString server = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/";
         if (reply->url().host().startsWith("beta")) {
             server = "http://cdn.fs.sl.blackberry.com/fs/qnx/beta/";
@@ -536,18 +531,41 @@ void MainNet::reverseLookupReply() {
         QNetworkRequest request;
         request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
         request.setUrl(QUrl(url));
+        request.setAttribute(QNetworkRequest::CustomVerbAttribute, swRelease);
         QNetworkReply* replyTmp = manager->get(request);
-        connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSR()));
+        if (skip)
+            connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSRSkip()));
+        else
+            connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSR()));
+    } else {
+        _softwareRelease = swRelease; emit softwareReleaseChanged();
+        setScanning(0);
     }
+}
+
+void MainNet::confirmNewSRSkip() {
+    QNetworkReply* reply = (QNetworkReply*)sender();
+    QString swRelease = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
+    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404) {
+        _softwareRelease = "SR not in system"; emit softwareReleaseChanged();
+    } else {
+        _softwareRelease = swRelease; emit softwareReleaseChanged();
+        _hasPotentialLinks = true; emit hasPotentialLinksChanged();
+    }
+    setScanning(0);
+    sender()->deleteLater();
 }
 
 void MainNet::confirmNewSR()
 {
     QNetworkReply* reply = (QNetworkReply*)sender();
+    QString swRelease = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
+    _softwareRelease = swRelease; emit softwareReleaseChanged();
     // Seems to give 301 redirect if it's real
-    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404) {
-        _hasPotentialLinks = false; emit hasPotentialLinksChanged();
+    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() != 404) {
+        _hasPotentialLinks = true; emit hasPotentialLinksChanged();
     }
+    setScanning(0);
     sender()->deleteLater();
 }
 
