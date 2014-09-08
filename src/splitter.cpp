@@ -402,38 +402,42 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         QMessageBox::information(nullptr, "Error", "Was not a Blackberry .signed image.");
         return;
     }
-    QNXStream stream(signedFile);
+    //QNXStream stream(signedFile);
     QList<qint64> partitionOffsets, partitionSizes;
     signedFile->seek(signedPos+12);
-    READ_TMP(int, numPartitions);
-    READ_TMP(int, blockSize);
+
+    // We are now at the partition table
+    QByteArray partitionTable = signedFile->read(4000);
+    QBuffer buffer(&partitionTable);
+    buffer.open(QIODevice::ReadOnly);
+    QNXStream tableStream(&buffer);
+    int numPartitions, blockSize;
+    tableStream >> numPartitions >> blockSize;
+
     if (numPartitions > 10) {
         QMessageBox::information(nullptr, "Error", "Bad partition table.");
         return;
     }
-    int nextOffset;
-    qint64 movingOffset = signedPos + blockSize;
-    partitionOffsets.append(movingOffset);
+
+    partitionOffsets.append(signedPos + blockSize);
     int scan_offset = 0;
-    for (int i = 1; i < numPartitions + 1; i++) {
+    for (int i = 0; i < numPartitions; i++) {
         int max_scan = 3;
-        signedFile->seek(signedPos + 0xc - 0x20 + (0x40 * i) + scan_offset);
-        stream >> max_scan;
+        buffer.seek(0x20 + 0x40 * i + scan_offset);
+        tableStream >> max_scan;
+        qint64 blocks = 0;
         for (int j = 0; j < max_scan; j++) {
-            signedFile->seek(signedPos + 0xc + (0x40 * i) + (8*j) + scan_offset);
-            stream >> nextOffset;
+            buffer.seek(0x40 + 0x40 * i + 8*j + scan_offset);
+            int nextOffset;
+            tableStream >> nextOffset;
             if (nextOffset > 0) {
-                movingOffset += nextOffset * blockSize;
-                signedFile->seek(movingOffset);
-                QByteArray header = signedFile->read(4);
-                if (header != QByteArray(4,(char)0)) {
-                    partitionOffsets.append(movingOffset);
-                    partitionSizes.append(partitionOffsets.last() - partitionOffsets[partitionOffsets.count() - 2]);
-                }
+               blocks += nextOffset;
             }
             else
-                j = 0xd7ad;
+                break;
         }
+        partitionSizes.append(blocks * (qint64)blockSize);
+        partitionOffsets.append(partitionSizes.last() + partitionOffsets.last());
         if (max_scan > 3) {
             scan_offset += (max_scan - 3) * 8;
         }
@@ -443,29 +447,29 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
 
 
     // Detect if RCFS exists in this file
+    QNXStream stream(signedFile);
     if (!extractApps && (extractTypes & 1)) {
-        foreach(int partitionOffset, partitionOffsets) {
-            signedFile->seek(partitionOffset);
+        for (int i = 0; i < partitionOffsets.count(); i++) {
+            signedFile->seek(partitionOffsets[i]);
             QByteArray header = signedFile->read(4);
             char unknownSig[] = {0x0,0x10,0x0,0x0};
             if (header == QByteArray("rimh",4) || header == QByteArray(unknownSig,4)) {
-                startPos = partitionOffset;
+                startPos = partitionOffsets[i];
                 QString rcfsTypeString = "";
                 if (header == QByteArray("rimh",4)) {
                     READ_TMP(int, rcfsType);
-                    rcfsTypeString = QString(signedFile->readLine(5));
-                    if (rcfsTypeString.startsWith("fs-r"))
+                    rcfsTypeString = signedFile->readLine(8);
+                    qDebug() << rcfsTypeString;
+                    if (rcfsTypeString.startsWith("fs-radio"))
                         rcfsTypeString = "Radio";
-                    else if (rcfsTypeString.startsWith("fs-o"))
+                    else if (rcfsTypeString.startsWith("fs-os"))
                         rcfsTypeString = "OS";
                     if (baseName.contains(rcfsTypeString))
                         rcfsTypeString = "";
                     else
                         rcfsTypeString.prepend("-");
                 }
-                signedFile->seek(startPos + 0x1030);
-                READ_TMP(int, rcfsSize);
-                maxSize += rcfsSize * 1.25;
+                maxSize += partitionSizes[i];
                 signedFile->seek(startPos);
                 if (!extractImage) {
                     processRStart(startPos, baseName + rcfsTypeString);
@@ -475,7 +479,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                     if (!rcfsFile->open(QIODevice::WriteOnly))
                         return die();
 
-                    for (qint64 s = rcfsSize + 0x1000; s > 0; s -= updateProgress(rcfsFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
+                    for (qint64 s = partitionSizes[i] + 0x1000; s > 0; s -= updateProgress(rcfsFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
                     rcfsFile->close();
                 }
             }

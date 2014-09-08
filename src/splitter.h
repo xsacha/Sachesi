@@ -18,16 +18,14 @@
 #pragma once
 
 #include <QObject>
+#include <QBuffer>
 #include <QStringList>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QDataStream>
 #include <QDebug>
-#include <QSettings>
 #include <QCoreApplication>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QMessageBox>
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
