@@ -38,7 +38,7 @@ Window {
                 SpinBox {
                     id: build
                     //width: implicitWidth + 25
-                    value: 1052
+                    value: 1154
                     maximumValue: 9999
                     stepSize: 3
                     onEditingFinished: relookup.clicked()

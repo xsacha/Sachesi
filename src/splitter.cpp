@@ -454,7 +454,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                 QString rcfsTypeString = "";
                 signedFile->read(4); // rcfsType (2)
                 rcfsTypeString = signedFile->readLine(8);
-                if (rcfsTypeString.startsWith("fs-radio"))
+                if (rcfsTypeString.startsWith("fs-rad"))
                     rcfsTypeString = "Radio";
                 else if (rcfsTypeString.startsWith("fs-os"))
                     rcfsTypeString = "OS";

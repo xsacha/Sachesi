@@ -33,11 +33,11 @@
 #include "boot.h"
 #endif
 
-// TODO: Make extraction less hacky.
-// TODO: Make extraction handle decent % tracking
+// TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress section. Pass a class to QML that contains file count, current and total progress
 // TODO: Don't use hardcoded width/height values for UI. Now that we use native UI elements and font sizes, this will break very bad
+// TODO: Name extracted signed/rcfs files and folders by relevant info found in the contents
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
