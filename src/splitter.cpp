@@ -402,7 +402,6 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         QMessageBox::information(nullptr, "Error", "Was not a Blackberry .signed image.");
         return;
     }
-    //QNXStream stream(signedFile);
     QList<qint64> partitionOffsets, partitionSizes;
     signedFile->seek(signedPos+12);
 

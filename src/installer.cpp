@@ -754,9 +754,9 @@ void InstallNet::restoreReply()
                         QString name = xml.readElementText().remove(0, 2);
                         // If we already know the name, make it nicer
                         if (name == "8d00270a")
-                            name = "Dev Alpha C";
+                            name = "Alpha C";
                         else if (name == "4002607")
-                            name = "Dev Alpha";
+                            name = "Alpha B";
                         setKnownHW(name);
                     }
                 }

@@ -147,16 +147,14 @@ Item {
             ListModel {
                 id: advancedModel
                 ListElement { text: "Z30" }
-                ListElement { text: "Z10 OMAP" }
-                ListElement { text: "Z10 QCOM" }
-                ListElement { text: "Z3" }
+                ListElement { text: "Z10 (OMAP)" }
+                ListElement { text: "Z10 (QCOM) + P9982" }
+                ListElement { text: "Z3 (Jakarta)" }
                 ListElement { text: "Q30 (Passport)" }
-                ListElement { text: "Q10" }
-                ListElement { text: "Q5" }
+                ListElement { text: "Q5 + Q10" }
                 ListElement { text: "Z5" }
                 ListElement { text: "Q3" }
-                ListElement { text: "Dev Alpha" }
-                ListElement { text: "Playbook" }
+                ListElement { text: "Developer" }
                 ListElement { text: "Ontario" }
                 ListElement { text: "Classic" }
                 ListElement { text: "Khan" }
@@ -164,22 +162,25 @@ Item {
             ListModel {
                 id: babyModel
                 ListElement { text: "Z30" }
-                ListElement { text: "Z10 OMAP" }
-                ListElement { text: "Z10 QCOM" }
-                ListElement { text: "Z3" }
+                ListElement { text: "Z10 (OMAP)" }
+                ListElement { text: "Z10 (QCOM) + P9982" }
+                ListElement { text: "Z3 (Jakarta)" }
                 ListElement { text: "Q30 (Passport)" }
-                ListElement { text: "Q10" }
-                ListElement { text: "Q5" }
+                ListElement { text: "Q5 + Q10" }
             }
-            onSelectedItemChanged: if (variantModel != null) {
-                                       variantModel.clear()
-                                       if (p.variantCount(selectedItem) > 1)
-                                           variantModel.append({ 'text': 'Any'});
-                                       for (var i = 0; i < p.variantCount(selectedItem); i++)
-                                           variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
+            function updateModel() {
+                if (variantModel != null) {
+                    variantModel.clear()
+                    if (p.variantCount(selectedItem) > 1)
+                        variantModel.append({ 'text': 'Any'});
+                    for (var i = 0; i < p.variantCount(selectedItem); i++)
+                        variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
 
-                                       variant.selectedItem = 0;
-                                   }
+                    variant.selectedItem = 0;
+                }
+            }
+            onSelectedItemChanged: updateModel();
+            Component.onCompleted: updateModel();
         }
 
         TextCoupleSelect {
@@ -195,7 +196,7 @@ Item {
                                    else if (device.text === "Z30" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
                                    else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
 
-            listModel: ListModel { id: variantModel; ListElement { text:  "STJ 100-1" } }
+            listModel: ListModel { id: variantModel; }
         }
         TextCoupleSelect {
             visible: p.advanced

@@ -413,34 +413,28 @@ static QStringList dev[] = {
     // 3 = Z3  (J Series)
     QStringList() << "STJ 100-1",
     QStringList() << "04002E07",
-    // 4 = Q30 (W Series)
-    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQW 100-3",
-    QStringList() << "87002C0A" << "85002C0A" << "84002C0A",
-    // 5 = Q10 (N Series)
-    QStringList() << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5",
-    QStringList() << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
-    // 6 = Q5  (R Series)
-    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3",
-    QStringList() << "84002A0A" << "85002A0A" << "86002A0A",
-    // 7 = B Series
+    // 4 = Passport / Q30 (W Series)
+    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQW 100-3" << "Variant D",
+    QStringList() << "87002C0A" << "85002C0A" << "84002C0A" << "86002C0A",
+    // 5 = Q5 (R Series) + Q10 (N Series)
+    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3" << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5",
+    QStringList() << "84002A0A" << "85002A0A" << "86002A0A" << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
+    // 6 = B Series
     QStringList() << "STB 100-1" << "STB 100-2" << "STB 100-3" << "STB 100-4" << "STB 100-5",
     QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
-    // 8 = Cafe Series
+    // 7 = Cafe Series
     QStringList() << "SQC 100-1" << "SQC 100-2",
     QStringList() << "87002A07" << "8C002A07",
-    // 9 = Dev Alpha
-    QStringList() << "A" << "B" << "C",
+    // 8 = Dev Alpha
+    QStringList() << "Alpha A" << "Alpha B" << "Alpha C",
     QStringList() << "4002307" << "4002607" << "8D00270A",
-    // 10 = Playbook
-    QStringList() << "Wifi" << "3G",
-    QStringList() << "6001A06" << "D001A06",
-    // 11 = Ontario Series
+    // 10 = Ontario Series
     QStringList() << "STO 100-1" << "STO 100-2" << "STO 100-3" << "STO 100-4",
     QStringList() << "AE00240A" << "AF00240A" << "B400240A" << "B600240A",
-    // 12 = Classic
+    // 11 = Classic
     QStringList() << "Classic Variant A" << "Classic Variant B" << "Classic Variant C" << " Classic Variant D",
     QStringList() << "9400270A" << "9500270A" << "9600270A" << "9700270A",
-    // 13 = Khan
+    // 12 = Khan
     QStringList() << "Khan Variant A" << "Khan Variant B",
     QStringList() << "8E00270A" << "8F00270A",
 };
