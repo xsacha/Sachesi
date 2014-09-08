@@ -2,6 +2,12 @@ function to_carrier(country, value) {
     var subtext = "";
     switch(country)
     {
+    case "001": // RIM
+        switch(value) {
+        case "001": subtext = "Blackberry Engineering"; break
+        }
+        break;
+
     case "202": //Greece
         switch(value) {
         case "001": subtext = "Cosmote"; break;

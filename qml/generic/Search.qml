@@ -114,8 +114,8 @@ Item {
         TextCouple {
             id: country
             type: "Country"
-            subtext: "Germany"
-            value: "262"
+            subtext: "Australia"
+            value: "505"
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
             onValueChanged: {
@@ -128,7 +128,7 @@ Item {
         TextCouple {
             id: carrier
             type: "Carrier"
-            value: "001"
+            value: "002"
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
             function updateVal() {
@@ -141,7 +141,7 @@ Item {
         TextCoupleSelect {
             id: device
             z: 11
-            selectedItem: 5
+            selectedItem: 4
             type: "Device"
             listModel: p.advanced ? advancedModel : babyModel
             ListModel {
@@ -150,7 +150,7 @@ Item {
                 ListElement { text: "Z10 OMAP" }
                 ListElement { text: "Z10 QCOM" }
                 ListElement { text: "Z3" }
-                ListElement { text: "Q30" }
+                ListElement { text: "Q30 (Passport)" }
                 ListElement { text: "Q10" }
                 ListElement { text: "Q5" }
                 ListElement { text: "Z5" }
@@ -167,7 +167,7 @@ Item {
                 ListElement { text: "Z10 OMAP" }
                 ListElement { text: "Z10 QCOM" }
                 ListElement { text: "Z3" }
-                ListElement { text: "Q30" }
+                ListElement { text: "Q30 (Passport)" }
                 ListElement { text: "Q10" }
                 ListElement { text: "Q5" }
             }
