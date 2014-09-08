@@ -52,6 +52,8 @@ ApplicationWindow {
         currentIndex: 1 + p.hasBootAccess
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
+        // Workaround for index moving on startup for Windows
+        onCountChanged: if (count == 4 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess
 
         Tab {
             title: "Extract";
@@ -69,8 +71,6 @@ ApplicationWindow {
             title: "Install";
             Installer { anchors.fill: parent }
         }
-        // HACK: Reset tab with timer otherwise it has no tab on Windows
-        Timer { running: true; onTriggered: titleRow.currentIndex = 1 + p.hasBootAccess }
         Component.onCompleted: {
             if (p.hasBootAccess)
                 titleRow.addTab("Boot", Qt.createComponent("Boot.qml") )
