@@ -395,7 +395,6 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
 {
     qint64 startPos = 0;
 
-    bool hasApps = (signedSize > 500*1024*1024);
     if (signedPos > 0)
         signedFile->seek(signedPos);
     if (signedFile->read(4) != QByteArray("mfcq", 4)) {
@@ -444,6 +443,8 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     }
     partitionSizes.append(signedPos + signedSize - partitionOffsets.last());
 
+    char qnx6Sig[] = {(char)0xEB, 0x10, (char)0x90, 0x0};
+
     // Detect if RCFS exists in this file
     if (!extractApps && (extractTypes & 1)) {
         for (int i = 0; i < partitionOffsets.count(); i++) {
@@ -479,9 +480,8 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     }
 
     // Now extract the user partition
-    if (hasApps && (extractTypes & 2)) {
+    if (extractTypes & 2) {
         int qnxcounter = 0;
-        char qnx6Sig[] = {(char)0xEB, 0x10, (char)0x90, 0x0};
         if (!extractImage) {
             maxSize += (signedFile->size() - partitionOffsets[0]) * 0.58; // Guesstimate. I think the real size is in the header
         }
@@ -511,4 +511,25 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
             }
         }
     }
+
+    // Everything else
+    if (extractTypes & 4) {
+        for (int i = 0; i < partitionOffsets.count(); i++) {
+            int unkcounter = 0;
+            signedFile->seek(partitionOffsets[i]);
+            QByteArray header = signedFile->read(4);
+            // Not RCFS or QNX6, so what is it?
+            if (header != QByteArray("rimh", 4) && header != QByteArray(qnx6Sig, 4) && partitionSizes[i] > 65535) {
+                maxSize += partitionSizes[i];
+                // Extract the file
+                QScopedPointer<QFile> unkFile(new QFile(QString(baseName + ".%1.%2.unk").arg(unkcounter++).arg(QString(header.toHex()))));
+                if (!unkFile->open(QIODevice::WriteOnly))
+                    return die();
+
+                for (qint64 s = partitionSizes[i]; s > 0; s -= updateProgress(unkFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
+                unkFile->close();
+            }
+        }
+    }
+
 }
