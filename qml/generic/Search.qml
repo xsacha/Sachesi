@@ -143,7 +143,7 @@ Item {
             z: 11
             selectedItem: 4
             type: "Device"
-            listModel: p.advanced ? advancedModel : babyModel
+
             ListModel {
                 id: advancedModel
                 ListElement { text: "Z30" }
@@ -168,7 +168,12 @@ Item {
                 ListElement { text: "Q30 (Passport)" }
                 ListElement { text: "Q5 + Q10" }
             }
-            function updateModel() {
+            function changeModel() {
+                var selected = selectedItem
+                listModel = p.advanced ? advancedModel : babyModel
+                selectedItem = Math.min(selected, listModel.count - 1);
+            }
+            function updateVariant() {
                 if (variantModel != null) {
                     variantModel.clear()
                     if (p.variantCount(selectedItem) > 1)
@@ -179,8 +184,10 @@ Item {
                     variant.selectedItem = 0;
                 }
             }
-            onSelectedItemChanged: updateModel();
-            Component.onCompleted: updateModel();
+            property bool advanced: p.advanced
+            onAdvancedChanged: changeModel()
+            onSelectedItemChanged: updateVariant();
+            Component.onCompleted: { changeModel(); updateVariant(); }
         }
 
         TextCoupleSelect {
