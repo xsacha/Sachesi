@@ -219,8 +219,8 @@ Item {
                 type: "Device"
                 selectedItem: 0
 
-                property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
-                property string familyName: familyType == 0 ? "Unknown" : listModel.get(familyType).text
+                //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
+                property string familyName: i.knownHWFamily == 0 ? "Unknown" : listModel.get(i.knownHWFamily).text
                 subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
                 onSubtextChanged: {
                     var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Above"
