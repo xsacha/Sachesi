@@ -50,7 +50,7 @@ public:
     MainNet(InstallNet* installer, QObject* parent = 0);
     ~MainNet();
     Q_INVOKABLE void updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server/*, int version*/);
-    Q_INVOKABLE void downloadLinks(int downloadDevice);
+    Q_INVOKABLE void downloadLinks(int downloadDevice = 0);
     Q_INVOKABLE void splitAutoloader(QUrl, int options);
     Q_INVOKABLE void combineAutoloader(QList<QUrl> selectedFiles);
     Q_INVOKABLE void extractImage(int type, int options);
