@@ -255,15 +255,10 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Debrick", true, true, ".desktop", osVersion);
     appendNewLink("Core",    true, true, "", osVersion);
 
-    appendNewHeader("QC8960 Verizon", "Blackberry Z10 STL 100-4");
-    appendNewLink("Debrick", true, false, "qc8960.verizon_sfi.desktop", osVersion);
-    appendNewLink("Core",    true, false, "qc8960.verizon_sfi", osVersion);
-
     potentialText.append("\n\n* Radios *\n");
     appendNewLink("Z3 (Jakarta)", false, false, "qc8930.wtr5", radioVersion);
     appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
-    appendNewLink("Z10 (STL 100-2, STL 100-3) and Porsche P9982", false, false, "qc8960", radioVersion);
-    appendNewLink("Z10 (STL 100-4)", false, false, "qc8960.omadm", radioVersion);
+    appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", false, false, "qc8960", radioVersion);
     appendNewLink("Z30", false, false, "qc8960.wtr", radioVersion);
     appendNewLink("Q5 and Q10", false, false, "qc8960.wtr5", radioVersion);
     appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);

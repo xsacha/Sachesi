@@ -84,10 +84,15 @@ Item {
         }
         Text {
             property string message: p.error
-            visible: message.length > 1
+            visible: message.length > 1 && !p.multiscan
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
-            text: (message.length < 5) ? "Server did not respond as expected [" + message + "]." : (message === "Success" ? "Success. No updates were available." : message)
+            onMessageChanged: if (message.length && message.length < 5)
+                                  text = "Server did not respond as expected [" + message + "]."
+                              else if (message === "Success")
+                                  text = "Success. No updates were available."
+                              else
+                                  text = message;
         }
     }
     ColumnLayout {
@@ -206,7 +211,6 @@ Item {
             listModel: ListModel { id: variantModel; }
         }
         TextCoupleSelect {
-            visible: p.advanced
             id: mode
             z: 9
             type: "Mode"
