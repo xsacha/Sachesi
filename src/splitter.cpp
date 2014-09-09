@@ -16,7 +16,11 @@
 // http://github.com/xsacha/Sachesi
 
 #include "splitter.h"
+#ifdef _LZO2_SHARED
+#include <lzo/lzo1x.h>
+#else
 #include "lzo.h"
+#endif
 #ifdef _WIN32
 #include "Windows.h"
 // We need to update the time of the extracted file based on the unix filesystem it comes from.
