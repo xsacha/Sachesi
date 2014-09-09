@@ -32,7 +32,7 @@ Item {
                     Label {
                         text: "?"
                         font.bold: true
-                        font.pointSize: 14
+                        font.pointSize: 12
                         MouseArea {
                             anchors.fill: parent
                             onClicked: Qt.openUrlExternally(helpLink);

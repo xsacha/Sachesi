@@ -550,8 +550,8 @@ void InstallNet::discoveryReply() {
                     }
                 } else if (xml.name() == "PlatformVersion") {
                     setKnownOS(xml.readElementText());
-                } else if (xml.name() == "Power") {
-                    setKnownBattery(xml.readElementText().toInt());
+                /*} else if (xml.name() == "Power") {
+                    setKnownBattery(xml.readElementText().toInt());*/
                 } else if (xml.name() == "ModelName") {
                     setKnownHW(xml.readElementText());
                 } else if (xml.name() == "MinSupportedProtocolVersion") {
