@@ -29,9 +29,19 @@
 
 // _()
 
-WRITE_QML(bool, wrongPassBlock, setWrongPassBlock)
+WRITE_QML(bool, loginBlock, setLoginBlock)
 WRITE_QML(int, possibleDevices, setPossibleDevices)
-WRITE_QML(int,  state,     setState)
+void InstallNet::setState(const int &state) {
+    if (!state) {
+        cookieJar->deleteLater();
+        cookieJar = nullptr;
+        manager->deleteLater();
+        manager = nullptr;
+    }
+    _state = state;
+    emit stateChanged();
+}
+
 int InstallNet::dgMaxPos() const {
     return _downgradeInfo.count();
 }
@@ -86,7 +96,6 @@ void InstallNet::setWrongPass(const bool &wrong)
     _wrongPass = wrong;
     if (wrong) {
         setState(0);
-        setWrongPassBlock(true);
         setCompleted(false);
     }
     emit wrongPassChanged();
@@ -95,8 +104,8 @@ void InstallNet::setWrongPass(const bool &wrong)
 void InstallNet::setCompleted(const bool &exists)
 {
     _completed = exists;
-    if (_wrongPassBlock && _completed)
-        setWrongPassBlock(false);
+    if (_loginBlock && _completed)
+        setLoginBlock(false);
     emit completedChanged();
 }
 
@@ -169,8 +178,8 @@ void InstallNet::setRestoring(const bool &restoring) {
 void InstallNet::setPassword(const QString &password) {
     _password = password;
     emit newPassword(password);
-    if (_wrongPass)
-        setWrongPass(false);
+    /*if (_wrongPass)
+        setWrongPass(false);*/
     QByteArray tmp = password.toLatin1();
     for (int i = 0; i < password.length(); i++) {
         tmp[i] = tmp[i] ^ ((0x40 + 5 * i - password.length()) % 127);

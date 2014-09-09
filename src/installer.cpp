@@ -24,7 +24,7 @@
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
     manager(nullptr), reply(nullptr), cookieJar(nullptr),
-    _knownHWFamily(0), _wrongPass(false), _wrongPassBlock(false),
+    _knownHWFamily(0), _wrongPass(false), _loginBlock(false),
     _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr)
 {
     resetVars();
@@ -36,7 +36,6 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
     connectTimer->start();
     connect(connectTimer, SIGNAL(timeout()), this, SLOT(login()));
     QSettings settings("Qtness","Sachesi");
-    setIp(settings.value("ip","169.254.0.1").toString());
     connect(&_back, SIGNAL(curModeChanged()), this, SIGNAL(backStatusChanged()));
     connect(&_back, SIGNAL(curSizeChanged()), this, SIGNAL(backCurProgressChanged()));
     connect(&_back, SIGNAL(numMethodsChanged()), this, SIGNAL(backMethodsChanged()));
@@ -462,8 +461,14 @@ void InstallNet::setActionProperty(QString name, QString value) {
 
 void InstallNet::login()
 {
-    if (_state || _wrongPassBlock)
+    if (_loginBlock || _wrongPass)
         return;
+
+    // How did we get here?
+    if (_state) {
+        checkLogin();
+        return;
+    }
 
     QStringList ips;
 
@@ -679,6 +684,8 @@ void InstallNet::determineDeviceFamily()
 
 void InstallNet::restoreReply()
 {
+    if (reply == nullptr)
+        return;
     QByteArray data = reply->readAll();
     //for (int s = 0; s < data.size(); s+=3000) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3000);
     if (data.size() == 0) {
@@ -718,9 +725,7 @@ void InstallNet::restoreReply()
                 iCount = element.toInt();
             else if (xml.name() == "ErrorDescription")
             {
-                setWrongPassBlock(true);
-                setCompleted(false);
-                setState(false);
+                setLoginBlock(true);
                 return;
             }
         }
@@ -752,10 +757,12 @@ void InstallNet::restoreReply()
                 {
                     if (xml.readElementText() == "Denied")
                     {
-                        if (!data.contains("Attempts>0</"))
+                        if (!data.contains("Attempts>0")) {
                             setWrongPass(true);
-                        else {
-                            setWrongPassBlock(true);
+                            setCompleted(false);
+                            setState(false);
+                        } else {
+                            setLoginBlock(true);
                             setCompleted(false);
                             setState(false);
                         }
@@ -774,7 +781,7 @@ void InstallNet::restoreReply()
             restore();
         else if (_hadPassword)
             scanProps();
-        // This can take up to 5 seconds to respond and all communication on device is Blocking!
+        // This can take up to 15 seconds to respond and all communication on device is Blocking!
         // backupQuery();
         // For example: if Link is talking to the device at the same time, comms will fail and vice-versa
     }
@@ -1142,7 +1149,7 @@ void InstallNet::restoreReply()
         _back.clearModes();
         while(!xml.atEnd() && !xml.hasError()) {
             QXmlStreamReader::TokenType token = xml.readNext();
-            if(token == QXmlStreamReader::StartElement && xml.attributes().count() > 3 &&  xml.attributes().at(0).name() == "id") {
+            if(token == QXmlStreamReader::StartElement && xml.attributes().count() > 3 && xml.attributes().at(0).name() == "id") {
                 _back.addMode(xml.attributes());
             }
         }
@@ -1287,7 +1294,7 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
     // If it's a discovery pong, the IP will be 169.x.x.x (at least 9 chars)
     QString this_ip = (ip_addr.length()) >= 9 ? ip_addr : _ip;
 
-    if (_state && ip_addr == _ip) {
+    if (_state && this_ip == _ip) {
         resetVars();
     }
     QString errString = QString("Communication Error: %1 (%2) from %3")

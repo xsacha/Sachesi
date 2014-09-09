@@ -78,7 +78,7 @@ class InstallNet : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString password         MEMBER _password        WRITE setPassword         NOTIFY passwordChanged)
     Q_PROPERTY(bool wrongPass           MEMBER _wrongPass       WRITE setWrongPass        NOTIFY wrongPassChanged)
-    Q_PROPERTY(bool wrongPassBlock      MEMBER _wrongPassBlock  WRITE setWrongPassBlock   NOTIFY wrongPassBlockChanged)
+    Q_PROPERTY(bool loginBlock          MEMBER _loginBlock      WRITE setLoginBlock       NOTIFY loginBlockChanged)
     Q_PROPERTY(int possibleDevices      MEMBER _possibleDevices WRITE setPossibleDevices  NOTIFY possibleDevicesChanged)
     Q_PROPERTY(QString ip               MEMBER _ip              WRITE setIp               NOTIFY ipChanged)
     Q_PROPERTY(QString newLine          MEMBER _newLine         WRITE setNewLine          NOTIFY newLineChanged)
@@ -157,7 +157,7 @@ public:
     void setIp(const QString &ip);
     void setPassword(const QString &password);
     void setWrongPass(const bool &wrong);
-    void setWrongPassBlock(const bool &wrong);
+    void setLoginBlock(const bool &wrong);
     void setPossibleDevices(const int &devices);
     void setNewLine(const QString &newLine);
     void setState(const int &state);
@@ -179,7 +179,7 @@ signals:
     void passwordChanged();
     void newPassword(QString newPass);
     void wrongPassChanged();
-    void wrongPassBlockChanged();
+    void loginBlockChanged();
     void possibleDevicesChanged();
     void ipChanged();
     void newLineChanged();
@@ -271,7 +271,7 @@ private:
     QString _ip;
     QString _password;
     bool _wrongPass;
-    bool _wrongPassBlock;
+    bool _loginBlock;
     int _possibleDevices;
     QString _newLine;
     QFile _firmware;

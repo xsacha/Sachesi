@@ -33,9 +33,13 @@ Item {
                 property bool showing: false
                 property string pass_init: i.password
                 text: pass_init;
+                Timer { id: try_again; interval: 100; onTriggered: i.wrongPass = false }
                 onTextChanged: {
-                    if (i.password !== text)
+                    if (i.password !== text) {
                         i.password = text
+                        if (i.wrongPass)
+                            try_again.restart()
+                    }
                 }
                 echoMode: showing ? TextInput.Normal : TextInput.Password
             }
@@ -47,20 +51,20 @@ Item {
             }
         }
         ColumnLayout {
-            visible: i.wrongPassBlock
+            visible: i.loginBlock
             Label {
                 text: "There was an issue connecting."
             }
             Button {
                 text: "Try Again"
-                onClicked: i.wrongPassBlock = false
+                onClicked: i.loginBlock = false
             }
         }
         RowLayout {
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
             ColumnLayout {
                 Label {
-                    visible: !i.wrongPassBlock && !detected.visible
+                    visible: !i.loginBlock && !detected.visible
                     text: "Searching for USB device"
                 }
                 Label {
@@ -83,7 +87,7 @@ Item {
                 }
             }
             BusyIndicator {
-                visible: !i.wrongPassBlock
+                visible: !i.loginBlock
                 height: parent.implicitHeight + 7
                 width: height
             }
