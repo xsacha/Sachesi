@@ -134,7 +134,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     if (barInfo.type == OSType) {
         QString installableOS = appName.split("os.").last().remove(".desktop");
         if (installableOS != _knownConnectedOSType) {
-            int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Continue", "Skip", "Exit", 2);
+            int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Ignore Warning [Stupid]", "Skip OS", "Cancel Install", 2);
             if (choice == 1) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
@@ -147,7 +147,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     } else if (barInfo.type == RadioType) {
         QString installableRadio = appName.split("radio.").last().remove(".omadm");
         if (installableRadio != _knownConnectedRadioType) {
-            int choice = QMessageBox::critical(nullptr, "WARNING", "The Radio file you have selected to install is for a different device!\nRadio Type: " + installableRadio + "\nYour Device: " + _knownConnectedRadioType, "Continue", "Skip", "Exit", 2);
+            int choice = QMessageBox::critical(nullptr, "WARNING", "The Radio file you have selected to install is for a different device!\nRadio Type: " + installableRadio + "\nYour Device: " + _knownConnectedRadioType, "Ignore Warning [Stupid]", "Skip Radio", "Cancel Install", 2);
             if (choice == 1) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
