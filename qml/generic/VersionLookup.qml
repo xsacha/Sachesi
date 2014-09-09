@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
 Window {
-    title: window.title + " - Version Lookup"
+    title: "Sachesi " + version + " - Version Lookup"
     visible: false
     onVisibleChanged: if (visible) {
                           x = window.x + (window.width - width) / 2
@@ -23,21 +23,21 @@ Window {
                 SpinBox {
                     id: major
                     prefix: "10."
-                    width: implicitWidth + 25
+                    width: qt_new ? implicitWidth : implicitWidth + 25
                     value: 3
                     maximumValue: 255
                     onEditingFinished: relookup.clicked()
                 }
                 SpinBox {
                     id: minor
-                    width: implicitWidth + 25
+                    width: qt_new ? implicitWidth : implicitWidth + 25
                     value: 0
                     maximumValue: 255
                     onEditingFinished: relookup.clicked()
                 }
                 SpinBox {
                     id: build
-                    width: implicitWidth + 25
+                    width: qt_new ? implicitWidth : implicitWidth + 25
                     value: 1154
                     maximumValue: 9999
                     stepSize: 3

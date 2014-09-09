@@ -47,6 +47,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
+    app.setApplicationVersion("1.7.0");
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     QQmlApplicationEngine engine;
@@ -54,6 +55,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     InstallNet i;
     context->setContextProperty("i", &i);
+    // Send the version across. Preferably via the .pro
+    context->setContextProperty("version", QVariant::fromValue(QApplication::applicationVersion()));
+    // Check if we have at least Qt 5.3 available. If not, do some workarounds for bugs.
+    context->setContextProperty("qt_new", QVariant::fromValue(QT_VERSION > QT_VERSION_CHECK(5, 3, 0)));
     MainNet p(&i);
 
     if (!checkCurPath())
