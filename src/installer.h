@@ -40,6 +40,17 @@
 #include "apps.h"
 #include "backupinfo.h"
 
+// TODO: Maybe name families by radio
+enum DeviceFamily {
+    UnknownFamily = 0,
+    Z30Family,
+    OMAPFamily,
+    Z10Family,
+    Z3Family,
+    Q30Family,
+    Q10Family,
+};
+
 enum BarType {
     NotInstallableType = 0,
     AppType,
@@ -88,8 +99,9 @@ class InstallNet : public QObject {
     Q_PROPERTY(QString knownRadio       MEMBER _knownRadio      WRITE setKnownRadio       NOTIFY knownRadioChanged)
     Q_PROPERTY(int knownBattery         MEMBER _knownBattery    WRITE setKnownBattery     NOTIFY knownBatteryChanged)
     Q_PROPERTY(QString knownName        MEMBER _knownName       WRITE setKnownName        NOTIFY knownNameChanged)
-    Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
     Q_PROPERTY(QString knownPIN         MEMBER _knownPIN        WRITE setKnownPIN         NOTIFY knownPINChanged)
+    Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
+    Q_PROPERTY(int     knownHWFamily    MEMBER _knownHWFamily                             NOTIFY appListChanged)
     Q_PROPERTY(QQmlListProperty<Apps> appList READ appList                                NOTIFY appListChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 
@@ -140,6 +152,7 @@ public:
     int backMethods() const;
     QStringList backNames() const;
     QList<double> backSizes() const;
+    QPair<QString,QString> getConnected(int downloadDevice);
 
     void setIp(const QString &ip);
     void setPassword(const QString &password);
@@ -221,6 +234,7 @@ private:
     void install();
     void restore();
     void backup();
+    void determineDeviceFamily();
     QTcpSocket* sock;
     unsigned char* serverChallenge;
     RSA* privkey;
@@ -243,6 +257,9 @@ private:
     int _knownBattery;
     QString _knownName;
     QString _knownHW;
+    int _knownHWFamily;
+    QString _knownConnectedOSType;
+    QString _knownConnectedRadioType;
     QString _knownPIN;
     int _knownProtocol;
 

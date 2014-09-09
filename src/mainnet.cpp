@@ -21,22 +21,25 @@
 #include <QStringList>
 #include <QMessageBox>
 
-MainNet::MainNet( QObject* parent) : QObject(parent)
+MainNet::MainNet(InstallNet *installer, QObject* parent)
+    : QObject(parent)
+    , _i(installer)
+    , replydl(nullptr)
+    , _softwareRelease("")
+    , _versionRelease("")
+    , _versionOS("")
+    , _versionRadio("")
+    , _variant("")
+    , _downloading(false)
+    , _hasPotentialLinks(false)
+    , _scanning(0)
+    , _currentId(0)
+    , _maxId(0)
+    , _splitting(0)
+    , _splitProgress(0)
+    , _dlProgress(-1)
 {
     manager = new QNetworkAccessManager();
-    _softwareRelease = "";
-    _versionRelease = "";
-    _versionOS = "";
-    _versionRadio = "";
-    _variant = "";
-    _scanning = 0;
-    _currentId = 0; _maxId = 0;
-    _splitting = 0;
-    _splitProgress = 0;
-    _downloading = false;
-    _dlProgress = -1;
-    _hasPotentialLinks = false;
-    replydl = nullptr;
 }
 
 MainNet::~MainNet()
@@ -201,9 +204,9 @@ void MainNet::abortSplit()
     cancelSplit();
 }
 
-void MainNet::grabLinks()
+void MainNet::grabLinks(int downloadDevice)
 {
-    writeDisplayFile("updates.txt", _links.toLocal8Bit());
+    writeDisplayFile("updates.txt", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
 }
 
 void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
@@ -250,18 +253,87 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     appendNewLink("Core",    true, true, "", osVersion);
 
     potentialText.append("\n\n* Radios *\n");
-    appendNewLink("Z3 (Jakarta)", false, false, "qc8930.wtr5", radioVersion);
+    // Touch
+    appendNewLink("Z30", false, false, "qc8960.wtr5", radioVersion);
     appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
     appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", false, false, "qc8960", radioVersion);
-    appendNewLink("Z30", false, false, "qc8960.wtr", radioVersion);
-    appendNewLink("Q5 and Q10", false, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Z3 (Jakarta)", false, false, "qc8930.wtr5", radioVersion);
+    // QWERTY
     appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);
+    appendNewLink("Q5 and Q10", false, false, "qc8960.wtr", radioVersion);
 
 
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
 }
 
-void MainNet::downloadLinks()
+QString MainNet::convertLinks(int downloadDevice, QString prepend)
+{
+    QPair<QString,QString> results = _i->getConnected(downloadDevice);
+    if (results.first == "" || results.second == "")
+        return _links;
+
+    QString osSignature = "com.qnx.coreos.qcfm.os.";
+    QString radioSignature = "com.qnx.qcfm.radio.";
+    bool failed = false;
+    QString updated = prepend;
+    for(QString item: _links.split("\n")) {
+        if (item.contains(osSignature)) {
+            QStringList components = item.split(osSignature);
+            // Replace first type
+            QString newPath = components[0] + osSignature;
+            if (results.first.startsWith("winchester")) // Old style
+                newPath.append("factory");
+            else
+                newPath.append(results.first);
+
+            // Fetch version
+            components = components[1].split("/");
+            if (components.count() < 2) {
+                failed = true;
+                break;
+            }
+            if (components[0].endsWith(".desktop"))
+                newPath.append(".desktop");
+            newPath.append(QString("/") + components[1] + "/" + results.first);
+
+            // Replace last type
+            components = components[2].split("-");
+            if (components[0].endsWith(".desktop"))
+                newPath.append(".desktop");
+            for (int i = 1; i < components.count(); i++)
+                newPath.append(QString("-") + components[i]);
+
+            item = newPath;
+        } else if (item.contains(radioSignature)) {
+            QStringList components = item.split(radioSignature);
+            // Replace first type
+            QString newPath = components[0] + radioSignature + results.second + "/";
+
+            // Fetch version
+            components = components[1].split("/");
+            if (components.count() < 2) {
+                failed = true;
+                break;
+            }
+            newPath.append(components[1] + "/" + results.second);
+
+            // Replace last type
+            components = components[2].split("-");
+            for (int i = 1; i < components.count(); i++)
+                newPath.append(QString("-") + components[i]);
+
+            item = newPath;
+        }
+        updated.append(item + "\n");
+    }
+    if (failed) {
+        QMessageBox::information(nullptr, "Error", "Was unable to convert the links to your selected device! Falling back to original search results.");
+        return _links;
+    }
+    return updated;
+}
+
+void MainNet::downloadLinks(int downloadDevice)
 {
     if (_dlProgress < 0 && !_downloading)
     {
@@ -284,7 +356,7 @@ void MainNet::downloadLinks()
         _dlBytes = 0;
         QDir firmware(_versionRelease);
         firmware.mkpath(".");
-        QStringList fileList(_links.split( QChar('\n') ));
+        QStringList fileList(convertLinks(downloadDevice, "").split("\n"));
         _currentFile.setFileName(_versionRelease + "/" + fileList.at(_currentId).split("/").last());
         emit currentFileChanged();
         while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < fileList.count())

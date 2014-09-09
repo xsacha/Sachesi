@@ -24,8 +24,8 @@
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
     manager(nullptr), reply(nullptr), cookieJar(nullptr),
-    _wrongPass(false), _wrongPassBlock(false), _hadPassword(true),
-    currentBackupZip(nullptr), _zipFile(nullptr)
+    _knownHWFamily(0), _wrongPass(false), _wrongPassBlock(false),
+    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr)
 {
     resetVars();
 #ifdef _MSC_VER
@@ -589,6 +589,57 @@ void InstallNet::backupFileFinish()
     postQuery("backup.cgi", "x-www-form-urlencoded", postData);
 }
 
+QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
+    QPair<QString,QString> ret = {"", ""};
+    if (downloadDevice == 0) {
+        if (_knownHW != "" && _knownHW != "Unknown") {
+            ret = qMakePair(_knownConnectedOSType, _knownConnectedRadioType);
+        }
+    } else {
+        switch(downloadDevice) {
+        case Z30Family:
+            ret = {"qc8960.factory_sfi", "qc8960.wtr5"};
+            break;
+        case OMAPFamily:
+            ret = {"winchester.factory_sfi", "m5730"};
+            break;
+        case Z10Family:
+            ret = {"qc8960.factory_sfi", "qc8960"};
+            break;
+        case Z3Family:
+            ret = {"qc8960.factory_sfi", "qc8930.wtr5"};
+            break;
+        case Q30Family:
+            ret = {"qc8974.factory_sfi", "qc8974.wtr2"};
+            break;
+        case Q10Family:
+            ret = {"qc8960.factory_sfi", "qc8960.wtr"};
+            break;
+        }
+    }
+    return ret;
+}
+
+void InstallNet::determineDeviceFamily()
+{
+    QString radio = _knownConnectedRadioType.remove(".omadm");
+    if (radio == "qc8960.wtr5") {
+        _knownHWFamily = Z30Family;
+    } else if (radio == "m5730") {
+        _knownHWFamily = OMAPFamily;
+    } else if (radio == "qc8960") {
+        _knownHWFamily = Z10Family;
+    } else if (radio == "qc8930.wtr5") {
+        _knownHWFamily = Z3Family;
+    } else if (radio == "qc8960.wtr") {
+        _knownHWFamily = Q10Family;
+    } else if (radio == "qc8974.wtr2") {
+        _knownHWFamily = Q30Family;
+    } else {
+        _knownHWFamily = UnknownFamily;
+    }
+}
+
 void InstallNet::restoreReply()
 {
     QByteArray data = reply->readAll();
@@ -698,6 +749,7 @@ void InstallNet::restoreReply()
             if (xml.isStartElement())
             {
                 QString name = xml.name().toString();
+
                 if (name == "ErrorDescription")
                 {
                     QMessageBox::information(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
@@ -741,6 +793,10 @@ void InstallNet::restoreReply()
                         _appList.append(newApp);
                     else
                         _appRemList.append(newApp);
+                    if (newApp->type() == "os")
+                        _knownConnectedOSType = newApp->name().split("os.").last();
+                    else if (newApp->type() == "radio")
+                        _knownConnectedRadioType = newApp->name().split("radio.").last();
                 }
                 else if (name == "PlatformVersion")
                     setKnownOS(xml.readElementText());
@@ -775,6 +831,7 @@ void InstallNet::restoreReply()
             appInfoList.append("  " + apps->friendlyName() + "<br>");
         }
         setNewLine(appInfoList);*/
+        determineDeviceFamily();
         emit appListChanged();
     }
     else if (xml.name() == "RTASChallenge") {

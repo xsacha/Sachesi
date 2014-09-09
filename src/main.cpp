@@ -51,12 +51,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
-    MainNet p;
 
-#ifndef BLACKBERRY
     InstallNet i;
     context->setContextProperty("i", &i);
-#endif
+    MainNet p(&i);
 
     if (!checkCurPath())
         return 0;

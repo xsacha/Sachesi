@@ -20,6 +20,7 @@
 #include <QtNetwork>
 #include <QObject>
 #include "splitter.h"
+#include "installer.h"
 
 class MainNet : public QObject {
     Q_OBJECT
@@ -46,14 +47,14 @@ class MainNet : public QObject {
     Q_PROPERTY(QString currentFile READ currentFile NOTIFY currentFileChanged)
 
 public:
-    MainNet(QObject* parent = 0);
+    MainNet(InstallNet* installer, QObject* parent = 0);
     ~MainNet();
     Q_INVOKABLE void updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server/*, int version*/);
-    Q_INVOKABLE void downloadLinks();
+    Q_INVOKABLE void downloadLinks(int downloadDevice);
     Q_INVOKABLE void splitAutoloader(QUrl, int options);
     Q_INVOKABLE void combineAutoloader(QList<QUrl> selectedFiles);
     Q_INVOKABLE void extractImage(int type, int options);
-    Q_INVOKABLE void grabLinks();
+    Q_INVOKABLE void grabLinks(int downloadDevice);
     Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion);
     Q_INVOKABLE void abortDL(QNetworkReply::NetworkError error = (QNetworkReply::NetworkError)0);
     Q_INVOKABLE void abortSplit();
@@ -111,6 +112,8 @@ private slots:
 
 private:
     // Utils:
+    InstallNet* _i;
+    QString convertLinks(int downloadDevice, QString prepend);
     QString NPCFromLocale(int country, int carrier);
 
     QThread* splitThread;

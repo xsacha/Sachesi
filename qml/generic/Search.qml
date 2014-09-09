@@ -101,12 +101,12 @@ Item {
         Button {
             Layout.alignment: Qt.AlignHCenter
             text: isMobile ? "Copy Links" : "Grab Links"
-            onClicked: p.grabLinks()
+            onClicked: p.grabLinks(downloadDevice.selectedItem)
         }
         Button {
             Layout.alignment: Qt.AlignHCenter
             text: "Download All"
-            onClicked: {p.dlProgress = -1; p.downloadLinks() }
+            onClicked: {p.dlProgress = -1; p.downloadLinks(downloadDevice.selectedItem) }
         }
     }
     ColumnLayout {
@@ -143,76 +143,106 @@ Item {
             onValueChanged: updateVal();
             onClicked: searchButton.clicked();
         }
-        TextCoupleSelect {
-            id: device
-            z: 11
-            selectedItem: 4
-            type: "Device"
+        GroupBox {
+            title: "Search Device"
+            ColumnLayout {
+                TextCoupleSelect {
+                    id: device
+                    selectedItem: 4
+                    type: "Device"
 
-            ListModel {
-                id: advancedModel
-                ListElement { text: "Z30" }
-                ListElement { text: "Z10 (OMAP)" }
-                ListElement { text: "Z10 (QCOM) + P9982" }
-                ListElement { text: "Z3 (Jakarta)" }
-                ListElement { text: "Q30 (Passport)" }
-                ListElement { text: "Q5 + Q10" }
-                ListElement { text: "Z5" }
-                ListElement { text: "Q3" }
-                ListElement { text: "Developer" }
-                ListElement { text: "Ontario" }
-                ListElement { text: "Classic" }
-                ListElement { text: "Khan" }
-            }
-            ListModel {
-                id: babyModel
-                ListElement { text: "Z30" }
-                ListElement { text: "Z10 (OMAP)" }
-                ListElement { text: "Z10 (QCOM) + P9982" }
-                ListElement { text: "Z3 (Jakarta)" }
-                ListElement { text: "Q30 (Passport)" }
-                ListElement { text: "Q5 + Q10" }
-            }
-            function changeModel() {
-                var selected = selectedItem
-                listModel = settings.advanced ? advancedModel : babyModel
-                selectedItem = Math.min(selected, listModel.count - 1);
-            }
-            function updateVariant() {
-                if (variantModel != null) {
-                    variantModel.clear()
-                    if (p.variantCount(selectedItem) > 1)
-                        variantModel.append({ 'text': 'Any'});
-                    for (var i = 0; i < p.variantCount(selectedItem); i++)
-                        variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
+                    ListModel {
+                        id: advancedModel
+                        ListElement { text: "Z30" }
+                        ListElement { text: "Z10 (OMAP)" }
+                        ListElement { text: "Z10 (QCOM) + P9982" }
+                        ListElement { text: "Z3" }
+                        ListElement { text: "Passport" }
+                        ListElement { text: "Q5 + Q10" }
+                        ListElement { text: "Z5" }
+                        ListElement { text: "Q3" }
+                        ListElement { text: "Developer" }
+                        ListElement { text: "Ontario" }
+                        ListElement { text: "Classic" }
+                        ListElement { text: "Khan" }
+                    }
+                    ListModel {
+                        id: babyModel
+                        ListElement { text: "Z30" }
+                        ListElement { text: "Z10 (OMAP)" }
+                        ListElement { text: "Z10 (QCOM) + P9982" }
+                        ListElement { text: "Z3" }
+                        ListElement { text: "Passport" }
+                        ListElement { text: "Q5 + Q10" }
+                    }
+                    function changeModel() {
+                        var selected = selectedItem
+                        listModel = settings.advanced ? advancedModel : babyModel
+                        selectedItem = Math.min(selected, listModel.count - 1);
+                    }
+                    function updateVariant() {
+                        if (variantModel != null) {
+                            variantModel.clear()
+                            if (p.variantCount(selectedItem) > 1)
+                                variantModel.append({ 'text': 'Any'});
+                            for (var i = 0; i < p.variantCount(selectedItem); i++)
+                                variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
 
-                    variant.selectedItem = 0;
+                            variant.selectedItem = 0;
+                        }
+                    }
+                    property bool advanced: settings.advanced
+                    onAdvancedChanged: changeModel()
+                    onSelectedItemChanged: updateVariant();
+                    Component.onCompleted: { changeModel(); updateVariant(); }
+                }
+
+                TextCoupleSelect {
+                    visible: settings.advanced
+                    id: variant
+                    type: "Variant"
+                    selectedItem: 0
+                    onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
+                                           else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
+                                           else if (device.text === "Q10" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
+                                           else if (device.text === "Z30" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
+                                           else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
+
+                    listModel: ListModel { id: variantModel; }
                 }
             }
-            property bool advanced: settings.advanced
-            onAdvancedChanged: changeModel()
-            onSelectedItemChanged: updateVariant();
-            Component.onCompleted: { changeModel(); updateVariant(); }
+        }
+        GroupBox {
+            title: "Download Device"
+            TextCoupleSelect {
+                id: downloadDevice
+                type: "Device"
+                selectedItem: 0
+
+                property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
+                property string familyName: familyType == 0 ? "Unknown" : listModel.get(familyType).text
+                subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
+                onSubtextChanged: {
+                    var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Above"
+                    if (listModel.get(0).text !== newText) {
+                        listModel.remove(0, 1)
+                        listModel.insert(0, {"text" : newText })
+                    }
+                }
+                listModel: ListModel {
+                ListElement { text: "As above" }
+                ListElement { text: "Z30" }
+                ListElement { text: "Z10 (OMAP)" }
+                ListElement { text: "Z10 (QCOM) + P9982" }
+                ListElement { text: "Z3" }
+                ListElement { text: "Passport" }
+                ListElement { text: "Q5 + Q10" }
+                }
+            }
         }
 
-        TextCoupleSelect {
-            visible: settings.advanced
-            id: variant
-            z: 10
-            type: "Variant"
-            selectedItem: 0
-            subtext: i.knownHW != "" ? "Connected: " + i.knownHW : ""
-            onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
-                                   else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
-                                   else if (device.text === "Q10" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
-                                   else if (device.text === "Z30" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
-                                   else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
-
-            listModel: ListModel { id: variantModel; }
-        }
         TextCoupleSelect {
             id: mode
-            z: 9
             type: "Mode"
             listModel: [ "Upgrade", "Debrick" ]
         }
@@ -220,14 +250,12 @@ Item {
         TextCoupleSelect {
             visible: settings.advanced
             id: server
-            z: 8
             type: "Server"
             listModel: [ "Production", "Beta" ]
         }
 
         /*TextCoupleSelect {
             id: version
-            z: 7
             type: "API"
             listModel: [ "2.1.0", "2.0.0", "1.0.0" ]
         }*/
