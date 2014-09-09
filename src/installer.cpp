@@ -129,6 +129,37 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
             break;
         }
     }
+
+    // Check if we are about to make a huge mistake!
+    if (barInfo.type == OSType) {
+        QString installableOS = appName.split("os.").last().remove(".desktop");
+        if (installableOS != _knownConnectedOSType) {
+            int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Continue", "Skip", "Exit", 2);
+            if (choice == 1) {
+                barInfo.type = NotInstallableType;
+                return barInfo;
+            }
+            if (choice == 2) {
+                barInfo.name = "EXIT";
+                return barInfo;
+            }
+        }
+    } else if (barInfo.type == RadioType) {
+        QString installableRadio = appName.split("radio.").last().remove(".omadm");
+        if (installableRadio != _knownConnectedRadioType) {
+            int choice = QMessageBox::critical(nullptr, "WARNING", "The Radio file you have selected to install is for a different device!\nRadio Type: " + installableRadio + "\nYour Device: " + _knownConnectedRadioType, "Continue", "Skip", "Exit", 2);
+            if (choice == 1) {
+                barInfo.type = NotInstallableType;
+                return barInfo;
+            }
+            if (choice == 2) {
+                barInfo.name = "EXIT";
+                return barInfo;
+            }
+        }
+    }
+
+    // Check if we are upgrading firmware or just installing apps.
     if (type == "system") {
         // Only if installing
         setNewLine("<b>Installing " + system + ": " + barInfo.version +"</b>");
@@ -156,11 +187,17 @@ void InstallNet::install(QList<QUrl> files)
             for(QString barFile : barFiles)
             {
                 BarInfo info = checkInstallableInfo(name + "/" + barFile);
+                if (info.name == "EXIT")
+                    return setNewLine("Install aborted.");
+
                 if (info.type != NotInstallableType)
                     _installInfo.append(info);
             }
         } else {
             BarInfo info = checkInstallableInfo(name);
+            if (info.name == "EXIT")
+                return setNewLine("Install aborted.");
+
             if (info.type != NotInstallableType)
                 _installInfo.append(info);
         }
@@ -622,7 +659,7 @@ QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
 
 void InstallNet::determineDeviceFamily()
 {
-    QString radio = _knownConnectedRadioType.remove(".omadm");
+    QString radio = _knownConnectedRadioType;
     if (radio == "qc8960.wtr5") {
         _knownHWFamily = Z30Family;
     } else if (radio == "m5730") {
@@ -794,9 +831,9 @@ void InstallNet::restoreReply()
                     else
                         _appRemList.append(newApp);
                     if (newApp->type() == "os")
-                        _knownConnectedOSType = newApp->name().split("os.").last();
+                        _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop");
                     else if (newApp->type() == "radio")
-                        _knownConnectedRadioType = newApp->name().split("radio.").last();
+                        _knownConnectedRadioType = newApp->name().split("radio.").last().remove(".omadm");
                 }
                 else if (name == "PlatformVersion")
                     setKnownOS(xml.readElementText());
