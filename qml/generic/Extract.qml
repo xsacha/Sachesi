@@ -96,7 +96,7 @@ Item {
                     checked: true
                 }
                 CheckBox {
-                    visible: p.advanced
+                    visible: settings.advanced
                     id: pinSelect
                     text: "PINList"
                 }
@@ -149,7 +149,7 @@ Item {
             }
             // Dump Contents
             ColumnLayout {
-                visible: p.advanced
+                visible: settings.advanced
                 RowLayout {
                     property int partValue: corePart.checked * 1 + userPart.checked * 2
                     Button {
@@ -175,7 +175,7 @@ Item {
             }
             // Extract Image
             ColumnLayout {
-                visible: p.advanced
+                visible: settings.advanced
                 RowLayout {
                     property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + unkImage.checked * 4
                     Button {

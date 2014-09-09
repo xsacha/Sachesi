@@ -33,7 +33,6 @@ class MainNet : public QObject {
     Q_PROPERTY(QString applications MEMBER _applications NOTIFY applicationsChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY versionChanged)
-    Q_PROPERTY(bool    advanced MEMBER _advanced WRITE setAdvanced NOTIFY advancedChanged)
     Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool    hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
@@ -73,7 +72,6 @@ public:
     void    setMultiscan(const bool &multiscan);
     void    setScanning(const int &scanning);
     void    setDLProgress(const int &progress);
-    void    setAdvanced(const bool &advanced);
     void    setDownloading(const bool &downloading);
     QString currentFile() const;
 public slots:
@@ -89,7 +87,6 @@ signals:
     void updateUrlChanged();
     void applicationsChanged();
     void errorChanged();
-    void advancedChanged();
     void multiscanChanged();
     void scanningChanged();
     void downloadingChanged();
@@ -128,7 +125,7 @@ private:
     QString _links;
     QString _error;
     QString _multiscanVersion;
-    bool _advanced, _downloading, _multiscan;
+    bool _downloading, _multiscan;
     bool _hasPotentialLinks;
     int _scanning;
     QFile _currentFile;

@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
+import QtQuick.Layouts 1.1
 import AppLibrary 1.0
 import "UI" 1.0
 
@@ -43,10 +44,14 @@ Item {
             }
         }
     }
-    Column {
-        id: toolsColumn
-        anchors {top: parent.top; topMargin: 20; left: parent.left; leftMargin: 20 }
-        spacing: 10
+    ColumnLayout {
+        anchors {fill: parent; margins: 15 }
+        Label {
+            Layout.fillWidth: true
+            text: "To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b> to this page. Otherwise, select the options below:"
+            wrapMode: Text.Wrap
+            font.pointSize: 12
+        }
         Row {
             spacing: 15
             FileDialog {
@@ -92,43 +97,40 @@ Item {
                 }
             }
         }
-        Text {
-            id: helpText
-            text: "To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b>."
-            font.pointSize: 10
-        }
-        Row {
-            visible: p.advanced
-            spacing: 15
-            Button {
-                id: wipe
-                text: "Wipe"
-                onClicked: i.wipe();
-            }
-            Button {
-                id: factorywipe
-                text: "Factory"
-                onClicked: i.factorywipe();
-            }
-            Button {
-                id: reboot
-                text: "Reboot"
-                onClicked: i.reboot();
+        GroupBox {
+            title: "Advanced Tools"
+            visible: settings.advanced
+            RowLayout {
+                Button {
+                    id: wipe
+                    text: "Wipe"
+                    onClicked: i.wipe();
+                }
+                Button {
+                    id: factorywipe
+                    text: "Factory Reset"
+                    onClicked: i.factorywipe();
+                }
+                Button {
+                    id: reboot
+                    text: "Reboot"
+                    onClicked: i.reboot();
+                }
             }
         }
-    }
-
-    TabView {
-        id: tabs
-        anchors { top: toolsColumn.bottom; topMargin: 15; left: toolsColumn.left }
-        height: parent.height - (p.advanced ? 135 : 100); width: parent.width - 30; z: 2;
-        Button {
-            anchors { top: parent.top; topMargin:-height; right: parent.right }
-            id: list_files
-            text: "Refresh"
-            onClicked: i.scanProps();
+        TabView {
+            id: tabs
+            Layout.alignment: Qt.AlignBottom
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Button {
+                anchors { top: parent.top; topMargin:-height; right: parent.right }
+                id: list_files
+                text: "Refresh"
+                onClicked: i.scanProps();
+            }
+            Component.onCompleted: { addTab("Apps", app_tab); addTab("Log", log_tab); }
         }
-        Component.onCompleted: { addTab("Apps", app_tab); addTab("Log", log_tab); }
     }
 
     // Log

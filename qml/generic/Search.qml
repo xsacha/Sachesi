@@ -175,7 +175,7 @@ Item {
             }
             function changeModel() {
                 var selected = selectedItem
-                listModel = p.advanced ? advancedModel : babyModel
+                listModel = settings.advanced ? advancedModel : babyModel
                 selectedItem = Math.min(selected, listModel.count - 1);
             }
             function updateVariant() {
@@ -189,14 +189,14 @@ Item {
                     variant.selectedItem = 0;
                 }
             }
-            property bool advanced: p.advanced
+            property bool advanced: settings.advanced
             onAdvancedChanged: changeModel()
             onSelectedItemChanged: updateVariant();
             Component.onCompleted: { changeModel(); updateVariant(); }
         }
 
         TextCoupleSelect {
-            visible: p.advanced
+            visible: settings.advanced
             id: variant
             z: 10
             type: "Variant"
@@ -218,7 +218,7 @@ Item {
         }
 
         TextCoupleSelect {
-            visible: p.advanced
+            visible: settings.advanced
             id: server
             z: 8
             type: "Server"

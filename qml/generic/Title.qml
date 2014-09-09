@@ -21,6 +21,7 @@ ApplicationWindow {
         property alias height: window.height
         property url installFolder
         property url backupFolder
+        property bool advanced: false
     }
 
     Text {
@@ -39,12 +40,12 @@ ApplicationWindow {
         anchors { right: parent.right; rightMargin: 1; top: parent.top; topMargin: 1 }
         height: title.height; width: height
         radius: height
-        color: p.advanced ? "#999999" : "transparent"
+        color: settings.advanced ? "#999999" : "transparent"
         border.width: 2
         antialiasing: true
         MouseArea {
             anchors.fill: parent
-            onClicked: p.advanced = !p.advanced
+            onClicked: settings.advanced = !settings.advanced
         }
     }
     TabView {

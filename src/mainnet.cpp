@@ -750,7 +750,6 @@ void MainNet::serverError(QNetworkReply::NetworkError err)
 }
 
 void MainNet::setDLProgress(const int &progress) { _dlProgress = progress; emit dlProgressChanged(); }
-void MainNet::setAdvanced(const bool &advanced) { QSettings settings("Qtness","Sachesi"); settings.setValue("advanced", advanced); _advanced = advanced; emit advancedChanged(); }
 void MainNet::setMultiscan(const bool &multiscan) {
     _multiscan = multiscan; emit multiscanChanged();
     if (true) { _multiscanVersion = ""; emit versionChanged(); }
