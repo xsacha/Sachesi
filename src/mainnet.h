@@ -58,7 +58,7 @@ public:
     Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion);
     Q_INVOKABLE void abortDL(QNetworkReply::NetworkError error = (QNetworkReply::NetworkError)0);
     Q_INVOKABLE void abortSplit();
-    Q_INVOKABLE void reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver, bool skip);
+    Q_INVOKABLE void reverseLookup(int device, int variant, int server, QString OSver, bool skip);
 
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);

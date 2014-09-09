@@ -36,12 +36,6 @@ MainNet::MainNet( QObject* parent) : QObject(parent)
     _downloading = false;
     _dlProgress = -1;
     _hasPotentialLinks = false;
-    QSettings settings("Qtness","Sachesi");
-#ifdef BLACKBERRY
-    setAdvanced(true);
-#else
-    setAdvanced(settings.value("advanced", false).toBool());
-#endif
     replydl = nullptr;
 }
 
@@ -317,8 +311,7 @@ void MainNet::downloadLinks()
         if (_dlBytes == 0)
         {
             if (data.startsWith("<?xml")) {
-                QMessageBox box(QMessageBox::Critical, "Error", "You must be a RIM employee to download this file.");
-                box.exec();
+                QMessageBox::critical(nullptr, "Error", "You must be a RIM employee to download this file.");
                 _currentFile.close();
                 _currentFile.remove();
                 if (replydl != nullptr)
@@ -446,7 +439,7 @@ unsigned int MainNet::variantCount(unsigned int device) {
     return dev[device*2].count();
 }
 
-void MainNet::reverseLookup(QString carrier, QString country, int device, int variant, int server, QString OSver, bool skip)
+void MainNet::reverseLookup(int device, int variant, int server, QString OSver, bool skip)
 {
     if (_scanning)
         return;
@@ -455,7 +448,6 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
     _hasPotentialLinks = false; emit hasPotentialLinksChanged();
     setScanning(1);
     QString id = hwidFromVariant(device, variant);
-    QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
     QString requestUrl;
 
     switch (server)
@@ -473,13 +465,10 @@ void MainNet::reverseLookup(QString carrier, QString country, int device, int va
     //0x8d00240a
     QString query = "<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"1366644680359\">"
             "<clientProperties><hardware>"
-            "<pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><imei>004402242176786</imei><id>0x"+id+"</id><isBootROMSecure>true</isBootROMSecure>"
+            "<pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><imei>004402242176786</imei><id>0x"+id+"</id>"
             "</hardware>"
-            "<network>"
-            "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><currentNPC>0x"+homeNPC+"</currentNPC><ecid>0x1</ecid>"
-            "</network>"
             "<software><currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale>"
-            "<osVersion>"+OSver+"</osVersion><omadmEnabled>false</omadmEnabled></software></clientProperties>"
+            "<osVersion>"+OSver+"</osVersion></software></clientProperties>"
             "</srVersionLookupRequest>";
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
@@ -770,4 +759,4 @@ void MainNet::setScanning(const int &scanning) { _scanning = scanning; emit scan
 void MainNet::setDownloading(const bool &downloading) { _downloading = downloading; emit downloadingChanged(); }
 void MainNet::setSplitProgress(const int &progress) { if (_splitProgress > 1000) _splitProgress = 0; else _splitProgress = progress; emit splitProgressChanged(); }
 
-QString MainNet::currentFile()    const { QString ret = _currentFile.fileName().split("/").last(); if (ret.length() > 30) ret.truncate(30); return ret; }
+QString MainNet::currentFile() const { QString ret = _currentFile.fileName().split("/").last(); if (ret.length() > 30) ret.truncate(30); return ret; }
