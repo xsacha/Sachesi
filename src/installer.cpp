@@ -106,7 +106,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     QuaZipFile manifest(name, "META-INF/MANIFEST.MF", QuaZip::csSensitive);
     if (!manifest.open(QIODevice::ReadOnly))
         return barInfo;
-    QString appName, type, system;
+    QString appName, type;
     while (!manifest.atEnd()) {
         QByteArray newLine = manifest.readLine();
         if (newLine.startsWith("Package-Name:")) {
@@ -161,7 +161,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     // Check if we are upgrading firmware or just installing apps.
     if (type == "system") {
         // Only if installing
-        setNewLine("<b>Installing " + system + ": " + barInfo.version +"</b>");
+        setNewLine(QString("<b>Installing ") + (barInfo.type == OSType ? "OS: " : "Radio: " ) + barInfo.version + "</b>");
         setFirmwareUpdate(true);
     } else if (!type.isEmpty())
         barInfo.type = AppType;
