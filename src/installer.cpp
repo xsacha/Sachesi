@@ -555,7 +555,7 @@ void InstallNet::discoveryReply() {
                     }
                 } else if (xml.name() == "PlatformVersion") {
                     setKnownOS(xml.readElementText());
-                /*} else if (xml.name() == "Power") {
+                    /*} else if (xml.name() == "Power") {
                     setKnownBattery(xml.readElementText().toInt());*/
                 } else if (xml.name() == "ModelName") {
                     setKnownHW(xml.readElementText());
@@ -686,6 +686,7 @@ void InstallNet::restoreReply()
 {
     if (reply == nullptr)
         return;
+
     QByteArray data = reply->readAll();
     //for (int s = 0; s < data.size(); s+=3000) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3000);
     if (data.size() == 0) {
@@ -1134,7 +1135,7 @@ void InstallNet::restoreReply()
             connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
             connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(restoreError(QNetworkReply::NetworkError)));
+                    this, SLOT(restoreError(QNetworkReply::NetworkError)));
         } else {
             postData.addQueryItem("status", "success");
             postQuery("backup.cgi", "x-www-form-urlencoded", postData);
@@ -1178,15 +1179,6 @@ void InstallNet::restoreReply()
                 if (xml.name() == "Status" && xml.readElementText() == "InProgress") {
                     connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
                 }
-                if (xml.name() == "Settings") {
-                    _back.setCurMaxSize(0, xml.readElementText().toLongLong());
-                }
-                else if (xml.name() == "Media") {
-                    _back.setCurMaxSize(1, xml.readElementText().toLongLong());
-                }
-                else if (xml.name().startsWith("App")) {
-                    _back.setCurMaxSize(2, xml.readElementText().toLongLong());
-                }
                 else if (xml.name() == "TotalSize")
                 {
                     _back.setMaxSize(xml.readElementText().toLongLong());
@@ -1195,6 +1187,14 @@ void InstallNet::restoreReply()
                     connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
                     connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
                     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
+                }
+                else {
+                    for (int i = 0; i < _back.numMethods(); i++) {
+                        // This is usually App, Media and Settings but make it future-proof
+                        if (xml.name().compare(_back.stringFromMode(i), Qt::CaseInsensitive) == 0) {
+                            _back.setCurMaxSize(i, xml.readElementText().toLongLong());
+                        }
+                    }
                 }
             }
         }
@@ -1298,9 +1298,9 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
         resetVars();
     }
     QString errString = QString("Communication Error: %1 (%2) from %3")
-        .arg(error)
-        .arg( ((QNetworkReply*)sender())->errorString() )
-        .arg(this_ip);
+            .arg(error)
+            .arg( ((QNetworkReply*)sender())->errorString() )
+            .arg(this_ip);
     setNewLine(errString);
     qDebug() << errString;
 }

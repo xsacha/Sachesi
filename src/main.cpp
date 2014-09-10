@@ -38,6 +38,9 @@
 // TODO: Use CircleProgress in every progress section. Pass a class to QML that contains file count, current and total progress
 // TODO: Don't use hardcoded width/height values for UI. Now that we use native UI elements and font sizes, this will break very bad
 // TODO: Name extracted signed/rcfs files and folders by relevant info found in the contents
+// TODO: Check PolicyRestrictions:
+// Personal: policy_block_backup_and_restore, policy_backup_and_restore
+// Enterprise: policy_disable_devmode, policy_log_submission, policy_block_computer_access_to_device
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
