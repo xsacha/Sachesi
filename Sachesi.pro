@@ -59,7 +59,10 @@ else:android {
     DEFINES += BOOTLOADER_ACCESS
 } else {
     shared_quazip: LIBS += -lquazip
-    shared_lzo2: DEFINES += _LZO2_SHARED
+    shared_lzo2 {
+        LIBS += -llzo2
+        DEFINES += _LZO2_SHARED
+    }
     LIBS += -lz -ldl -ludev
     # These below should be static for it to be fully portable (changing ABIs)
     LIBS += -lcrypto -lusb-1.0
