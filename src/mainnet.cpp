@@ -356,14 +356,14 @@ void MainNet::downloadLinks(int downloadDevice)
         _dlBytes = 0;
         QDir firmware(_versionRelease);
         firmware.mkpath(".");
-        QStringList fileList(convertLinks(downloadDevice, "").split("\n"));
-        _currentFile.setFileName(_versionRelease + "/" + fileList.at(_currentId).split("/").last());
+        _fileList = convertLinks(downloadDevice, "").split("\n");
+        _currentFile.setFileName(_versionRelease + "/" + _fileList.at(_currentId).split("/").last());
         emit currentFileChanged();
-        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < fileList.count())
+        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < _fileList.count())
         {
             _dlBytes += _sizes.at(_currentId);
             _currentId++; emit currentIdChanged();
-            _currentFile.setFileName(_versionRelease + "/" + fileList.at(_currentId).split("/").last());
+            _currentFile.setFileName(_versionRelease + "/" + _fileList.at(_currentId).split("/").last());
             emit currentFileChanged();
         }
         if (_currentFile.size() != _sizes.at(_currentId))
@@ -371,7 +371,7 @@ void MainNet::downloadLinks(int downloadDevice)
         _currentFile.open(QIODevice::WriteOnly);
         setDownloading(true);
         QNetworkRequest request;
-        request.setUrl(QUrl(fileList.at(_currentId)));
+        request.setUrl(QUrl(_fileList.at(_currentId)));
         replydl = manager->get(request);
         connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));
@@ -383,7 +383,7 @@ void MainNet::downloadLinks(int downloadDevice)
         if (_dlBytes == 0)
         {
             if (data.startsWith("<?xml")) {
-                QMessageBox::critical(nullptr, "Error", "You must be a RIM employee to download this file.");
+                QMessageBox::critical(nullptr, "Error", "You are restricted from downloading this file.");
                 _currentFile.close();
                 _currentFile.remove();
                 if (replydl != nullptr)
@@ -415,22 +415,21 @@ void MainNet::downloadFinish()
     {
         _currentFile.close();
 
-        QStringList fileList(_links.split( QChar('\n') ));
         _currentId++; emit currentIdChanged();
-        _currentFile.setFileName(_versionRelease + "/" + fileList.at(_currentId).split("/").last());
+        _currentFile.setFileName(_versionRelease + "/" + _fileList.at(_currentId).split("/").last());
         emit currentFileChanged();
-        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < fileList.count())
+        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < _fileList.count())
         {
             _dlBytes += _sizes.at(_currentId);
             _currentId++; emit currentIdChanged();
-            _currentFile.setFileName(_versionRelease + "/" + fileList.at(_currentId).split("/").last());
+            _currentFile.setFileName(_versionRelease + "/" + _fileList.at(_currentId).split("/").last());
             emit currentFileChanged();
         }
         if (_currentFile.size() != _sizes.at(_currentId))
             _currentFile.remove();
         _currentFile.open(QIODevice::WriteOnly);
         QNetworkRequest request;
-        request.setUrl(QUrl(fileList.at(_currentId)));
+        request.setUrl(QUrl(_fileList.at(_currentId)));
         replydl = manager->get(request);
         connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));

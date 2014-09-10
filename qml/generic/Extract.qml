@@ -177,7 +177,7 @@ Item {
             ColumnLayout {
                 visible: settings.advanced
                 RowLayout {
-                    property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + unkImage.checked * 4
+                    property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + bootImage.checked * 4
                     Button {
                         text: "Extract Image"
                         enabled: !p.splitting && parent.imageValue
@@ -193,8 +193,8 @@ Item {
                         text: "QNX6"
                     }
                     CheckBox {
-                        id: unkImage
-                        text: "Unknown"
+                        id: bootImage
+                        text: "Boot"
                     }
                 }
                 Label {

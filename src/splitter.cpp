@@ -331,9 +331,11 @@ int Splitter::processQStart(qint64 startPos, QString startDir) {
     READ_TMP(unsigned char, typeQNX); // 0x10 = no offset; 0x08 = has offset
     unsigned char bootSig[] = {0xDD, 0xEE, 0xE6, 0x97};
     signedFile->seek(startPos + 0x2000);
+    qDebug() << typeQNX;
     if ( (startPos = findIndexFromSig(bootSig, -1, 0)) == 0) { return 1; }
     signedFile->seek(startPos+48);
     stream >> sectorSize;
+    qDebug() << sectorSize;
     if (sectorSize % 512) { return 1; }
     startPos += sectorSize;
 
@@ -448,6 +450,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     partitionSizes.append(signedPos + signedSize - partitionOffsets.last());
 
     char qnx6Sig[] = {(char)0xEB, 0x10, (char)0x90, 0x0};
+    char bootSig[] = {(char)0xFE, 0x03, 0x00, (char)0xEA};
 
     // Detect if RCFS exists in this file
     if (!extractApps && (extractTypes & 1)) {
@@ -516,14 +519,36 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         }
     }
 
-    // Everything else
+    // Boot
     if (extractTypes & 4) {
+            for (int i = 0; i < partitionOffsets.count(); i++) {
+                int unkcounter = 0;
+                signedFile->seek(partitionOffsets[i]);
+                QByteArray header = signedFile->read(4);
+                // Check for ROM header
+                if (header == QByteArray(bootSig, 4)) {
+                    signedFile->seek(partitionOffsets[i]);
+                    maxSize += partitionSizes[i];
+                    // Extract the file
+                    QScopedPointer<QFile> unkFile(new QFile(QString(baseName + "-boot.%1.bin").arg(unkcounter++)));
+                    if (!unkFile->open(QIODevice::WriteOnly))
+                        return die();
+
+                    for (qint64 s = partitionSizes[i]; s > 0; s -= updateProgress(unkFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
+                    unkFile->close();
+                }
+            }
+        }
+
+    // Everything else
+    /*if (extractTypes & 4) {
         for (int i = 0; i < partitionOffsets.count(); i++) {
             int unkcounter = 0;
             signedFile->seek(partitionOffsets[i]);
             QByteArray header = signedFile->read(4);
             // Not RCFS or QNX6, so what is it?
-            if (header != QByteArray("rimh", 4) && header != QByteArray(qnx6Sig, 4) && partitionSizes[i] > 65535) {
+            if (header != QByteArray("rimh", 4) && header != QByteArray(qnx6Sig, 4) && header != QByteArray(bootSig, 4) && partitionSizes[i] > 65535) {
+                signedFile->seek(partitionOffsets[i]);
                 maxSize += partitionSizes[i];
                 // Extract the file
                 QScopedPointer<QFile> unkFile(new QFile(QString(baseName + ".%1.%2.unk").arg(unkcounter++).arg(QString(header.toHex()))));
@@ -534,6 +559,6 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                 unkFile->close();
             }
         }
-    }
+    }*/
 
 }

@@ -128,6 +128,7 @@ private:
     QString _links;
     QString _error;
     QString _multiscanVersion;
+    QStringList _fileList;
     bool _downloading, _multiscan;
     bool _hasPotentialLinks;
     int _scanning;
@@ -136,6 +137,6 @@ private:
     int _currentId, _maxId, _dlBytes, _dlTotal;
     int _splitting, _splitProgress;
     int _dlProgress;
-	int _options;
-	int _type;
+    int _options;
+    int _type;
 };
