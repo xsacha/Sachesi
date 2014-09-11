@@ -266,87 +266,87 @@ Item {
         id: versionLookup
     }
 
-    ColumnLayout {
-        anchors {top: parent.top; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 30; }
-        TextArea {
-            id: updateMessage
-            Layout.fillWidth: true
-            text: p.updateMessage
-            readOnly: true
-            textFormat: TextEdit.RichText
-            selectByKeyboard: true
-        }
-        ScrollView {
-            id: updateAppMessage
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            ListView {
-                id: appView
-                anchors.fill: parent
-                spacing: 3
-                clip: true
-                model: p.updateAppList
-                Menu {
-                    id: options_menu
-                    signal checkAll()
-                    signal uncheckAll()
-                    title: "Options"
-                    MenuItem {
-                        enabled: p.updateCheckedCount != p.updateAppCount
-                        text: "Check All"
-                        onTriggered: {
-                            options_menu.checkAll();
-                            for (var i = 0; i < p.updateAppCount; i++)
-                                p.updateAppList[i].isMarked = true;
-                        }
-                    }
-                    MenuItem {
-                        enabled: p.updateCheckedCount > 0
-                        text: "Uncheck All"
-                        onTriggered: {
-                            options_menu.uncheckAll()
-                            for (var i = 0; i < p.updateAppCount; i++)
-                                p.updateAppList[i].isMarked = false;
-                        }
+    TextArea {
+        id: updateMessage
+        anchors {top: parent.top; left: variables.right; right: parent.right; margins: 15; }
+        Layout.fillWidth: true
+        height: parent.height / 10
+        text: p.updateMessage
+        readOnly: true
+        textFormat: TextEdit.RichText
+        selectByKeyboard: true
+    }
+    ScrollView {
+        id: updateAppMessage
+        anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        ListView {
+            id: appView
+            anchors.fill: parent
+            spacing: 3
+            clip: true
+            model: p.updateAppList
+            Menu {
+                id: options_menu
+                signal checkAll()
+                signal uncheckAll()
+                title: "Options"
+                MenuItem {
+                    enabled: p.updateCheckedCount != p.updateAppCount
+                    text: "Check All"
+                    onTriggered: {
+                        options_menu.checkAll();
+                        for (var i = 0; i < p.updateAppCount; i++)
+                            p.updateAppList[i].isMarked = true;
                     }
                 }
+                MenuItem {
+                    enabled: p.updateCheckedCount > 0
+                    text: "Uncheck All"
+                    onTriggered: {
+                        options_menu.uncheckAll()
+                        for (var i = 0; i < p.updateAppCount; i++)
+                            p.updateAppList[i].isMarked = false;
+                    }
+                }
+            }
 
-                MouseArea {
-                    acceptedButtons: Qt.RightButton
-                    onClicked: options_menu.popup()
+            MouseArea {
+                acceptedButtons: Qt.RightButton
+                onClicked: options_menu.popup()
+                anchors.fill: parent
+            }
+            delegate: Item {
+                visible: type !== "";
+                width: parent.width - 3
+                height: type === "" ? 0 : 26
+                Rectangle {
                     anchors.fill: parent
+                    color: { switch(type) {
+                        case "os": return "red";
+                        case "radio": return "maroon";
+                        case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
+                        default: return "transparent";
+                        }
+                    }
+                    opacity: 0.2
                 }
-                delegate: Item {
-                    visible: type !== "";
-                    width: parent.width - 3
-                    height: type === "" ? 0 : 26
-                    Rectangle {
-                        anchors.fill: parent
-                        color: { switch(type) {
-                            case "os": return "red";
-                            case "radio": return "maroon";
-                            case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
-                            default: return "transparent";
-                            }
-                        }
-                        opacity: 0.2
+                CheckBox {
+                    id: delegateBox
+                    text: friendlyName
+                    checked: isMarked
+                    onCheckedChanged: isMarked = checked;
+                    Connections {
+                        target: options_menu
+                        onCheckAll: delegateBox.checked = true;
+                        onUncheckAll: delegateBox.checked = false;
                     }
-                    CheckBox {
-                        id: delegateBox
-                        text: friendlyName
-                        checked: isMarked
-                        onCheckedChanged: isMarked = checked;
-                        Connections {
-                            target: options_menu
-                            onCheckAll: delegateBox.checked = true;
-                            onUncheckAll: delegateBox.checked = false;
-                        }
-                    }
-                    Label {
-                        anchors.right: parent.right
-                        text: (size / 1024 / 1024).toFixed(1) + " MB"
-                        font.pointSize: 12;
-                    }
+                }
+                Label {
+                    anchors.right: parent.right
+                    text: (size / 1024 / 1024).toFixed(1) + " MB"
+                    font.pointSize: 12;
                 }
             }
         }

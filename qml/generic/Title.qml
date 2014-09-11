@@ -54,7 +54,7 @@ ApplicationWindow {
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
         // Workaround for index moving on startup for Windows
-        onCountChanged: if (count == 4 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess
+        onCountChanged: { titleRow.currentIndex = 0; if (count == 4 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
 
         Tab {
             title: "Extract";
