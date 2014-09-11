@@ -35,10 +35,19 @@
 #define PACKED_FILE_RADIO   (1 << 1)
 #define PACKED_FILE_PINLIST (1 << 2)
 
-#define QCFM_IS_COMPRESSED  (1 << 23)
-#define QCFM_IS_DIRECTORY   (1 << 14)
-#define QCFM_IS_SYMLINK     (1 << 13)
+// node.mode flags
+#define QCFM_IS_COMPRESSED      ((1 << 22) | (1 << 23) | (1 << 24))
+// lzo1x_decompress_safe
+#define QCFM_IS_LZO_COMPRESSED   (1 << 23)
+// ucl_nrv2b_decompress_8
+#define QCFM_IS_UCL_COMPRESSED  ((1 << 22) | (1 << 23))
+#define QCFM_IS_GZIP_COMPRESSED  (1 << 22)
+#define QCFM_IS_DIRECTORY        (1 << 14)
+#define QCFM_IS_SYMLINK          (1 << 13)
+
 #define BUFFER_LEN (qint64)4096
+// QNX6 maximum filename length
+#define QNX6_MAX_CHARS 510
 
 #define READ_TMP(x, y) x y; stream >> y;
 
@@ -130,6 +139,17 @@ struct rinode {
     int nameoffset;
     int offset;
     int size;
+    int time;
+    QString path_to;
+    int chunks;
+};
+
+struct binode {
+    int mode;
+    QString name;
+    int offset;
+    // TODO: Sizes greater than 16-bit?
+    qint16 size;
     int time;
     QString path_to;
     int chunks;
@@ -418,18 +438,6 @@ public slots:
         return (startPos) + (0x80 * (node - 1));
     }
 
-    rinode createRNode(int offset, qint64 startPos) {
-        QNXStream stream(signedFile);
-        signedFile->seek(4 + offset + startPos);
-        rinode ind;
-        stream >> ind.mode >> ind.nameoffset >> ind.offset >> ind.size >> ind.time;
-        signedFile->seek(ind.nameoffset + startPos);
-        ind.name = QString(signedFile->readLine(510)); // QNX6 maximum filename length
-        if (ind.name == "")
-            ind.name = ".";
-        return ind;
-    }
-
     qinode createNode(int node, qint64 startPos) {
         QNXStream stream(signedFile);
         qinode ind;
@@ -456,16 +464,50 @@ public slots:
         stream >> ind.tiers;
         return ind;
     }
+
+    rinode createRNode(int offset, qint64 startPos) {
+        QNXStream stream(signedFile);
+        signedFile->seek(4 + offset + startPos);
+        rinode ind;
+        stream >> ind.mode >> ind.nameoffset >> ind.offset >> ind.size >> ind.time;
+        signedFile->seek(ind.nameoffset + startPos);
+        ind.name = QString(signedFile->readLine(QNX6_MAX_CHARS));
+        if (ind.name == "")
+            ind.name = ".";
+        return ind;
+    }
+
+    binode createBNode(int offset, qint64 startPos) {
+        QNXStream stream(signedFile);
+        signedFile->seek(startPos + offset);
+        binode ind;
+        stream >> ind.mode >> ind.size >> ind.time;
+
+        ind.name = QString(signedFile->readLine(QNX6_MAX_CHARS));
+        if (ind.name == "")
+            ind.name = ".";
+        ind.offset = signedFile->pos() - startPos;
+
+        return ind;
+    }
     void extractManifest(int nodenum, qint64 startPos);
     void extractDir(int nodenum, QString basedir, qint64 startPos, int tier);
+    void extractRCFSDir(int offset, int numNodes, QString basedir, qint64 startPos);
+    void extractBootDir(int offset, int numNodes, QString basedir, qint64 startPos);
     int  processQStart(qint64 startPos, QString startDir);
     void processRStart(qint64 startPos, QString startDir);
-    void extractRCFSDir(int offset, int numNodes, QString basedir, qint64 startPos);
+    void processBStart(qint64 startPos, QString startDir, qint64 size);
 
     void processExtractSigned();
     void processExtract(QString baseName, qint64 signedSize, qint64 signedPos);
-    void processExtractRCFS();
     void processExtractQNX6();
+    void processExtractRCFS();
+    void processExtractBoot();
+
+    QString generateNameFromRCFS(qint64 startPos);
+    QString generateNameFromIFS(qint64 startPos, int count);
+
+    QByteArray extractRCFSFile(qint64 node_offset, int node_size, int node_mode);
 
     quint64 updateProgress(qint64 delta) {
         if (delta < 0)

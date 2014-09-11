@@ -151,7 +151,7 @@ Item {
             ColumnLayout {
                 visible: settings.advanced
                 RowLayout {
-                    property int partValue: corePart.checked * 1 + userPart.checked * 2
+                    property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
                     Button {
                         text: "Dump Contents"
                         enabled: !p.splitting && parent.partValue
@@ -166,6 +166,11 @@ Item {
                         id: userPart
                         checked: true
                         text: "User"
+                    }
+                    CheckBox {
+                        id: bootPart
+                        checked: false
+                        text: "Boot"
                     }
                 }
                 Label {
@@ -194,7 +199,7 @@ Item {
                     }
                     CheckBox {
                         id: bootImage
-                        text: "Boot"
+                        text: "IFS"
                     }
                 }
                 Label {

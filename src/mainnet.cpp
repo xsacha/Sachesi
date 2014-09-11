@@ -133,6 +133,8 @@ void MainNet::extractImage(int type, int options)
         filter += " *.rcfs";
     if (type == 2 || (type == 0 && _options & 2))
         filter += " *.qnx6";
+    if (type == 0 && _options & 4)
+        filter += " *.ifs";
     FileSelect finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
 #ifdef BLACKBERRY
     QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(extractImageSlot(const QStringList&)));
@@ -174,7 +176,9 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     }
     splitter->extractTypes = _options;
     splitter->moveToThread(splitThread);
-    if (fileInfo.suffix() == "rcfs")
+    if (fileInfo.suffix() == "ifs")
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractBoot()));
+    else if (fileInfo.suffix() == "rcfs")
         connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractRCFS()));
     else if (fileInfo.suffix() == "qnx6")
         connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractQNX6()));

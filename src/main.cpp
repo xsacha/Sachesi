@@ -34,6 +34,7 @@
 #endif
 
 // TODO: Make extraction handle decent % tracking for QNX FS
+// TODO: Create extraction names based on file data
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress section. Pass a class to QML that contains file count, current and total progress
 // TODO: Don't use hardcoded width/height values for UI. Now that we use native UI elements and font sizes, this will break very bad
