@@ -6,7 +6,7 @@ import "UI" 1.0
 
 
 Item {
-    property bool init: p.versionRelease === ""
+    property bool init: p.updateMessage === ""
     property bool isMobile: false
     state: "initing"
 
@@ -230,13 +230,13 @@ Item {
                     }
                 }
                 listModel: ListModel {
-                ListElement { text: "As above" }
-                ListElement { text: "Z30" }
-                ListElement { text: "Z10 (OMAP)" }
-                ListElement { text: "Z10 (QCOM) + P9982" }
-                ListElement { text: "Z3" }
-                ListElement { text: "Passport" }
-                ListElement { text: "Q5 + Q10" }
+                    ListElement { text: "As above" }
+                    ListElement { text: "Z30" }
+                    ListElement { text: "Z10 (OMAP)" }
+                    ListElement { text: "Z10 (QCOM) + P9982" }
+                    ListElement { text: "Z3" }
+                    ListElement { text: "Passport" }
+                    ListElement { text: "Q5 + Q10" }
                 }
             }
         }
@@ -264,17 +264,80 @@ Item {
         id: versionLookup
     }
 
-    TextArea {
-        id: updateMessage
+    ColumnLayout {
         anchors {top: parent.top; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 30; }
-        //width: parent.width - 200; height: parent.height - 130
-        text: "<b>Update " + p.versionRelease + " available for " + p.variant + "!</b><br>" +
-              (p.versionOS !== "" ? ("<b> OS: " + p.versionOS + "</b>") : "") +
-              (p.versionRadio !== "" ? (" + <b> Radio: " + p.versionRadio + "</b>") : "") +
-              "<br><br>" + p.description + "<br><b>Base URL<br></b>" + p.updateUrl + "<br><b>Files<br></b>" + p.applications + "<br>";
-        readOnly: true
-        textFormat: TextEdit.RichText
-        selectByKeyboard: true
+        TextArea {
+            id: updateMessage
+            Layout.fillWidth: true
+            text: p.updateMessage
+            readOnly: true
+            textFormat: TextEdit.RichText
+            selectByKeyboard: true
+        }
+        ScrollView {
+            id: updateAppMessage
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            ListView {
+                id: appView
+                anchors.fill: parent
+                spacing: 3
+                clip: true
+                model: p.updateAppList
+                Menu {
+                    id: options_menu
+                    signal checkAll()
+                    signal uncheckAll()
+                    title: "Options"
+                    MenuItem {
+                        text: "Check All"
+                        onTriggered: options_menu.checkAll();
+                    }
+                    MenuItem {
+                        text: "Uncheck All"
+                        onTriggered: options_menu.uncheckAll()
+                    }
+                }
+
+                MouseArea {
+                    acceptedButtons: Qt.RightButton
+                    onClicked: options_menu.popup()
+                    anchors.fill: parent
+                }
+                delegate: Item {
+                    visible: type !== "";
+                    width: parent.width - 3
+                    height: type === "" ? 0 : 26
+                    Rectangle {
+                        anchors.fill: parent
+                        color: { switch(type) {
+                            case "os": return "red";
+                            case "radio": return "maroon";
+                            case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
+                            default: return "transparent";
+                            }
+                        }
+                        opacity: 0.2
+                    }
+                    CheckBox {
+                        id: delegateBox
+                        text: friendlyName
+                        checked: isMarked
+                        onCheckedChanged: isMarked = checked;
+                        Connections {
+                            target: options_menu
+                            onCheckAll: delegateBox.checked = true;
+                            onUncheckAll: delegateBox.checked = false;
+                        }
+                    }
+                    Label {
+                        anchors.right: parent.right
+                        text: (size / 1024 / 1024).toFixed(1) + " MB"
+                        font.pointSize: 12;
+                    }
+                }
+            }
+        }
     }
 
     states: [
@@ -284,6 +347,7 @@ Item {
             AnchorChanges { target: variables; anchors.horizontalCenter: parent.horizontalCenter; anchors.left: undefined }
             AnchorChanges { target: scanButton; anchors.horizontalCenter: parent.horizontalCenter; anchors.left: undefined }
             PropertyChanges { target: updateMessage; visible: false; opacity: 0.0; scale: 0.4 }
+            PropertyChanges { target: updateAppMessage; visible: false; opacity: 0.0; scale: 0.4 }
             PropertyChanges { target: urlLinks; visible: false; opacity: 0.0; scale: 0.4 }
         },
         State {
@@ -292,6 +356,7 @@ Item {
             AnchorChanges { target: variables; anchors.horizontalCenter: undefined; anchors.left: parent.left }
             AnchorChanges { target: scanButton; anchors.horizontalCenter: undefined; anchors.left: parent.left }
             PropertyChanges { target: updateMessage; visible: true; opacity: 1.0; scale: 1.0 }
+            PropertyChanges { target: updateAppMessage; visible: true; opacity: 1.0; scale: 1.0 }
             PropertyChanges { target: urlLinks; visible: true; opacity: 1.0; scale: 1.0 }
         }
     ]

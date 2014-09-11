@@ -129,7 +129,7 @@ Item {
                 text: "Refresh"
                 onClicked: i.scanProps();
             }
-            Component.onCompleted: { addTab("Apps", app_tab); addTab("Log", log_tab); }
+            Component.onCompleted: { addTab("Your Applications", app_tab); addTab("Log", log_tab); }
         }
     }
 
@@ -151,29 +151,17 @@ Item {
     Component {
         id: app_tab
         Item {
-            Button {
-                visible: appView.count > 0
+            Image {
+                id: uninstall_notifier
+                visible: uninstalling
                 property bool uninstalling: false
-                anchors {right: parent.left; rightMargin: -2; top: parent.top }
-                enabled: !i.installing
-                onEnabledChanged: if (enabled && uninstalling) { uninstalling = false; }
-                iconSource: "trash.png"
-                tooltip: "Uninstall Marked"
-                width: 26; height: 26
-                opacity: uninstalling ? 0.6 : 1.0
-                onClicked: { if (i.uninstallMarked()) uninstalling = true; }
+                anchors {centerIn: parent; verticalCenterOffset: -parent.height / 4}
+                source: "trash.png"
+                width: 75; height: 75
+                opacity: 0.8
                 BusyIndicator {
-                    visible: parent.uninstalling
                     anchors.fill: parent
                 }
-            }
-            Button {
-                visible: appView.count > 0
-                anchors {right: parent.left; rightMargin: -1; bottom: parent.bottom }
-                iconSource: "text.png"
-                tooltip: "Show Installed Apps"
-                width: 24; height: 24
-                onClicked: i.exportInstalled();
             }
             Text {
                 visible: appView.count == 0
@@ -189,6 +177,30 @@ Item {
                     spacing: 3
                     clip: true
                     model: i.appList
+                    Menu {
+                        id: apps_menu
+                        visible: appView.count > 0
+                        title: "Options"
+                        MenuItem {
+                            text: "Uninstall Marked"
+                            iconSource: "trash.png"
+                            enabled: !i.installing
+                            onEnabledChanged: if (enabled && uninstall_notifier.uninstalling) { uninstall_notifier.uninstalling = false; }
+                            onTriggered: { if (i.uninstallMarked()) uninstall_notifier.uninstalling = true; }
+                        }
+                        MenuItem {
+                            text: "Show Installed Apps"
+                            iconSource: "text.png"
+                            onTriggered: i.exportInstalled();
+                        }
+                    }
+
+                    MouseArea {
+                        enabled: appView.count > 0
+                        acceptedButtons: Qt.RightButton
+                        onClicked: apps_menu.popup()
+                        anchors.fill: parent
+                    }
                     delegate: Item {
                         visible: type !== "";
                         width: parent.width - 3

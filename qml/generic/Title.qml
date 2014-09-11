@@ -96,12 +96,19 @@ ApplicationWindow {
         }
     }*/
     statusBar: StatusBar {
-        visible: i.knownBattery > -1
+        //visible: i.knownBattery > -1
         Label {
+            visible: i.knownBattery < 0
+            text: "No device connected"
+        }
+
+        Label {
+            visible: i.knownBattery > -1
             property bool hasSpace: window.width > 700
             text: "<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + " Radio:" + i.knownRadio + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : "");
         }
         Label {
+            visible: i.knownBattery > -1
             anchors.right: parent.right
             text: "<b>[</b>"+i.knownHW+"<b>]</b>"
         }

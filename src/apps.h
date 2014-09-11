@@ -28,6 +28,7 @@ class Apps : public QObject {
     Q_PROPERTY(QString packageId READ packageId WRITE setPackageId NOTIFY packageIdChanged)
     Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName NOTIFY friendlyNameChanged)
     Q_PROPERTY(int code READ code WRITE setCode NOTIFY codeChanged)
+    Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(bool isMarked READ isMarked WRITE setIsMarked NOTIFY isMarkedChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
@@ -41,6 +42,7 @@ public:
     QString packageId() const;
     QString friendlyName() const;
     int code() const;
+    int size() const;
     bool isMarked() const;
     QString type() const;
     QString version() const;
@@ -50,6 +52,7 @@ public:
     void setPackageId(const QString &str);
     void setFriendlyName(const QString &str);
     void setCode(const int &num);
+    void setSize(const int &num);
     void setIsMarked(const bool &marked);
     void setType(const QString &str);
     void setVersion(const QString &str);
@@ -61,6 +64,7 @@ signals:
     void packageIdChanged();
     void friendlyNameChanged();
     void codeChanged();
+    void sizeChanged();
     void isMarkedChanged();
     void typeChanged();
     void versionChanged();
@@ -72,6 +76,7 @@ private:
     QString _packageId;
     QString _friendlyName;
     int _code;
+    int _size;
     bool _isMarked;
     QString _type;
     QString _version;

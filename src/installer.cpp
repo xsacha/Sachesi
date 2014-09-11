@@ -692,18 +692,8 @@ void InstallNet::restoreReply()
     if (data.size() == 0) {
         if (_restoring) {
             QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
-            if (_zipFile != nullptr) {
-                if (_zipFile->isOpen())
-                    _zipFile->close();
-                _zipFile->deleteLater();
-                _zipFile = nullptr;
-            }
-            if (currentBackupZip != nullptr) {
-                if (currentBackupZip->isOpen())
-                    currentBackupZip->close();
-                delete currentBackupZip;
-                currentBackupZip = nullptr;
-            }
+            qIoSafeFree(_zipFile);
+            ioSafeFree(currentBackupZip);
             setRestoring(false);
         }
     }
@@ -1210,12 +1200,7 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "RestoreSend")
     {
-        if (_zipFile) {
-            if (_zipFile->isOpen())
-                _zipFile->close();
-            _zipFile->deleteLater();
-            _zipFile = nullptr;
-        }
+        qIoSafeFree(_zipFile)
         _back.setCurMode(1);
         if (_back.curMode() == "complete") {
             postData.addQueryItem("status", "success");
@@ -1248,30 +1233,15 @@ void InstallNet::restoreSendFile() {
 
 void InstallNet::resetVars()
 {
-    if (manager != nullptr) {
-        manager->deleteLater();
-        manager = nullptr;
-    }
-    if (reply != nullptr) {
-        reply->deleteLater();
-        reply = nullptr;
-    }
-    if (cookieJar != nullptr) {
-        cookieJar->deleteLater();
-        cookieJar = nullptr;
-    }
+    qSafeFree(manager);
+    qSafeFree(reply);
+    qSafeFree(cookieJar);
     setCompleted(false);
     setRestoring(false);
     setBacking(false);
     setInstalling(false);
-    if (currentBackupZip != nullptr) {
-        delete currentBackupZip;
-        currentBackupZip = nullptr;
-    }
-    if (_zipFile != nullptr) {
-        _zipFile->deleteLater();
-        _zipFile = nullptr;
-    }
+    qIoSafeFree(_zipFile);
+    ioSafeFree(currentBackupZip);
     setKnownPIN("");
     setKnownOS("");
     setKnownRadio("N/A");

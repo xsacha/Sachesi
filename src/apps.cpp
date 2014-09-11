@@ -33,6 +33,7 @@ Apps::Apps(QObject *parent) : QObject(parent)
     _name = "";
     _packageId = "";
     _code = 0;
+    _size = 0;
     _isMarked = false;
     _type = "";
     _version = "";
@@ -48,4 +49,5 @@ SET_QML2(QString, version, setVersion)
 SET_QML2(QString, versionId, setVersionId)
 SET_QML2(QString, checksum, setChecksum)
 SET_QML2(int, code, setCode)
+SET_QML2(int, size, setSize)
 SET_QML2(bool, isMarked, setIsMarked)

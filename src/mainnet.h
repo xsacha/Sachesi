@@ -22,18 +22,25 @@
 #include "splitter.h"
 #include "installer.h"
 
+class DownloadInfo : public QObject {
+    Q_OBJECT
+public:
+    DownloadInfo(QString _version, QObject* parent = 0)
+        : QObject(parent)
+        , baseDir(_version)
+    { }
+
+    QString baseDir;
+};
+
 class MainNet : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString softwareRelease MEMBER _softwareRelease NOTIFY softwareReleaseChanged) // from reverse lookup
-    Q_PROPERTY(QString versionRelease MEMBER _versionRelease NOTIFY versionChanged)
-    Q_PROPERTY(QString versionOS MEMBER _versionOS NOTIFY versionChanged)
-    Q_PROPERTY(QString versionRadio MEMBER _versionRadio NOTIFY versionChanged)
-    Q_PROPERTY(QString variant MEMBER _variant NOTIFY variantChanged)
-    Q_PROPERTY(QString description MEMBER _description NOTIFY descriptionChanged)
-    Q_PROPERTY(QString updateUrl MEMBER _updateUrl NOTIFY updateUrlChanged)
-    Q_PROPERTY(QString applications MEMBER _applications NOTIFY applicationsChanged)
+    Q_PROPERTY(QString updateMessage MEMBER _updateMessage NOTIFY updateMessageChanged)
+    Q_PROPERTY(QQmlListProperty<Apps> updateAppList READ updateAppList NOTIFY updateMessageChanged)
+    Q_PROPERTY(int updateAppCount READ updateAppCount NOTIFY updateMessageChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
-    Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY versionChanged)
+    Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
     Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool    hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
@@ -75,6 +82,11 @@ public:
     void    setDLProgress(const int &progress);
     void    setDownloading(const bool &downloading);
     QString currentFile() const;
+    QQmlListProperty<Apps> updateAppList() {
+        return QQmlListProperty<Apps>(this, &_updateAppList, &appendApps, &appsSize, &appsAt, &clearApps);
+    }
+
+    int updateAppCount() const { return _updateAppList.count(); }
 public slots:
     void    setSplitProgress(const int &progress);
     void    capNetworkReply(QNetworkReply* reply);
@@ -82,11 +94,7 @@ public slots:
     void    confirmNewSR();
 signals:
     void softwareReleaseChanged();
-    void versionChanged();
-    void variantChanged();
-    void descriptionChanged();
-    void updateUrlChanged();
-    void applicationsChanged();
+    void updateMessageChanged();
     void errorChanged();
     void multiscanChanged();
     void scanningChanged();
@@ -119,12 +127,11 @@ private:
     QThread* splitThread;
     QNetworkReply *replydl;
     QNetworkAccessManager *manager;
+    DownloadInfo* currentDownload;
+    QList<Apps*> _updateAppList;
+    QString _updateMessage;
     QString _softwareRelease;
-    QString _versionRelease, _versionOS, _versionRadio;
-    QString _variant;
-    QString _description;
-    QString _updateUrl;
-    QString _applications;
+    QString _versionRelease;
     QString _links;
     QString _error;
     QString _multiscanVersion;
