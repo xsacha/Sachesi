@@ -84,7 +84,7 @@ Item {
         }
         Text {
             property string message: p.error
-            visible: message.length > 1 && !p.multiscan
+            visible: message.length > 1 && !p.multiscan && p.updateMessage == ""
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)

@@ -413,6 +413,7 @@ int Splitter::processQStart(qint64 startPos, QString startDir) {
         }
     }
     extractDir(1, startDir, startPos, 0);
+    QDesktopServices::openUrl(QUrl(startDir));
     return 0;
 }
 
@@ -421,6 +422,7 @@ void Splitter::processRStart(qint64 startPos, QString startDir) {
     QNXStream stream(signedFile);
     READ_TMP(qint32, offset);
     extractRCFSDir(offset, 1, startDir, startPos);
+    QDesktopServices::openUrl(QUrl(startDir));
 }
 
 void Splitter::processBStart(qint64 startPos, QString startDir, qint64 size) {
@@ -468,6 +470,7 @@ void Splitter::processBStart(qint64 startPos, QString startDir, qint64 size) {
         return die();
     for (qint64 s = size - boot_size - startup_size; s > 0; s -= updateProgress(imageFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
     imageFile->close();
+    QDesktopServices::openUrl(QUrl(startDir));
 }
 
 void Splitter::processExtractSigned()

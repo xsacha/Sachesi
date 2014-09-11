@@ -813,30 +813,36 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         if (_multiscan)
             _multiscanVersion = ver;
         _versionRelease = ver;
-        // Server uses some funny order. Put in order of largest to smallest.
-        std::sort(newApps.begin(), newApps.end(),
-                  [=](const Apps* i, const Apps* j) { return i->size() > j->size(); });
+        if (ver == "") {
+            _updateMessage = "";
+            emit updateMessageChanged();
+        } else {
+            // Server uses some funny order. Put in order of largest to smallest.
+            std::sort(newApps.begin(), newApps.end(),
+                      [=](const Apps* i, const Apps* j) { return i->size() > j->size(); });
 
-        // Put this new list up for display
-        if (_updateAppList.count()) {
-            for (Apps* app: _updateAppList)
-                delete app;
-            _updateAppList.clear();
+            // Put this new list up for display
+            if (_updateAppList.count()) {
+                for (Apps* app: _updateAppList) {
+                    app->disconnect(SIGNAL(isMarkedChanged()));
+                }
+                _updateAppList.clear();
+            }
+            _updateAppList = newApps;
+            // Connect every isMarkedChanged to the list signal
+            for (Apps* app: _updateAppList) {
+                connect(app, SIGNAL(isMarkedChanged()), this, SIGNAL(updateCheckedCountChanged()));
+            }
+            _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
+                    .arg(ver)
+                    .arg(variant)
+                    .arg(os != "" ? QString("<b> OS: %1</b>").arg(os) : "")
+                    .arg(radio != "" ? QString("<b> Radio: %1</b>").arg(radio) : "")
+                    .arg(desc);
+            emit updateMessageChanged();
+            emit updateCheckedCountChanged();
+            _error = ""; emit errorChanged();
         }
-        _updateAppList = newApps;
-        // Connect every isMarkedChanged to the list signal
-        for (Apps* app: _updateAppList) {
-            connect(app, SIGNAL(isMarkedChanged()), this, SIGNAL(updateCheckedCountChanged()));
-        }
-        _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
-                .arg(ver)
-                .arg(variant)
-                .arg(os != "" ? QString("<b> OS: %1</b>").arg(os) : "")
-                .arg(radio != "" ? QString("<b> Radio: %1</b>").arg(radio) : "")
-                .arg(desc);
-        emit updateMessageChanged();
-        emit updateCheckedCountChanged();
-        _error = ""; emit errorChanged();
     }
     setScanning(_scanning-1);
     if (_scanning <= 0)
