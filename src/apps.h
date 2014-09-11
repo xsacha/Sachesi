@@ -37,6 +37,8 @@ class Apps : public QObject {
 
 public:
     Apps(QObject *parent = 0);
+    Apps(const Apps& app, QObject *parent = 0);
+    Apps(const Apps* app, QObject *parent = 0);
 
     QString name() const;
     QString packageId() const;

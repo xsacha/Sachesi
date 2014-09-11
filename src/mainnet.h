@@ -30,7 +30,20 @@ public:
         , baseDir(_version)
     { }
 
+    void setApps(QList<Apps*> newApps) {
+        for (Apps* newApp : newApps) {
+            if (!newApp->isMarked())
+                continue;
+            apps.append(*newApp);
+        }
+    }
+    QString getUrl(int i) {
+        if (i >= 0 && i < apps.count())
+            return apps.at(i).packageId();
+    }
+
     QString baseDir;
+    QList<Apps> apps;
 };
 
 class MainNet : public QObject {
@@ -39,6 +52,7 @@ class MainNet : public QObject {
     Q_PROPERTY(QString updateMessage MEMBER _updateMessage NOTIFY updateMessageChanged)
     Q_PROPERTY(QQmlListProperty<Apps> updateAppList READ updateAppList NOTIFY updateMessageChanged)
     Q_PROPERTY(int updateAppCount READ updateAppCount NOTIFY updateMessageChanged)
+    Q_PROPERTY(int updateCheckedCount READ updateCheckedCount NOTIFY updateCheckedCountChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
     Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
@@ -87,6 +101,13 @@ public:
     }
 
     int updateAppCount() const { return _updateAppList.count(); }
+    int updateCheckedCount() const {
+        int checked = 0;
+        for (Apps* app: _updateAppList)
+            if (app->isMarked())
+                checked++;
+        return checked;
+    }
 public slots:
     void    setSplitProgress(const int &progress);
     void    capNetworkReply(QNetworkReply* reply);
@@ -95,6 +116,7 @@ public slots:
 signals:
     void softwareReleaseChanged();
     void updateMessageChanged();
+    void updateCheckedCountChanged();
     void errorChanged();
     void multiscanChanged();
     void scanningChanged();
@@ -122,6 +144,8 @@ private:
     // Utils:
     InstallNet* _i;
     QString convertLinks(int downloadDevice, QString prepend);
+    QString fixVariantName(QString name, QString replace, int type);
+    void fixApps(int downloadDevice);
     QString NPCFromLocale(int country, int carrier);
 
     QThread* splitThread;
@@ -132,10 +156,8 @@ private:
     QString _updateMessage;
     QString _softwareRelease;
     QString _versionRelease;
-    QString _links;
     QString _error;
     QString _multiscanVersion;
-    QStringList _fileList;
     bool _downloading, _multiscan;
     bool _hasPotentialLinks;
     int _scanning;

@@ -59,7 +59,7 @@ Item {
     }
     Column {
         id: scanButton
-        anchors { bottom: parent.bottom; bottomMargin: 60; leftMargin: 60 }
+        anchors { bottom: parent.bottom; bottomMargin: 15; leftMargin: 15 }
         ColumnLayout {
             anchors.horizontalCenter: parent.horizontalCenter
             RowLayout {
@@ -97,15 +97,17 @@ Item {
     }
     ColumnLayout {
         id: urlLinks
-        anchors { right: parent.right; rightMargin: 60; bottom: parent.bottom; bottomMargin: 60 }
+        anchors { right: parent.right; rightMargin: 15; bottom: parent.bottom; bottomMargin: 15 }
         Button {
+            enabled: p.updateCheckedCount > 0
             Layout.alignment: Qt.AlignHCenter
             text: isMobile ? "Copy Links" : "Grab Links"
             onClicked: p.grabLinks(downloadDevice.selectedItem)
         }
         Button {
+            enabled: p.updateCheckedCount > 0
             Layout.alignment: Qt.AlignHCenter
-            text: "Download All"
+            text: (p.updateCheckedCount == p.updateAppCount) ? "Download All" : "Download Selected (" + p.updateCheckedCount + ")"
             onClicked: {p.dlProgress = -1; p.downloadLinks(downloadDevice.selectedItem) }
         }
     }
@@ -290,12 +292,22 @@ Item {
                     signal uncheckAll()
                     title: "Options"
                     MenuItem {
+                        visible: p.updateCheckedCount != p.updateAppCount
                         text: "Check All"
-                        onTriggered: options_menu.checkAll();
+                        onTriggered: {
+                            options_menu.checkAll();
+                            for (var i = 0; i < p.updateAppCount; i++)
+                                p.updateAppList[i].isMarked = true;
+                        }
                     }
                     MenuItem {
+                        visible: p.updateCheckedCount != 0
                         text: "Uncheck All"
-                        onTriggered: options_menu.uncheckAll()
+                        onTriggered: {
+                            options_menu.uncheckAll()
+                            for (var i = 0; i < p.updateAppCount; i++)
+                                p.updateAppList[i].isMarked = false;
+                        }
                     }
                 }
 

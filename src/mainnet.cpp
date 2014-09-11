@@ -270,6 +270,75 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
 }
 
+QString MainNet::fixVariantName(QString name, QString replace, int type) {
+    if (type == 0) { // OS
+        QString osSignature = "com.qnx.coreos.qcfm.os.";
+        QStringList components = name.split(osSignature);
+        // Replace first type
+        QString newPath = components[0] + osSignature;
+        if (replace.startsWith("winchester")) // Old style
+            newPath.append("factory");
+        else
+            newPath.append(replace);
+
+        // Fetch version
+        components = components[1].split("/");
+        if (components.count() < 2) {
+            QMessageBox::information(nullptr, "Error", "Was unable to convert the OS to your selected device! Falling back to original search results.");
+            return name;
+        }
+        if (components[0].endsWith(".desktop"))
+            newPath.append(".desktop");
+        newPath.append(QString("/") + components[1] + "/" + replace);
+
+        // Replace last type
+        components = components[2].split("-");
+        if (components[0].endsWith(".desktop"))
+            newPath.append(".desktop");
+        for (int i = 1; i < components.count(); i++)
+            newPath.append(QString("-") + components[i]);
+
+        return newPath;
+    } else if (type == 1) { // Radio
+        QString radioSignature = "com.qnx.qcfm.radio.";
+        QStringList components = name.split(radioSignature);
+        QString newPath = components[0] + radioSignature + replace + "/";
+
+        // Fetch version
+        components = components[1].split("/");
+        if (components.count() < 2) {
+            QMessageBox::information(nullptr, "Error", "Was unable to convert the Radio to your selected device! Falling back to original search results.");
+            return name;
+        }
+        newPath.append(components[1] + "/" + replace);
+
+        // Replace last type
+        components = components[2].split("-");
+        for (int i = 1; i < components.count(); i++)
+            newPath.append(QString("-") + components[i]);
+
+        return newPath;
+    }
+}
+
+// Permanently converts the currentDownload object apps to the current 'Download Device'
+// Important not to change this object during the, rather large, download!
+void MainNet::fixApps(int downloadDevice) {
+    QPair<QString,QString> results = _i->getConnected(downloadDevice);
+    if (results.first == "" || results.second == "")
+        return;
+
+    for(Apps& app : currentDownload->apps) {
+        if (app.type() == "os")
+            app.setPackageId(fixVariantName(app.packageId(), results.first, 0));
+        else if (app.type() == "radio")
+            app.setPackageId(fixVariantName(app.packageId(), results.second, 1));
+    }
+}
+
+
+// Creates a string with a list of URLs based on current 'Search Device'
+// and converted to current 'Download Device'
 QString MainNet::convertLinks(int downloadDevice, QString prepend)
 {
     bool convert = true;
@@ -277,64 +346,18 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
     if (results.first == "" || results.second == "")
         convert = false;
 
-    QString osSignature = "com.qnx.coreos.qcfm.os.";
-    QString radioSignature = "com.qnx.qcfm.radio.";
     QString updated;
     for(Apps* app : _updateAppList) {
         if (!app->isMarked())
             continue;
         QString item = app->packageId();
         if (convert) {
-            if (item.contains(osSignature)) {
-                QStringList components = item.split(osSignature);
-                // Replace first type
-                QString newPath = components[0] + osSignature;
-                if (results.first.startsWith("winchester")) // Old style
-                    newPath.append("factory");
-                else
-                    newPath.append(results.first);
-
-                // Fetch version
-                components = components[1].split("/");
-                if (components.count() < 2) {
-                    convert = false;
-                    QMessageBox::information(nullptr, "Error", "Was unable to convert the OS to your selected device! Falling back to original search results.");
-                } else {
-                    if (components[0].endsWith(".desktop"))
-                        newPath.append(".desktop");
-                    newPath.append(QString("/") + components[1] + "/" + results.first);
-
-                    // Replace last type
-                    components = components[2].split("-");
-                    if (components[0].endsWith(".desktop"))
-                        newPath.append(".desktop");
-                    for (int i = 1; i < components.count(); i++)
-                        newPath.append(QString("-") + components[i]);
-
-                    item = newPath;
-                }
-            } else if (item.contains(radioSignature)) {
-                QStringList components = item.split(radioSignature);
-                // Replace first type
-                QString newPath = components[0] + radioSignature + results.second + "/";
-
-                // Fetch version
-                components = components[1].split("/");
-                if (components.count() < 2) {
-                    convert = false;
-                    QMessageBox::information(nullptr, "Error", "Was unable to convert the Radio to your selected device! Falling back to original search results.");
-                } else {
-                    newPath.append(components[1] + "/" + results.second);
-
-                    // Replace last type
-                    components = components[2].split("-");
-                    for (int i = 1; i < components.count(); i++)
-                        newPath.append(QString("-") + components[i]);
-
-                    item = newPath;
-                }
-            }
+            if (app->type() == "os")
+                item = fixVariantName(item, results.first, 0);
+            else if (app->type() == "radio")
+                item = fixVariantName(item, results.second, 1);
         }
+
         updated.append(item + "\n");
     }
 
@@ -355,22 +378,23 @@ void MainNet::downloadLinks(int downloadDevice)
             setDownloading(false);
             return;
         }
-        qSafeFree(currentDownload);
+        delete currentDownload;
         currentDownload = new DownloadInfo(_versionRelease);
+        currentDownload->setApps(_updateAppList);
+        fixApps(downloadDevice);
         setDLProgress(0);
         _currentId = 0; emit currentIdChanged();
         _maxId = _sizes.count(); emit maxIdChanged();
         _dlBytes = 0;
         QDir firmware(currentDownload->baseDir);
         firmware.mkpath(".");
-        _fileList = convertLinks(downloadDevice, "").split("\n");
-        _currentFile.setFileName(currentDownload->baseDir + "/" + _fileList.at(_currentId).split("/").last());
+        _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
         emit currentFileChanged();
-        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < _fileList.count())
+        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < currentDownload->apps.count())
         {
             _dlBytes += _sizes.at(_currentId);
             _currentId++; emit currentIdChanged();
-            _currentFile.setFileName(currentDownload->baseDir + "/" + _fileList.at(_currentId).split("/").last());
+            _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
             emit currentFileChanged();
         }
         if (_currentFile.size() != _sizes.at(_currentId))
@@ -378,7 +402,7 @@ void MainNet::downloadLinks(int downloadDevice)
         _currentFile.open(QIODevice::WriteOnly);
         setDownloading(true);
         QNetworkRequest request;
-        request.setUrl(QUrl(_fileList.at(_currentId)));
+        request.setUrl(QUrl(currentDownload->getUrl(_currentId)));
         replydl = manager->get(request);
         connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));
@@ -418,20 +442,20 @@ void MainNet::downloadFinish()
         _currentFile.close();
 
         _currentId++; emit currentIdChanged();
-        _currentFile.setFileName(currentDownload->baseDir + "/" + _fileList.at(_currentId).split("/").last());
+        _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
         emit currentFileChanged();
-        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < _fileList.count())
+        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < currentDownload->apps.count())
         {
             _dlBytes += _sizes.at(_currentId);
             _currentId++; emit currentIdChanged();
-            _currentFile.setFileName(currentDownload->baseDir + "/" + _fileList.at(_currentId).split("/").last());
+            _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
             emit currentFileChanged();
         }
         if (_currentFile.size() != _sizes.at(_currentId))
             _currentFile.remove();
         _currentFile.open(QIODevice::WriteOnly);
         QNetworkRequest request;
-        request.setUrl(QUrl(_fileList.at(_currentId)));
+        request.setUrl(QUrl(currentDownload->getUrl(_currentId)));
         replydl = manager->get(request);
         connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));
@@ -789,14 +813,25 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         }
     }
     if (isNewer) {
-        _multiscanVersion = ver;
+        // Update software release versions
+        if (_multiscan)
+            _multiscanVersion = ver;
         _versionRelease = ver;
         // Server uses some funny order. Put in order of largest to smallest.
         std::sort(newApps.begin(), newApps.end(),
                   [=](const Apps* i, const Apps* j) { return i->size() > j->size(); });
 
         // Put this new list up for display
+        if (_updateAppList.count()) {
+            for (Apps* app: _updateAppList)
+                delete app;
+            _updateAppList.clear();
+        }
         _updateAppList = newApps;
+        // Connect every isMarkedChanged to the list signal
+        for (Apps* app: _updateAppList) {
+            connect(app, SIGNAL(isMarkedChanged()), this, SIGNAL(updateCheckedCountChanged()));
+        }
         _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
                 .arg(ver)
                 .arg(variant)
@@ -804,11 +839,11 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 .arg(radio != "" ? QString("<b> Radio: %1</b>").arg(radio) : "")
                 .arg(desc);
         emit updateMessageChanged();
+        emit updateCheckedCountChanged();
 
         _sizes = sizes;
         _dlTotal = 0;
-        foreach(int i, _sizes) { _dlTotal += i; }
-        _links = links;
+        for(int i : _sizes) { _dlTotal += i; }
     }
     setScanning(_scanning-1);
     if (_scanning <= 0)

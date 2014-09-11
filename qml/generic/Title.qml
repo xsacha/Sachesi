@@ -8,8 +8,8 @@ ApplicationWindow {
     id: window
     // TODO: Send version from C++
     title: "Sachesi " + version
-    width: 520
-    height: 480
+    width: 820
+    height: 680
     minimumHeight: 520
     minimumWidth: 440
 
@@ -96,12 +96,10 @@ ApplicationWindow {
         }
     }*/
     statusBar: StatusBar {
-        //visible: i.knownBattery > -1
         Label {
             visible: i.knownBattery < 0
             text: "No device connected"
         }
-
         Label {
             visible: i.knownBattery > -1
             property bool hasSpace: window.width > 700
