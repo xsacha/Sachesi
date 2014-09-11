@@ -292,7 +292,7 @@ Item {
                     signal uncheckAll()
                     title: "Options"
                     MenuItem {
-                        visible: p.updateCheckedCount != p.updateAppCount
+                        enabled: p.updateCheckedCount != p.updateAppCount
                         text: "Check All"
                         onTriggered: {
                             options_menu.checkAll();
@@ -301,7 +301,7 @@ Item {
                         }
                     }
                     MenuItem {
-                        visible: p.updateCheckedCount != 0
+                        enabled: p.updateCheckedCount > 0
                         text: "Uncheck All"
                         onTriggered: {
                             options_menu.uncheckAll()

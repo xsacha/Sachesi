@@ -382,23 +382,30 @@ void MainNet::downloadLinks(int downloadDevice)
         currentDownload = new DownloadInfo(_versionRelease);
         currentDownload->setApps(_updateAppList);
         fixApps(downloadDevice);
-        setDLProgress(0);
         _currentId = 0; emit currentIdChanged();
-        _maxId = _sizes.count(); emit maxIdChanged();
+        // NOTE: Guide only! Maybe we should ask server for real filesizes beforehand
+        _dlTotal = 0;
         _dlBytes = 0;
+        _maxId = 0;
+        for(int i = 0; i < currentDownload->apps.count(); i++) {
+            QString fileName = currentDownload->baseDir + "/" + currentDownload->getUrl(i).split("/").last();
+            // Either check signature or size to confirm?
+            if (QFile::exists(fileName)) {
+                currentDownload->apps.removeAt(i);
+            } else {
+                _dlTotal += currentDownload->getSize(i);
+                _maxId++;
+            }
+        }
+        if (_maxId == 0)
+            return;
+        emit maxIdChanged();
+        setDLProgress(0);
+
         QDir firmware(currentDownload->baseDir);
         firmware.mkpath(".");
         _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
         emit currentFileChanged();
-        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < currentDownload->apps.count())
-        {
-            _dlBytes += _sizes.at(_currentId);
-            _currentId++; emit currentIdChanged();
-            _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
-            emit currentFileChanged();
-        }
-        if (_currentFile.size() != _sizes.at(_currentId))
-            _currentFile.remove();
         _currentFile.open(QIODevice::WriteOnly);
         setDownloading(true);
         QNetworkRequest request;
@@ -431,28 +438,13 @@ void MainNet::downloadFinish()
 {
     if (!_downloading)
         return;
-    if (_dlBytes == _dlTotal)
-    {
-        _currentFile.close();
-        setDownloading(false);
-        setDLProgress(-1);
-    }
-    else if (_currentId != (_maxId - 1))
+
+    if (_currentId != (_maxId - 1))
     {
         _currentFile.close();
 
         _currentId++; emit currentIdChanged();
         _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
-        emit currentFileChanged();
-        while (_currentFile.exists() && _currentFile.size() == _sizes.at(_currentId) && _currentId < currentDownload->apps.count())
-        {
-            _dlBytes += _sizes.at(_currentId);
-            _currentId++; emit currentIdChanged();
-            _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
-            emit currentFileChanged();
-        }
-        if (_currentFile.size() != _sizes.at(_currentId))
-            _currentFile.remove();
         _currentFile.open(QIODevice::WriteOnly);
         QNetworkRequest request;
         request.setUrl(QUrl(currentDownload->getUrl(_currentId)));
@@ -461,6 +453,12 @@ void MainNet::downloadFinish()
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));
         connect(replydl, SIGNAL(readyRead()), this, SLOT(downloadLinks()));
         connect(replydl, SIGNAL(finished()), this, SLOT(downloadFinish()));
+    } else {
+        // May not be 100% equal to _dlTotal because we switched out some files actually
+        _currentFile.close();
+        setDownloading(false);
+        setDLProgress(-1);
+        QDesktopServices::openUrl(QUrl(currentDownload->baseDir));
     }
 }
 
@@ -740,35 +738,33 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
     QString radio = "";
     QString desc = "";
     QString addr = "";
-    QString links = "";
     QString currentaddr = "";
-    QList<int> sizes;
     QList<Apps*> newApps;
     while(!xml.atEnd() && !xml.hasError()) {
         if(xml.tokenType() == QXmlStreamReader::StartElement) {
             if (xml.name() == "package")
             {
                 Apps* newApp = new Apps();
-                QString name = xml.attributes().value("name").toString();
                 newApp->setIsMarked(true);
-                newApp->setFriendlyName(name);
-                int downloadSize = xml.attributes().value("downloadSize").toString().toInt();
-                newApp->setSize(downloadSize);
-                sizes.append(downloadSize);
-                QString app_path = xml.attributes().value("path").toString();
-                newApp->setName(app_path);
+                // Remember: this name *can* change
+                newApp->setFriendlyName(xml.attributes().value("name").toString());
+                // Remember: this size *can* change
+                newApp->setSize(xml.attributes().value("downloadSize").toString().toInt());
+                // Remember: this name *can* change
+                newApp->setName(xml.attributes().value("path").toString());
+                newApp->setVersion(xml.attributes().value("version").toString());
+                newApp->setVersionId(xml.attributes().value("id").toString());
                 QString type = xml.attributes().value("type").toString();
                 if (type == "system:os" || type == "system:desktop") {
-                    os = app_path.split('/').at(1);
+                    os = newApp->name().split('/').at(1);
                     newApp->setType("os");
                 } else if (type == "system:radio") {
-                    radio = app_path.split('/').at(1);
+                    radio = newApp->name().split('/').at(1);
                     newApp->setType("radio");
                 } else {
                     newApp->setType("application");
                 }
-                newApp->setPackageId(currentaddr + "/" + app_path);
-                links += currentaddr + "/" + app_path + "\n";
+                newApp->setPackageId(currentaddr + "/" + newApp->name());
                 newApps.append(newApp);
             }
             else if (xml.name() == "friendlyMessage")
@@ -840,18 +836,11 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 .arg(desc);
         emit updateMessageChanged();
         emit updateCheckedCountChanged();
-
-        _sizes = sizes;
-        _dlTotal = 0;
-        for(int i : _sizes) { _dlTotal += i; }
+        _error = ""; emit errorChanged();
     }
     setScanning(_scanning-1);
     if (_scanning <= 0)
         setMultiscan(false);
-    if (_dlTotal > 0)
-    {
-        _error = ""; emit errorChanged();
-    }
 }
 
 void MainNet::serverError(QNetworkReply::NetworkError err)

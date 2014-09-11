@@ -40,6 +40,14 @@ public:
     QString getUrl(int i) {
         if (i >= 0 && i < apps.count())
             return apps.at(i).packageId();
+        else
+            return "";
+    }
+    int getSize(int i) {
+        if (i >= 0 && i < apps.count())
+            return apps.at(i).size();
+        else
+            return 0;
     }
 
     QString baseDir;
@@ -162,7 +170,6 @@ private:
     bool _hasPotentialLinks;
     int _scanning;
     QFile _currentFile;
-    QList<int> _sizes;
     int _currentId, _maxId, _dlBytes, _dlTotal;
     int _splitting, _splitProgress;
     int _dlProgress;
