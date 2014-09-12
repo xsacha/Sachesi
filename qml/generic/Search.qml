@@ -276,6 +276,9 @@ Item {
         textFormat: TextEdit.RichText
         selectByKeyboard: true
     }
+    // Cheat to get system widths of text here. Should use a TableView with rowDelegate later to replace it.
+    // A Label with 6 characters and ' MB', like the maximum filesize of an app
+    Label { visible: false; id: sizeHint; font.pointSize: 12; text: "1700.0 MB"; }
     ScrollView {
         id: updateAppMessage
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
@@ -334,7 +337,7 @@ Item {
                 CheckBox {
                     id: delegateBox
                     text: friendlyName
-                    width: Math.min(implicitWidth, parent.width - sizeText.width)
+                    width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                     clip: true
                     checked: isMarked
                     onCheckedChanged: isMarked = checked;
@@ -344,9 +347,18 @@ Item {
                         onUncheckAll: delegateBox.checked = false;
                     }
                 }
+
+                Label {
+                    id: versionText
+                    anchors.right: sizeText.left;
+                    visible: (parent.width - sizeText.paintedWidth) > delegateBox.implicitWidth
+                    text: version
+                }
                 Label {
                     id: sizeText
                     anchors.right: parent.right
+                    width: sizeHint.width
+                    horizontalAlignment: Text.AlignRight
                     text: (size / 1024 / 1024).toFixed(1) + " MB"
                     font.pointSize: 12;
                 }
