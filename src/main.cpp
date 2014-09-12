@@ -79,6 +79,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     context->setContextProperty("p", &p);
+    context->setContextProperty("download", p.currentDownload);
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");

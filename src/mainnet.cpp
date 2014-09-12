@@ -33,13 +33,12 @@ MainNet::MainNet(InstallNet *installer, QObject* parent)
     , _downloading(false)
     , _hasPotentialLinks(false)
     , _scanning(0)
-    , _currentId(0)
-    , _maxId(0)
     , _splitting(0)
     , _splitProgress(0)
     , _dlProgress(-1)
 {
     manager = new QNetworkAccessManager();
+    currentDownload = new DownloadInfo();
 }
 
 MainNet::~MainNet()
@@ -319,6 +318,7 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
 
         return newPath;
     }
+    return name;
 }
 
 // Permanently converts the currentDownload object apps to the current 'Download Device'
@@ -329,11 +329,18 @@ void MainNet::fixApps(int downloadDevice) {
         return;
 
     for(Apps& app : currentDownload->apps) {
-        if (app.type() == "os")
+        if (app.type() == "os") {
             app.setPackageId(fixVariantName(app.packageId(), results.first, 0));
-        else if (app.type() == "radio")
+            app.setName(app.packageId().split("/").last());
+            app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
+        } else if (app.type() == "radio") {
             app.setPackageId(fixVariantName(app.packageId(), results.second, 1));
+            app.setName(app.packageId().split("/").last());
+            app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
+        }
     }
+    // Refresh the names in QML
+    currentDownload->nextFile(0);
 }
 
 
@@ -378,38 +385,18 @@ void MainNet::downloadLinks(int downloadDevice)
             setDownloading(false);
             return;
         }
-        delete currentDownload;
-        currentDownload = new DownloadInfo(_versionRelease);
-        currentDownload->setApps(_updateAppList);
+        currentDownload->setApps(_updateAppList, _versionRelease);
         fixApps(downloadDevice);
-        _currentId = 0; emit currentIdChanged();
-        // NOTE: Guide only! Maybe we should ask server for real filesizes beforehand
-        _dlTotal = 0;
-        _dlBytes = 0;
-        _maxId = 0;
-        for(int i = 0; i < currentDownload->apps.count(); i++) {
-            QString fileName = currentDownload->baseDir + "/" + currentDownload->getUrl(i).split("/").last();
-            // Either check signature or size to confirm?
-            if (QFile::exists(fileName)) {
-                currentDownload->apps.removeAt(i);
-            } else {
-                _dlTotal += currentDownload->getSize(i);
-                _maxId++;
-            }
-        }
-        if (_maxId == 0)
+        if (currentDownload->maxId == 0)
             return;
-        emit maxIdChanged();
-        setDLProgress(0);
 
         QDir firmware(currentDownload->baseDir);
         firmware.mkpath(".");
-        _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
-        emit currentFileChanged();
+        _currentFile.setFileName(currentDownload->getFilename());
         _currentFile.open(QIODevice::WriteOnly);
         setDownloading(true);
         QNetworkRequest request;
-        request.setUrl(QUrl(currentDownload->getUrl(_currentId)));
+        request.setUrl(QUrl(currentDownload->getUrl()));
         replydl = manager->get(request);
         connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));
@@ -418,7 +405,7 @@ void MainNet::downloadLinks(int downloadDevice)
     }
     else if (_downloading) {
         QByteArray data = replydl->readAll();
-        if (_dlBytes == 0)
+        if (currentDownload->size == 0)
         {
             if (data.startsWith("<?xml")) {
                 QMessageBox::critical(nullptr, "Error", "You are restricted from downloading this file.");
@@ -429,8 +416,7 @@ void MainNet::downloadLinks(int downloadDevice)
                 return;
             }
         }
-        _dlBytes += data.size();
-        setDLProgress((int)100.0*((double)(_dlBytes)/(double)_dlTotal));
+        currentDownload->progressSize(data.size());
         _currentFile.write(data);
     }
 }
@@ -439,26 +425,25 @@ void MainNet::downloadFinish()
     if (!_downloading)
         return;
 
-    if (_currentId != (_maxId - 1))
+    if (currentDownload->nextFile())
     {
         _currentFile.close();
-
-        _currentId++; emit currentIdChanged();
-        _currentFile.setFileName(currentDownload->baseDir + "/" + currentDownload->getUrl(_currentId).split("/").last());
+        _currentFile.setFileName(currentDownload->getFilename());
         _currentFile.open(QIODevice::WriteOnly);
         QNetworkRequest request;
-        request.setUrl(QUrl(currentDownload->getUrl(_currentId)));
+        request.setUrl(QUrl(currentDownload->getUrl()));
         replydl = manager->get(request);
         connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(abortDL(QNetworkReply::NetworkError)));
         connect(replydl, SIGNAL(readyRead()), this, SLOT(downloadLinks()));
         connect(replydl, SIGNAL(finished()), this, SLOT(downloadFinish()));
     } else {
-        // May not be 100% equal to _dlTotal because we switched out some files actually
+        // May not be 100% equal to totalSize because we switched out some files actually
+        QDesktopServices::openUrl(QUrl(QFileInfo(_currentFile).absolutePath()));
+        qDebug() << _currentFile.isOpen();
         _currentFile.close();
         setDownloading(false);
-        setDLProgress(-1);
-        QDesktopServices::openUrl(QUrl(currentDownload->baseDir));
+        currentDownload->resetApps();
     }
 }
 
@@ -765,6 +750,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     newApp->setType("application");
                 }
                 newApp->setPackageId(currentaddr + "/" + newApp->name());
+                newApp->setName(newApp->name().split("/").last());
                 newApps.append(newApp);
             }
             else if (xml.name() == "friendlyMessage")
@@ -873,5 +859,3 @@ void MainNet::setMultiscan(const bool &multiscan) {
 void MainNet::setScanning(const int &scanning) { _scanning = scanning; emit scanningChanged(); }
 void MainNet::setDownloading(const bool &downloading) { _downloading = downloading; emit downloadingChanged(); }
 void MainNet::setSplitProgress(const int &progress) { if (_splitProgress > 1000) _splitProgress = 0; else _splitProgress = progress; emit splitProgressChanged(); }
-
-QString MainNet::currentFile() const { QString ret = _currentFile.fileName().split("/").last(); if (ret.length() > 30) ret.truncate(30); return ret; }

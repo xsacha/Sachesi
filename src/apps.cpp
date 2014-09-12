@@ -30,7 +30,7 @@
 
 Apps::Apps(QObject *parent)
     : QObject(parent)
-    , _name(""), _packageId("")
+    , _name(""), _friendlyName(""), _packageId("")
     , _code(0), _size(0)
     , _isMarked(false), _type("")
     , _version(""), _versionId("")
@@ -39,13 +39,14 @@ Apps::Apps(QObject *parent)
 
 Apps::Apps(const Apps& app, QObject *parent)
     : QObject(parent)
-    , _name(app.name()), _packageId(app.packageId())
+    , _name(app.name()), _friendlyName(app.friendlyName()), _packageId(app.packageId())
     , _code(app.code()), _size(app.size())
     , _isMarked(app.isMarked()), _type(app.type())
     , _version(app.version()), _versionId(app.versionId())
     , _checksum(app.checksum())
 { }
 
+/*
 Apps::Apps(const Apps* app, QObject *parent)
     : QObject(parent)
     , _name(app->name()), _packageId(app->packageId())
@@ -53,7 +54,7 @@ Apps::Apps(const Apps* app, QObject *parent)
     , _isMarked(app->isMarked()), _type(app->type())
     , _version(app->version()), _versionId(app->versionId())
     , _checksum(app->checksum())
-{ }
+{ }*/
 
 SET_QML2(QString, name, setName)
 SET_QML2(QString, packageId, setPackageId)

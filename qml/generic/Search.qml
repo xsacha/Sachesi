@@ -13,48 +13,22 @@ Item {
     Rectangle {
         visible: p.downloading
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        height: 115; width: parent.width - 20; radius: 5
+        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20); radius: 8
         color: "lightgray"
-        z: 5
-        opacity: 0.95
         Text {
+            id: titleText
             text: "Download"
-            font.pointSize: 10
+            font.pointSize: 14
             anchors.horizontalCenter: parent.horizontalCenter
         }
-        Text {
-            id: dlText
-            anchors {top: parent.top; topMargin: 40; left: parent.left; leftMargin: 10 }
-            property int thisId: p.currentId + 1
-            text: "Downloading (" + thisId + " of " + p.maxId + "): "
-            font.pointSize: 10
-        }
-        Rectangle {
-            anchors {left: dlText.right; leftMargin: 10; verticalCenter: dlText.verticalCenter }
-            color: "transparent"
-            width: 240; height: 40
-            border { color: "gray"; width: 1 }
-            Rectangle {
-                x: 1; y: 1
-                width: (p.dlProgress / 100) * parent.width - 2
-                height: 40 - 2
-                color: "lightsteelblue"
-            }
-            Text {
-                text: p.currentFile
-                anchors {top: parent.top; topMargin: 2; horizontalCenter: parent.horizontalCenter }
-                font.pointSize: 10
-            }
-            Text {
-                anchors {bottom: parent.bottom; bottomMargin: 2; horizontalCenter: parent.horizontalCenter }
-                text: "("+p.dlProgress+"%)"
-                font.pointSize: 10
-            }
-        }
-        Button {
-            anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter}
-            text: "Cancel"
-            onClicked: p.abortDL()
+        CircleProgress {
+            width: parent.width - 10; height: Math.min(parent.height - 20, width);
+            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
+            currentValue: download.curProgress
+            overallValue: download.progress
+            curId: download.id + 1
+            maxId: download.maxId
+            text: download.curName
         }
     }
     Column {
@@ -105,7 +79,7 @@ Item {
             onClicked: p.grabLinks(downloadDevice.selectedItem)
         }
         Button {
-            enabled: p.updateCheckedCount > 0
+            enabled: p.updateCheckedCount > 0 && !p.downloading
             Layout.alignment: Qt.AlignHCenter
             text: (p.updateCheckedCount == p.updateAppCount) ? "Download All" : "Download Selected (" + p.updateCheckedCount + ")"
             onClicked: {p.dlProgress = -1; p.downloadLinks(downloadDevice.selectedItem) }
