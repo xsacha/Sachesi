@@ -51,7 +51,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
-    app.setApplicationVersion("1.8.1");
+    app.setApplicationVersion("1.8.2");
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     QQmlApplicationEngine engine;
@@ -79,6 +79,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     context->setContextProperty("p", &p);
+    context->setContextProperty("download", p.currentDownload);
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");

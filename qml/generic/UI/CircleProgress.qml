@@ -17,12 +17,15 @@ Canvas {
     property real maximumValue: 100
     property real currentValue: 0
     // To show on click
-    property real overallValue: 0
+    property real overallValue: -1
+    property real viewValue: (overallValue > -1 && mouseArea.pressed) ? overallValue : currentValue
+    property real curId: 0
+    property real maxId: 0
 
     // this is the angle that splits the circle in two arcs
     // first arc is drawn from 0 radians to angle radians
     // second arc is angle radians to 2*PI radians
-    property real angle: (currentValue - minimumValue) / (maximumValue - minimumValue) * 2 * Math.PI
+    property real angle: (viewValue - minimumValue) / (maximumValue - minimumValue) * 2 * Math.PI
 
     // we want both circle to start / end at 12 o'clock
     // without this offset we would start / end at 9 o'clock
@@ -38,7 +41,7 @@ Canvas {
     onMaximumValueChanged: requestPaint()
     onHeightChanged: requestPaint();
     // Keeps turning off
-    onCurrentValueChanged: { requestPaint(); antialiasing = true; }
+    onViewValueChanged: { requestPaint(); antialiasing = true; }
 
     onPaint: {
         var ctx = getContext("2d");
@@ -53,7 +56,7 @@ Canvas {
         if (mouseArea.pressed) {
             ctx.beginPath();
             ctx.lineWidth = 1;
-            ctx.fillStyle = Qt.lighter(canvas.secondaryColor, 1.25);
+            ctx.fillStyle = Qt.lighter(canvas.primaryColor, 1.25);
             ctx.arc(canvas.centerWidth,
                     canvas.centerHeight,
                     canvas.radius,
@@ -102,9 +105,13 @@ Canvas {
             anchors.horizontalCenter: parent.horizontalCenter
         }
         // Show count if we are looking at individual percents
-        // Text { visible: !mouseArea.pressed; text: p.curDgPos " of " p.dgCount  }
         Text {
-            text: currentValue + "%"
+            visible: !mouseArea.pressed && maxId > 0;
+            text: curId + " of " + maxId
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+        Text {
+            text: viewValue + "%"
             font.bold: true
             scale: mouseArea.pressed ? 2.0 : 1.0
             NumberAnimation on scale { duration: 3000 }
