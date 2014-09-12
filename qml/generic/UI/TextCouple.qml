@@ -18,6 +18,7 @@ Item {
     width: (14.5) * 15
     ColumnLayout {
         RowLayout {
+            id: topRow
             Layout.fillWidth: true
             Label {
                 text: type
@@ -49,7 +50,7 @@ Item {
         }
         Label {
             id: subtextValue
-            anchors {left: parent.left; leftMargin: 10}
+            anchors {left: parent.left; leftMargin: 10; top: parent.top; topMargin: topRow.implicitHeight - 4 }
             text: ""
         }
     }

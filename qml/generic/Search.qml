@@ -282,7 +282,6 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         ListView {
-            id: appView
             anchors.fill: parent
             spacing: 3
             clip: true
@@ -335,6 +334,8 @@ Item {
                 CheckBox {
                     id: delegateBox
                     text: friendlyName
+                    width: Math.min(implicitWidth, parent.width - sizeText.width)
+                    clip: true
                     checked: isMarked
                     onCheckedChanged: isMarked = checked;
                     Connections {
@@ -344,6 +345,7 @@ Item {
                     }
                 }
                 Label {
+                    id: sizeText
                     anchors.right: parent.right
                     text: (size / 1024 / 1024).toFixed(1) + " MB"
                     font.pointSize: 12;

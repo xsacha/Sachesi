@@ -11,7 +11,7 @@ ApplicationWindow {
     width: 820
     height: 680
     minimumHeight: 520
-    minimumWidth: 440
+    minimumWidth: 450
 
     Settings {
         id: settings

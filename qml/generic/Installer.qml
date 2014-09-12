@@ -218,10 +218,13 @@ Item {
                         }
                         CheckBox {
                             text: friendlyName
+                            width: Math.min(implicitWidth, parent.width - versionText.width)
+                            clip: true
                             checked: isMarked
                             onCheckedChanged: isMarked = checked;
                         }
                         Label {
+                            id: versionText
                             anchors.right: parent.right
                             text: version
                             font.pointSize: 12;
