@@ -276,7 +276,67 @@ Item {
         textFormat: TextEdit.RichText
         selectByKeyboard: true
     }
-    // Cheat to get system widths of text here. Should use a TableView with rowDelegate later to replace it.
+
+    // Changes required to make this workable
+    // - Need to prevent it being horizontally scrollable or at least make it fit by default
+    // - Requires Qt 5.3 for resizeToContents()!!
+    // - Context menu doesn't work? We need (Un)Check All
+    /*TableView {
+        id: updateAppMessage
+        anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        alternatingRowColors: false
+        backgroundVisible: false
+        model: p.updateAppList
+        Menu {
+            id: options_menu
+            signal checkAll()
+            signal uncheckAll()
+            title: "Options"
+            MenuItem {
+                enabled: p.updateCheckedCount != p.updateAppCount
+                text: "Check All"
+                onTriggered: {
+                    options_menu.checkAll();
+                    for (var i = 0; i < p.updateAppCount; i++)
+                        p.updateAppList[i].isMarked = true;
+                }
+            }
+            MenuItem {
+                enabled: p.updateCheckedCount > 0
+                text: "Uncheck All"
+                onTriggered: {
+                    options_menu.uncheckAll()
+                    for (var i = 0; i < p.updateAppCount; i++)
+                        p.updateAppList[i].isMarked = false;
+                }
+            }
+        }
+        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title: "Name" }
+        TableViewColumn { id: verCol;  role: "version"; title: "Version"; resizable: false; }
+        TableViewColumn { id: sizeCol;  role: "size"; title: "Size"; resizable: false; }
+        //onModelChanged: { verCol.resizeToContents(); sizeCol.resizeToContents(); }
+        rowDelegate: Rectangle {
+            opacity: 0.2
+            color: { switch(typeof modelData != 'undefined' ? modelData.type : "") {
+                case "os": return "red";
+                case "radio": return "maroon";
+                case "application": if (modelData.friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
+                default: return "transparent";
+                }
+            }
+        }
+
+        itemDelegate: Text {
+            property variant value: styleData.value
+            text: (styleData.role === "size") ? (value / 1024 / 1024).toFixed(1) + " MB" : value
+            horizontalAlignment: (styleData.role === "size") ? Qt.AlignRight : Qt.AlignLeft
+            clip: true
+        }
+    }*/
+
+    // Cheat to get system widths of text here. Should use a TableView (above) later to replace it.
     // A Label with 6 characters and ' MB', like the maximum filesize of an app
     Label { visible: false; id: sizeHint; font.pointSize: 12; text: "1700.0 MB"; }
     ScrollView {
