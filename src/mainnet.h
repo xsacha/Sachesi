@@ -21,121 +21,7 @@
 #include <QObject>
 #include "splitter.h"
 #include "installer.h"
-
-class DownloadInfo : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(int     id          MEMBER id          NOTIFY idChanged)
-    Q_PROPERTY(int     maxId       MEMBER maxId       NOTIFY appsChanged)
-    Q_PROPERTY(int     curProgress MEMBER curProgress NOTIFY sizeChanged)
-    Q_PROPERTY(int     progress    MEMBER progress    NOTIFY sizeChanged)
-    Q_PROPERTY(int     size        MEMBER size        NOTIFY sizeChanged)
-    Q_PROPERTY(qint64  totalSize   MEMBER totalSize   NOTIFY appsChanged)
-    Q_PROPERTY(QString curName     MEMBER curName     NOTIFY idChanged)
-public:
-    DownloadInfo(QObject* parent = 0)
-        : QObject(parent)
-        , baseDir("")
-        , id(0), maxId(0)
-        , progress(-1), curProgress(0)
-        , size(0), totalSize(0)
-    {
-    }
-
-    void resetApps() {
-        maxId = 0;
-        size = 0;
-        totalSize = 0;
-        progress = -1;
-        apps.clear();
-        curName.clear();
-    }
-
-    void setApps(QList<Apps*> newApps, QString& version) {
-        resetApps();
-        baseDir = QDir::currentPath() + "/" + version;
-
-        // Check which apps user wanted
-        for (Apps* newApp : newApps) {
-            if (!newApp->isMarked())
-                continue;
-            apps.append(*newApp);
-        }
-
-        // Check which apps user doesn't already have
-        for(int i = 0; i < apps.count(); i++) {
-            QString fileName = baseDir + "/" + apps.at(i).name();
-            // Either check signature or size to confirm?
-            if (QFile::exists(fileName)) {
-                apps.removeAt(i--);
-            } else {
-                // NOTE: Guide only! Maybe we should ask server for real filesizes beforehand
-                totalSize += apps.at(i).size();
-            }
-        }
-        maxId = apps.count();
-        nextFile(0);
-        emit appsChanged();
-    }
-
-    QString getFilename(int i = -1) {
-        if (i == -1)
-            i = id;
-        if (i >= 0 && i < maxId)
-            return baseDir + "/" + apps.at(i).name();
-        else
-            return "";
-    }
-
-    QString getUrl(int i = -1) {
-        if (i == -1)
-            i = id;
-        if (i >= 0 && i < maxId)
-            return apps.at(i).packageId();
-        else
-            return "";
-    }
-    int getSize(int i = -1) {
-        if (i == -1)
-            i = id;
-        if (i >= 0 && i < maxId)
-            return apps.at(i).size();
-        else
-            return 0;
-    }
-    void progressSize(qint64 bytes) {
-        size += bytes;
-        curSize += bytes;
-        curProgress = 100*curSize / apps.at(id).size();
-        progress = 100*size / totalSize;
-        emit sizeChanged();
-    }
-
-    bool nextFile(int i = -1) {
-        curSize = 0;
-        if (i == -1)
-            id++;
-        else
-            id = i;
-
-        if (id >= 0 && id < maxId)
-            curName = apps.at(id).friendlyName();
-
-        emit idChanged();
-
-        return (id < maxId);
-    }
-
-    QString baseDir;
-    QList<Apps> apps;
-    int id, maxId;
-    int progress, curProgress;
-    qint64 curSize, size, totalSize;
-    QString curName;
-signals:
-    void idChanged();
-    void sizeChanged();
-    void appsChanged();
-};
+#include "downloadinfo.h"
 
 class MainNet : public QObject {
     Q_OBJECT
@@ -144,6 +30,8 @@ class MainNet : public QObject {
     Q_PROPERTY(QQmlListProperty<Apps> updateAppList READ updateAppList NOTIFY updateMessageChanged)
     Q_PROPERTY(int updateAppCount READ updateAppCount NOTIFY updateMessageChanged)
     Q_PROPERTY(int updateCheckedCount READ updateCheckedCount NOTIFY updateCheckedCountChanged)
+    Q_PROPERTY(int updateAppAvailableCount READ updateAppAvailableCount NOTIFY updateMessageChanged)
+    Q_PROPERTY(int updateCheckedAvailableCount READ updateCheckedAvailableCount NOTIFY updateCheckedCountChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
     Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
@@ -151,7 +39,6 @@ class MainNet : public QObject {
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
     Q_PROPERTY(bool    multiscan MEMBER _multiscan WRITE setMultiscan NOTIFY multiscanChanged)
     Q_PROPERTY(int     scanning MEMBER _scanning WRITE setScanning NOTIFY scanningChanged)
-    Q_PROPERTY(int     dlProgress MEMBER _dlProgress WRITE setDLProgress NOTIFY dlProgressChanged)
     Q_PROPERTY(int     maxId MEMBER _maxId NOTIFY maxIdChanged)
     Q_PROPERTY(int     splitting MEMBER _splitting NOTIFY splittingChanged)
     Q_PROPERTY(int     splitProgress MEMBER _splitProgress WRITE setSplitProgress NOTIFY splitProgressChanged)
@@ -182,17 +69,31 @@ public:
                                    }
     void    setMultiscan(const bool &multiscan);
     void    setScanning(const int &scanning);
-    void    setDLProgress(const int &progress);
     void    setDownloading(const bool &downloading);
     QQmlListProperty<Apps> updateAppList() {
         return QQmlListProperty<Apps>(this, &_updateAppList, &appendApps, &appsSize, &appsAt, &clearApps);
     }
 
     int updateAppCount() const { return _updateAppList.count(); }
+    int updateAppAvailableCount() const {
+        int count = 0;
+        for (Apps* app : _updateAppList) {
+            if (app->isAvailable())
+                count++;
+        }
+        return count;
+    }
     int updateCheckedCount() const {
         int checked = 0;
         for (Apps* app: _updateAppList)
             if (app->isMarked())
+                checked++;
+        return checked;
+    }
+    int updateCheckedAvailableCount() const {
+        int checked = 0;
+        for (Apps* app: _updateAppList)
+            if (app->isMarked() && app->isAvailable())
                 checked++;
         return checked;
     }
@@ -212,7 +113,6 @@ signals:
     void downloadingChanged();
     void hasPotentialLinksChanged();
     void hasBootAccessChanged();
-    void dlProgressChanged();
     void maxIdChanged();
     void splittingChanged();
     void splitProgressChanged();
@@ -250,7 +150,6 @@ private:
     QFile _currentFile;
     int _maxId, _dlBytes, _dlTotal;
     int _splitting, _splitProgress;
-    int _dlProgress;
     int _options;
     int _type;
 };

@@ -26,7 +26,6 @@ MainNet::MainNet(InstallNet *installer, QObject* parent)
     : QObject(parent)
     , _i(installer)
     , replydl(nullptr)
-    , currentDownload(nullptr)
     , _updateMessage("")
     , _softwareRelease("")
     , _versionRelease("")
@@ -35,7 +34,6 @@ MainNet::MainNet(InstallNet *installer, QObject* parent)
     , _scanning(0)
     , _splitting(0)
     , _splitProgress(0)
-    , _dlProgress(-1)
 {
     manager = new QNetworkAccessManager();
     currentDownload = new DownloadInfo();
@@ -375,26 +373,33 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
 
 void MainNet::downloadLinks(int downloadDevice)
 {
-    if (_dlProgress < 0 && !_downloading)
+    if (_downloading && currentDownload->maxId == 0) {
+        if (_currentFile.isOpen())
+        {
+            _currentFile.close();
+            _currentFile.remove();
+        }
+        qNetSafeFree(replydl);
+        setDownloading(false);
+    }
+    else if (!_downloading && currentDownload->isStarting())
     {
         if (_currentFile.isOpen())
         {
             _currentFile.close();
             _currentFile.remove();
-            qNetSafeFree(replydl);
-            setDownloading(false);
-            return;
         }
         currentDownload->setApps(_updateAppList, _versionRelease);
         fixApps(downloadDevice);
-        if (currentDownload->maxId == 0)
+        if (currentDownload->maxId == 0) {
+            currentDownload->reset();
             return;
+        }
+        setDownloading(true);
 
-        QDir firmware(currentDownload->baseDir);
-        firmware.mkpath(".");
+        QDir(currentDownload->baseDir).mkpath(".");
         _currentFile.setFileName(currentDownload->getFilename());
         _currentFile.open(QIODevice::WriteOnly);
-        setDownloading(true);
         QNetworkRequest request;
         request.setUrl(QUrl(currentDownload->getUrl()));
         replydl = manager->get(request);
@@ -413,6 +418,7 @@ void MainNet::downloadLinks(int downloadDevice)
                 _currentFile.remove();
                 qNetSafeFree(replydl);
                 setDownloading(false);
+                currentDownload->reset();
                 return;
             }
         }
@@ -422,8 +428,10 @@ void MainNet::downloadLinks(int downloadDevice)
 }
 void MainNet::downloadFinish()
 {
-    if (!_downloading)
+    if (!_downloading) {
+        currentDownload->reset();
         return;
+    }
 
     if (currentDownload->nextFile())
     {
@@ -442,7 +450,7 @@ void MainNet::downloadFinish()
         QDesktopServices::openUrl(QUrl(QFileInfo(_currentFile).absolutePath()));
         _currentFile.close();
         setDownloading(false);
-        currentDownload->resetApps();
+        currentDownload->reset();
     }
 }
 
@@ -729,7 +737,6 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
             if (xml.name() == "package")
             {
                 Apps* newApp = new Apps();
-                newApp->setIsMarked(true);
                 // Remember: this name *can* change
                 newApp->setFriendlyName(xml.attributes().value("name").toString());
                 // Remember: this size *can* change
@@ -750,6 +757,9 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 }
                 newApp->setPackageId(currentaddr + "/" + newApp->name());
                 newApp->setName(newApp->name().split("/").last());
+
+                newApp->setIsMarked(true);
+                newApp->setIsAvailable(true);
                 newApps.append(newApp);
             }
             else if (xml.name() == "friendlyMessage")
@@ -814,9 +824,12 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 _updateAppList.clear();
             }
             _updateAppList = newApps;
-            // Connect every isMarkedChanged to the list signal
+            // Connect every isMarkedChanged to the list signal and check if it should be marked
             for (Apps* app: _updateAppList) {
                 connect(app, SIGNAL(isMarkedChanged()), this, SIGNAL(updateCheckedCountChanged()));
+                bool exists = QFile::exists(QDir::currentPath() + "/" + _versionRelease + "/" + app->name());
+                app->setIsMarked(!exists);
+                app->setIsAvailable(!exists);
             }
             _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
                     .arg(ver)
@@ -850,7 +863,6 @@ void MainNet::serverError(QNetworkReply::NetworkError err)
         setMultiscan(false);
 }
 
-void MainNet::setDLProgress(const int &progress) { _dlProgress = progress; emit dlProgressChanged(); }
 void MainNet::setMultiscan(const bool &multiscan) {
     _multiscan = multiscan; emit multiscanChanged();
     _multiscanVersion = ""; emit updateMessageChanged();

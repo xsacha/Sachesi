@@ -78,7 +78,8 @@ SOURCES += \
 HEADERS += \
     src/mainnet.h \
     src/splitter.h \
-    src/ports.h
+    src/ports.h \
+    src/downloadinfo.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {

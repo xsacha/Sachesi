@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
+import QtQuick.Window 2.1
 import "mcc.js" as MCC
 import "UI" 1.0
 
@@ -10,25 +11,46 @@ Item {
     property bool isMobile: false
     state: "initing"
 
-    Rectangle {
-        visible: p.downloading
+    RowLayout {
+        visible: p.downloading && !downloadWin.visible
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20); radius: 8
-        color: "lightgray"
-        Text {
-            id: titleText
-            text: "Download"
-            font.pointSize: 14
-            anchors.horizontalCenter: parent.horizontalCenter
+        Button {
+            text: "View Download (" + download.progress + "%)"
+            onClicked: downloadWin.visible = true
         }
-        CircleProgress {
-            width: parent.width - 10; height: Math.min(parent.height - 20, width);
-            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
-            currentValue: download.curProgress
-            overallValue: download.progress
-            curId: download.id + 1
-            maxId: download.maxId
-            text: download.curName
+        Button {
+            text: "Cancel Download"
+            onClicked: p.downloading = false;
+        }
+    }
+
+    Window {
+        id: downloadWin
+        visible: p.downloading
+        onVisibleChanged: if (visible) {
+                              x = window.x + (window.width - width) / 2
+                              y = window.y + (window.height - height) / 2
+                          }
+        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
+        color: "lightgray"
+        title: "Download"
+        ColumnLayout {
+            anchors.fill: parent
+            CircleProgress {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                currentValue: download.curProgress
+                overallValue: download.progress
+                curId: download.id + 1
+                maxId: download.maxId
+                text: download.curName
+            }
+            Button {
+                id: cancelButton
+                text: "Cancel Download"
+                onClicked: download.reset();
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
     }
     Column {
@@ -79,10 +101,10 @@ Item {
             onClicked: p.grabLinks(downloadDevice.selectedItem)
         }
         Button {
-            enabled: p.updateCheckedCount > 0 && !p.downloading
+            enabled: p.updateCheckedAvailableCount > 0 && !p.downloading
             Layout.alignment: Qt.AlignHCenter
-            text: (p.updateCheckedCount == p.updateAppCount) ? "Download All" : "Download Selected (" + p.updateCheckedCount + ")"
-            onClicked: {p.dlProgress = -1; p.downloadLinks(downloadDevice.selectedItem) }
+            text: (p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "Download All" : "Download Selected (" + p.updateCheckedAvailableCount + ")"
+            onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
         }
     }
     ColumnLayout {
@@ -326,15 +348,25 @@ Item {
             Menu {
                 id: options_menu
                 signal checkAll()
+                signal checkAllAvailable()
                 signal uncheckAll()
                 title: "Options"
                 MenuItem {
-                    enabled: p.updateCheckedCount != p.updateAppCount
+                    enabled: p.updateCheckedCount !== p.updateAppCount
                     text: "Check All"
                     onTriggered: {
                         options_menu.checkAll();
                         for (var i = 0; i < p.updateAppCount; i++)
                             p.updateAppList[i].isMarked = true;
+                    }
+                }
+                MenuItem {
+                    enabled: p.updateCheckedAvailableCount !== p.updateAppAvailableCount
+                    text: "Check All Needed"
+                    onTriggered: {
+                        options_menu.checkAllAvailable();
+                        for (var i = 0; i < p.updateAppCount; i++)
+                            p.updateAppList[i].isMarked = p.updateAppList[i].isAvailable;
                     }
                 }
                 MenuItem {
@@ -370,7 +402,7 @@ Item {
                 }
                 CheckBox {
                     id: delegateBox
-                    text: friendlyName
+                    text: friendlyName + (isAvailable ? "" : " (downloaded)")
                     width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                     clip: true
                     checked: isMarked
@@ -378,6 +410,7 @@ Item {
                     Connections {
                         target: options_menu
                         onCheckAll: delegateBox.checked = true;
+                        onCheckAllAvailable: delegateBox.checked = isAvailable;
                         onUncheckAll: delegateBox.checked = false;
                     }
                 }

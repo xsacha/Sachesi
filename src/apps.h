@@ -30,6 +30,7 @@ class Apps : public QObject {
     Q_PROPERTY(int code READ code WRITE setCode NOTIFY codeChanged)
     Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(bool isMarked READ isMarked WRITE setIsMarked NOTIFY isMarkedChanged)
+    Q_PROPERTY(bool isAvailable READ isAvailable WRITE setIsAvailable NOTIFY isAvailableChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(QString versionId READ versionId WRITE setVersionId NOTIFY versionIdChanged)
@@ -46,6 +47,7 @@ public:
     int code() const;
     int size() const;
     bool isMarked() const;
+    bool isAvailable() const;
     QString type() const;
     QString version() const;
     QString versionId() const;
@@ -56,6 +58,7 @@ public:
     void setCode(const int &num);
     void setSize(const int &num);
     void setIsMarked(const bool &marked);
+    void setIsAvailable(const bool &available);
     void setType(const QString &str);
     void setVersion(const QString &str);
     void setVersionId(const QString &str);
@@ -68,6 +71,7 @@ signals:
     void codeChanged();
     void sizeChanged();
     void isMarkedChanged();
+    void isAvailableChanged();
     void typeChanged();
     void versionChanged();
     void versionIdChanged();
@@ -80,6 +84,7 @@ private:
     int _code;
     int _size;
     bool _isMarked;
+    bool _isAvailable;
     QString _type;
     QString _version;
     QString _versionId;
