@@ -15,23 +15,25 @@ Item {
     visible: i.knownBattery > -1
     anchors.fill: parent
 
-    // TODO: Switch to Window
-    Rectangle {
-        visible: i.dgProgress >= 0
+    Button {
+        visible: i.dgProgress >= 0 && !installWin.visible
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20); radius: 8
-        z: 5
+        text: "View Install (" + i.dgProgress + ")"
+        onClicked: installWin.visible = true
+    }
+
+    Window {
+        id: installWin
+        visible: i.dgProgress >= 0
+        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
+        onVisibleChanged: if (visible) {
+                              x = window.x + (window.width - width) / 2
+                              y = window.y + (window.height - height) / 2
+                          }
         color: "lightgray"
-        opacity: 0.6
-        Text {
-            id: titleText
-            text: i.firmwareUpdate ? "Firmware Update" : "Install"
-            font.pointSize: 14
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+        title: i.firmwareUpdate ? "Firmware Update" : "Install"
         CircleProgress {
-            width: parent.width - 10; height: Math.min(parent.height - 20, width);
-            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
+            anchors.fill: parent
             currentValue: i.dgProgress
             text: i.curInstallName
         }
