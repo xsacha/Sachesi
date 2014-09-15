@@ -11,22 +11,11 @@ Item {
     property bool isMobile: false
     state: "initing"
 
-    RowLayout {
-        visible: p.downloading && !downloadWin.visible
-        anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        Button {
-            text: "View Download (" + download.progress + "%)"
-            onClicked: downloadWin.visible = true
-        }
-        Button {
-            text: "Cancel Download"
-            onClicked: p.downloading = false;
-        }
-    }
-
     Window {
         id: downloadWin
-        visible: p.downloading
+        property int maxId: download.maxId
+        visible: false
+        onMaxIdChanged: visible = (maxId > 0)
         onVisibleChanged: if (visible) {
                               x = window.x + (window.width - width) / 2
                               y = window.y + (window.height - height) / 2
@@ -105,14 +94,14 @@ Item {
                 property string familyName: i.knownHWFamily == 0 ? "Unknown" : listModel.get(i.knownHWFamily).text
                 subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
                 onSubtextChanged: {
-                    var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Above"
+                    var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Searched"
                     if (listModel.get(0).text !== newText) {
                         listModel.remove(0, 1)
                         listModel.insert(0, {"text" : newText })
                     }
                 }
                 listModel: ListModel {
-                    ListElement { text: "As above" }
+                    ListElement { text: "As Searched" }
                     ListElement { text: "Z30" }
                     ListElement { text: "Z10 (OMAP)" }
                     ListElement { text: "Z10 (QCOM) + P9982" }
@@ -130,10 +119,21 @@ Item {
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {
-                enabled: p.updateCheckedAvailableCount > 0 && !p.downloading
+                enabled: p.updateCheckedAvailableCount > 0
+                visible: !p.downloading
                 Layout.alignment: Qt.AlignHCenter
                 text: "Download"
                 onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
+            }
+            Button {
+                visible: p.downloading
+                text: "View Download (" + download.progress + "%)"
+                onClicked: downloadWin.visible = true
+            }
+            Button {
+                visible: p.downloading
+                text: "Cancel Download"
+                onClicked: download.reset();
             }
         }
     }
@@ -339,106 +339,107 @@ Item {
     Label { visible: false; id: sizeHint; font.pointSize: 12; text: "1700.0 MB"; }
     GroupBox {
         id: updateAppMessage
-        title: "Selected: " + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps    "
-               + ((p.updateCheckedAvailableCount != p.updateCheckedCount) ? " Needed: " + p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps    " : "")
+        // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
+        title: "Selected: " + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
+               + ((p.updateAvailableCount !== p.updateAppCount) ? ". Needed: " + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
         Layout.fillHeight: true
         Layout.fillWidth: true
         ScrollView {
-        anchors.fill: parent
-        ListView {
             anchors.fill: parent
-            spacing: 3
-            clip: true
-            model: p.updateAppList
-            Menu {
-                id: options_menu
-                signal checkAll()
-                signal checkAllAvailable()
-                signal uncheckAll()
-                title: "Options"
-                MenuItem {
-                    enabled: p.updateCheckedCount !== p.updateAppCount
-                    text: "Check All"
-                    onTriggered: {
-                        options_menu.checkAll();
-                        for (var i = 0; i < p.updateAppCount; i++)
-                            p.updateAppList[i].isMarked = true;
-                    }
-                }
-                MenuItem {
-                    enabled: p.updateCheckedAvailableCount !== p.updateAppAvailableCount
-                    text: "Check All Needed"
-                    onTriggered: {
-                        options_menu.checkAllAvailable();
-                        for (var i = 0; i < p.updateAppCount; i++)
-                            p.updateAppList[i].isMarked = p.updateAppList[i].isAvailable;
-                    }
-                }
-                MenuItem {
-                    enabled: p.updateCheckedCount > 0
-                    text: "Uncheck All"
-                    onTriggered: {
-                        options_menu.uncheckAll()
-                        for (var i = 0; i < p.updateAppCount; i++)
-                            p.updateAppList[i].isMarked = false;
-                    }
-                }
-            }
-
-            MouseArea {
-                acceptedButtons: Qt.RightButton
-                onClicked: options_menu.popup()
+            ListView {
                 anchors.fill: parent
-            }
-            delegate: Item {
-                visible: type !== "";
-                width: parent.width - 3
-                height: type === "" ? 0 : 26
-                Rectangle {
-                    anchors.fill: parent
-                    color: { switch(type) {
-                        case "os": return "red";
-                        case "radio": return "maroon";
-                        case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
-                        default: return "transparent";
+                spacing: 3
+                clip: true
+                model: p.updateAppList
+                Menu {
+                    id: options_menu
+                    signal checkAll()
+                    signal checkAllAvailable()
+                    signal uncheckAll()
+                    title: "Options"
+                    MenuItem {
+                        enabled: p.updateCheckedCount !== p.updateAppCount
+                        text: "Check All"
+                        onTriggered: {
+                            options_menu.checkAll();
+                            for (var i = 0; i < p.updateAppCount; i++)
+                                p.updateAppList[i].isMarked = true;
                         }
                     }
-                    opacity: 0.2
-                }
-                CheckBox {
-                    id: delegateBox
-                    text: friendlyName + (isAvailable ? "" : " (downloaded)")
-                    width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
-                    clip: true
-                    checked: isMarked
-                    onCheckedChanged: isMarked = checked;
-                    Connections {
-                        target: options_menu
-                        onCheckAll: delegateBox.checked = true;
-                        onCheckAllAvailable: delegateBox.checked = isAvailable;
-                        onUncheckAll: delegateBox.checked = false;
+                    MenuItem {
+                        enabled: p.updateCheckedAvailableCount !== p.updateAppAvailableCount
+                        text: "Check All Needed"
+                        onTriggered: {
+                            options_menu.checkAllAvailable();
+                            for (var i = 0; i < p.updateAppCount; i++)
+                                p.updateAppList[i].isMarked = p.updateAppList[i].isAvailable;
+                        }
+                    }
+                    MenuItem {
+                        enabled: p.updateCheckedCount > 0
+                        text: "Uncheck All"
+                        onTriggered: {
+                            options_menu.uncheckAll()
+                            for (var i = 0; i < p.updateAppCount; i++)
+                                p.updateAppList[i].isMarked = false;
+                        }
                     }
                 }
 
-                Label {
-                    id: versionText
-                    anchors.right: sizeText.left;
-                    visible: (parent.width - sizeText.paintedWidth) > delegateBox.implicitWidth
-                    text: version
+                MouseArea {
+                    acceptedButtons: Qt.RightButton
+                    onClicked: options_menu.popup()
+                    anchors.fill: parent
                 }
-                Label {
-                    id: sizeText
-                    anchors.right: parent.right
-                    width: sizeHint.width
-                    horizontalAlignment: Text.AlignRight
-                    text: (size / 1024 / 1024).toFixed(1) + " MB"
-                    font.pointSize: 12;
+                delegate: Item {
+                    visible: type !== "";
+                    width: parent.width - 3
+                    height: type === "" ? 0 : 26
+                    Rectangle {
+                        anchors.fill: parent
+                        color: { switch(type) {
+                            case "os": return "red";
+                            case "radio": return "maroon";
+                            case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
+                            default: return "transparent";
+                            }
+                        }
+                        opacity: 0.2
+                    }
+                    CheckBox {
+                        id: delegateBox
+                        text: friendlyName + (isAvailable ? "" : " (downloaded)")
+                        width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
+                        clip: true
+                        checked: isMarked
+                        onCheckedChanged: isMarked = checked;
+                        Connections {
+                            target: options_menu
+                            onCheckAll: delegateBox.checked = true;
+                            onCheckAllAvailable: delegateBox.checked = isAvailable;
+                            onUncheckAll: delegateBox.checked = false;
+                        }
+                    }
+
+                    Label {
+                        id: versionText
+                        anchors.right: sizeText.left;
+                        visible: (parent.width - sizeText.paintedWidth) > delegateBox.implicitWidth
+                        text: version
+                    }
+                    Label {
+                        id: sizeText
+                        anchors.right: parent.right
+                        width: sizeHint.width
+                        horizontalAlignment: Text.AlignRight
+                        text: (size / 1024 / 1024).toFixed(1) + " MB"
+                        font.pointSize: 12;
+                    }
                 }
             }
         }
-    }
     }
 
     states: [

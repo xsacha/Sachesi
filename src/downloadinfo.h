@@ -32,6 +32,8 @@ public:
         apps.clear();
         curName.clear();
         emit sizeChanged();
+        emit idChanged();
+        emit appsChanged();
     }
 
     Q_INVOKABLE void start() {
