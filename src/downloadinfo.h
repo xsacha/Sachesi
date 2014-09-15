@@ -27,6 +27,7 @@ public:
     }
 
     Q_INVOKABLE void reset() {
+        starting = false;
         maxId = 0;
         size = 0;
         totalSize = 0;

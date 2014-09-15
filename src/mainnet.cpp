@@ -280,19 +280,21 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
 void MainNet::verifyLink(QString url, QString type) {
     QNetworkReply* reply = manager->get(QNetworkRequest(url));
 
-    QObject::connect(reply, &QNetworkReply::metaDataChanged, [this, reply, &type]() {
+    QObject::connect(reply, &QNetworkReply::metaDataChanged, [=]() {
         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
-            QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for this 'Download Device'.\nPlease try a different search result or a difference download device.");
             currentDownload->reset();
+            QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for this 'Download Device'.\n\nPlease try a different search result or a difference download device.");
         } else {
             currentDownload->verifyLink--;
             // Verified. Now lets complete
             if (currentDownload->verifyLink == 0)
                 downloadLinks();
         }
+        reply->disconnect(SIGNAL(error(QNetworkReply::NetworkError))); // Otherwise abort will likely error
+        reply->abort(); // Otherwise, it may try to download it.
         reply->deleteLater();
     });
-    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [this, &type]() {
+    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
         if (currentDownload->verifyLink > 0) {
             QMessageBox::information(NULL, "Error", "Encountered an error when attempting to verify the " + type +".\n Aborting download.");
             currentDownload->reset();
