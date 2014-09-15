@@ -50,7 +50,7 @@ Item {
         }
         Label {
             id: subtextValue
-            anchors {left: parent.left; leftMargin: 10; top: parent.top; topMargin: topRow.implicitHeight - 4 }
+            anchors {left: parent.left; leftMargin: 10; top: parent.top; topMargin: topRow.implicitHeight - 2 }
             text: ""
         }
     }

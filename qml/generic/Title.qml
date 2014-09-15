@@ -10,8 +10,8 @@ ApplicationWindow {
     title: "Sachesi " + version
     width: 820
     height: 680
-    minimumHeight: 520
-    minimumWidth: 450
+    minimumHeight: 540
+    minimumWidth: 620
 
     Settings {
         id: settings

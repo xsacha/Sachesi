@@ -91,20 +91,50 @@ Item {
                                   text = message;
         }
     }
-    ColumnLayout {
+    RowLayout {
         id: urlLinks
-        anchors { right: parent.right; rightMargin: 15; bottom: parent.bottom; bottomMargin: 15 }
-        Button {
-            enabled: p.updateCheckedCount > 0
-            Layout.alignment: Qt.AlignHCenter
-            text: isMobile ? "Copy Links" : "Grab Links"
-            onClicked: p.grabLinks(downloadDevice.selectedItem)
+        anchors { left: variables.right; right: parent.right; bottom: parent.bottom; margins: 15 }
+        GroupBox {
+            title: "Download For"
+            TextCoupleSelect {
+                id: downloadDevice
+                type: "Device"
+                selectedItem: 0
+
+                //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
+                property string familyName: i.knownHWFamily == 0 ? "Unknown" : listModel.get(i.knownHWFamily).text
+                subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
+                onSubtextChanged: {
+                    var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Above"
+                    if (listModel.get(0).text !== newText) {
+                        listModel.remove(0, 1)
+                        listModel.insert(0, {"text" : newText })
+                    }
+                }
+                listModel: ListModel {
+                    ListElement { text: "As above" }
+                    ListElement { text: "Z30" }
+                    ListElement { text: "Z10 (OMAP)" }
+                    ListElement { text: "Z10 (QCOM) + P9982" }
+                    ListElement { text: "Z3" }
+                    ListElement { text: "Passport" }
+                    ListElement { text: "Q5 + Q10" }
+                }
+            }
         }
-        Button {
-            enabled: p.updateCheckedAvailableCount > 0 && !p.downloading
-            Layout.alignment: Qt.AlignHCenter
-            text: (p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "Download All" : "Download Selected (" + p.updateCheckedAvailableCount + ")"
-            onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
+        ColumnLayout {
+            Button {
+                enabled: p.updateCheckedCount > 0
+                Layout.alignment: Qt.AlignHCenter
+                text: isMobile ? "Copy Links" : "Grab Links"
+                onClicked: p.grabLinks(downloadDevice.selectedItem)
+            }
+            Button {
+                enabled: p.updateCheckedAvailableCount > 0 && !p.downloading
+                Layout.alignment: Qt.AlignHCenter
+                text: "Download"
+                onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
+            }
         }
     }
     ColumnLayout {
@@ -142,7 +172,7 @@ Item {
             onClicked: searchButton.clicked();
         }
         GroupBox {
-            title: "Search Device"
+            title: "Search For"
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
@@ -207,34 +237,6 @@ Item {
                                            else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
 
                     listModel: ListModel { id: variantModel; }
-                }
-            }
-        }
-        GroupBox {
-            title: "Download Device"
-            TextCoupleSelect {
-                id: downloadDevice
-                type: "Device"
-                selectedItem: 0
-
-                //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
-                property string familyName: i.knownHWFamily == 0 ? "Unknown" : listModel.get(i.knownHWFamily).text
-                subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
-                onSubtextChanged: {
-                    var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Above"
-                    if (listModel.get(0).text !== newText) {
-                        listModel.remove(0, 1)
-                        listModel.insert(0, {"text" : newText })
-                    }
-                }
-                listModel: ListModel {
-                    ListElement { text: "As above" }
-                    ListElement { text: "Z30" }
-                    ListElement { text: "Z10 (OMAP)" }
-                    ListElement { text: "Z10 (QCOM) + P9982" }
-                    ListElement { text: "Z3" }
-                    ListElement { text: "Passport" }
-                    ListElement { text: "Q5 + Q10" }
                 }
             }
         }
@@ -335,11 +337,16 @@ Item {
     // Cheat to get system widths of text here. Should use a TableView (above) later to replace it.
     // A Label with 6 characters and ' MB', like the maximum filesize of an app
     Label { visible: false; id: sizeHint; font.pointSize: 12; text: "1700.0 MB"; }
-    ScrollView {
+    GroupBox {
         id: updateAppMessage
+        title: "Selected: " + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps    "
+               + ((p.updateCheckedAvailableCount != p.updateCheckedCount) ? " Needed: " + p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps    " : "")
+
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
         Layout.fillHeight: true
         Layout.fillWidth: true
+        ScrollView {
+        anchors.fill: parent
         ListView {
             anchors.fill: parent
             spacing: 3
@@ -431,6 +438,7 @@ Item {
                 }
             }
         }
+    }
     }
 
     states: [
