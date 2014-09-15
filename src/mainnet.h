@@ -100,7 +100,6 @@ public:
     DownloadInfo* currentDownload;
 public slots:
     void    setSplitProgress(const int &progress);
-    void    capNetworkReply(QNetworkReply* reply);
     void    confirmNewSRSkip();
     void    confirmNewSR();
 signals:
@@ -130,6 +129,7 @@ private slots:
 private:
     // Utils:
     InstallNet* _i;
+    void verifyLink(QString url, QString type);
     QString convertLinks(int downloadDevice, QString prepend);
     QString fixVariantName(QString name, QString replace, int type);
     void fixApps(int downloadDevice);

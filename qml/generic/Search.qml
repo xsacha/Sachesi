@@ -119,10 +119,10 @@ Item {
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {
-                enabled: p.updateCheckedAvailableCount > 0
+                enabled: p.updateCheckedAvailableCount > 0 && !download.verifying
                 visible: !p.downloading
                 Layout.alignment: Qt.AlignHCenter
-                text: "Download"
+                text: download.verifying ? "Verifying" : "Download"
                 onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
             }
             Button {

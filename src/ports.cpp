@@ -53,20 +53,15 @@ FileSelect selectFiles(QString title, QString dir, QString nameString, QString n
 }
 
 QString getSaveDir() {
-    QSettings settings("Qtness", "Sachesi");
 #ifdef BLACKBERRY
     QString writable = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/Sachesi/";
 #else
-    QString writable = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QString writable = QDir::currentPath() + "/";
 #endif
-    QString path = settings.value("splitDir", writable).toString();
-    if (!(QFileInfo(path).isDir() && QFileInfo(path).isWritable()))
-    {
-        settings.setValue("splitDir", writable);
+    if (QFileInfo(writable).isWritable())
         return writable;
-    }
 
-    return path;
+    return QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 }
 
 bool checkCurPath()

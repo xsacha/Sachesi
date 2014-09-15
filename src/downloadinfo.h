@@ -13,6 +13,7 @@ class DownloadInfo : public QObject {
     Q_PROPERTY(int     size        MEMBER size        NOTIFY sizeChanged)
     Q_PROPERTY(qint64  totalSize   MEMBER totalSize   NOTIFY appsChanged)
     Q_PROPERTY(QString curName     MEMBER curName     NOTIFY idChanged)
+    Q_PROPERTY(bool    verifying   READ   verifying   NOTIFY verifyingChanged)
 public:
     DownloadInfo(QObject* parent = 0)
         : QObject(parent)
@@ -21,6 +22,7 @@ public:
         , progress(-1), curProgress(0)
         , size(0), totalSize(0)
         , starting(false)
+        , verifyLink(0)
     {
     }
 
@@ -29,6 +31,7 @@ public:
         size = 0;
         totalSize = 0;
         progress = -1;
+        verifyLink = 0;
         apps.clear();
         curName.clear();
         emit sizeChanged();
@@ -122,6 +125,10 @@ public:
         return (id < maxId);
     }
 
+    bool verifying() const {
+        return verifyLink > 0;
+    }
+
     QString baseDir;
     QList<Apps> apps;
     int id, maxId;
@@ -129,8 +136,10 @@ public:
     qint64 curSize, size, totalSize;
     QString curName;
     bool starting;
+    qint16 verifyLink;
 signals:
     void idChanged();
     void sizeChanged();
     void appsChanged();
+    void verifyingChanged();
 };

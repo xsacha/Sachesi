@@ -97,28 +97,38 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
     if (!QFileInfo(capPath()).exists())
     {
         QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.11.exe";
-        QNetworkAccessManager* mNetworkManager = new QNetworkAccessManager(this);
-        QObject::connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(capNetworkReply(QNetworkReply*)));
-        mNetworkManager->get(QNetworkRequest(capUrl));
         _splitting = 5; emit splittingChanged();
+        QNetworkReply* reply = manager->get(QNetworkRequest(capUrl));
+        QObject::connect(reply, &QNetworkReply::readyRead, [=]() {
+            if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
+                QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
+                _splitting = 0; emit splittingChanged();
+                splitThread->deleteLater();
+                splitter->deleteLater();
+                reply->deleteLater();
+                return;
+            }
+            QFile capFile(capPath());
+            capFile.open(QIODevice::WriteOnly | QIODevice::Append);
+            capFile.write(reply->readAll());
+            capFile.close();
+        });
+        QObject::connect(reply, &QNetworkReply::finished, [=]() {
+            _splitting = 2; emit splittingChanged();
+            splitThread->start();
+            reply->deleteLater();
+        });
+        QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
+            QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
+            _splitting = 0; emit splittingChanged();
+            splitThread->deleteLater();
+            splitter->deleteLater();
+            reply->deleteLater();
+        });
+
         return;
     }
     splitThread->start();
-}
-
-void MainNet::capNetworkReply(QNetworkReply* reply) {
-    if(reply->error() == QNetworkReply::NoError) {
-        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() == 200) {
-            QFile capFile(capPath());
-            capFile.open(QIODevice::WriteOnly);
-            capFile.write(reply->readAll());
-            capFile.close();
-            _splitting = 2; emit splittingChanged();
-            splitThread->start();
-            return;
-        }
-    }
-    splitThread->deleteLater();
 }
 
 void MainNet::extractImage(int type, int options)
@@ -267,6 +277,29 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
 }
 
+void MainNet::verifyLink(QString url, QString type) {
+    QNetworkReply* reply = manager->get(QNetworkRequest(url));
+
+    QObject::connect(reply, &QNetworkReply::metaDataChanged, [this, reply, &type]() {
+        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
+            QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for this 'Download Device'.\nPlease try a different search result or a difference download device.");
+            currentDownload->reset();
+        } else {
+            currentDownload->verifyLink--;
+            // Verified. Now lets complete
+            if (currentDownload->verifyLink == 0)
+                downloadLinks();
+        }
+        reply->deleteLater();
+    });
+    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [this, &type]() {
+        if (currentDownload->verifyLink > 0) {
+            QMessageBox::information(NULL, "Error", "Encountered an error when attempting to verify the " + type +".\n Aborting download.");
+            currentDownload->reset();
+        }
+    });
+}
+
 QString MainNet::fixVariantName(QString name, QString replace, int type) {
     if (type == 0) { // OS
         QString osSignature = "com.qnx.coreos.qcfm.os.";
@@ -331,10 +364,14 @@ void MainNet::fixApps(int downloadDevice) {
             app.setPackageId(fixVariantName(app.packageId(), results.first, 0));
             app.setName(app.packageId().split("/").last());
             app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
+            currentDownload->verifyLink++;
+            verifyLink(app.packageId(), "OS");
         } else if (app.type() == "radio") {
             app.setPackageId(fixVariantName(app.packageId(), results.second, 1));
             app.setName(app.packageId().split("/").last());
             app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
+            currentDownload->verifyLink++;
+            verifyLink(app.packageId(), "Radio");
         }
     }
     // Refresh the names in QML
@@ -384,15 +421,24 @@ void MainNet::downloadLinks(int downloadDevice)
     }
     else if (!_downloading && currentDownload->isStarting())
     {
-        if (_currentFile.isOpen())
-        {
-            _currentFile.close();
-            _currentFile.remove();
-        }
-        currentDownload->setApps(_updateAppList, _versionRelease);
-        fixApps(downloadDevice);
+        // Have we been here before? Starting but ids already generated. Maybe links were verified, so skip this
         if (currentDownload->maxId == 0) {
-            currentDownload->reset();
+            if (_currentFile.isOpen())
+            {
+                _currentFile.close();
+                _currentFile.remove();
+            }
+            currentDownload->setApps(_updateAppList, _versionRelease);
+            fixApps(downloadDevice);
+            if (currentDownload->maxId == 0) {
+                currentDownload->reset();
+                return;
+            }
+        }
+        emit currentDownload->verifyingChanged();
+        if (currentDownload->verifyLink > 0) {
+            // Check this later. We need to verify first, then we can call downloadLinks again.
+            currentDownload->start();
             return;
         }
         setDownloading(true);
@@ -737,29 +783,33 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
             if (xml.name() == "package")
             {
                 Apps* newApp = new Apps();
+
                 // Remember: this name *can* change
                 newApp->setFriendlyName(xml.attributes().value("name").toString());
-                // Remember: this size *can* change
-                newApp->setSize(xml.attributes().value("downloadSize").toString().toInt());
                 // Remember: this name *can* change
                 newApp->setName(xml.attributes().value("path").toString());
+                // Remember: this size *can* change
+                newApp->setSize(xml.attributes().value("downloadSize").toString().toInt());
                 newApp->setVersion(xml.attributes().value("version").toString());
                 newApp->setVersionId(xml.attributes().value("id").toString());
+                newApp->setChecksum(xml.attributes().value("checksum").toString());
                 QString type = xml.attributes().value("type").toString();
                 if (type == "system:os" || type == "system:desktop") {
                     os = newApp->name().split('/').at(1);
                     newApp->setType("os");
+                    newApp->setIsMarked(true);
+                    newApp->setIsAvailable(true);
                 } else if (type == "system:radio") {
                     radio = newApp->name().split('/').at(1);
                     newApp->setType("radio");
+                    newApp->setIsMarked(true);
+                    newApp->setIsAvailable(true);
                 } else {
                     newApp->setType("application");
                 }
                 newApp->setPackageId(currentaddr + "/" + newApp->name());
                 newApp->setName(newApp->name().split("/").last());
 
-                newApp->setIsMarked(true);
-                newApp->setIsAvailable(true);
                 newApps.append(newApp);
             }
             else if (xml.name() == "friendlyMessage")
@@ -827,9 +877,13 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
             // Connect every isMarkedChanged to the list signal and check if it should be marked
             for (Apps* app: _updateAppList) {
                 connect(app, SIGNAL(isMarkedChanged()), this, SIGNAL(updateCheckedCountChanged()));
-                bool exists = QFile::exists(QDir::currentPath() + "/" + _versionRelease + "/" + app->name());
-                app->setIsMarked(!exists);
-                app->setIsAvailable(!exists);
+
+                // No need to check OS and Radio as they are variable
+                if (app->type() == "application") {
+                    bool exists = QFile(QDir::currentPath() + "/" + _versionRelease + "/" + app->name()).size() == app->size();
+                    app->setIsMarked(!exists);
+                    app->setIsAvailable(!exists);
+                }
             }
             _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
                     .arg(ver)
