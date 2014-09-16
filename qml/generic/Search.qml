@@ -93,21 +93,19 @@ Item {
                 //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
                 property string familyName: i.knownHWFamily == 0 ? "Unknown" : listModel.get(i.knownHWFamily).text
                 subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
-                onSubtextChanged: {
+                onSubtextChanged: generateModel()
+                Component.onCompleted: generateModel()
+
+                function generateModel() {
                     var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Searched"
-                    if (listModel.get(0).text !== newText) {
-                        listModel.remove(0, 1)
+                    if (listModel.count < 2 || listModel.get(0).text !== newText) {
+                        listModel = babyModel
                         listModel.insert(0, {"text" : newText })
                     }
                 }
+
                 listModel: ListModel {
                     ListElement { text: "As Searched" }
-                    ListElement { text: "Z30 + Classic" }
-                    ListElement { text: "Z10 (OMAP)" }
-                    ListElement { text: "Z10 (QCOM) + P9982" }
-                    ListElement { text: "Z3" }
-                    ListElement { text: "Passport" }
-                    ListElement { text: "Q5 + Q10 + Khan" }
                 }
             }
         }
@@ -179,27 +177,27 @@ Item {
                     selectedItem: 4
                     type: "Device"
 
+                    // List everything we know except abandoned models
                     ListModel {
                         id: advancedModel
                         ListElement { text: "Z30 + Classic" }
                         ListElement { text: "Z10 (OMAP)" }
                         ListElement { text: "Z10 (QCOM) + P9982" }
-                        ListElement { text: "Z3" }
+                        ListElement { text: "Z3 + Cafe" }
                         ListElement { text: "Passport" }
                         ListElement { text: "Q5 + Q10 + Khan" }
-                        ListElement { text: "Z5" }
-                        ListElement { text: "Q3" }
                         ListElement { text: "Developer" }
                         ListElement { text: "Ontario" }
                     }
+                    // Only list released models
                     ListModel {
                         id: babyModel
-                        ListElement { text: "Z30 + Classic" }
-                        ListElement { text: "Z10 (OMAP)" }
-                        ListElement { text: "Z10 (QCOM) + P9982" }
+                        ListElement { text: "Z30" }
+                        ListElement { text: "Z10 (STL 100-1)" }
+                        ListElement { text: "Z10 (STL 100-2/3/4) + Porsche" }
                         ListElement { text: "Z3" }
                         ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10 + Khan" }
+                        ListElement { text: "Q5 + Q10" }
                     }
                     function changeModel() {
                         var selected = selectedItem
@@ -228,11 +226,12 @@ Item {
                     id: variant
                     type: "Variant"
                     selectedItem: 0
-                    onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
+                    // This is going to be hell to maintain. Maybe an identifier in dev[] for carrier-specific and its associated code?
+                    /*onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
                                            else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
                                            else if (device.text === "Q10" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
                                            else if (device.text === "Z30" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
-                                           else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }
+                                           else if (device.text === "Z30" && selectedItem == 4) { country.value = "310"; carrier.value = "120" }*/
 
                     listModel: ListModel { id: variantModel; }
                 }
