@@ -91,16 +91,20 @@ Item {
                 selectedItem: 0
 
                 //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
-                property string familyName: i.knownHWFamily == 0 ? "Unknown" : listModel.get(i.knownHWFamily).text
-                subtext: i.knownHW != "" ? i.knownHW + " (" + familyName + ")" : ""
+                property string hwid: typeof i == 'undefined' ? "" : i.knownHW
+                property int hwfam: typeof i == 'undefined' ? "" : i.knownHWFamily
+                property string familyName: (hwfam == 0 || hwfam > listModel.count) ? "Unknown" : listModel.get(hwfam).text
+                subtext: hwid != "" ? hwid + " (" + familyName + ")" : ""
                 onSubtextChanged: generateModel()
                 Component.onCompleted: generateModel()
 
                 function generateModel() {
-                    var newText = (i.knownHW != "Unknown" && i.knownHW != "") ? "Connected" : "As Searched"
+                    var newText = (hwid != "Unknown" && hwid != "") ? "Connected" : "As Searched"
                     if (listModel.count < 2 || listModel.get(0).text !== newText) {
-                        listModel = babyModel
-                        listModel.insert(0, {"text" : newText })
+                        listModel.clear()
+                        listModel.append({"text" : newText })
+                        for (var i = 0; i < babyModel.count; i++)
+                            listModel.append({"text" : babyModel.get(i).text })
                     }
                 }
 

@@ -118,8 +118,7 @@ OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \
     qml/generic/UI/*.qml \
-    Android/AndroidManifest.xml \
-    bar-descriptor.xml
+    Android/AndroidManifest.xml
 
 # Qt Workaround for having install.cpp file
 phony.depends = install uninstall
