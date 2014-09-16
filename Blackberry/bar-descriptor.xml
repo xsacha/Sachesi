@@ -17,7 +17,7 @@
     <publisher>Qtness</publisher>
     <env var="QML_IMPORT_PATH" value="app/native/imports:/usr/lib/qt4/imports"/>
     <env var="QT_PLUGIN_PATH" value="app/native/plugins:/usr/lib/qt4/plugins"/>
-    <env var="LD_LIBRARY_PATH" value="/usr/lib/qt4/lib:app/native/lib:/usr/lib/qt4/lib/"/>
+    <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib:/usr/lib/qt4/lib/"/>
     <permission system="true">run_native</permission>
     <permission>access_internet</permission>
     <permission>access_shared</permission>

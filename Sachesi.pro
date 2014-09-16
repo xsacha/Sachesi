@@ -40,7 +40,7 @@ win32 {
 }
 else:blackberry {
     DEFINES += BLACKBERRY
-    LIBS += -lbbcascadespickers -lbbsystem -lQtXml #-lcrypto
+    LIBS += -lz #-lbbcascadespickers -lbbsystem -lQtXml #-lcrypto
 }
 else:mac {
     INCLUDEPATH += /opt/local/include
@@ -73,13 +73,15 @@ SOURCES += \
     src/main.cpp \
     src/mainnet.cpp \
     src/splitter.cpp \
-    src/ports.cpp
+    src/ports.cpp \
+    src/apps.cpp
 
 HEADERS += \
     src/mainnet.h \
     src/splitter.h \
     src/ports.h \
-    src/downloadinfo.h
+    src/downloadinfo.h \
+    src/apps.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {
@@ -88,11 +90,9 @@ HEADERS += \
         src/installer_qml.cpp \
         src/installer_establish.cpp \
         src/installer_auth.cpp \
-        src/apps.cpp \
         src/backupinfo.cpp
     HEADERS += \
         src/installer.h \
-        src/apps.h \
         src/backupinfo.h
 }
 
@@ -118,7 +118,8 @@ OTHER_FILES += \
     qml/generic/mcc.js \
     qml/generic/*.qml \
     qml/generic/UI/*.qml \
-    Android/AndroidManifest.xml
+    Android/AndroidManifest.xml \
+    bar-descriptor.xml
 
 # Qt Workaround for having install.cpp file
 phony.depends = install uninstall

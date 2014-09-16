@@ -64,33 +64,6 @@ struct BarInfo {
     BarType type;
 };
 
-// These may not be entirely necessary but there have been issues in the past
-#define qSafeFree(x) \
-    if (x != nullptr) { \
-        x->deleteLater(); \
-        x = nullptr; \
-    }
-#define qNetSafeFree(x) \
-    if (x != nullptr) { \
-        x->abort(); \
-        x->deleteLater(); \
-        x = nullptr; \
-    }
-#define qIoSafeFree(x) \
-    if (x != nullptr) { \
-        if (x->isOpen()) \
-            x->close(); \
-        x->deleteLater(); \
-        x = nullptr; \
-    }
-#define ioSafeFree(x) \
-    if (x != nullptr) { \
-        if (x->isOpen()) \
-            x->close(); \
-        delete x; \
-        x = nullptr; \
-    }
-
 void appendApps(QQmlListProperty<Apps> * property, Apps * app);
 int appsSize(QQmlListProperty<Apps> * property);
 Apps* appsAt(QQmlListProperty<Apps> * property, int index);

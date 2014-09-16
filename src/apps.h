@@ -18,7 +18,7 @@
 #pragma once
 
 #include <QString>
-#include <QObject>
+#include <QQmlListProperty>
 
 class Apps : public QObject {
 
@@ -90,3 +90,10 @@ private:
     QString _versionId;
     QString _checksum;
 };
+
+void appendApps(QQmlListProperty<Apps> * property, Apps * app);
+int appsSize(QQmlListProperty<Apps> * property);
+int appsSize(QQmlListProperty<Apps> * property);
+Apps* appsAt(QQmlListProperty<Apps> * property, int index);
+void clearApps(QQmlListProperty<Apps> *property);
+

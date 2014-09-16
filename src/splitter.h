@@ -90,7 +90,7 @@ public:
         QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
         dataStream << (quint64)_infos.count();
         quint64 counter = pos() + 64;
-        for (QFileInfo info: _infos)
+        foreach (QFileInfo info, _infos)
         {
             dataStream << counter;
             counter += info.size();
@@ -100,7 +100,7 @@ public:
         write(dataHeader);
         _read = 100 * pos();
         _maxSize = counter;
-        for (QFileInfo file: _infos)
+        foreach (QFileInfo file, _infos)
             appendFile(file.filePath());
         close();
     }
@@ -311,7 +311,7 @@ public slots:
         for (int attempts = 0; attempts < 32; attempts++) {
             qint64 tmp;
             dataStream >> tmp;
-            if (abs(tmp - signedFile->pos()) < 500) {
+            if ((tmp - signedFile->pos()) < 500 && (tmp - signedFile->pos()) > -500) {
                 signedFile->seek(signedFile->pos() - 16);
                 dataStream >> files;
                 break;
@@ -378,7 +378,7 @@ public slots:
                 }
                 tmpFile.at(i)->close();
             }
-            for(QFile* file: tmpFile)
+            foreach (QFile* file, tmpFile)
                     file->deleteLater();
             tmpFile.clear();
         }
@@ -391,7 +391,7 @@ public slots:
         combining = true;
         QFileInfo largestInfo;
         qint64 largestSize = 0;
-        for(QFileInfo info: selectedInfo) {
+        foreach (QFileInfo info, selectedInfo) {
             if (info.size() > largestSize) {
                 largestSize = info.size();
                 largestInfo = info;

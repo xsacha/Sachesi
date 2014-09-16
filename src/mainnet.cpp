@@ -15,7 +15,6 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
-#include "apps.h"
 #include "mainnet.h"
 #include "splitter.h"
 #include "ports.h"
@@ -357,11 +356,12 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
 // Permanently converts the currentDownload object apps to the current 'Download Device'
 // Important not to change this object during the, rather large, download!
 void MainNet::fixApps(int downloadDevice) {
+#ifndef BLACKBERRY
     QPair<QString,QString> results = _i->getConnected(downloadDevice);
     if (results.first == "" || results.second == "")
         return;
 
-    for(Apps& app : currentDownload->apps) {
+    foreach (Apps app, currentDownload->apps) {
         if (app.type() == "os") {
             app.setPackageId(fixVariantName(app.packageId(), results.first, 0));
             app.setName(app.packageId().split("/").last());
@@ -378,6 +378,7 @@ void MainNet::fixApps(int downloadDevice) {
     }
     // Refresh the names in QML
     currentDownload->nextFile(0);
+#endif
 }
 
 
@@ -386,12 +387,15 @@ void MainNet::fixApps(int downloadDevice) {
 QString MainNet::convertLinks(int downloadDevice, QString prepend)
 {
     bool convert = true;
-    QPair<QString,QString> results = _i->getConnected(downloadDevice);
+    QPair<QString,QString> results;
+#ifndef BLACKBERRY
+    results = _i->getConnected(downloadDevice);
     if (results.first == "" || results.second == "")
         convert = false;
+#endif
 
     QString updated;
-    for(Apps* app : _updateAppList) {
+    foreach (Apps* app, _updateAppList) {
         if (!app->isMarked())
             continue;
         QString item = app->packageId();
@@ -694,7 +698,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         requestUrl += "2.1.0/";
         break;
     }*/
-    requestUrl += "2.2/";
+    requestUrl += "2.2.0/";
 
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
 
@@ -858,14 +862,14 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
 
             // Put this new list up for display
             if (_updateAppList.count()) {
-                for (Apps* app: _updateAppList) {
+                foreach (Apps* app, _updateAppList) {
                     app->disconnect(SIGNAL(isMarkedChanged()));
                 }
                 _updateAppList.clear();
             }
             _updateAppList = newApps;
             // Connect every isMarkedChanged to the list signal and check if it should be marked
-            for (Apps* app: _updateAppList) {
+            foreach (Apps* app, _updateAppList) {
                 connect(app, SIGNAL(isMarkedChanged()), this, SIGNAL(updateCheckedCountChanged()));
 
                 // No need to check OS and Radio as they are variable

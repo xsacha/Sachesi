@@ -183,7 +183,7 @@ void InstallNet::install(QList<QUrl> files)
         if (QFileInfo(name).isDir())
         {
             QStringList barFiles = QDir(name).entryList(QStringList("*.bar"));
-            for(QString barFile : barFiles)
+            foreach (QString barFile, barFiles)
             {
                 BarInfo info = checkInstallableInfo(name + "/" + barFile);
                 if (info.name == "EXIT")
@@ -217,7 +217,7 @@ void InstallNet::install()
         int nfilesize = 0;
         _downgradePos = 0;
         _downgradeInfo.clear();
-        for (auto filePair : _installInfo)
+        foreach (auto filePair, _installInfo)
             _downgradeInfo.append(filePair.name);
 
         emit dgPosChanged();

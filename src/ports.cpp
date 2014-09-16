@@ -30,14 +30,6 @@ QString capPath() {
 }
 
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
-#ifdef BLACKBERRY
-    FileSelect finder = new bb::cascades::pickers::FilePicker();
-    finder->setTitle(title);
-    finder->setDirectories(QStringList() << dir);
-    finder->setFilter(nameExt.split(' '));
-    finder->setMode(bb::cascades::pickers::FilePickerMode::Picker);
-    finder->open();
-#else
     FileSelect finder = new QFileDialog();
     finder->setWindowTitle(title);
     finder->setDirectory(dir);
@@ -48,7 +40,6 @@ FileSelect selectFiles(QString title, QString dir, QString nameString, QString n
     QTreeView *t = finder->findChild<QTreeView*>();
     if (t)
         t->setSelectionMode(QAbstractItemView::ExtendedSelection);
-#endif
     return finder;
 }
 
@@ -68,7 +59,7 @@ bool checkCurPath()
 {
 #ifdef BLACKBERRY
     QDir dir;
-    QString path = QStandardPaths::standardLocations(GenericDataLocation) + "/Sachesi/";
+    QString path = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + "/Sachesi/";
     dir.mkpath(path);
     QDir::setCurrent(path);
 #endif
@@ -102,9 +93,10 @@ void writeDisplayFile(QString name, QByteArray data) {
     displayFile.close();
 
 #ifdef BLACKBERRY
-    bb::system::Clipboard clipboard;
-    clipboard.clear();
-    clipboard.insert("text/plain", data);
+    // Clipboard has dependency on Qt4
+    //bb::system::Clipboard clipboard;
+    //clipboard.clear();
+    //clipboard.insert("text/plain", data);
 
     // Cascades code is not working
 /*#if defined(BLACKBERRY)

@@ -53,7 +53,7 @@ public:
         baseDir = QDir::currentPath() + "/" + version;
 
         // Check which apps user wanted
-        for (Apps* newApp : newApps) {
+        foreach (Apps* newApp, newApps) {
             if (!newApp->isMarked())
                 continue;
             apps.append(*newApp);

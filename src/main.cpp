@@ -56,13 +56,25 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
 
-    InstallNet i;
-    context->setContextProperty("i", &i);
     // Send the version across. Preferably via the .pro
     context->setContextProperty("version", QVariant::fromValue(QApplication::applicationVersion()));
     // Check if we have at least Qt 5.3 available. If not, do some workarounds for bugs.
     context->setContextProperty("qt_new", QVariant::fromValue(QT_VERSION > QT_VERSION_CHECK(5, 3, 0)));
+    // Check if this is a Blackberry device.
+    context->setContextProperty("blackberry", QVariant::fromValue(
+                                #ifdef BLACKBERRY
+                                    1
+                                #else
+                                    0
+                                #endif
+                                    ));
+#ifdef BLACKBERRY
+    MainNet p;
+#else
+    InstallNet i;
+    context->setContextProperty("i", &i);
     MainNet p(&i);
+#endif
 
     if (!checkCurPath())
         return 0;
@@ -81,8 +93,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("download", p.currentDownload);
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
-    qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
 #endif
+    qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
 
 #ifdef _WIN32
     engine.addImportPath("qrc:/qml/");

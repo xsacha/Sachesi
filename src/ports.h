@@ -27,18 +27,18 @@
 #include <QSettings>
 #include <QUrl>
 #ifdef BLACKBERRY
-#include <bb/cascades/pickers/FilePicker>
+//#include <bb/cascades/pickers/FilePicker>
 #include <bb/system/Clipboard>
 #endif
 
 #include <QUrlQuery>
 #define encodedQuery query(QUrl::FullyEncoded).toUtf8
 
-#ifdef BLACKBERRY
-typedef bb::cascades::pickers::FilePicker* FileSelect;
-#else
+//#ifdef BLACKBERRY
+//typedef bb::cascades::pickers::FilePicker* FileSelect;
+//#else
 typedef QFileDialog* FileSelect;
-#endif
+//#endif
 
 QString capPath();
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt);
@@ -46,3 +46,30 @@ QString getSaveDir();
 bool checkCurPath();
 void openFile(QString name);
 void writeDisplayFile(QString name, QByteArray data);
+
+// These may not be entirely necessary but there have been issues in the past
+#define qSafeFree(x) \
+    if (x != nullptr) { \
+        x->deleteLater(); \
+        x = nullptr; \
+    }
+#define qNetSafeFree(x) \
+    if (x != nullptr) { \
+        x->abort(); \
+        x->deleteLater(); \
+        x = nullptr; \
+    }
+#define qIoSafeFree(x) \
+    if (x != nullptr) { \
+        if (x->isOpen()) \
+            x->close(); \
+        x->deleteLater(); \
+        x = nullptr; \
+    }
+#define ioSafeFree(x) \
+    if (x != nullptr) { \
+        if (x->isOpen()) \
+            x->close(); \
+        delete x; \
+        x = nullptr; \
+    }

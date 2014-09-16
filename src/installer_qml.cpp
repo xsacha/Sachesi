@@ -57,26 +57,6 @@ WRITE_QML(QString, knownName, setKnownName)
 WRITE_QML(QString, knownPIN, setKnownPIN)
 WRITE_QML(QString, knownHW, setKnownHW)
 
-
-void appendApps(QQmlListProperty<Apps> * property, Apps * app)
-{
-    Q_UNUSED(property);
-    Q_UNUSED(app);
-    //Do nothing. Can't add to Apps using this method
-}
-int appsSize(QQmlListProperty<Apps> * property)
-{
-    return static_cast< QList<Apps *> *>(property->data)->size();
-}
-Apps* appsAt(QQmlListProperty<Apps> * property, int index)
-{
-    return static_cast< QList<Apps *> *>(property->data)->at(index);
-}
-void clearApps(QQmlListProperty<Apps> *property)
-{
-    return static_cast< QList<Apps *> *>(property->data)->clear();
-}
-
 QQmlListProperty<Apps> InstallNet::appList()
 {
     return QQmlListProperty<Apps>(this, &_appList, &appendApps, &appsSize, &appsAt, &clearApps);

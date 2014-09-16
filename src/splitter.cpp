@@ -550,7 +550,7 @@ QString Splitter::generateNameFromRCFS(qint64 startPos)
             }
             if (slashdotnode.name.endsWith(".tdf")) {
                 QByteArray boardData = extractRCFSFile(startPos + slashdotnode.offset, slashdotnode.size, slashdotnode.mode);
-                for (QString config : QString(boardData).split('\n')) {
+                foreach (QString config, QString(boardData).split('\n')) {
                     if (config.startsWith("CPU=")) {
                         cpu = config.split('=').last().remove('"');
                     } else if (config.startsWith("BOARD=")) {

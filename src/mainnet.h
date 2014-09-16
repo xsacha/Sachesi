@@ -19,9 +19,15 @@
 
 #include <QtNetwork>
 #include <QObject>
+#include "apps.h"
 #include "splitter.h"
-#include "installer.h"
 #include "downloadinfo.h"
+
+#ifdef BLACKBERRY
+class InstallNet;
+#else
+#include "installer.h"
+#endif
 
 class MainNet : public QObject {
     Q_OBJECT
@@ -44,7 +50,7 @@ class MainNet : public QObject {
     Q_PROPERTY(int     splitProgress MEMBER _splitProgress WRITE setSplitProgress NOTIFY splitProgressChanged)
 
 public:
-    MainNet(InstallNet* installer, QObject* parent = 0);
+    MainNet(InstallNet* installer = nullptr, QObject* parent = 0);
     ~MainNet();
     Q_INVOKABLE void updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server/*, int version*/);
     Q_INVOKABLE void downloadLinks(int downloadDevice = 0);
@@ -77,7 +83,7 @@ public:
     int updateAppCount() const { return _updateAppList.count(); }
     int updateAppAvailableCount() const {
         int count = 0;
-        for (Apps* app : _updateAppList) {
+        foreach (Apps* app, _updateAppList) {
             if (app->isAvailable())
                 count++;
         }
@@ -85,14 +91,14 @@ public:
     }
     int updateCheckedCount() const {
         int checked = 0;
-        for (Apps* app: _updateAppList)
+        foreach (Apps* app, _updateAppList)
             if (app->isMarked())
                 checked++;
         return checked;
     }
     int updateCheckedAvailableCount() const {
         int checked = 0;
-        for (Apps* app: _updateAppList)
+        foreach (Apps* app, _updateAppList)
             if (app->isMarked() && app->isAvailable())
                 checked++;
         return checked;
