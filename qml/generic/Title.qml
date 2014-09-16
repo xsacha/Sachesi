@@ -54,7 +54,7 @@ ApplicationWindow {
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
         // Workaround for index moving on startup for Windows
-        onCountChanged: { titleRow.currentIndex = 0; if (count == 4 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
+        onCountChanged: { titleRow.currentIndex = 0; if (count > p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
 
         Tab {
             title: "Extract";
@@ -62,15 +62,12 @@ ApplicationWindow {
         }
         Tab {
             title: "Search"
-            Search { anchors.fill: parent }
-        }
-        Tab {
-            title: "Backup";
-            Backup { anchors.fill: parent }
-        }
-        Tab {
-            title: "Install";
-            Installer { anchors.fill: parent }
+            Search { anchors.fill: parent
+                Component.onCompleted: if (!blackberry) {
+                    titleRow.addTab("Backup", Qt.createComponent("Backup.qml") )
+                    titleRow.addTab("Install", Qt.createComponent("Installer.qml") )
+                }
+            }
         }
         Component.onCompleted: {
             if (p.hasBootAccess)

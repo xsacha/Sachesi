@@ -26,8 +26,6 @@
 #ifndef BLACKBERRY
 #include "installer.h"
 #include "backupinfo.h"
-#include "apps.h"
-#include "ports.h"
 #endif
 #ifdef BOOTLOADER_ACCESS
 #include "boot.h"
