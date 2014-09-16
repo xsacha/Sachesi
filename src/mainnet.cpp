@@ -265,13 +265,13 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
 
     potentialText.append("\n\n* Radios *\n");
     // Touch
-    appendNewLink("Z30", false, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Z30 + Classic", false, false, "qc8960.wtr5", radioVersion);
     appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
     appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", false, false, "qc8960", radioVersion);
     appendNewLink("Z3 (Jakarta)", false, false, "qc8930.wtr5", radioVersion);
     // QWERTY
     appendNewLink("Passport", false, false, "qc8974.wtr2", radioVersion);
-    appendNewLink("Q5 and Q10", false, false, "qc8960.wtr", radioVersion);
+    appendNewLink("Q5 + Q10 + Khan", false, false, "qc8960.wtr", radioVersion);
 
 
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
@@ -283,7 +283,7 @@ void MainNet::verifyLink(QString url, QString type) {
     QObject::connect(reply, &QNetworkReply::metaDataChanged, [=]() {
         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
             currentDownload->reset();
-            QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for this 'Download Device'.\n\nPlease try a different search result or a difference download device.");
+            QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for the selected 'Download Device'.\n\nPlease try a different search result or a different download device.");
         } else {
             currentDownload->verifyLink--;
             // Verified. Now lets complete
@@ -520,9 +520,9 @@ QString MainNet::NPCFromLocale(int carrier, int country) {
 }
 
 static QStringList dev[] = {
-    // 0 = Z30 (A Series)
-    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6",
-    QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A",
+    // 0 = Z30 (A Series) + Classic
+    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6" << "Classic AT&T" << "Classic Verizon" << "Classic ROW" << " Classic NA",
+    QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A" << "9400270A" << "9500270A" << "9600270A" << "9700270A",
     // 1 = Z10 (L Series) OMAP
     QStringList() << "STL 100-1",
     QStringList() << "4002607",
@@ -533,11 +533,11 @@ static QStringList dev[] = {
     QStringList() << "STJ 100-1",
     QStringList() << "04002E07",
     // 4 = Passport / Q30 (W Series)
-    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQW 100-3" << "Variant D",
-    QStringList() << "87002C0A" << "85002C0A" << "84002C0A" << "86002C0A",
-    // 5 = Q5 (R Series) + Q10 (N Series)
-    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3" << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5",
-    QStringList() << "84002A0A" << "85002A0A" << "86002A0A" << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A",
+    QStringList() << "Europe/ME/Asia" << "Verizon" << "North America" << "Sprint" << "Wichita",
+    QStringList() << "87002C0A" << "85002C0A" << "84002C0A" << "86002C0A" << "8C002C0A",
+    // 5 = Q5 (R Series) + Q10 (N Series) + Khan
+    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3" << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5" << "Khan Variant A" << "Khan Variant B",
+    QStringList() << "84002A0A" << "85002A0A" << "86002A0A" << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A" << "8E00270A" << "8F00270A",
     // 6 = B Series
     QStringList() << "STB 100-1" << "STB 100-2" << "STB 100-3" << "STB 100-4" << "STB 100-5",
     QStringList() << "9700240A" << "9600240A" << "A700240A" << "AC00240A" << "9C00240A",
@@ -548,14 +548,8 @@ static QStringList dev[] = {
     QStringList() << "Alpha A" << "Alpha B" << "Alpha C",
     QStringList() << "4002307" << "4002607" << "8D00270A",
     // 10 = Ontario Series
-    QStringList() << "STO 100-1" << "STO 100-2" << "STO 100-3" << "STO 100-4",
-    QStringList() << "AE00240A" << "AF00240A" << "B400240A" << "B600240A",
-    // 11 = Classic
-    QStringList() << "Classic Variant A" << "Classic Variant B" << "Classic Variant C" << " Classic Variant D",
-    QStringList() << "9400270A" << "9500270A" << "9600270A" << "9700270A",
-    // 12 = Khan
-    QStringList() << "Khan Variant A" << "Khan Variant B",
-    QStringList() << "8E00270A" << "8F00270A",
+    QStringList() << "Ontario NA" << "Ontario Verizon" << "Ontario Sprint" << "Ontario ROW" << "China",
+    QStringList() << "AE00240A" << "AF00240A" << "B400240A" << "B600240A" << "BC00240A",
 };
 
 QString MainNet::nameFromVariant(unsigned int device, unsigned int variant) {

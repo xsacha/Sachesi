@@ -102,12 +102,12 @@ Item {
                 }
                 listModel: ListModel {
                     ListElement { text: "As Searched" }
-                    ListElement { text: "Z30" }
+                    ListElement { text: "Z30 + Classic" }
                     ListElement { text: "Z10 (OMAP)" }
                     ListElement { text: "Z10 (QCOM) + P9982" }
                     ListElement { text: "Z3" }
                     ListElement { text: "Passport" }
-                    ListElement { text: "Q5 + Q10" }
+                    ListElement { text: "Q5 + Q10 + Khan" }
                 }
             }
         }
@@ -181,27 +181,25 @@ Item {
 
                     ListModel {
                         id: advancedModel
-                        ListElement { text: "Z30" }
+                        ListElement { text: "Z30 + Classic" }
                         ListElement { text: "Z10 (OMAP)" }
                         ListElement { text: "Z10 (QCOM) + P9982" }
                         ListElement { text: "Z3" }
                         ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10" }
+                        ListElement { text: "Q5 + Q10 + Khan" }
                         ListElement { text: "Z5" }
                         ListElement { text: "Q3" }
                         ListElement { text: "Developer" }
                         ListElement { text: "Ontario" }
-                        ListElement { text: "Classic" }
-                        ListElement { text: "Khan" }
                     }
                     ListModel {
                         id: babyModel
-                        ListElement { text: "Z30" }
+                        ListElement { text: "Z30 + Classic" }
                         ListElement { text: "Z10 (OMAP)" }
                         ListElement { text: "Z10 (QCOM) + P9982" }
                         ListElement { text: "Z3" }
                         ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10" }
+                        ListElement { text: "Q5 + Q10 + Khan" }
                     }
                     function changeModel() {
                         var selected = selectedItem
