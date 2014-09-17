@@ -274,31 +274,6 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
 }
 
-void MainNet::verifyLink(QString url, QString type) {
-    QNetworkReply* reply = manager->get(QNetworkRequest(url));
-
-    QObject::connect(reply, &QNetworkReply::metaDataChanged, [=]() {
-        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
-            currentDownload->reset();
-            QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for the selected 'Download Device'.\n\nPlease try a different search result or a different download device.");
-        } else {
-            currentDownload->verifyLink--;
-            // Verified. Now lets complete
-            if (currentDownload->verifyLink == 0)
-                downloadLinks();
-        }
-        reply->disconnect(SIGNAL(error(QNetworkReply::NetworkError))); // Otherwise abort will likely error
-        reply->abort(); // Otherwise, it may try to download it.
-        reply->deleteLater();
-    });
-    QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-        if (currentDownload->verifyLink > 0) {
-            QMessageBox::information(NULL, "Error", "Encountered an error when attempting to verify the " + type +".\n Aborting download.");
-            currentDownload->reset();
-        }
-    });
-}
-
 QString MainNet::fixVariantName(QString name, QString replace, int type) {
     if (type == 0) { // OS
         QString osSignature = "com.qnx.coreos.qcfm.os.";
@@ -364,14 +339,12 @@ void MainNet::fixApps(int downloadDevice) {
             app.setPackageId(fixVariantName(app.packageId(), results.first, 0));
             app.setName(app.packageId().split("/").last());
             app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
-            currentDownload->verifyLink++;
-            verifyLink(app.packageId(), "OS");
+            currentDownload->verifyLink(app.packageId(), "OS");
         } else if (app.type() == "radio") {
             app.setPackageId(fixVariantName(app.packageId(), results.second, 1));
             app.setName(app.packageId().split("/").last());
             app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
-            currentDownload->verifyLink++;
-            verifyLink(app.packageId(), "Radio");
+            currentDownload->verifyLink(app.packageId(), "Radio");
         }
     }
     // Refresh the names in QML
@@ -425,7 +398,7 @@ void MainNet::downloadLinks(int downloadDevice)
         }
     }
     emit currentDownload->verifyingChanged();
-    if (currentDownload->verifyLink > 0) {
+    if (currentDownload->toVerify > 0) {
         // Check this later. We need to verify first, then we can call downloadLinks again.
         currentDownload->start();
         return;
@@ -549,7 +522,7 @@ void MainNet::reverseLookupReply() {
         request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
         request.setUrl(QUrl(url));
         request.setAttribute(QNetworkRequest::CustomVerbAttribute, swRelease);
-        QNetworkReply* replyTmp = manager->get(request);
+        QNetworkReply* replyTmp = manager->head(request);
         if (skip)
             connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSRSkip()));
         else

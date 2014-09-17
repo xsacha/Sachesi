@@ -8,6 +8,11 @@
 #include <QMessageBox>
 #include "apps.h"
 
+// Need to get creative with CURR_FILE when threading comes
+enum {
+    CURR_FILE = -1,
+};
+
 class DownloadInfo : public QObject {
     Q_OBJECT
     Q_PROPERTY(int     id          MEMBER id          NOTIFY idChanged)
@@ -27,7 +32,7 @@ public:
         , progress(0), curProgress(0)
         , size(0), totalSize(0)
         , starting(false)
-        , verifyLink(0)
+        , toVerify(0)
         , running(false)
     {
         _manager = new QNetworkAccessManager();
@@ -42,7 +47,7 @@ public:
         maxId = 0;
         size = 0;
         totalSize = 0;
-        verifyLink = 0;
+        toVerify = 0;
         apps.clear();
         emit sizeChanged();
         emit idChanged();
@@ -56,20 +61,56 @@ public:
             _updateFile.remove();
         }
     }
+
     bool isStarting() {
         bool isRequested = starting;
         starting = false;
         return isRequested;
     }
+
+    bool verifying() const {
+        return toVerify > 0;
+    }
+
+    void verifyLink(QString url, QString type) {
+        toVerify++;
+        QNetworkReply* reply = _manager->head(QNetworkRequest(url));
+
+        QObject::connect(reply, &QNetworkReply::finished, [=]() {
+            if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
+                reset();
+                QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for the selected 'Download Device'.\n\nPlease try a different search result or a different download device.");
+            } else {
+                toVerify--;
+                // Verified. Now lets complete
+                if (toVerify == 0)
+                    download();
+            }
+            reply->deleteLater();
+        });
+        QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
+            if (toVerify > 0) {
+                QMessageBox::information(NULL, "Error", "Encountered an error when attempting to verify the " + type +".\n Aborting download.");
+                reset();
+            }
+        });
+    }
+
     void download() {
         running = true;
         emit idChanged(); // For above, running
         QDir(baseDir).mkpath(".");
         downloadNextFile();
     }
+
     void downloadNextFile() {
-        _updateFile.setFileName(getFilename());
-        _updateFile.open(QIODevice::WriteOnly);
+        // Set to a temporary filename
+        _updateFile.setFileName(baseDir + "/." + apps.at(id).name());
+        // Obviously something is wrong if this file is bigger than what we want
+        if (_updateFile.size() > apps.at(id).size())
+            _updateFile.remove();
+        // It is possible that it already exists and, in this case, we would want to resume
+        _updateFile.open(QIODevice::WriteOnly | QIODevice::Append);
         QNetworkReply* replydl = _manager->get(QNetworkRequest(getUrl()));
 
         connect(replydl, &QNetworkReply::readyRead, [=]() {
@@ -101,6 +142,9 @@ public:
             if (!running)
                 return;
 
+            // When we have size of OS/Radio working, should check the file was successful
+            _updateFile.rename(baseDir + "/" + apps.at(id).name());
+
             if (nextFile())
             {
                 downloadNextFile();
@@ -111,10 +155,12 @@ public:
             }
         });
         QObject::connect(replydl, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            qDebug() << "DL Error: " << replydl->errorString() << replydl->error();
             replydl->deleteLater();
-            _updateFile.remove();
             reset();
+            if (replydl->error() == 5)
+                return; // User cancelled
+
+            qDebug() << "DL Error: "  << replydl->error() << replydl->errorString();
         });
     }
 
@@ -141,17 +187,8 @@ public:
         emit appsChanged();
     }
 
-    QString getFilename(int i = -1) {
-        if (i == -1)
-            i = id;
-        if (i >= 0 && i < maxId)
-            return baseDir + "/" + apps.at(i).name();
-        else
-            return "";
-    }
-
-    QString getName(int i = -1) {
-        if (i == -1)
+    QString getName(int i = CURR_FILE) {
+        if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
             return apps.at(i).friendlyName();
@@ -159,16 +196,17 @@ public:
             return "";
     }
 
-    QString getUrl(int i = -1) {
-        if (i == -1)
+    QString getUrl(int i = CURR_FILE) {
+        if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
             return apps.at(i).packageId();
         else
             return "";
     }
-    int getSize(int i = -1) {
-        if (i == -1)
+
+    int getSize(int i = CURR_FILE) {
+        if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
             return apps.at(i).size();
@@ -186,9 +224,9 @@ public:
         emit sizeChanged();
     }
 
-    bool nextFile(int i = -1) {
+    bool nextFile(int i = CURR_FILE) {
         curSize = 0;
-        if (i == -1)
+        if (i == CURR_FILE)
             id++;
         else
             id = i;
@@ -198,17 +236,13 @@ public:
         return (id < maxId);
     }
 
-    bool verifying() const {
-        return verifyLink > 0;
-    }
-
     QString baseDir;
     QList<Apps> apps;
     int id, maxId;
     int progress, curProgress;
     qint64 curSize, size, totalSize;
     bool starting;
-    qint16 verifyLink;
+    qint16 toVerify;
     bool running;
 signals:
     void idChanged();

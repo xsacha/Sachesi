@@ -32,7 +32,6 @@
 #endif
 
 // *** Download Manager Plan
-// * Refactor the currentDownload class
 // * Save to a temporary file (eg. "." + filename)
 // * Don't delete files when finished.
 // * When switching files, check if file exists. If OS/Radio, ask server for expected filesize (maybe do this when verifying Links actually!).
