@@ -123,18 +123,18 @@ Item {
             }
             Button {
                 enabled: p.updateCheckedAvailableCount > 0 && !download.verifying
-                visible: !p.downloading
+                visible: !download.running
                 Layout.alignment: Qt.AlignHCenter
                 text: download.verifying ? "Verifying" : "Download"
                 onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
             }
             Button {
-                visible: p.downloading
+                visible: download.running
                 text: "View Download (" + download.progress + "%)"
                 onClicked: downloadWin.visible = true
             }
             Button {
-                visible: p.downloading
+                visible: download.running
                 text: "Cancel Download"
                 onClicked: download.reset();
             }
@@ -150,8 +150,8 @@ Item {
         TextCouple {
             id: country
             type: "Country"
-            subtext: "Australia"
-            value: "505"
+            subtext: "Indonesia"
+            value: "510"
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
             onValueChanged: {
@@ -164,7 +164,7 @@ Item {
         TextCouple {
             id: carrier
             type: "Carrier"
-            value: "002"
+            value: "010"
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
             function updateVal() {
@@ -179,7 +179,7 @@ Item {
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
-                    selectedItem: 4
+                    selectedItem: 5
                     type: "Device"
 
                     // List everything we know except abandoned models
@@ -190,7 +190,7 @@ Item {
                         ListElement { text: "Z10 (QCOM) + P9982" }
                         ListElement { text: "Z3 + Cafe" }
                         ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10 + Khan" }
+                        ListElement { text: "Q5 + Q10 + P9983" }
                         ListElement { text: "Developer" }
                         ListElement { text: "Ontario" }
                     }
@@ -199,10 +199,10 @@ Item {
                         id: babyModel
                         ListElement { text: "Z30" }
                         ListElement { text: "Z10 (STL 100-1)" }
-                        ListElement { text: "Z10 (STL 100-2/3/4) + Porsche" }
+                        ListElement { text: "Z10 (STL 100-2/3/4) + P9982" }
                         ListElement { text: "Z3" }
                         ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10" }
+                        ListElement { text: "Q5 + Q10 + P9983" }
                     }
                     function changeModel() {
                         var selected = selectedItem

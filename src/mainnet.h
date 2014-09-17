@@ -40,7 +40,6 @@ class MainNet : public QObject {
     Q_PROPERTY(int updateCheckedAvailableCount READ updateCheckedAvailableCount NOTIFY updateCheckedCountChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
-    Q_PROPERTY(bool    downloading MEMBER _downloading WRITE setDownloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool    hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
     Q_PROPERTY(bool    multiscan MEMBER _multiscan WRITE setMultiscan NOTIFY multiscanChanged)
@@ -59,7 +58,6 @@ public:
     Q_INVOKABLE void extractImage(int type, int options);
     Q_INVOKABLE void grabLinks(int downloadDevice);
     Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion);
-    Q_INVOKABLE void abortDL(QNetworkReply::NetworkError error = (QNetworkReply::NetworkError)0);
     Q_INVOKABLE void abortSplit();
     Q_INVOKABLE void reverseLookup(int device, int variant, int server, QString OSver, bool skip);
 
@@ -75,7 +73,6 @@ public:
                                    }
     void    setMultiscan(const bool &multiscan);
     void    setScanning(const int &scanning);
-    void    setDownloading(const bool &downloading);
     QQmlListProperty<Apps> updateAppList() {
         return QQmlListProperty<Apps>(this, &_updateAppList, &appendApps, &appsSize, &appsAt, &clearApps);
     }
@@ -115,7 +112,6 @@ signals:
     void errorChanged();
     void multiscanChanged();
     void scanningChanged();
-    void downloadingChanged();
     void hasPotentialLinksChanged();
     void hasBootAccessChanged();
     void maxIdChanged();
@@ -127,7 +123,6 @@ private slots:
     void serverReply();
     void showFirmwareData(QByteArray data, QString variant);
     void serverError(QNetworkReply::NetworkError error);
-    void downloadFinish();
     void cancelSplit();
 // Blackberry
 	void extractImageSlot(const QStringList& selectedFiles);
@@ -142,7 +137,6 @@ private:
     QString NPCFromLocale(int country, int carrier);
 
     QThread* splitThread;
-    QNetworkReply *replydl;
     QNetworkAccessManager *manager;
     QList<Apps*> _updateAppList;
     QString _updateMessage;
@@ -150,7 +144,7 @@ private:
     QString _versionRelease;
     QString _error;
     QString _multiscanVersion;
-    bool _downloading, _multiscan;
+    bool _multiscan;
     bool _hasPotentialLinks;
     int _scanning;
     QFile _currentFile;

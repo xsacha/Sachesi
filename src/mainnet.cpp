@@ -24,11 +24,9 @@
 MainNet::MainNet(InstallNet *installer, QObject* parent)
     : QObject(parent)
     , _i(installer)
-    , replydl(nullptr)
     , _updateMessage("")
     , _softwareRelease("")
     , _versionRelease("")
-    , _downloading(false)
     , _hasPotentialLinks(false)
     , _scanning(0)
     , _splitting(0)
@@ -416,105 +414,23 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
 
 void MainNet::downloadLinks(int downloadDevice)
 {
-    if (_downloading && currentDownload->maxId == 0) {
-        if (_currentFile.isOpen())
-        {
-            _currentFile.close();
-            _currentFile.remove();
-        }
-        qNetSafeFree(replydl);
-        setDownloading(false);
-    }
-    else if (!_downloading && currentDownload->isStarting())
-    {
-        // Have we been here before? Starting but ids already generated. Maybe links were verified, so skip this
+    // Have we been here before? Starting but ids already generated. Maybe links were verified, so skip this
+    if (currentDownload->maxId == 0) {
+        currentDownload->setApps(_updateAppList, _versionRelease);
+        fixApps(downloadDevice);
+        // Did we find any apps?
         if (currentDownload->maxId == 0) {
-            if (_currentFile.isOpen())
-            {
-                _currentFile.close();
-                _currentFile.remove();
-            }
-            currentDownload->setApps(_updateAppList, _versionRelease);
-            fixApps(downloadDevice);
-            if (currentDownload->maxId == 0) {
-                currentDownload->reset();
-                return;
-            }
-        }
-        emit currentDownload->verifyingChanged();
-        if (currentDownload->verifyLink > 0) {
-            // Check this later. We need to verify first, then we can call downloadLinks again.
-            currentDownload->start();
+            currentDownload->reset();
             return;
         }
-        setDownloading(true);
-
-        QDir(currentDownload->baseDir).mkpath(".");
-        _currentFile.setFileName(currentDownload->getFilename());
-        _currentFile.open(QIODevice::WriteOnly);
-        QNetworkRequest request;
-        request.setUrl(QUrl(currentDownload->getUrl()));
-        replydl = manager->get(request);
-        connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(abortDL(QNetworkReply::NetworkError)));
-        connect(replydl, SIGNAL(readyRead()), this, SLOT(downloadLinks()));
-        connect(replydl, SIGNAL(finished()), this, SLOT(downloadFinish()));
     }
-    else if (_downloading) {
-        QByteArray data = replydl->readAll();
-        if (currentDownload->size == 0)
-        {
-            if (data.startsWith("<?xml")) {
-                QMessageBox::critical(nullptr, "Error", "You are restricted from downloading this file.");
-                _currentFile.close();
-                _currentFile.remove();
-                qNetSafeFree(replydl);
-                setDownloading(false);
-                currentDownload->reset();
-                return;
-            }
-        }
-        currentDownload->progressSize(data.size());
-        _currentFile.write(data);
-    }
-}
-void MainNet::downloadFinish()
-{
-    if (!_downloading) {
-        currentDownload->reset();
+    emit currentDownload->verifyingChanged();
+    if (currentDownload->verifyLink > 0) {
+        // Check this later. We need to verify first, then we can call downloadLinks again.
+        currentDownload->start();
         return;
     }
-
-    if (currentDownload->nextFile())
-    {
-        _currentFile.close();
-        _currentFile.setFileName(currentDownload->getFilename());
-        _currentFile.open(QIODevice::WriteOnly);
-        QNetworkRequest request;
-        request.setUrl(QUrl(currentDownload->getUrl()));
-        replydl = manager->get(request);
-        connect(replydl, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(abortDL(QNetworkReply::NetworkError)));
-        connect(replydl, SIGNAL(readyRead()), this, SLOT(downloadLinks()));
-        connect(replydl, SIGNAL(finished()), this, SLOT(downloadFinish()));
-    } else {
-        // May not be 100% equal to totalSize because we switched out some files actually
-        QDesktopServices::openUrl(QUrl(QFileInfo(_currentFile).absolutePath()));
-        _currentFile.close();
-        setDownloading(false);
-        currentDownload->reset();
-    }
-}
-
-void MainNet::abortDL(QNetworkReply::NetworkError)
-{
-    if (_currentFile.isOpen())
-    {
-        _currentFile.close();
-        _currentFile.remove();
-        qNetSafeFree(replydl);
-    }
-    setDownloading(false);
+    currentDownload->download();
 }
 
 QString MainNet::NPCFromLocale(int carrier, int country) {
@@ -530,7 +446,7 @@ static QStringList dev[] = {
     // 1 = Z10 (L Series) OMAP
     QStringList() << "STL 100-1",
     QStringList() << "4002607",
-    // 2 = Z10 (L Series) Qualcomm + P9982  (K Series)
+    // 2 = Z10 (L Series) Qualcomm + P9982  (TK Series)
     QStringList() << "STL 100-2" << "STL 100-3" << "STL 100-4" << "STK 100-1" << "STK 100-2",
     QStringList() << "8700240A" << "8500240A" << "8400240A" << "A500240A" << "A600240A",
     // 3 = Z3  (J Series) + Cafe
@@ -539,9 +455,9 @@ static QStringList dev[] = {
     // 4 = Passport / Q30 (W Series)
     QStringList() << "Passport Europe/ME/Asia" << "Passport Verizon" << "Passport NA" << "Passport Sprint" << "Passport Wichita",
     QStringList() << "87002C0A" << "85002C0A" << "84002C0A" << "86002C0A" << "8C002C0A",
-    // 5 = Q5 (R Series) + Q10 (N Series) + Khan
-    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3" << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5" << "Khan Variant A" << "Khan Variant B",
-    QStringList() << "84002A0A" << "85002A0A" << "86002A0A" << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A" << "8E00270A" << "8F00270A",
+    // 5 = Q5 (R Series) + Q10 (N Series) + P9983 (QK Series)
+    QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3" << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5" << "SQK 100-1" << "SQK 100-2",
+    QStringList() << "84002A0A" << "85002A0A" << "86002A0A" << "8400270A" << "8500270A" << "8600270A" << "8C00270A" << "8700270A"  << "8F00270A" << "8E00270A",
     // 6 = Dev Alpha
     QStringList() << "Alpha A" << "Alpha B" << "Alpha C",
     QStringList() << "4002307" << "4002607" << "8D00270A",
@@ -916,5 +832,4 @@ void MainNet::setMultiscan(const bool &multiscan) {
     _multiscanVersion = ""; emit updateMessageChanged();
 }
 void MainNet::setScanning(const int &scanning) { _scanning = scanning; emit scanningChanged(); }
-void MainNet::setDownloading(const bool &downloading) { _downloading = downloading; emit downloadingChanged(); }
 void MainNet::setSplitProgress(const int &progress) { if (_splitProgress > 1000) _splitProgress = 0; else _splitProgress = progress; emit splitProgressChanged(); }

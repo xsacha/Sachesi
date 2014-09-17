@@ -31,6 +31,16 @@
 #include "boot.h"
 #endif
 
+// *** Download Manager Plan
+// * Refactor the currentDownload class
+// * Save to a temporary file (eg. "." + filename)
+// * Don't delete files when finished.
+// * When switching files, check if file exists. If OS/Radio, ask server for expected filesize (maybe do this when verifying Links actually!).
+// * If filesize > 0, add the size_in_bytes to progress. Then try to resume the download.
+// * Send header of "Range", "bytes=size_in_bytes-"
+// * Test / Push
+// * Now try to make it threaded.
+
 // TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress
