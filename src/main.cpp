@@ -31,19 +31,11 @@
 #include "boot.h"
 #endif
 
-// *** Download Manager Plan
-// * When switching files, check if file exists. If OS/Radio, ask server for expected filesize (maybe do this when verifying Links actually!).
-// * If filesize > 0, add the size_in_bytes to progress. Then try to resume the download.
-// * Send header of "Range", "bytes=size_in_bytes-"
-// * Test / Push
-// * Now try to make it threaded.
-
 // TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress
-// TODO: Probably use a Rectangle for CircleProgress container with option to pull out (reparent to Window). This solves mobile incompatibility. Also put each progress in a separate qml.
-// TODO: Don't use hardcoded width/height values for UI. Now that we use native UI elements and font sizes, this will break very bad
-// TODO: Check PolicyRestrictions:
+// TODO: Probably use a Rectangle for CircleProgress container with option to pull out (reparent to Window). This solves Android incompatibility. Also put each progress in a separate qml.
+// TODO: Check PolicyRestrictions somehow?
 // Personal: policy_block_backup_and_restore, policy_backup_and_restore
 // Enterprise: policy_disable_devmode, policy_log_submission, policy_block_computer_access_to_device
 
@@ -68,7 +60,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("version", QVariant::fromValue(QApplication::applicationVersion()));
     // Check if we have at least Qt 5.3 available. If not, do some workarounds for bugs.
     context->setContextProperty("qt_new", QVariant::fromValue(QT_VERSION > QT_VERSION_CHECK(5, 3, 0)));
-    // Check if this is a Blackberry device.
+    // Check if this is a Blackberry device. There are some restrictions such as no InstallNet
     context->setContextProperty("blackberry", QVariant::fromValue(
                                 #ifdef BLACKBERRY
                                     1
@@ -110,7 +102,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QQmlComponent> comp(new QQmlComponent(&engine));
     comp->loadUrl(QUrl("qrc:/qml/generic/Title.qml"));
     if (comp->status() == QQmlComponent::Error) {
-        QMessageBox::information(NULL, "Error", qPrintable(comp->errorString()), QMessageBox::Ok);
+        QMessageBox::information(nullptr, "Error", qPrintable(comp->errorString()), QMessageBox::Ok);
         return 0;
     }
     QQuickWindow *window = qobject_cast<QQuickWindow *>(comp->create());
