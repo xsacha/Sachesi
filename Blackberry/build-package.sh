@@ -25,8 +25,11 @@ blackberry-nativepackager \
     -package Sachesi.bar \
     bar-descriptor.xml Sachesi $DEBUG \
     -e ../assets/sachesi-114.png res/sachesi-114.png \
-    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/plugins plugins \
-    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/qml imports \
+    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/plugins/platforms plugins/platforms \
+    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/plugins/imageformats plugins/imageformats \
+    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/qml/Qt imports/Qt \
+    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/qml/QtQuick imports/QtQuick \
+    -e /data/SDKs/bbndk/target_10_2_0_1155/qnx6/armle-v7/usr/lib/qt5/qml/QtQuick.2 imports/QtQuick.2 \
     -e ${QT_INSTALL_PATH}/libQt5Core.so.5 lib/libQt5Core.so.5 \
     -e ${QT_INSTALL_PATH}/libQt5Gui.so.5 lib/libQt5Gui.so.5 \
     -e ${QT_INSTALL_PATH}/libQt5Widgets.so.5 lib/libQt5Widgets.so.5 \

@@ -85,6 +85,7 @@ Item {
         anchors { left: variables.right; right: parent.right; bottom: parent.bottom; margins: 15 }
         GroupBox {
             title: "Download For"
+            visible: !blackberry
             TextCoupleSelect {
                 id: downloadDevice
                 type: "Device"

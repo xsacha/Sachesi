@@ -24,7 +24,7 @@ ApplicationWindow {
         property bool advanced: false
     }
 
-    Text {
+    Label {
         id: title
         font.pointSize: 22
         text: "SACHESI"
@@ -54,7 +54,7 @@ ApplicationWindow {
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
         // Workaround for index moving on startup for Windows
-        onCountChanged: { titleRow.currentIndex = 0; if (count > p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
+        onCountChanged: { titleRow.currentIndex = 0; if (count >= 1 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
 
         Tab {
             title: "Extract";
@@ -93,6 +93,7 @@ ApplicationWindow {
         }
     }*/
     statusBar: StatusBar {
+        visible: !blackberry
         Label {
             visible: i.knownBattery < 0
             text: "No device connected"
