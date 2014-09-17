@@ -74,17 +74,29 @@ public:
 
     void verifyLink(QString url, QString type) {
         toVerify++;
+        emit verifyingChanged();
         QNetworkReply* reply = _manager->head(QNetworkRequest(url));
 
         QObject::connect(reply, &QNetworkReply::finished, [=]() {
-            if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
-                reset();
-                QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for the selected 'Download Device'.\n\nPlease try a different search result or a different download device.");
-            } else {
+            uint status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
+            if (status == 200 || (status > 300 && status <= 308)) {
+                uint realSize = reply->header(QNetworkRequest::ContentLengthHeader).toUInt();
+                // Adjust the expected size
+                foreach(Apps app, apps) {
+                    if (app.type() == type.toLower()) {
+                        totalSize += realSize - app.size();
+                        app.setSize(realSize);
+                    }
+                }
+
                 toVerify--;
+                emit verifyingChanged();
                 // Verified. Now lets complete
                 if (toVerify == 0)
                     download();
+            } else {
+                reset();
+                QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for the selected 'Download Device'.\n\nPlease try a different search result or a different download device.");
             }
             reply->deleteLater();
         });
@@ -98,20 +110,39 @@ public:
 
     void download() {
         running = true;
-        emit idChanged(); // For above, running
+        // OS and Radio files were just verified, so lets check if we already have them
+        for (int i = 0; i < apps.count(); i++) {
+            if (apps[i].type() == "os" || apps[i].type() == "radio") {
+                QFileInfo fileInfo(baseDir + "/" + apps[i].name());
+                if (fileInfo.exists() && fileInfo.size() == apps[i].size()) {
+                    totalSize -= apps[i].size();
+                    apps.removeAt(i--);
+                    maxId--;
+                    emit appsChanged();
+                }
+            }
+        }
+        emit idChanged(); // For above, running=true and if any apps changed
         QDir(baseDir).mkpath(".");
         downloadNextFile();
     }
 
     void downloadNextFile() {
+        QNetworkRequest request(getUrl());
+        request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
         // Set to a temporary filename
         _updateFile.setFileName(baseDir + "/." + apps.at(id).name());
         // Obviously something is wrong if this file is bigger than what we want
         if (_updateFile.size() > apps.at(id).size())
             _updateFile.remove();
         // It is possible that it already exists and, in this case, we would want to resume
+        if (_updateFile.size() > 0) {
+            size += _updateFile.size();
+            curSize += _updateFile.size();
+            request.setRawHeader("Range", QString("bytes=%1-").arg(_updateFile.size()).toLatin1());
+        }
         _updateFile.open(QIODevice::WriteOnly | QIODevice::Append);
-        QNetworkReply* replydl = _manager->get(QNetworkRequest(getUrl()));
+        QNetworkReply* replydl = _manager->get(request);
 
         connect(replydl, &QNetworkReply::readyRead, [=]() {
             if (!running) {
@@ -142,14 +173,26 @@ public:
             if (!running)
                 return;
 
-            // When we have size of OS/Radio working, should check the file was successful
-            _updateFile.rename(baseDir + "/" + apps.at(id).name());
+            // This should always match otherwise I'm pretty sure something bad happened
+            if (_updateFile.size() == apps.at(id).size())
+                _updateFile.rename(baseDir + "/" + apps.at(id).name());
+            else {
+                // Pretend like that didn't happen and try again
+                size -= _updateFile.size();
+                _updateFile.close();
+                _updateFile.remove();
+                curSize = 0;
+                downloadNextFile();
+                return;
+            }
 
             if (nextFile())
             {
                 downloadNextFile();
             } else {
-                // May not be 100% equal to totalSize because we switched out some files actually
+                if (size != totalSize)
+                    QMessageBox::information(NULL, "Warning", "Your update completed successfully. However, the update size does not match the download size. This could just be a bug.");
+
                 QDesktopServices::openUrl(QUrl(QFileInfo(_updateFile).absolutePath()));
                 reset();
             }
@@ -191,7 +234,7 @@ public:
         if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
-            return apps.at(i).friendlyName();
+            return apps[i].friendlyName();
         else
             return "";
     }
@@ -200,7 +243,7 @@ public:
         if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
-            return apps.at(i).packageId();
+            return apps[i].packageId();
         else
             return "";
     }
@@ -209,7 +252,7 @@ public:
         if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
-            return apps.at(i).size();
+            return apps[i].size();
         else
             return 0;
     }

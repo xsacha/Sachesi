@@ -32,8 +32,6 @@
 #endif
 
 // *** Download Manager Plan
-// * Save to a temporary file (eg. "." + filename)
-// * Don't delete files when finished.
 // * When switching files, check if file exists. If OS/Radio, ask server for expected filesize (maybe do this when verifying Links actually!).
 // * If filesize > 0, add the size_in_bytes to progress. Then try to resume the download.
 // * Send header of "Range", "bytes=size_in_bytes-"

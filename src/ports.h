@@ -26,19 +26,11 @@
 #include <QDesktopServices>
 #include <QSettings>
 #include <QUrl>
-#ifdef BLACKBERRY
-//#include <bb/cascades/pickers/FilePicker>
-#include <bb/system/Clipboard>
-#endif
 
 #include <QUrlQuery>
 #define encodedQuery query(QUrl::FullyEncoded).toUtf8
 
-//#ifdef BLACKBERRY
-//typedef bb::cascades::pickers::FilePicker* FileSelect;
-//#else
 typedef QFileDialog* FileSelect;
-//#endif
 
 QString capPath();
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt);
@@ -50,12 +42,6 @@ void writeDisplayFile(QString name, QByteArray data);
 // These may not be entirely necessary but there have been issues in the past
 #define qSafeFree(x) \
     if (x != nullptr) { \
-        x->deleteLater(); \
-        x = nullptr; \
-    }
-#define qNetSafeFree(x) \
-    if (x != nullptr) { \
-        x->abort(); \
         x->deleteLater(); \
         x = nullptr; \
     }

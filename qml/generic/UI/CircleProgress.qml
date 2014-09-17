@@ -98,6 +98,13 @@ Canvas {
     Column {
         anchors.centerIn: parent
         spacing: height / 5
+        add: Transition {
+            NumberAnimation {
+                duration: 100
+                properties: "y"
+                easing.type: Easing.OutBounce
+            }
+        }
 
         Text {
             text: canvas.text.substring(0, 35)
@@ -114,7 +121,7 @@ Canvas {
             text: viewValue + "%"
             font.bold: true
             scale: mouseArea.pressed ? 2.0 : 1.0
-            NumberAnimation on scale { duration: 3000 }
+            Behavior on scale { NumberAnimation { duration: 100 } }
             color: canvas.secondaryColor
             anchors.horizontalCenter: parent.horizontalCenter
         }

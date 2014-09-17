@@ -97,14 +97,6 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         _splitting = 5; emit splittingChanged();
         QNetworkReply* reply = manager->get(QNetworkRequest(capUrl));
         QObject::connect(reply, &QNetworkReply::readyRead, [=]() {
-            if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt() != 200) {
-                QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
-                _splitting = 0; emit splittingChanged();
-                splitThread->deleteLater();
-                splitter->deleteLater();
-                reply->deleteLater();
-                return;
-            }
             QFile capFile(capPath());
             capFile.open(QIODevice::WriteOnly | QIODevice::Append);
             capFile.write(reply->readAll());
@@ -140,13 +132,9 @@ void MainNet::extractImage(int type, int options)
     if (type == 0 && _options & 4)
         filter += " *.ifs";
     FileSelect finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
-#ifdef BLACKBERRY
-    QObject::connect(finder, SIGNAL(fileSelected(const QStringList&)), this, SLOT(extractImageSlot(const QStringList&)));
-#else
     if (finder->exec())
         extractImageSlot(finder->selectedFiles());
     finder->deleteLater();
-#endif
 }
 
 void MainNet::extractImageSlot(const QStringList& selectedFiles)
@@ -397,13 +385,9 @@ void MainNet::downloadLinks(int downloadDevice)
             return;
         }
     }
-    emit currentDownload->verifyingChanged();
-    if (currentDownload->toVerify > 0) {
-        // Check this later. We need to verify first, then we can call downloadLinks again.
-        currentDownload->start();
-        return;
+    if (currentDownload->toVerify == 0) {
+        currentDownload->download();
     }
-    currentDownload->download();
 }
 
 QString MainNet::NPCFromLocale(int carrier, int country) {
@@ -536,11 +520,12 @@ void MainNet::reverseLookupReply() {
 void MainNet::confirmNewSRSkip() {
     QNetworkReply* reply = (QNetworkReply*)sender();
     QString swRelease = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
-    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 404) {
-        _softwareRelease = "SR not in system"; emit softwareReleaseChanged();
-    } else {
+    uint status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
+    if (status == 200 || (status > 300 && status <= 308)) {
         _softwareRelease = swRelease; emit softwareReleaseChanged();
         _hasPotentialLinks = true; emit hasPotentialLinksChanged();
+    } else {
+        _softwareRelease = "SR not in system"; emit softwareReleaseChanged();
     }
     setScanning(0);
     sender()->deleteLater();
@@ -552,7 +537,8 @@ void MainNet::confirmNewSR()
     QString swRelease = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
     _softwareRelease = swRelease; emit softwareReleaseChanged();
     // Seems to give 301 redirect if it's real
-    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() != 404) {
+    uint status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
+    if (status == 200 || (status > 300 && status <= 308)) {
         _hasPotentialLinks = true; emit hasPotentialLinksChanged();
     }
     setScanning(0);
