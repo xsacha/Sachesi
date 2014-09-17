@@ -90,7 +90,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(int     state            MEMBER _state           WRITE setState            NOTIFY stateChanged)
     Q_PROPERTY(int     dgPos            MEMBER _downgradePos                              NOTIFY dgPosChanged)
     Q_PROPERTY(int     dgMaxPos         READ dgMaxPos                                     NOTIFY dgMaxPosChanged)
-    Q_PROPERTY(int     dgProgress       MEMBER _dgProgress      WRITE setDGProgress       NOTIFY dgProgressChanged)
+    Q_PROPERTY(int     dgProgress       MEMBER _dgProgress                                NOTIFY curDGProgressChanged)
     Q_PROPERTY(int     curDGProgress    MEMBER _curDGProgress   WRITE setCurDGProgress    NOTIFY curDGProgressChanged)
     Q_PROPERTY(QString curInstallName   MEMBER _curInstallName  WRITE setCurInstallName   NOTIFY curInstallNameChanged)
     Q_PROPERTY(bool    completed        MEMBER _completed                                 NOTIFY completedChanged)
@@ -147,7 +147,6 @@ public:
     void AESEncryptSend(QByteArray &plain, int code);
     QString password() const;
     int dgMaxPos() const;
-    int curDGProgress() const;
     QQmlListProperty<Apps> appList();
     int appCount() const { return _appList.count(); }
     BackupInfo* back();
@@ -166,7 +165,6 @@ public:
     void setPossibleDevices(const int &devices);
     void setNewLine(const QString &newLine);
     void setState(const int &state);
-    void setDGProgress(const int &progress);
     void setCurDGProgress(const int &progress);
     void setCurInstallName(const QString &name);
     void setCompleted(const bool &exists);
@@ -192,7 +190,6 @@ signals:
     void completedChanged();
     void dgPosChanged();
     void dgMaxPosChanged();
-    void dgProgressChanged();
     void curDGProgressChanged();
     void curInstallNameChanged();
     void installingChanged();
@@ -281,8 +278,11 @@ private:
     QString _newLine;
     QFile _firmware;
     int _state;
+    // Urgh, the below should be in a class
     quint64 _dlBytes;
     quint64 _dlTotal;
+    quint64 _dlDoneBytes;
+    quint64 _dlOverallTotal;
     int _dgProgress;
     int _curDGProgress;
     QString _curInstallName;

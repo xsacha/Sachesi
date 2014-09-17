@@ -34,8 +34,7 @@ Item {
         title: i.firmwareUpdate ? "Firmware Update" : "Install"
         CircleProgress {
             anchors.fill: parent
-            // Currently, dgProgess is the current progress and overall is not calculated.
-            currentValue: i.dgProgress // i.curDGProgress
+            currentValue: i.curDGProgress
             overallValue: i.dgProgress
             curId: i.dgPos + 1
             maxId: i.dgMaxPos

@@ -103,8 +103,6 @@ public:
     DownloadInfo* currentDownload;
 public slots:
     void    setSplitProgress(const int &progress);
-    void    confirmNewSRSkip();
-    void    confirmNewSR();
 signals:
     void softwareReleaseChanged();
     void updateMessageChanged();

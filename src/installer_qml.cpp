@@ -45,7 +45,6 @@ void InstallNet::setState(const int &state) {
 int InstallNet::dgMaxPos() const {
     return _downgradeInfo.count();
 }
-WRITE_QML(int,  dgProgress, setDGProgress)
 WRITE_QML(int,  curDGProgress, setCurDGProgress)
 WRITE_QML(QString, curInstallName, setCurInstallName)
 WRITE_QML(bool, installing, setInstalling)

@@ -505,44 +505,26 @@ void MainNet::reverseLookupReply() {
         QNetworkRequest request;
         request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
         request.setUrl(QUrl(url));
-        request.setAttribute(QNetworkRequest::CustomVerbAttribute, swRelease);
         QNetworkReply* replyTmp = manager->head(request);
-        if (skip)
-            connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSRSkip()));
-        else
-            connect(replyTmp, SIGNAL(finished()), this, SLOT(confirmNewSR()));
+        connect(replyTmp, &QNetworkReply::finished, [=]() {
+            // Seems to give 301 redirect if it's real
+            uint status = replyTmp->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
+            // New SW release found
+            _softwareRelease = swRelease;
+            if (status == 200 || (status > 300 && status <= 308)) {
+                _hasPotentialLinks = true; emit hasPotentialLinksChanged();
+            } else if (skip) {
+                // Instead of using version, report 'not in system' so that it is skipped
+                _softwareRelease = "SR not in system"; emit softwareReleaseChanged();
+            }
+            emit softwareReleaseChanged();
+            setScanning(0);
+            replyTmp->deleteLater();
+        });
     } else {
         _softwareRelease = swRelease; emit softwareReleaseChanged();
         setScanning(0);
     }
-}
-
-void MainNet::confirmNewSRSkip() {
-    QNetworkReply* reply = (QNetworkReply*)sender();
-    QString swRelease = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
-    uint status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
-    if (status == 200 || (status > 300 && status <= 308)) {
-        _softwareRelease = swRelease; emit softwareReleaseChanged();
-        _hasPotentialLinks = true; emit hasPotentialLinksChanged();
-    } else {
-        _softwareRelease = "SR not in system"; emit softwareReleaseChanged();
-    }
-    setScanning(0);
-    sender()->deleteLater();
-}
-
-void MainNet::confirmNewSR()
-{
-    QNetworkReply* reply = (QNetworkReply*)sender();
-    QString swRelease = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toString();
-    _softwareRelease = swRelease; emit softwareReleaseChanged();
-    // Seems to give 301 redirect if it's real
-    uint status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
-    if (status == 200 || (status > 300 && status <= 308)) {
-        _hasPotentialLinks = true; emit hasPotentialLinksChanged();
-    }
-    setScanning(0);
-    sender()->deleteLater();
 }
 
 void MainNet::updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server)

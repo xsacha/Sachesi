@@ -214,7 +214,6 @@ void InstallNet::install()
     if (checkLogin())
     {
         QUrlQuery postData;
-        int nfilesize = 0;
         _downgradePos = 0;
         _downgradeInfo.clear();
         foreach (auto filePair, _installInfo)
@@ -222,11 +221,12 @@ void InstallNet::install()
 
         emit dgPosChanged();
         emit dgMaxPosChanged();
+        _dlDoneBytes = 0;
         for(QString filename : _downgradeInfo)
-            nfilesize += QFile(filename).size();
+            _dlOverallTotal += QFile(filename).size();
 
         postData.addQueryItem("mode", _firmwareUpdate ? "os" : "bar");
-        postData.addQueryItem("size", QString::number(nfilesize));
+        postData.addQueryItem("size", QString::number(_dlOverallTotal));
         postQuery("update.cgi", "x-www-form-urlencoded", postData);
     }
 }
@@ -591,7 +591,9 @@ void InstallNet::installProgress(qint64 pread, qint64)
     if (pread == 0)
         return;
     _dlBytes = 50*pread;
-    setDGProgress(qMin((int)50, (int)(_dlBytes / _dlTotal)));
+    setCurDGProgress(qMin((int)50, (int)(_dlBytes / _dlTotal)));
+    qint64 curBytes = ((qint64)_curDGProgress * _dlTotal);
+    _dgProgress = (curBytes + _dlDoneBytes) / _dlOverallTotal;
 }
 
 void InstallNet::backupProgress(qint64 pread, qint64)
@@ -1012,7 +1014,8 @@ void InstallNet::restoreReply()
                 else if (element == "Success")
                 {
                     inProgress = false;
-                    setCurInstallName(_curInstallName + " Sent.");
+                    setCurInstallName(_curInstallName + " (Sent)");
+                    _dlDoneBytes += 100 * _dlTotal;
                     _downgradePos++;
                     emit dgPosChanged();
                     if (_downgradePos == _downgradeInfo.count())
@@ -1059,16 +1062,19 @@ void InstallNet::restoreReply()
                     setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last());
                     setNewLine("&nbsp;&nbsp;Error: " + errorText);
                     setInstalling(false);
-                    setDGProgress(-1);
+                    _dgProgress = -1;
                     setCurDGProgress(-1);
                 }
             }
             else if (xml.name() == "Progress")
             {
                 if (_downgradePos == (_downgradeInfo.count() - 1))
-                    setDGProgress(50 + element.toInt()/2);
+                    setCurDGProgress(50 + element.toInt()/2);
                 else
-                    setDGProgress(inProgress ? (50 + element.toInt()/2) : 0);
+                    setCurDGProgress(inProgress ? (50 + element.toInt()/2) : 0);
+
+                qint64 curBytes = ((qint64)_curDGProgress * _dlTotal);
+                _dgProgress = (curBytes + _dlDoneBytes) / _dlOverallTotal;
                 bool resend = false;
                 if (_knownOS.startsWith("2.")) // Playbook OS support
                     resend = !data.contains("100");
@@ -1110,7 +1116,7 @@ void InstallNet::restoreReply()
     else if (xml.name() == "UpdateEnd") {
         setInstalling(false);
         setNewLine("Completed Update.");
-        setDGProgress(-1);
+        _dgProgress = -1;
         setCurDGProgress(-1);
     }
     else if (xml.name() == "BackupCheck")
@@ -1247,7 +1253,7 @@ void InstallNet::resetVars()
     setKnownRadio("N/A");
     setKnownBattery(-1);
     setState(0);
-    setDGProgress(-1);
+    _dgProgress = -1;
     setCurDGProgress(-1);
     _dlBytes = 0;
     _dlTotal = 0;
