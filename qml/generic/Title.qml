@@ -35,18 +35,14 @@ ApplicationWindow {
         anchors.horizontalCenterOffset: font.letterSpacing / 2
     }
 
-    Rectangle {
-        id: advanced_toggle
-        anchors { right: parent.right; rightMargin: 1; top: parent.top; topMargin: 1 }
-        height: title.height; width: height
-        radius: height
-        color: settings.advanced ? "#999999" : "transparent"
-        border.width: 2
-        antialiasing: true
-        MouseArea {
-            anchors.fill: parent
-            onClicked: settings.advanced = !settings.advanced
-        }
+    Button {
+        anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 1 }
+        height: title.height + 7; width: height
+        checkable: true
+        checked: settings.advanced
+        onClicked: settings.advanced = !settings.advanced
+        text: checked ? "A" : "H"
+        tooltip: "Advanced"
     }
     TabView {
         id: titleRow

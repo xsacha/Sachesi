@@ -96,7 +96,7 @@ Window {
                 Button {
                     id: grabPotential
                     enabled: p.hasPotentialLinks // Exists?
-                    text: enabled ? (isMobile ? "Copy Public Links" : "Grab Public Links") : "No Links Available"
+                    text: enabled ? "Grab Public Links" : "No Links Available"
                     onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion)
                 }
             }
