@@ -43,7 +43,7 @@ Item {
             }
             Text {
                 visible: p.splitProgress > 100
-                text: "Percentages are not entirely accurate."
+                text: "Percentages are not entirely accurate for QNX6 files."
                 font.pointSize: 10
             }
         }

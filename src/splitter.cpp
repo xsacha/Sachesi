@@ -16,24 +16,6 @@
 // http://github.com/xsacha/Sachesi
 
 #include "splitter.h"
-#ifdef _LZO2_SHARED
-#include <lzo/lzo1x.h>
-#else
-#include "lzo.h"
-#endif
-#ifdef _WIN32
-#include "Windows.h"
-// We need to update the time of the extracted file based on the unix filesystem it comes from.
-void fixFileTime(QString filename, int time) {
-    FILETIME pft;
-    LONGLONG ll = Int32x32To64(time, 10000000) + 116444736000000000;
-    pft.dwLowDateTime = (DWORD)ll;
-    pft.dwHighDateTime = ll >> 32;
-    HANDLE fd_handle = CreateFile(filename.toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-    SetFileTime(fd_handle, &pft,(LPFILETIME) nullptr, &pft);
-    CloseHandle(fd_handle);
-}
-#endif
 
 void Splitter::extractManifest(int nodenum, qint64 startPos) {
     QNXStream stream(signedFile);
@@ -233,102 +215,10 @@ void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tie
     }
 }
 
-void Splitter::extractRCFSDir(int offset, int numNodes, QString basedir, qint64 startPos)
-{
-    QNXStream stream(signedFile);
-    QDir mainDir(basedir);
-    for (int i = 0; i < numNodes; i++) {
-        rinode node = createRNode(offset + (i * 0x20), startPos);
-        node.path_to = basedir;
-        if (node.mode & QCFM_IS_DIRECTORY) {
-            mainDir.mkpath(node.name);
-            if (node.size > 0)
-                extractRCFSDir(node.offset, node.size / 0x20, node.path_to + "/" + node.name, startPos);
-        }
-        else {
-            signedFile->seek(node.offset + startPos);
-            if (node.mode & QCFM_IS_SYMLINK) {
-#ifdef _WIN32
-                QString lnkName = node.path_to + "/" + node.name + ".lnk";
-                QFile::link(node.path_to + "/" + signedFile->readLine(QNX6_MAX_CHARS), lnkName);
-                fixFileTime(lnkName, node.time);
-#else
-                QFile::link(node.path_to + "/" + signedFile->readLine(QNX6_MAX_CHARS), node.path_to + "/" + node.name);
-#endif
-                continue;
-            }
-            QFile newFile(node.path_to + "/" + node.name);
-            newFile.open(QFile::WriteOnly);
-            if (node.mode & QCFM_IS_LZO_COMPRESSED) {
-                READ_TMP(int, next);
-                int chunks = (next - 4) / 4;
-                QList<int> sizes, offsets;
-                offsets.append(next);
-                for (int s = 0; s < chunks; s++) {
-                    stream >> next;
-                    offsets.append(next);
-                    sizes.append(offsets[s+1] - offsets[s]);
-                }
-                char* buffer = new char[node.size];
-                foreach(int size, sizes) {
-                    char* readData = new char[size];
-                    signedFile->read(readData, size);
-                    size_t write_len = 0x4000;
-                    lzo1x_decompress_safe(reinterpret_cast<const unsigned char*>(readData), size, reinterpret_cast<unsigned char*>(buffer), &write_len, nullptr);
-                    newFile.write(buffer, (qint64)write_len);
-                    updateProgress(size);
-                    delete [] readData;
-                }
-                delete [] buffer;
-            } else {
-                for (qint64 i = node.size; i > 0;) {
-                    qint64 read_len = qMin(BUFFER_LEN, i);
-                    qint64 written_size = newFile.write(signedFile->read(read_len));
-                    i -= updateProgress(written_size);
-                }
-            }
-            newFile.close();
-#ifdef _WIN32
-            fixFileTime(newFile.fileName(), node.time);
-#endif
-        }
-    }
-}
-
-void Splitter::extractBootDir(int offset, int numNodes, QString basedir, qint64 startPos)
-{
-
-    // TODO: Nodes seem to fall apart. This must be whole-image compressed?
-    /*
-    QNXStream stream(signedFile);
-    QDir mainDir(basedir);
-    for (int i = 0; i < numNodes; i++) {
-        binode node = createBNode(offset + (i * 0x20), startPos);
-        qDebug() << QString::number(node.mode,16) << node.name << QString::number(node.offset,16);
-        if (node.mode & QCFM_IS_DIRECTORY) {
-            qDebug() << "Is directory";
-            //extractRCFSDir(node.offset, node.size / 0x20, node.path_to + "/" + node.name, startPos);
-        } else {
-            if (node.mode & QCFM_IS_SYMLINK) {
-                signedFile->seek(startPos + node.offset);
-                qDebug() << "Symlink: " << node.name << " -> " << signedFile->readLine(QNX6_MAX_CHARS);
-            } else if (node.mode & QCFM_IS_COMPRESSED) {
-                qDebug() << "Is compressed file";
-            } else {
-                qDebug() << "Is regular file";
-            }
-        }
-    }*/
-}
-
 void Splitter::processExtractType(FileSystemType type) {
     extracting = true;
-    signedFile = new QFile(selectedFile);
-    signedFile->open(QIODevice::ReadOnly);
-    read = 0;
-    maxSize = signedFile->size();
-    progressChanged(0);
-    // TODO: Move 'detection' somewhere else
+
+    // TODO: Move 'detection' somewhere else and detect by header
     if (type == FS_UNKNOWN) {
         if (selectedFile.endsWith(".qnx6"))
             type = FS_QNX6;
@@ -338,16 +228,32 @@ void Splitter::processExtractType(FileSystemType type) {
             type = FS_IFS;
     }
     if (type == FS_QNX6) {
-        QString baseName = selectedFile;
-        baseName.chop(5);
-        processQStart(0, baseName);
+        signedFile = new QFile(selectedFile);
+        signedFile->open(QIODevice::ReadOnly);
+        read = 0;
+        maxSize = signedFile->size();
+        progressChanged(0);
+        processQStart(0, generateNameFromQNX6(0, 0));
+        signedFile->close();
+        delete signedFile;
     } else if (type == FS_RCFS) {
-        processRStart(0, generateNameFromRCFS(0));
+        int unique = newProgressInfo();
+        FS::RCFS* rcfs = new FS::RCFS(selectedFile);
+        connect(rcfs, &FS::RCFS::sizeChanged, [=] () {
+            updateCurProgress(unique, rcfs->curSize, rcfs->maxSize);
+        });
+        rcfs->extractContents();
+        delete rcfs;
     } else if (type == FS_IFS) {
-        processBStart(0, generateNameFromIFS(0, 0), maxSize);
+        int unique = newProgressInfo();
+        FS::IFS* ifs = new FS::IFS(selectedFile);
+        connect(ifs, &FS::IFS::sizeChanged, [=] () {
+            updateCurProgress(unique, ifs->curSize, ifs->maxSize);
+        });
+        ifs->extractContents();
+        delete ifs;
     }
-    signedFile->close();
-    delete signedFile;
+
     emit finished();
 }
 
@@ -402,62 +308,6 @@ int Splitter::processQStart(qint64 startPos, QString startDir) {
     return 0;
 }
 
-void Splitter::processRStart(qint64 startPos, QString startDir) {
-    signedFile->seek(startPos + 0x1038);
-    QNXStream stream(signedFile);
-    READ_TMP(qint32, offset);
-    extractRCFSDir(offset, 1, startDir, startPos);
-    QDesktopServices::openUrl(QUrl(startDir));
-}
-
-void Splitter::processBStart(qint64 startPos, QString startDir, qint64 size) {
-    signedFile->seek(startPos + 0x1020);
-    qint32 boot_size, startup_size;
-    QNXStream stream(signedFile);
-    // boot @ 0 with boot_size;
-    stream >> boot_size;
-    boot_size &= 0xffffff;
-    unsigned char ifsSig[] = {0xEB, 0x7E, 0xFF, 0x00};
-
-    signedFile->seek(startPos + boot_size);
-    // Make sure there is a startup header
-    if (signedFile->read(4) != QByteArray((char*)ifsSig, 4)) {
-        return; // Not a valid IFS image
-    }
-    signedFile->seek(startPos + boot_size + 0x20);
-    // startup @ boot_size + 0x100 with startup_size - 0x100
-    stream >> startup_size;
-    // imagefs @ boot_size + startup_size
-    extractBootDir(0xC, 1, startDir, startPos + boot_size + startup_size);
-
-
-    // Temporarily dump the components until a full extraction is available
-    QDir(startDir).mkpath(".");
-    // -- Dump boot.bin --
-    signedFile->seek(startPos);
-    QScopedPointer<QFile> bootFile(new QFile(QString(startDir + "/boot.bin")));
-    if (!bootFile->open(QIODevice::WriteOnly))
-        return die();
-
-    for (qint64 s = boot_size; s > 0; s -= updateProgress(bootFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-    bootFile->close();
-    // -- Dump startup.bin
-    signedFile->seek(startPos + boot_size + 0x100);
-    QScopedPointer<QFile> startupFile(new QFile(QString(startDir + "/startup.bin")));
-    if (!startupFile->open(QIODevice::WriteOnly))
-        return die();
-    for (qint64 s = startup_size - 0x100; s > 0; s -= updateProgress(startupFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-    startupFile->close();
-    // -- Dump imagefs.bin
-    signedFile->seek(startPos + boot_size + startup_size);
-    QScopedPointer<QFile> imageFile(new QFile(QString(startDir + "/imagefs.bin")));
-    if (!imageFile->open(QIODevice::WriteOnly))
-        return die();
-    for (qint64 s = size - boot_size - startup_size; s > 0; s -= updateProgress(imageFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-    imageFile->close();
-    QDesktopServices::openUrl(QUrl(startDir));
-}
-
 void Splitter::processExtractSigned()
 {
     extracting = true;
@@ -473,106 +323,13 @@ void Splitter::processExtractSigned()
     emit finished();
 }
 
-QByteArray Splitter::extractRCFSFile(qint64 node_offset, int node_size, int node_mode)
+QString Splitter::generateNameFromQNX6(qint64 startPos, int count)
 {
-    QByteArray ret;
-    signedFile->seek(node_offset);
-    QNXStream stream(signedFile);
-    if (node_mode & QCFM_IS_LZO_COMPRESSED) {
-        READ_TMP(int, next);
-        int chunks = (next - 4) / 4;
-        QList<int> sizes, offsets;
-        offsets.append(next);
-        for (int s = 0; s < chunks; s++) {
-            stream >> next;
-            offsets.append(next);
-            sizes.append(offsets[s+1] - offsets[s]);
-        }
-        char* buffer = new char[node_size];
-        foreach(int size, sizes) {
-            char* readData = new char[size];
-            signedFile->read(readData, size);
-            size_t write_len = 0x4000;
-            lzo1x_decompress_safe(reinterpret_cast<const unsigned char*>(readData), size, reinterpret_cast<unsigned char*>(buffer), &write_len, nullptr);
-            ret.append(buffer, write_len);
-            delete [] readData;
-        }
-        delete [] buffer;
-    }
-    else {
-        for (qint64 i = node_size; i > 0;) {
-            QByteArray data = signedFile->read(qMin(BUFFER_LEN, i));
-            i -= data.size();
-            ret.append(data);
-        }
-    }
-    return ret;
-}
-
-QString Splitter::generateNameFromRCFS(qint64 startPos)
-{
-    signedFile->seek(startPos + 8);
-    QString board = "rcfs";
-    QString variant = "unk";
-    QString cpu = "unk";
-    QString version = "unk";
-
-    if (signedFile->readLine(4).startsWith("fs-")) {
-        signedFile->seek(startPos + 0x1038);
-        QNXStream stream(signedFile);
-        READ_TMP(qint32, offset);
-        rinode dotnode = createRNode(offset, startPos);
-        for (int i = 0; i < dotnode.size / 0x20; i++) {
-            rinode slashdotnode = createRNode(dotnode.offset + (i * 0x20), startPos);
-            if (slashdotnode.name == "etc") {
-                for (int i = 0; i < slashdotnode.size / 0x20; i++) {
-                    rinode node = createRNode(slashdotnode.offset + (i * 0x20), startPos);
-                    if (node.name == "os.version" || node.name == "radio.version") {
-                        QByteArray versionData = extractRCFSFile(startPos + node.offset, node.size, node.mode);
-                        version = QString(versionData).simplified();
-                    }
-                }
-            }
-            if (slashdotnode.name.endsWith(".tdf")) {
-                QByteArray boardData = extractRCFSFile(startPos + slashdotnode.offset, slashdotnode.size, slashdotnode.mode);
-                foreach (QString config, QString(boardData).split('\n')) {
-                    if (config.startsWith("CPU=")) {
-                        cpu = config.split('=').last().remove('"');
-                    } else if (config.startsWith("BOARD=")) {
-                        board = config.split('=').last().remove('"');
-                        if (board != "radio")
-                            board.prepend("os.");
-                    } else if (config.startsWith("BOARD_CONFIG=") ||
-                               config.startsWith("RADIO_BOARD_CONFIG=")) {
-                        variant = config.split('=').last().remove('"');
-                    }
-                }
-            }
-        }
-    }
-
-    return QString("%1.%2.%3.%4")
-            .arg(board)
-            .arg(variant)
-            .arg(version)
-            .arg(cpu);
-}
-
-QString Splitter::generateNameFromIFS(qint64 startPos, int count)
-{
-    signedFile->seek(startPos + 0x40);
-    QString builder = QString(signedFile->readLine(16)); // ec_agent, developer
-    if (builder == "ec_agent")
-        builder = "prod";
-    else if (builder == "developer")
-        builder = "trunk";
-
-    signedFile->seek(startPos + 0x50);
-    QString build_date = QString(signedFile->readLine(16)); // Mmm dd yyyy
-    return QString("boot%1-%2-%3")
-            .arg(count > 0 ? QString::number(count+1) : "")
-            .arg(builder)
-            .arg(build_date.replace(' ', '.'));
+    // TODO: Read ./.rootfs.os.version or ./var/pps/system/installer/coreos/0
+    QString baseName = QString("%1%2")
+            .arg(QFileInfo(selectedFile).completeBaseName())
+            .arg(count > 0 ? QString::number(count+1) : "");
+    return baseName;
 }
 
 void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signedPos)
@@ -637,20 +394,19 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
             signedFile->seek(partitionOffsets[i]);
             if (signedFile->read(4) == QByteArray("rimh", 4)) {
                 startPos = partitionOffsets[i];
-                QString name = generateNameFromRCFS(startPos);
                 maxSize += partitionSizes[i];
+                int unique = newProgressInfo();
+                FS::RCFS* rcfs = new FS::RCFS(selectedFile, signedFile, startPos, partitionSizes[i], baseDir);
+                connect(rcfs, &FS::RCFS::sizeChanged, [=] () {
+                    updateCurProgress(unique, rcfs->curSize, rcfs->maxSize);
+                });
                 signedFile->seek(startPos);
-                if (!extractImage) {
-                    processRStart(startPos, baseDir + "/" + name);
+                if (extractImage) {
+                    rcfs->extractImage();
                 } else {
-                    // Extract the file
-                    QScopedPointer<QFile> rcfsFile(new QFile(baseDir + "/" + name + ".rcfs"));
-                    if (!rcfsFile->open(QIODevice::WriteOnly))
-                        return die();
-
-                    for (qint64 s = partitionSizes[i] + 0x1000; s > 0; s -= updateProgress(rcfsFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-                    rcfsFile->close();
+                    rcfs->extractContents();
                 }
+                delete rcfs;
             }
         }
     }
@@ -665,18 +421,14 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                     maxSize += partitionSizes[i] * 10000;
                 startPos = partitionOffsets[i];
                 signedFile->seek(startPos);
-                QString type = extractApps ? "Apps" : "OS";
-                if (!extractApps && baseName.contains("OS"))
-                    type == "";
-                else
-                    type.prepend("-");
+                QString name = generateNameFromQNX6(startPos, qnxcounter++);
                 if (!extractImage) {
-                    if (!processQStart(startPos, baseName + type))
+                    if (!processQStart(startPos, baseDir + name))
                         break;
                 } else {
                     maxSize += partitionSizes[i];
                     // Extract the file
-                    QScopedPointer<QFile> qnx6File(new QFile(QString(baseName + ".%1.qnx6").arg(qnxcounter++)));
+                    QScopedPointer<QFile> qnx6File(new QFile(QString(baseDir + name + ".qnx6")));
                     if (!qnx6File->open(QIODevice::WriteOnly))
                         return die();
 
@@ -690,26 +442,23 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     // Boot
     if (extractTypes & 4) {
         for (int i = 0; i < partitionOffsets.count(); i++) {
-            int bootcounter = 0;
             signedFile->seek(partitionOffsets[i]);
             QByteArray header = signedFile->read(4);
             // Check for ROM header
             if (header == QByteArray((char*)bootSig, 4)) {
                 startPos = partitionOffsets[i];
                 maxSize += partitionSizes[i];
-                QString name = generateNameFromIFS(startPos, bootcounter++);
-                if (!extractImage) {
-                    processBStart(startPos, baseDir + "/" + name, partitionSizes[i]);
+                int unique = newProgressInfo();
+                FS::IFS* ifs = new FS::IFS(selectedFile, signedFile, startPos, partitionSizes[i], baseDir);
+                connect(ifs, &FS::IFS::sizeChanged, [=] () {
+                    updateCurProgress(unique, ifs->curSize, ifs->maxSize);
+                });
+                if (extractImage) {
+                    ifs->extractImage();
                 } else {
-                    signedFile->seek(startPos);
-                    // Extract the file
-                    QScopedPointer<QFile> bootFile(new QFile(baseDir + "/" + name + ".ifs"));
-                    if (!bootFile->open(QIODevice::WriteOnly))
-                        return die();
-
-                    for (qint64 s = partitionSizes[i]; s > 0; s -= updateProgress(bootFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-                    bootFile->close();
+                    ifs->extractContents();
                 }
+                delete ifs;
             }
         }
     }

@@ -74,14 +74,20 @@ SOURCES += \
     src/mainnet.cpp \
     src/splitter.cpp \
     src/ports.cpp \
-    src/apps.cpp
+    src/apps.cpp \
+    src/fs/ifs.cpp \
+    src/fs/fs.cpp \
+    src/fs/rcfs.cpp
 
 HEADERS += \
     src/mainnet.h \
     src/splitter.h \
     src/ports.h \
     src/downloadinfo.h \
-    src/apps.h
+    src/apps.h \
+    src/fs/ifs.h \
+    src/fs/fs.h \
+    src/fs/rcfs.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {

@@ -30,6 +30,8 @@
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
 #include "ports.h"
+#include "fs/ifs.h"
+#include "fs/rcfs.h"
 
 enum FileSystemType {
     FS_UNKNOWN = 0,
@@ -38,38 +40,16 @@ enum FileSystemType {
     FS_IFS,
 };
 
+struct ProgressInfo {
+    int unique;
+    qint64 curSize;
+    qint64 maxSize;
+    double progress;
+};
+
 #define PACKED_FILE_OS      (1 << 0)
 #define PACKED_FILE_RADIO   (1 << 1)
 #define PACKED_FILE_PINLIST (1 << 2)
-
-// node.mode flags
-#define QCFM_IS_COMPRESSED      ((1 << 22) | (1 << 23) | (1 << 24))
-// lzo1x_decompress_safe
-#define QCFM_IS_LZO_COMPRESSED   (1 << 23)
-// ucl_nrv2b_decompress_8
-#define QCFM_IS_UCL_COMPRESSED  ((1 << 22) | (1 << 23))
-#define QCFM_IS_GZIP_COMPRESSED  (1 << 22)
-#define QCFM_IS_DIRECTORY        (1 << 14)
-#define QCFM_IS_SYMLINK          (1 << 13)
-
-#define BUFFER_LEN (qint64)4096
-// QNX6 maximum filename length
-#define QNX6_MAX_CHARS 510
-
-#define READ_TMP(x, y) x y; stream >> y;
-
-class QNXStream : public QDataStream {
-public:
-    QNXStream(QIODevice * device)
-    : QDataStream(device) {
-        setByteOrder(QDataStream::LittleEndian);
-    }
-    QNXStream(QByteArray * a, QIODevice::OpenMode flags)
-    : QDataStream(a, flags) {
-        setByteOrder(QDataStream::LittleEndian);
-        resetStatus();
-    }
-};
 
 class AutoloaderWriter: public QFile {
     Q_OBJECT
@@ -138,28 +118,6 @@ struct qinode {
     quint8 tiers;
     int time;
     quint16 perms;
-};
-
-struct rinode {
-    int mode;
-    QString name;
-    int nameoffset;
-    int offset;
-    int size;
-    int time;
-    QString path_to;
-    int chunks;
-};
-
-struct binode {
-    int mode;
-    QString name;
-    int offset;
-    // TODO: Sizes greater than 16-bit?
-    qint16 size;
-    int time;
-    QString path_to;
-    int chunks;
 };
 
 class Splitter: public QObject {
@@ -468,47 +426,16 @@ public slots:
         return ind;
     }
 
-    rinode createRNode(int offset, qint64 startPos) {
-        QNXStream stream(signedFile);
-        signedFile->seek(4 + offset + startPos);
-        rinode ind;
-        stream >> ind.mode >> ind.nameoffset >> ind.offset >> ind.size >> ind.time;
-        signedFile->seek(ind.nameoffset + startPos);
-        ind.name = QString(signedFile->readLine(QNX6_MAX_CHARS));
-        if (ind.name == "")
-            ind.name = ".";
-        return ind;
-    }
 
-    binode createBNode(int offset, qint64 startPos) {
-        QNXStream stream(signedFile);
-        signedFile->seek(startPos + offset);
-        binode ind;
-        stream >> ind.mode >> ind.size >> ind.time;
-
-        ind.name = QString(signedFile->readLine(QNX6_MAX_CHARS));
-        if (ind.name == "")
-            ind.name = ".";
-        ind.offset = signedFile->pos() - startPos;
-
-        return ind;
-    }
     void extractManifest(int nodenum, qint64 startPos);
     void extractDir(int nodenum, QString basedir, qint64 startPos, int tier);
-    void extractRCFSDir(int offset, int numNodes, QString basedir, qint64 startPos);
-    void extractBootDir(int offset, int numNodes, QString basedir, qint64 startPos);
     int  processQStart(qint64 startPos, QString startDir);
-    void processRStart(qint64 startPos, QString startDir);
-    void processBStart(qint64 startPos, QString startDir, qint64 size);
 
     void processExtractSigned();
     void processExtract(QString baseName, qint64 signedSize, qint64 signedPos);
     void processExtractType(FileSystemType type = FS_UNKNOWN);
 
-    QString generateNameFromRCFS(qint64 startPos);
-    QString generateNameFromIFS(qint64 startPos, int count);
-
-    QByteArray extractRCFSFile(qint64 node_offset, int node_size, int node_mode);
+    QString generateNameFromQNX6(qint64 startPos, int count);
 
     quint64 updateProgress(qint64 delta) {
         if (delta < 0)
@@ -517,6 +444,19 @@ public slots:
         emit progressChanged((int)(read / maxSize));
         return delta;
     }
+    int newProgressInfo() {
+        progressInfo.append(ProgressInfo());
+        return progressInfo.count() - 1;
+    }
+
+    void updateCurProgress(int unique, qint64 bytes, qint64 maxBytes) {
+        if (progressInfo.count() <= unique)
+            return;
+        progressInfo[unique].curSize = bytes;
+        progressInfo[unique].maxSize = maxBytes;
+        progressInfo[unique].progress = (double)(100*bytes) / (double)maxBytes;
+    }
+
 signals:
     void finished();
     void progressChanged(int progress);
@@ -538,4 +478,7 @@ private:
     QList<int> lfn;       // For extracting
     QuaZip* currentZip;   // For extracting apps
     QList<QString> manifestApps;
+
+    // New
+    QList<ProgressInfo> progressInfo;
 };
