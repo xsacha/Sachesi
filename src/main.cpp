@@ -34,7 +34,7 @@
 // TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress
-// TODO: Probably use a Rectangle for CircleProgress container with option to pull out (reparent to Window). This solves Android incompatibility. Also put each progress in a separate qml.
+// TODO: Window {} not working on Android. Maybe special QML files?
 // TODO: Check PolicyRestrictions somehow?
 // Personal: policy_block_backup_and_restore, policy_backup_and_restore
 // Enterprise: policy_disable_devmode, policy_log_submission, policy_block_computer_access_to_device

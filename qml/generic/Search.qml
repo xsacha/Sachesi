@@ -8,14 +8,13 @@ import "UI" 1.0
 
 Item {
     property bool init: p.updateMessage === ""
-    property bool isMobile: false
     state: "initing"
 
     Window {
         id: downloadWin
         property int maxId: download.maxId
-        visible: false
         onMaxIdChanged: visible = (maxId > 0)
+        visible: false
         onVisibleChanged: if (visible) {
                               x = window.x + (window.width - width) / 2
                               y = window.y + (window.height - height) / 2
@@ -118,7 +117,7 @@ Item {
             Button {
                 enabled: p.updateCheckedCount > 0
                 Layout.alignment: Qt.AlignHCenter
-                text: isMobile ? "Copy Links" : "Grab Links"
+                text: "Grab Links"
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {

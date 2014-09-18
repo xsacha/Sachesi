@@ -608,14 +608,6 @@ void InstallNet::backupProgress(qint64 pread, qint64)
     _back.setProgress(qMin((int)100, (int)(_back.curSize() / _back.curMaxSize())));
 }
 
-void InstallNet::backupFileReady()
-{
-    if (reply->bytesAvailable() > 16384) {
-        while (!reply->atEnd())
-            _zipFile->write(reply->read(16384));
-    }
-}
-
 void InstallNet::restoreProgress(qint64 pwrite, qint64) {
     _back.setCurSize(100*pwrite);
     _back.setProgress(qMin((int)100, (int)(_back.curSize() / _back.curMaxSize())));
@@ -623,7 +615,6 @@ void InstallNet::restoreProgress(qint64 pwrite, qint64) {
 
 void InstallNet::backupFileFinish()
 {
-    _zipFile->write(reply->readAll());
     _zipFile->close();
     _zipFile->deleteLater();
     _zipFile = nullptr;
@@ -1024,15 +1015,14 @@ void InstallNet::restoreReply()
                     _dlDoneBytes += 100 * _dlTotal;
                     _downgradePos++;
                     emit dgPosChanged();
+                    compressedFile->close();
                     if (_downgradePos == _downgradeInfo.count())
                     {
                         postData.addQueryItem("status","success");
                         reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
-                        compressedFile->close();
                     }
                     else
                     {
-                        compressedFile->close();
                         compressedFile = new QFile(_downgradeInfo.at(_downgradePos));
                         compressedFile->open(QIODevice::ReadOnly);
                         _dlBytes = 0;
@@ -1134,7 +1124,9 @@ void InstallNet::restoreReply()
             _zipFile = new QuaZipFile(currentBackupZip);
             _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), nullptr, 0, 8);
             connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
-            connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
+            connect(reply, &QNetworkReply::readyRead, [=]() {
+                _zipFile->write(reply->readAll());
+            });
             connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                     this, SLOT(restoreError(QNetworkReply::NetworkError)));
@@ -1186,7 +1178,9 @@ void InstallNet::restoreReply()
                     _back.setMaxSize(xml.readElementText().toLongLong());
                     _zipFile = new QuaZipFile(currentBackupZip);
                     _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), nullptr, 0, 8);
-                    connect(reply, SIGNAL(readyRead()), this, SLOT(backupFileReady()));
+                    connect(reply, &QNetworkReply::readyRead, [=]() {
+                        _zipFile->write(reply->readAll());
+                    });
                     connect(reply, SIGNAL(finished()), this, SLOT(backupFileFinish()));
                     connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
                 }

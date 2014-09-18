@@ -224,7 +224,6 @@ private slots:
     void installProgress(qint64 pread, qint64);
     void backupProgress(qint64 pread, qint64 psize);
     void restoreProgress(qint64 pwrite, qint64 psize);
-    void backupFileReady();
     void backupFileFinish();
     void dumpLogs();
     void setActionProperty(QString name, QString value);
