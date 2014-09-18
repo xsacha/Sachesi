@@ -119,48 +119,46 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                 break;
         }
         partInfo.last().size = blocks * (qint64)blockSize;
+        if (extractTypes & partInfo.last().type)
+            maxSize += partInfo.last().size;
         partInfo.append(PartitionInfo(partInfo.last().size + partInfo.last().offset));
+        // Check what sort of image we are dealing with
+        signedFile->seek(partInfo.last().offset);
+        QByteArray header = signedFile->read(4);
+        if (header == QByteArray("rimh", 4))
+            partInfo.last().type = FS_RCFS;
+        else if (header == QByteArray::fromHex("EB109000"))
+            partInfo.last().type = FS_QNX6;
+        else if (header == QByteArray::fromHex("FE0300EA"))
+            partInfo.last().type = FS_IFS;
         if (max_scan > 3) {
             scan_offset += (max_scan - 3) * 8;
         }
 
     }
     partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
+    if (extractTypes & partInfo.last().type)
+        maxSize += partInfo.last().size;
 
-    // Detect if RCFS exists in this file
-    if (!extractApps && (extractTypes & 1)) {
-        for (int i = 0; i < partInfo.count(); i++) {
-            signedFile->seek(partInfo[i].offset);
-            if (signedFile->read(4) == QByteArray("rimh", 4)) {
-                startPos = partInfo[i].offset;
-                maxSize += partInfo[i].size /*+ 0x1000*/;
+    foreach(PartitionInfo info, partInfo) {
+        if (info.type == FS_UNKNOWN)
+            continue;
+        if (extractTypes & info.type) {
+            if (info.type == FS_RCFS) {
                 int unique = newProgressInfo();
-                FS::RCFS* rcfs = new FS::RCFS(selectedFile, signedFile, startPos, partInfo[i].size /*+ 0x1000*/, baseDir);
+                FS::RCFS* rcfs = new FS::RCFS(selectedFile, signedFile, info.offset, info.size /*+ 0x1000*/, baseDir);
                 connect(rcfs, &FS::RCFS::sizeChanged, [=] () {
                     updateCurProgress(unique, rcfs->curSize, rcfs->maxSize);
                 });
-                signedFile->seek(startPos);
                 if (extractImage) {
                     rcfs->extractImage();
                 } else {
                     rcfs->extractContents();
                 }
                 delete rcfs;
-            }
-        }
-    }
-
-    // Now extract the user partition
-    if (extractTypes & 2) {
-        for (int i = 0; i < partInfo.count(); i++) {
-            signedFile->seek(partInfo[i].offset);
-            if (signedFile->read(4) == QByteArray::fromHex("EB109000")) {
-                if (!extractImage)
-                    maxSize += partInfo[i].size;
-                startPos = partInfo[i].offset;
-                signedFile->seek(startPos);
+            } else if (info.type == FS_QNX6) {
                 int unique = newProgressInfo();
-                FS::QNX6* qnx = new FS::QNX6(selectedFile, signedFile, startPos, partInfo[i].size, baseDir);
+                FS::QNX6* qnx = new FS::QNX6(selectedFile, signedFile, info.offset, info.size, baseDir);
                 qnx->extractApps = extractApps;
                 connect(qnx, &FS::QNX6::sizeChanged, [=] () {
                     updateCurProgress(unique, qnx->curSize, qnx->maxSize);
@@ -171,21 +169,9 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                     qnx->extractContents();
                 }
                 delete qnx;
-            }
-        }
-    }
-
-    // Boot
-    if (extractTypes & 4) {
-        for (int i = 0; i < partInfo.count(); i++) {
-            signedFile->seek(partInfo[i].offset);
-            QByteArray header = signedFile->read(4);
-            // Check for ROM header
-            if (header == QByteArray::fromHex("FE0300EA")) {
-                startPos = partInfo[i].offset;
-                maxSize += partInfo[i].size;
+            } else if (info.type == FS_IFS) {
                 int unique = newProgressInfo();
-                FS::IFS* ifs = new FS::IFS(selectedFile, signedFile, startPos, partInfo[i].size, baseDir);
+                FS::IFS* ifs = new FS::IFS(selectedFile, signedFile, info.offset, info.size, baseDir);
                 connect(ifs, &FS::IFS::sizeChanged, [=] () {
                     updateCurProgress(unique, ifs->curSize, ifs->maxSize);
                 });
@@ -198,26 +184,5 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
             }
         }
     }
-
-    // Everything else
-    /*if (extractTypes & 4) {
-        for (int i = 0; i < partitionOffsets.count(); i++) {
-            int unkcounter = 0;
-            signedFile->seek(partitionOffsets[i]);
-            QByteArray header = signedFile->read(4);
-            // Not RCFS, QNX6 or IFS, so what is it?
-            if (header != QByteArray("rimh", 4) && header != QByteArray(qnx6Sig, 4) && header != QByteArray(bootSig, 4) && partitionSizes[i] > 65535) {
-                signedFile->seek(partitionOffsets[i]);
-                maxSize += partitionSizes[i];
-                // Extract the file
-                QScopedPointer<QFile> unkFile(new QFile(QString(baseDir + "/%1.%2.unk").arg(unkcounter++).arg(QString(header.toHex()))));
-                if (!unkFile->open(QIODevice::WriteOnly))
-                    return die();
-
-                for (qint64 s = partitionSizes[i]; s > 0; s -= updateProgress(unkFile->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-                unkFile->close();
-            }
-        }
-    }*/
 
 }
