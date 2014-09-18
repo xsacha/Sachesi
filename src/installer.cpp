@@ -103,6 +103,10 @@ void InstallNet::scanProps()
 BarInfo InstallNet::checkInstallableInfo(QString name)
 {
     BarInfo barInfo = {name, "", NotInstallableType};
+    // Check if it's a 'hidden' file as we use these for temporary file downloads.
+    if (QFileInfo(name).fileName().startsWith('.'))
+        return barInfo;
+
     QuaZipFile manifest(name, "META-INF/MANIFEST.MF", QuaZip::csSensitive);
     if (!manifest.open(QIODevice::ReadOnly))
         return barInfo;
@@ -201,8 +205,10 @@ void InstallNet::install(QList<QUrl> files)
                 _installInfo.append(info);
         }
     }
-    if (_installInfo.isEmpty())
+    if (_installInfo.isEmpty()) {
+        setNewLine("None of the selected files were installable.");
         return;
+    }
     setNewLine(QString("Installing <b>%1</b> .bar(s).")
                .arg(_installInfo.count()));
     install();
