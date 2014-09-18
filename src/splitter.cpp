@@ -17,204 +17,6 @@
 
 #include "splitter.h"
 
-void Splitter::extractManifest(int nodenum, qint64 startPos) {
-    QNXStream stream(signedFile);
-    int count;
-    qinode ind = createNode(nodenum, startPos);
-    foreach(int num, ind.sectors)
-    {
-        for (int i = 0; i < 0x1000; i += 0x20)
-        {
-            if (kill) return die();
-            updateProgress(1400);
-            signedFile->seek(findSector(num, startPos) + i);
-            READ_TMP(int, inodenum);
-            if (inodenum == 0)
-                break;
-
-            READ_TMP(unsigned char, c_byte);
-            count = c_byte;
-            if (count == 0xFF)
-            {
-                signedFile->seek(findSector(num, startPos) + i + 0x8);
-                READ_TMP(int, item);
-                if (item > lfn.count())
-                    item = 1;
-                signedFile->seek(findSector(lfn.at(item), startPos));
-                READ_TMP(unsigned short, c_sint);
-                count = c_sint;
-            }
-            QString dir = QString(signedFile->read(count));
-            if (dir == "." || dir == "..")
-                continue;
-            qinode ind2 = createNode(inodenum, startPos);
-            if (ind2.perms & QCFM_IS_DIRECTORY && dir == "META-INF") {
-                extractDir(inodenum, dir, startPos, 3);
-            }
-        }
-    }
-}
-
-void Splitter::extractDir(int nodenum, QString basedir, qint64 startPos, int tier)
-{
-    QDir mainDir;
-    if (!extractApps)
-        mainDir.mkdir(basedir);
-
-    QNXStream stream(signedFile);
-    int count;
-    qinode ind = createNode(nodenum, startPos);
-    foreach(int num, ind.sectors)
-    {
-        for (int i = 0; i < 0x80; i++)
-        {
-            if (kill)
-                return die();
-
-            signedFile->seek(findSector(num, startPos) + (i * 0x20));
-            READ_TMP(int, inodenum);
-            if (inodenum == 0)
-                break;
-
-            READ_TMP(unsigned char, c_byte);
-            count = c_byte;
-            if (count == 0xFF)
-            {
-                signedFile->seek(findSector(num, startPos) + (i * 0x20) + 0x8);
-                READ_TMP(int, item);
-                if (item > lfn.count())
-                    item = 1;
-                signedFile->seek(findSector(lfn.at(item), startPos));
-                READ_TMP(unsigned short, c_sint);
-                count = c_sint;
-            }
-            QString dir = QString(signedFile->read(count));
-            if (dir == "." || dir == "..")
-                continue;
-
-            qinode ind2 = createNode(inodenum, startPos);
-
-            if (ind2.perms & QCFM_IS_DIRECTORY)
-            {
-                if (extractApps) {
-                    if (dir == "apps" && tier == 0) {
-                        mainDir.mkdir(basedir);
-                        extractDir(inodenum, basedir, startPos, 1);
-                        continue;
-                    }
-                    else if (tier == 1) {
-                        if (!dir.contains(".gY"))
-                            continue;
-                        dir = dir.split(".gY").first();
-                        currentZip = new QuaZip(basedir + "/" + dir+".bar");
-                        currentZip->open(QuaZip::mdCreate);
-                        extractManifest(inodenum, startPos);
-                        extractDir(inodenum, "", startPos, 2);
-                        currentZip->close();
-                        manifestApps.clear();
-                        delete currentZip;
-                        continue;
-                    } else if (tier == 2 && dir != "META-INF") {
-                        extractDir(inodenum, dir, startPos, 3);
-                        continue;
-                    }
-                }
-                extractDir(inodenum, basedir + "/" + dir, startPos, tier ? tier + 1 : 0);
-                continue;
-            }
-            if (extractApps) {
-                if (!tier)
-                    continue;
-                QString thisFile = (tier == 2) ? dir : (basedir + "/" + dir);
-                if (!manifestApps.isEmpty() && basedir != "META-INF" && !manifestApps.contains(thisFile))
-                    continue;
-            }
-            QList<int> sections;
-            if (ind2.tiers == 0 && (ind2.sectors[0] > 0)) {
-                foreach(int sector, ind2.sectors) {
-                    if (sector != -1)
-                        sections.append(sector);
-                }
-            } else if (ind2.tiers > 0 ) {
-                foreach (int sector, ind2.sectors) {
-                    if (sector == -1) break;
-                    signedFile->seek(findSector(sector, startPos));
-                    for (int j = 0; j < 0x400; j++)
-                    {
-                        stream >> sector;
-                        if (sector > 0)
-                            sections.append(sector);
-                    }
-                }
-                if (ind2.tiers == 2) {
-                    QList<int> nodes = sections;
-                    sections.clear();
-                    foreach (int fn, nodes) {
-                        if (fn == -1) break;
-                        signedFile->seek(findSector(fn, startPos));
-                        for (int tmpx = 0; tmpx < 1024; tmpx++) {
-                            stream >> fn;
-                            if (fn > 0) sections.append(fn);
-                        }
-                    }
-                }
-            }
-
-            QuaZipFile* zipFile = 0;
-            QFile* newFile = 0;
-            bool isManifest = (tier == 3) && (dir == "MANIFEST.MF");
-            QByteArray manifestDump;
-            if (extractApps)
-            {
-                zipFile = new QuaZipFile(currentZip);
-                zipFile->open(QIODevice::WriteOnly, tier == 2 ? QuaZipNewInfo(dir) : QuaZipNewInfo(basedir + "/" + dir), nullptr, 0, 8);
-            } else {
-                newFile = new QFile(basedir + "/" + dir);
-                newFile->open(QIODevice::WriteOnly);
-            }
-            if (ind2.size != 0) {
-                foreach(int section, sections)
-                {
-                    signedFile->seek(findSector(section, startPos));
-                    int len = sectorSize;
-                    if (section == sections.last() && (ind2.size % sectorSize))
-                        len = ind2.size % sectorSize;
-                    updateProgress(len);
-                    QByteArray tmp = signedFile->read(len);
-                    if (extractApps)
-                    {
-                        zipFile->write(tmp);
-                        if (isManifest)
-                            manifestDump.append(tmp);
-                    }
-                    else
-                        newFile->write(tmp);
-                }
-            }
-            if (extractApps)
-            {
-                zipFile->close();
-                delete zipFile;
-                if (isManifest) {
-                    foreach(QByteArray manifestString, manifestDump.split('\n')) {
-                        QString tmp = QString(manifestString).simplified();
-                        if (tmp.startsWith("Archive-Asset-Name:")) {
-                            manifestApps.append(tmp.split(": ").last());
-                        }
-                    }
-                }
-            }
-            else {
-                newFile->close();
-#ifdef _WIN32
-                fixFileTime(newFile->fileName(), ind.time);
-#endif
-                delete newFile;
-            }
-        }
-    }
-}
-
 void Splitter::processExtractType(FileSystemType type) {
     extracting = true;
 
@@ -226,18 +28,19 @@ void Splitter::processExtractType(FileSystemType type) {
             type = FS_RCFS;
         else if (selectedFile.endsWith(".ifs"))
             type = FS_IFS;
+        else
+            return;
     }
+    int unique = newProgressInfo();
     if (type == FS_QNX6) {
-        signedFile = new QFile(selectedFile);
-        signedFile->open(QIODevice::ReadOnly);
-        read = 0;
-        maxSize = signedFile->size();
-        progressChanged(0);
-        processQStart(0, generateNameFromQNX6(0, 0));
-        signedFile->close();
-        delete signedFile;
+        FS::QNX6* qnx = new FS::QNX6(selectedFile);
+        qnx->extractApps = extractApps;
+        connect(qnx, &FS::QNX6::sizeChanged, [=] () {
+            updateCurProgress(unique, qnx->curSize, qnx->maxSize);
+        });
+        qnx->extractContents();
+        delete qnx;
     } else if (type == FS_RCFS) {
-        int unique = newProgressInfo();
         FS::RCFS* rcfs = new FS::RCFS(selectedFile);
         connect(rcfs, &FS::RCFS::sizeChanged, [=] () {
             updateCurProgress(unique, rcfs->curSize, rcfs->maxSize);
@@ -245,7 +48,6 @@ void Splitter::processExtractType(FileSystemType type) {
         rcfs->extractContents();
         delete rcfs;
     } else if (type == FS_IFS) {
-        int unique = newProgressInfo();
         FS::IFS* ifs = new FS::IFS(selectedFile);
         connect(ifs, &FS::IFS::sizeChanged, [=] () {
             updateCurProgress(unique, ifs->curSize, ifs->maxSize);
@@ -255,57 +57,6 @@ void Splitter::processExtractType(FileSystemType type) {
     }
 
     emit finished();
-}
-
-int Splitter::processQStart(qint64 startPos, QString startDir) {
-    QNXStream stream(signedFile);
-    signedFile->seek(startPos+8);
-    READ_TMP(unsigned char, typeQNX); // 0x10 = no offset; 0x08 = has offset
-    unsigned char qnx6Sig[] = {0x22, 0x11, 0x19, 0x68};
-    unsigned char fsSig[] = {0xDD, 0xEE, 0xE6, 0x97};
-    if ( (findIndexFromSig(qnx6Sig, -1, 0, 1)) == 0) { return 1; }
-    if ( (startPos = findIndexFromSig(fsSig, -1, 0)) == 0) { return 1; }
-    signedFile->seek(startPos+48);
-    stream >> sectorSize;
-    if (sectorSize % 512) { return 1; }
-    startPos += sectorSize;
-
-    // Find sectorOffset
-    qinode ind2 = createNode(1, startPos);
-    // Try all offsets
-    if (typeQNX == 0x10)
-    {
-        sectorOffset = 0;
-        signedFile->seek((ind2.sectors[0] - sectorOffset)*sectorSize + startPos);
-        READ_TMP(int, offsetCheck);
-        if (offsetCheck != 1)
-            typeQNX = 8;
-    }
-    if (typeQNX != 0x10) {
-        for (sectorOffset = 0x6320; sectorOffset < 0x6400; sectorOffset += 0x10)
-        {
-            signedFile->seek((ind2.sectors[0] - sectorOffset)*sectorSize + startPos);
-            READ_TMP(int, offsetCheck);
-            if (offsetCheck == 1)
-                break;
-        }
-    }
-
-    for (qint64 s = startPos - 0xF10; true; s+=4)
-    {
-        signedFile->seek(s);
-        READ_TMP(int, next);
-        if (next == -1) break;
-        signedFile->seek(findSector(next, startPos));
-        for (int i = 0; i < 0x400; i++) {
-            stream >> next;
-            if (next > 0)
-                lfn.append(next);
-        }
-    }
-    extractDir(1, startDir, startPos, 0);
-    QDesktopServices::openUrl(QUrl(startDir));
-    return 0;
 }
 
 void Splitter::processExtractSigned()
@@ -323,15 +74,6 @@ void Splitter::processExtractSigned()
     emit finished();
 }
 
-QString Splitter::generateNameFromQNX6(qint64 startPos, int count)
-{
-    // TODO: Read ./.rootfs.os.version or ./var/pps/system/installer/coreos/0
-    QString baseName = QString("%1%2")
-            .arg(QFileInfo(selectedFile).completeBaseName())
-            .arg(count > 0 ? QString::number(count+1) : "");
-    return baseName;
-}
-
 void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signedPos)
 {
     qint64 startPos = 0;
@@ -343,7 +85,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         QMessageBox::information(nullptr, "Error", "Was not a Blackberry .signed image.");
         return;
     }
-    QList<qint64> partitionOffsets, partitionSizes;
+    QList<PartitionInfo> partInfo;
     signedFile->seek(signedPos+12);
 
     // We are now at the partition table
@@ -359,7 +101,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         return;
     }
 
-    partitionOffsets.append(signedPos + blockSize);
+    partInfo.append(PartitionInfo(signedPos + blockSize));
     int scan_offset = 0;
     for (int i = 0; i < numPartitions; i++) {
         int max_scan = 3;
@@ -376,27 +118,24 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
             else
                 break;
         }
-        partitionSizes.append(blocks * (qint64)blockSize);
-        partitionOffsets.append(partitionSizes.last() + partitionOffsets.last());
+        partInfo.last().size = blocks * (qint64)blockSize;
+        partInfo.append(PartitionInfo(partInfo.last().size + partInfo.last().offset));
         if (max_scan > 3) {
             scan_offset += (max_scan - 3) * 8;
         }
 
     }
-    partitionSizes.append(signedPos + signedSize - partitionOffsets.last());
-
-    unsigned char qnx6Sig[] = {0xEB, 0x10, 0x90, 0x0};
-    unsigned char bootSig[] = {0xFE, 0x03, 0x00, 0xEA};
+    partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
 
     // Detect if RCFS exists in this file
     if (!extractApps && (extractTypes & 1)) {
-        for (int i = 0; i < partitionOffsets.count(); i++) {
-            signedFile->seek(partitionOffsets[i]);
+        for (int i = 0; i < partInfo.count(); i++) {
+            signedFile->seek(partInfo[i].offset);
             if (signedFile->read(4) == QByteArray("rimh", 4)) {
-                startPos = partitionOffsets[i];
-                maxSize += partitionSizes[i];
+                startPos = partInfo[i].offset;
+                maxSize += partInfo[i].size /*+ 0x1000*/;
                 int unique = newProgressInfo();
-                FS::RCFS* rcfs = new FS::RCFS(selectedFile, signedFile, startPos, partitionSizes[i], baseDir);
+                FS::RCFS* rcfs = new FS::RCFS(selectedFile, signedFile, startPos, partInfo[i].size /*+ 0x1000*/, baseDir);
                 connect(rcfs, &FS::RCFS::sizeChanged, [=] () {
                     updateCurProgress(unique, rcfs->curSize, rcfs->maxSize);
                 });
@@ -413,43 +152,40 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
 
     // Now extract the user partition
     if (extractTypes & 2) {
-        int qnxcounter = 0;
-        for (int i = 0; i < partitionOffsets.count(); i++) {
-            signedFile->seek(partitionOffsets[i]);
-            if (signedFile->read(4) == QByteArray((char*)qnx6Sig,4)) {
+        for (int i = 0; i < partInfo.count(); i++) {
+            signedFile->seek(partInfo[i].offset);
+            if (signedFile->read(4) == QByteArray::fromHex("EB109000")) {
                 if (!extractImage)
-                    maxSize += partitionSizes[i] * 10000;
-                startPos = partitionOffsets[i];
+                    maxSize += partInfo[i].size;
+                startPos = partInfo[i].offset;
                 signedFile->seek(startPos);
-                QString name = generateNameFromQNX6(startPos, qnxcounter++);
-                if (!extractImage) {
-                    if (!processQStart(startPos, baseDir + name))
-                        break;
+                int unique = newProgressInfo();
+                FS::QNX6* qnx = new FS::QNX6(selectedFile, signedFile, startPos, partInfo[i].size, baseDir);
+                qnx->extractApps = extractApps;
+                connect(qnx, &FS::QNX6::sizeChanged, [=] () {
+                    updateCurProgress(unique, qnx->curSize, qnx->maxSize);
+                });
+                if (extractImage) {
+                    qnx->extractImage();
                 } else {
-                    maxSize += partitionSizes[i];
-                    // Extract the file
-                    QScopedPointer<QFile> qnx6File(new QFile(QString(baseDir + name + ".qnx6")));
-                    if (!qnx6File->open(QIODevice::WriteOnly))
-                        return die();
-
-                    for (qint64 s = partitionSizes[i]; s > 0; s -= updateProgress(qnx6File->write(signedFile->read(qMin(BUFFER_LEN, s)))));
-                    qnx6File->close();
+                    qnx->extractContents();
                 }
+                delete qnx;
             }
         }
     }
 
     // Boot
     if (extractTypes & 4) {
-        for (int i = 0; i < partitionOffsets.count(); i++) {
-            signedFile->seek(partitionOffsets[i]);
+        for (int i = 0; i < partInfo.count(); i++) {
+            signedFile->seek(partInfo[i].offset);
             QByteArray header = signedFile->read(4);
             // Check for ROM header
-            if (header == QByteArray((char*)bootSig, 4)) {
-                startPos = partitionOffsets[i];
-                maxSize += partitionSizes[i];
+            if (header == QByteArray::fromHex("FE0300EA")) {
+                startPos = partInfo[i].offset;
+                maxSize += partInfo[i].size;
                 int unique = newProgressInfo();
-                FS::IFS* ifs = new FS::IFS(selectedFile, signedFile, startPos, partitionSizes[i], baseDir);
+                FS::IFS* ifs = new FS::IFS(selectedFile, signedFile, startPos, partInfo[i].size, baseDir);
                 connect(ifs, &FS::IFS::sizeChanged, [=] () {
                     updateCurProgress(unique, ifs->curSize, ifs->maxSize);
                 });

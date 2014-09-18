@@ -8,7 +8,7 @@
 
 namespace FS {
 
-rinode RCFS::createRNode(int offset) {
+rinode RCFS::createNode(int offset) {
     QNXStream stream(_file);
     _file->seek(_offset + offset + 4);
     rinode ind;
@@ -31,12 +31,12 @@ QString RCFS::generateName(QString imageExt) {
         _file->seek(_offset + 0x1038);
         QNXStream stream(_file);
         READ_TMP(qint32, offset);
-        rinode dotnode = createRNode(offset);
+        rinode dotnode = createNode(offset);
         for (int i = 0; i < dotnode.size / 0x20; i++) {
-            rinode slashdotnode = createRNode(dotnode.offset + (i * 0x20));
+            rinode slashdotnode = createNode(dotnode.offset + (i * 0x20));
             if (slashdotnode.name == "etc") {
                 for (int i = 0; i < slashdotnode.size / 0x20; i++) {
-                    rinode node = createRNode(slashdotnode.offset + (i * 0x20));
+                    rinode node = createNode(slashdotnode.offset + (i * 0x20));
                     if (node.name == "os.version" || node.name == "radio.version") {
                         QByteArray versionData = extractFile(_offset + node.offset, node.size, node.mode);
                         version = QString(versionData).simplified();
@@ -115,7 +115,7 @@ void RCFS::extractDir(int offset, int numNodes, QString basedir, qint64 _offset)
     QNXStream stream(_file);
     QDir mainDir(basedir);
     for (int i = 0; i < numNodes; i++) {
-        rinode node = createRNode(offset + (i * 0x20));
+        rinode node = createNode(offset + (i * 0x20));
         node.path_to = basedir;
         QString absName = node.path_to + "/" + node.name;
         if (node.mode & QCFM_IS_DIRECTORY) {

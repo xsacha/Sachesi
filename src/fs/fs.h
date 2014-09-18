@@ -69,7 +69,7 @@ public:
 
     QString uniqueDir(QString name);
     QString uniqueFile(QString name);
-    virtual QString generateName(QString imageExt);
+    virtual QString generateName(QString imageExt = "");
     bool writeFile(QString fileName, qint64 writeSize, bool absolute = false);
     virtual bool extractImage(QString imageExt);
 

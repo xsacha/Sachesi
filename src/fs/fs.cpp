@@ -41,7 +41,7 @@ QString QFileSystem::uniqueFile(QString name) {
 }
 
 // A generic method of working out new name based on old name
-QString QFileSystem::generateName(QString imageExt = "") {
+QString QFileSystem::generateName(QString imageExt) {
     QString name = QFileInfo(_filename).completeBaseName();
     if (imageExt.isEmpty())
         return uniqueDir(name);
@@ -54,7 +54,7 @@ bool QFileSystem::extractImage(QString imageExt) {
     curSize = 0;
     maxSize = _size;
     _file->seek(_offset);
-    return writeFile(generateName(imageExt), maxSize);
+    return writeFile(this->generateName(imageExt), maxSize);
 }
 
 // A method to write writeSize bytes from a QIODevice to a new file, named filename
@@ -67,8 +67,13 @@ bool QFileSystem::writeFile(QString fileName, qint64 writeSize, bool absolute) {
     if (!newFile.open(QIODevice::WriteOnly))
         return false;
     qint64 endSize = curSize + writeSize;
-    while (endSize > curSize)
-        increaseCurSize(newFile.write(_file->read(qMin(BUFFER_LEN, endSize - curSize))));
+    while (endSize > curSize) {
+        int diff = newFile.write(_file->read(qMin(BUFFER_LEN, endSize - curSize)));
+        if (diff <= 0)
+            return false;
+        increaseCurSize(diff);
+
+    }
     newFile.close();
 
     return true;

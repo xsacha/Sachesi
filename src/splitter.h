@@ -27,17 +27,16 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QMessageBox>
-#include <quazip/quazip.h>
-#include <quazip/quazipfile.h>
 #include "ports.h"
-#include "fs/ifs.h"
+#include "fs/qnx6.h"
 #include "fs/rcfs.h"
+#include "fs/ifs.h"
 
 enum FileSystemType {
     FS_UNKNOWN = 0,
-    FS_QNX6,
-    FS_RCFS,
-    FS_IFS,
+    FS_RCFS = 1,
+    FS_QNX6 = 2,
+    FS_IFS = 4,
 };
 
 struct ProgressInfo {
@@ -45,6 +44,17 @@ struct ProgressInfo {
     qint64 curSize;
     qint64 maxSize;
     double progress;
+};
+
+struct PartitionInfo {
+    qint64 offset;
+    qint64 size;
+    FileSystemType type;
+    PartitionInfo(qint64 loc)
+        : offset(loc)
+        , size(0)
+        , type(FS_UNKNOWN)
+    {}
 };
 
 #define PACKED_FILE_OS      (1 << 0)
@@ -112,14 +122,6 @@ private:
     QList<QFileInfo> _infos;
 };
 
-struct qinode {
-    int size;
-    QList<int> sectors;
-    quint8 tiers;
-    int time;
-    quint16 perms;
-};
-
 class Splitter: public QObject {
     Q_OBJECT
 
@@ -141,7 +143,6 @@ public slots:
         extracting = false;
         splitting = false;
         signedFile = nullptr;
-        currentZip = nullptr;
     }
 
     void killSplit() {
@@ -368,74 +369,10 @@ public slots:
         newAutoloader.create(largestInfo.absolutePath() + "/" + largestInfo.completeBaseName());
         emit finished();
     }
-    qint64 findIndexFromSig(unsigned char* signature, int startFrom, int distanceFrom, unsigned int maxBlocks = -1, int num = 4) {
-        if (startFrom != -1)
-            signedFile->seek(startFrom);
-        int readlen = BUFFER_LEN;
-        while (!signedFile->atEnd() && (maxBlocks-- != 0))
-        {
-            QByteArray tmp = signedFile->read(readlen);
-            if (tmp.size() < 0)
-                break;
-            for (int i = 0; i < tmp.size(); i++)
-            {
-                bool found = true;
-                for (int j = 0; j < num; j++)
-                    if ((unsigned char)tmp[i+j] != signature[j]) {
-                        found = false;
-                        break;
-                    }
-                if (found)
-                    return (qint64)(signedFile->pos() - tmp.size() + i + distanceFrom);
-            }
-        }
-        return 0;
-    }
-
-    qint64 findSector(qint64 sector, qint64 startPos) {
-        return ((sector - sectorOffset) * sectorSize) + startPos;
-    }
-    qint64 findNode(int node, qint64 startPos) {
-        return (startPos) + (0x80 * (node - 1));
-    }
-
-    qinode createNode(int node, qint64 startPos) {
-        QNXStream stream(signedFile);
-        qinode ind;
-        qint64 base = findNode(node, startPos);
-        signedFile->seek(base);
-        stream >> ind.size;
-        signedFile->seek(base + 0x10);
-        stream >> ind.time;
-        signedFile->seek(base + 0x20);
-        stream >> ind.perms;
-        stream.skipRawData(2);
-        int sector;
-        for (int i = 0; i < 16; i++)
-        {
-            stream >> sector;
-            if (sector != -1)
-                ind.sectors.append(sector);
-        }
-        // No sectors appears to be caused by empty files. These need to be extracted
-        if (ind.sectors.count() == 0) {
-            ind.sectors.append(0);
-        }
-
-        stream >> ind.tiers;
-        return ind;
-    }
-
-
-    void extractManifest(int nodenum, qint64 startPos);
-    void extractDir(int nodenum, QString basedir, qint64 startPos, int tier);
-    int  processQStart(qint64 startPos, QString startDir);
 
     void processExtractSigned();
     void processExtract(QString baseName, qint64 signedSize, qint64 signedPos);
     void processExtractType(FileSystemType type = FS_UNKNOWN);
-
-    QString generateNameFromQNX6(qint64 startPos, int count);
 
     quint64 updateProgress(qint64 delta) {
         if (delta < 0)
@@ -473,11 +410,6 @@ private:
     QList<QFileInfo> selectedInfo;
     QList<QFile*> tmpFile;
     QIODevice* signedFile;
-    quint16 sectorSize;   // For extracting
-    quint16 sectorOffset; // For extracting
-    QList<int> lfn;       // For extracting
-    QuaZip* currentZip;   // For extracting apps
-    QList<QString> manifestApps;
 
     // New
     QList<ProgressInfo> progressInfo;

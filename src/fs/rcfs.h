@@ -25,7 +25,7 @@ public:
     explicit RCFS(QString filename)
         : QFileSystem(filename) {}
 
-    rinode createRNode(int offset);
+    rinode createNode(int offset);
     QString generateName(QString imageExt = "");
     QByteArray extractFile(qint64 node_offset, int node_size, int node_mode);
     void extractDir(int offset, int numNodes, QString basedir, qint64 startPos);
@@ -36,4 +36,5 @@ public:
     bool extractContents();
 
 };
+
 }

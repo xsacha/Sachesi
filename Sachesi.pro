@@ -77,7 +77,8 @@ SOURCES += \
     src/apps.cpp \
     src/fs/ifs.cpp \
     src/fs/fs.cpp \
-    src/fs/rcfs.cpp
+    src/fs/rcfs.cpp \
+    src/fs/qnx6.cpp
 
 HEADERS += \
     src/mainnet.h \
@@ -87,7 +88,8 @@ HEADERS += \
     src/apps.h \
     src/fs/ifs.h \
     src/fs/fs.h \
-    src/fs/rcfs.h
+    src/fs/rcfs.h \
+    src/fs/qnx6.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {
