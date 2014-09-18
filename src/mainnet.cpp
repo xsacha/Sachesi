@@ -460,11 +460,10 @@ void MainNet::reverseLookup(int device, int variant, int server, QString OSver, 
     //
     //0x8d00240a
     QString query = "<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"1366644680359\">"
-            "<clientProperties><hardware>"
-            "<pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><imei>004402242176786</imei><id>0x"+id+"</id>"
-            "</hardware>"
-            "<software><currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale>"
-            "<osVersion>"+OSver+"</osVersion></software></clientProperties>"
+            "<clientProperties>"
+                "<hardware><pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><id>0x"+id+"</id></hardware>"
+                "<software><osVersion>"+OSver+"</osVersion></software>"
+            "</clientProperties>"
             "</srVersionLookupRequest>";
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
@@ -713,17 +712,15 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
             _updateMessage = "";
             emit updateMessageChanged();
         } else {
-            // Server uses some funny order. Put in order of largest to smallest.
-            std::sort(newApps.begin(), newApps.end(),
-                      [=](const Apps* i, const Apps* j) { return i->size() > j->size(); });
-
-            // Put this new list up for display
+            // Delete old list
             if (_updateAppList.count()) {
                 foreach (Apps* app, _updateAppList) {
                     app->disconnect(SIGNAL(isMarkedChanged()));
+                    app->deleteLater();
                 }
                 _updateAppList.clear();
             }
+            // Put this new list up for display
             _updateAppList = newApps;
             // Connect every isMarkedChanged to the list signal and check if it should be marked
             foreach (Apps* app, _updateAppList) {
@@ -736,20 +733,38 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     app->setIsAvailable(!exists);
                 }
             }
+            // Server uses some funny order.
+            // Put in order of largest to smallest with OS and Radio first and already downloaded last.
+            std::sort(_updateAppList.begin(), _updateAppList.end(),
+                      [=](const Apps* i, const Apps* j) {
+                if (i->type() != "application" && j->type() == "application")
+                    return true;
+                if (j->type() != "application" && i->type() == "application")
+                    return false;
+                if (i->isAvailable() != j->isAvailable())
+                    return i->isAvailable();
+
+                return (i->size() > j->size());
+            }
+            );
+
             _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
                     .arg(ver)
                     .arg(variant)
                     .arg(os != "" ? QString("<b> OS: %1</b>").arg(os) : "")
                     .arg(radio != "" ? QString("<b> Radio: %1</b>").arg(radio) : "")
                     .arg(desc);
-            emit updateMessageChanged();
-            emit updateCheckedCountChanged();
+
             _error = ""; emit errorChanged();
         }
     }
     setScanning(_scanning-1);
-    if (_scanning <= 0)
+    // All scans complete
+    if (_scanning <= 0) {
         setMultiscan(false);
+        emit updateMessageChanged();
+        emit updateCheckedCountChanged();
+    }
 }
 
 void MainNet::serverError(QNetworkReply::NetworkError err)
