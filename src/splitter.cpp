@@ -321,44 +321,31 @@ void Splitter::extractBootDir(int offset, int numNodes, QString basedir, qint64 
     }*/
 }
 
-// TODO: These should all be the same function
-
-void Splitter::processExtractQNX6() {
+void Splitter::processExtractType(FileSystemType type) {
     extracting = true;
     signedFile = new QFile(selectedFile);
     signedFile->open(QIODevice::ReadOnly);
     read = 0;
     maxSize = signedFile->size();
     progressChanged(0);
-    QString baseName = selectedFile;
-    baseName.chop(5);
-    processQStart(0, baseName);
-    signedFile->close();
-    delete signedFile;
-    emit finished();
-}
-
-void Splitter::processExtractRCFS() {
-    extracting = true;
-    signedFile = new QFile(selectedFile);
-    signedFile->open(QIODevice::ReadOnly);
-    read = 0;
-    maxSize = signedFile->size();
-    progressChanged(0);
-    processRStart(0, generateNameFromRCFS(0));
-    signedFile->close();
-    delete signedFile;
-    emit finished();
-}
-
-void Splitter::processExtractBoot() {
-    extracting = true;
-    signedFile = new QFile(selectedFile);
-    signedFile->open(QIODevice::ReadOnly);
-    read = 0;
-    maxSize = signedFile->size();
-    progressChanged(0);
-    processBStart(0, generateNameFromIFS(0, 0), maxSize);
+    // TODO: Move 'detection' somewhere else
+    if (type == FS_UNKNOWN) {
+        if (selectedFile.endsWith(".qnx6"))
+            type = FS_QNX6;
+        else if (selectedFile.endsWith(".rcfs"))
+            type = FS_RCFS;
+        else if (selectedFile.endsWith(".ifs"))
+            type = FS_IFS;
+    }
+    if (type == FS_QNX6) {
+        QString baseName = selectedFile;
+        baseName.chop(5);
+        processQStart(0, baseName);
+    } else if (type == FS_RCFS) {
+        processRStart(0, generateNameFromRCFS(0));
+    } else if (type == FS_IFS) {
+        processBStart(0, generateNameFromIFS(0, 0), maxSize);
+    }
     signedFile->close();
     delete signedFile;
     emit finished();
@@ -370,9 +357,7 @@ int Splitter::processQStart(qint64 startPos, QString startDir) {
     READ_TMP(unsigned char, typeQNX); // 0x10 = no offset; 0x08 = has offset
     unsigned char qnx6Sig[] = {0x22, 0x11, 0x19, 0x68};
     unsigned char fsSig[] = {0xDD, 0xEE, 0xE6, 0x97};
-    signedFile->seek(startPos + 0x2000);
-    if (signedFile->read(4) != QByteArray((char*)qnx6Sig, 4))
-        return 1; // Not a valid QNX6 filesystem
+    if ( (findIndexFromSig(qnx6Sig, -1, 0, 1)) == 0) { return 1; }
     if ( (startPos = findIndexFromSig(fsSig, -1, 0)) == 0) { return 1; }
     signedFile->seek(startPos+48);
     stream >> sectorSize;
@@ -673,12 +658,11 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     // Now extract the user partition
     if (extractTypes & 2) {
         int qnxcounter = 0;
-        if (!extractImage) {
-            maxSize += (signedFile->size() - partitionOffsets[0]) * 0.58; // Guesstimate. I think the real size is in the header
-        }
         for (int i = 0; i < partitionOffsets.count(); i++) {
             signedFile->seek(partitionOffsets[i]);
             if (signedFile->read(4) == QByteArray((char*)qnx6Sig,4)) {
+                if (!extractImage)
+                    maxSize += partitionSizes[i] * 10000;
                 startPos = partitionOffsets[i];
                 signedFile->seek(startPos);
                 QString type = extractApps ? "Apps" : "OS";

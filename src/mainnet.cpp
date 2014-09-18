@@ -168,12 +168,8 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     }
     splitter->extractTypes = _options;
     splitter->moveToThread(splitThread);
-    if (fileInfo.suffix() == "ifs")
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractBoot()));
-    else if (fileInfo.suffix() == "rcfs")
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractRCFS()));
-    else if (fileInfo.suffix() == "qnx6")
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractQNX6()));
+    if (fileInfo.suffix() == "ifs" || fileInfo.suffix() == "rcfs" || fileInfo.suffix() == "qnx6")
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractType()));
     else if (fileInfo.suffix() == "exe")
         connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractAutoloader()));
     else if (fileInfo.suffix() == "signed")

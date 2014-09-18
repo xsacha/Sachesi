@@ -31,6 +31,13 @@
 #include <quazip/quazipfile.h>
 #include "ports.h"
 
+enum FileSystemType {
+    FS_UNKNOWN = 0,
+    FS_QNX6,
+    FS_RCFS,
+    FS_IFS,
+};
+
 #define PACKED_FILE_OS      (1 << 0)
 #define PACKED_FILE_RADIO   (1 << 1)
 #define PACKED_FILE_PINLIST (1 << 2)
@@ -403,13 +410,11 @@ public slots:
         newAutoloader.create(largestInfo.absolutePath() + "/" + largestInfo.completeBaseName());
         emit finished();
     }
-    qint64 findIndexFromSig(unsigned char* signature, int startFrom, int distanceFrom, int num = 4, int skip = 1) {
+    qint64 findIndexFromSig(unsigned char* signature, int startFrom, int distanceFrom, unsigned int maxBlocks = -1, int num = 4) {
         if (startFrom != -1)
             signedFile->seek(startFrom);
         int readlen = BUFFER_LEN;
-        if (skip == 0x1000)
-            readlen = num;
-        while (!signedFile->atEnd())
+        while (!signedFile->atEnd() && (maxBlocks-- != 0))
         {
             QByteArray tmp = signedFile->read(readlen);
             if (tmp.size() < 0)
@@ -425,8 +430,6 @@ public slots:
                 if (found)
                     return (qint64)(signedFile->pos() - tmp.size() + i + distanceFrom);
             }
-            if (skip != 1)
-                signedFile->seek(signedFile->pos() + skip - tmp.size());
         }
         return 0;
     }
@@ -500,9 +503,7 @@ public slots:
 
     void processExtractSigned();
     void processExtract(QString baseName, qint64 signedSize, qint64 signedPos);
-    void processExtractQNX6();
-    void processExtractRCFS();
-    void processExtractBoot();
+    void processExtractType(FileSystemType type = FS_UNKNOWN);
 
     QString generateNameFromRCFS(qint64 startPos);
     QString generateNameFromIFS(qint64 startPos, int count);
