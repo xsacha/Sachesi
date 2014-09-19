@@ -84,7 +84,7 @@ public:
         // Find potential file
         QString append = ".exe";
         for (int f = 0; QFile::exists(name + append); f++) {
-            append = QString("-%1.exe").arg(f);
+            append = QString("-%1.exe").arg(QString::number(f));
         }
         // Start the autoloader as a cap file
         QFile::copy(capPath(), name + append);
@@ -104,7 +104,7 @@ public:
             dataStream << counter;
             counter += info.size();
         }
-        for (int i = _infos.count() - 1; i < 6; i++)
+        for (int i = _infos.count(); i < 6; i++)
             dataStream << (qint64)0;
         write(dataHeader);
         _read = 100 * pos();
