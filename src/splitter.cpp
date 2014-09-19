@@ -17,22 +17,13 @@
 
 #include "splitter.h"
 
-void Splitter::processExtractType(FileSystemType type) {
+void Splitter::processExtractType() {
     extracting = true;
+    PartitionInfo partInfo(selectedFile); // Maybe wrapper will hold some class member form of this but it will need a QIODevice* member
+    progressInfo.clear(); // Clear at wrapper level when wrapper exists
 
-    // TODO: Move 'detection' somewhere else and detect by header
-    if (type == FS_UNKNOWN) {
-        if (selectedFile.endsWith(".qnx6"))
-            type = FS_QNX6;
-        else if (selectedFile.endsWith(".rcfs"))
-            type = FS_RCFS;
-        else if (selectedFile.endsWith(".ifs"))
-            type = FS_IFS;
-        else
-            return;
-    }
     int unique = newProgressInfo(QFileInfo(selectedFile).size());
-    QFileSystem* fs = createTypedFileSystem(type);
+    QFileSystem* fs = createTypedFileSystem(partInfo.type);
     connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
         updateCurProgress(unique, fs->curSize, delta);
     });
@@ -83,7 +74,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         return;
     }
     QList<PartitionInfo> partInfo;
-    progressInfo.clear();
+    progressInfo.clear(); // Clear at wrapper level when wrapper exists
     signedFile->seek(signedPos+12);
 
     // We are now at the partition table
