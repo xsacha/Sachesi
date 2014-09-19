@@ -586,7 +586,7 @@ bool InstallNet::checkLogin() {
         return false;
 
     if (!_completed) {
-        getQuery(QString("login.cgi?request_version=%1").arg(_knownProtocol), "x-www-form-urlencoded");
+        getQuery(QString("login.cgi?request_version=%1").arg(QString::number(_knownProtocol)), "x-www-form-urlencoded");
         return false;
     }
     return true;

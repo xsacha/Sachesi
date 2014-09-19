@@ -50,11 +50,23 @@ struct PartitionInfo {
     qint64 offset;
     qint64 size;
     FileSystemType type;
-    PartitionInfo(qint64 loc)
+    PartitionInfo(QIODevice* dev, qint64 loc)
         : offset(loc)
         , size(0)
-        , type(FS_UNKNOWN)
-    {}
+    {
+        // Check what sort of image we are dealing with
+        dev->seek(offset);
+        QByteArray header = dev->read(4);
+
+        if (header == QByteArray("rimh", 4))
+            type = FS_RCFS;
+        else if (header == QByteArray::fromHex("EB109000"))
+            type = FS_QNX6;
+        else if (header == QByteArray::fromHex("FE0300EA"))
+            type = FS_IFS;
+        else
+            type = FS_UNKNOWN;
+    }
 };
 
 #define PACKED_FILE_OS      (1 << 0)
@@ -373,6 +385,7 @@ public slots:
     void processExtractSigned();
     void processExtract(QString baseName, qint64 signedSize, qint64 signedPos);
     void processExtractType(FileSystemType type = FS_UNKNOWN);
+    QFileSystem* createTypedFileSystem(FileSystemType type, qint64 offset = 0, qint64 size = 0, QString baseDir = ".");
 
     quint64 updateProgress(qint64 delta) {
         if (delta < 0)
@@ -381,17 +394,17 @@ public slots:
         emit progressChanged((int)(read / maxSize));
         return delta;
     }
-    int newProgressInfo() {
+    int newProgressInfo(qint64 size) {
         progressInfo.append(ProgressInfo());
+        progressInfo.last().maxSize = size;
         return progressInfo.count() - 1;
     }
 
-    void updateCurProgress(int unique, qint64 bytes, qint64 maxBytes) {
+    void updateCurProgress(int unique, qint64 bytes) {
         if (progressInfo.count() <= unique)
             return;
         progressInfo[unique].curSize = bytes;
-        progressInfo[unique].maxSize = maxBytes;
-        progressInfo[unique].progress = (double)(100*bytes) / (double)maxBytes;
+        progressInfo[unique].progress = (double)(100*progressInfo[unique].curSize) / (double)progressInfo[unique].maxSize;
     }
 
 signals:

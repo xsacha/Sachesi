@@ -169,11 +169,7 @@ void RCFS::extractDir(int offset, int numNodes, QString basedir, qint64 _offset)
     }
 }
 
-bool RCFS::extractContents() {
-    curSize = 0;
-    maxSize = _size;
-    _path += "/" + generateName();
-
+bool RCFS::createContents() {
     _file->seek(_offset + 0x1038);
     QNXStream stream(_file);
     READ_TMP(qint32, offset);

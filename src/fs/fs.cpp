@@ -1,12 +1,13 @@
 #include "fs.h"
 
-QFileSystem::QFileSystem(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
+QFileSystem::QFileSystem(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path, QString imageExt)
     : QObject(nullptr)
     , _file(file)
     , _offset(offset)
     , _size(size)
     , _path(path)
     , _filename(filename)
+    , _imageExt(imageExt)
 {
     if (_file == nullptr) {
         _file = new QFile(filename);
@@ -49,12 +50,25 @@ QString QFileSystem::generateName(QString imageExt) {
     return uniqueFile(name + imageExt);
 }
 
-// A generic method for extracting an entire image of maxSize
-bool QFileSystem::extractImage(QString imageExt) {
+// Entry for requesting an extration of the filesystem image
+bool QFileSystem::extractImage() {
     curSize = 0;
     maxSize = _size;
     _file->seek(_offset);
-    return writeFile(this->generateName(imageExt), maxSize);
+    return this->createImage(this->generateName(_imageExt));
+}
+
+// A generic method for extracting an entire image of maxSize
+bool QFileSystem::createImage(QString name) {
+    return writeFile(name, maxSize);
+}
+
+// Entry for requesting an extration of the filesystem contents
+bool QFileSystem::extractContents() {
+    curSize = 0;
+    maxSize = _size;
+    _path += "/" + this->generateName();
+    return this->createContents();
 }
 
 // A method to write writeSize bytes from a QIODevice to a new file, named filename

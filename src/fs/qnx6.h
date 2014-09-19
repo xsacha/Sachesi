@@ -19,7 +19,7 @@ class QNX6 : public QFileSystem
     Q_OBJECT
 public:
     explicit QNX6(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
-        : QFileSystem(filename, file, offset, size, path)
+        : QFileSystem(filename, file, offset, size, path, ".qnx6")
         , currentZip(nullptr) {}
     explicit QNX6(QString filename)
         : QFileSystem(filename)
@@ -37,11 +37,8 @@ public:
     //QString generateName(QString imageExt = "");
     void extractManifest(int nodenum);
     void extractDir(int offset, QString basedir, int numNodes);
-    bool extractImage() {
-        return QFileSystem::extractImage(".rcfs");
-    }
 
-    bool extractContents();
+    bool createContents();
 
     // TODO: These need to have a better method of passing from Splitter
     bool extractApps;

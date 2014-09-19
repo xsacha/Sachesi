@@ -251,13 +251,9 @@ void QNX6::extractDir(int nodenum, QString basedir, int tier)
     }
 }
 
-bool QNX6::extractContents() {
-    curSize = 0;
-    maxSize = _size;
-    _path += "/" + generateName();
-
-    QNXStream stream(_file);
+bool QNX6::createContents() {
     _file->seek(_offset+8);
+    QNXStream stream(_file);
     READ_TMP(unsigned char, typeQNX); // 0x10 = no offset; 0x08 = has offset
     unsigned char qnx6Sig[] = {0x22, 0x11, 0x19, 0x68};
     unsigned char fsSig[] = {0xDD, 0xEE, 0xE6, 0x97};

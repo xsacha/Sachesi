@@ -56,7 +56,7 @@ class QFileSystem : public QObject
 {
     Q_OBJECT
 public:
-    explicit QFileSystem(QString filename, QIODevice* file = nullptr, qint64 offset = 0, qint64 size = 0, QString path = ".");
+    explicit QFileSystem(QString filename, QIODevice* file = nullptr, qint64 offset = 0, qint64 size = 0, QString path = ".", QString imageExt = "");
     ~QFileSystem();
 
     // Basis of size reporting
@@ -71,7 +71,10 @@ public:
     QString uniqueFile(QString name);
     virtual QString generateName(QString imageExt = "");
     bool writeFile(QString fileName, qint64 writeSize, bool absolute = false);
-    virtual bool extractImage(QString imageExt);
+    bool extractImage();
+    virtual bool createImage(QString name);
+    bool extractContents();
+    virtual bool createContents() = 0;
 
     qint64 curSize;
     qint64 maxSize;
@@ -83,4 +86,5 @@ protected:
     QIODevice* _file;
     qint64 _offset, _size;
     QString _path, _filename;
+    QString _imageExt;
 };

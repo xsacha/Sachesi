@@ -21,7 +21,7 @@ class RCFS : public QFileSystem
 
 public:
     explicit RCFS(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
-        : QFileSystem(filename, file, offset, size, path) {}
+        : QFileSystem(filename, file, offset, size, path, ".rcfs") {}
     explicit RCFS(QString filename)
         : QFileSystem(filename) {}
 
@@ -29,11 +29,8 @@ public:
     QString generateName(QString imageExt = "");
     QByteArray extractFile(qint64 node_offset, int node_size, int node_mode);
     void extractDir(int offset, int numNodes, QString basedir, qint64 startPos);
-    bool extractImage() {
-        return QFileSystem::extractImage(".rcfs");
-    }
 
-    bool extractContents();
+    bool createContents();
 
 };
 
