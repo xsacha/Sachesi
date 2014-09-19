@@ -64,7 +64,7 @@ public:
         if (read <= 0)
             return;
         curSize += read;
-        emit sizeChanged();
+        emit sizeChanged(read);
     }
 
     QString uniqueDir(QString name);
@@ -80,7 +80,7 @@ public:
     qint64 maxSize;
 
 signals:
-    void sizeChanged();
+    void sizeChanged(qint64 delta);
 
 protected:
     QIODevice* _file;

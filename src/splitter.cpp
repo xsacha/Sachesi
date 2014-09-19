@@ -33,8 +33,8 @@ void Splitter::processExtractType(FileSystemType type) {
     }
     int unique = newProgressInfo(QFileInfo(selectedFile).size());
     QFileSystem* fs = createTypedFileSystem(type);
-    connect(fs, &QFileSystem::sizeChanged, [=] () {
-        updateCurProgress(unique, fs->curSize);
+    connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
+        updateCurProgress(unique, fs->curSize, delta);
     });
     if (extractApps) {
         // TODO: This should be cleaner
@@ -117,8 +117,6 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                 break;
         }
         partInfo.last().size = blocks * (qint64)blockSize;
-        if (extractTypes & partInfo.last().type)
-            maxSize += partInfo.last().size;
         partInfo.append(PartitionInfo(signedFile, partInfo.last().size + partInfo.last().offset));
         if (max_scan > 3) {
             scan_offset += (max_scan - 3) * 8;
@@ -126,9 +124,16 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
 
     }
     partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
-    if (extractTypes & partInfo.last().type)
-        maxSize += partInfo.last().size;
 
+    // Would be great to get this at a container level (eg. for .exe or .zip) where multiple .signed partition tables are possible!
+    // To do this, we either need to calculate size beforehand or extract afterwards. Latter is most likely
+    // So, we would want a wrapper function for Image/Container and then go through each partition table, accumulating these info results.
+    // Finally, we would perform the code below.
+    foreach(PartitionInfo info, partInfo) {
+        if (extractTypes & info.type) {
+            maxSize += info.size;
+        }
+    }
 
     foreach(PartitionInfo info, partInfo) {
         if (info.type == FS_UNKNOWN)
@@ -136,8 +141,8 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         if (extractTypes & info.type) {
             int unique = newProgressInfo(info.size);
             QFileSystem* fs = createTypedFileSystem(info.type, info.offset, info.size, baseDir);
-            connect(fs, &QFileSystem::sizeChanged, [=] () {
-                updateCurProgress(unique, fs->curSize);
+            connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
+                updateCurProgress(unique, fs->curSize, delta);
             });
             if (extractApps) {
                 // TODO: This should be cleaner

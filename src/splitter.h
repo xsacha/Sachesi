@@ -387,6 +387,7 @@ public slots:
     void processExtractType(FileSystemType type = FS_UNKNOWN);
     QFileSystem* createTypedFileSystem(FileSystemType type, qint64 offset = 0, qint64 size = 0, QString baseDir = ".");
 
+    // Old, compatibility
     quint64 updateProgress(qint64 delta) {
         if (delta < 0)
             return 0;
@@ -400,11 +401,16 @@ public slots:
         return progressInfo.count() - 1;
     }
 
-    void updateCurProgress(int unique, qint64 bytes) {
+    void updateCurProgress(int unique, qint64 bytes, qint64 delta) {
+        // New, unused
         if (progressInfo.count() <= unique)
             return;
         progressInfo[unique].curSize = bytes;
         progressInfo[unique].progress = (double)(100*progressInfo[unique].curSize) / (double)progressInfo[unique].maxSize;
+
+        // Old, compatibility
+        read += 100 * delta;
+        emit progressChanged((int)(read / maxSize));
     }
 
 signals:
