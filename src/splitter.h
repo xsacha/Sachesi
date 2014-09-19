@@ -50,10 +50,13 @@ struct PartitionInfo {
     qint64 offset;
     qint64 size;
     FileSystemType type;
+    QIODevice* dev;
+    QString image;
     // We are grabbing a partition of a container or image
-    PartitionInfo(QIODevice* dev, qint64 loc)
+    PartitionInfo(QIODevice* file, qint64 loc)
         : offset(loc)
         , size(0)
+        , dev(file)
     {
         detectType(dev);
     }
@@ -61,17 +64,19 @@ struct PartitionInfo {
     PartitionInfo(QString filename)
         : offset(0)
         , size(0)
+        , dev(nullptr)
+        , image(filename)
     {
-        QFile file(filename);
+        QFile file(image);
         file.open(QIODevice::ReadOnly);
         detectType(&file);
         file.close();
     }
 
-    void detectType(QIODevice* dev) {
+    void detectType(QIODevice* device) {
         // Check what sort of image we are dealing with
-        dev->seek(offset);
-        QByteArray header = dev->read(4);
+        device->seek(offset);
+        QByteArray header = device->read(4);
 
         if (header == QByteArray("rimh", 4))
             type = FS_RCFS;
@@ -401,6 +406,8 @@ public slots:
     void processExtract(QString baseName, qint64 signedSize, qint64 signedPos);
     void processExtractType();
     QFileSystem* createTypedFileSystem(FileSystemType type, qint64 offset = 0, qint64 size = 0, QString baseDir = ".");
+
+    void processExtractWrapper();
 
     // Old, compatibility
     quint64 updateProgress(qint64 delta) {

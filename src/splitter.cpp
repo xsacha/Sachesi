@@ -17,6 +17,20 @@
 
 #include "splitter.h"
 
+void Splitter::processExtractWrapper() {
+    extracting = true;
+    QFileInfo fileInfo(selectedFile);
+    if (fileInfo.suffix() == "exe")
+        processExtractAutoloader();
+    else if (fileInfo.suffix() == "signed")
+        processExtractSigned();
+    else if (fileInfo.suffix() == "bar" || fileInfo.suffix() == "zip")
+        processExtractBar();
+    else // Assume it is a rcfs/qnx6/ifs
+        processExtractType();
+
+}
+
 void Splitter::processExtractType() {
     extracting = true;
     PartitionInfo partInfo(selectedFile); // Maybe wrapper will hold some class member form of this but it will need a QIODevice* member
@@ -46,6 +60,7 @@ void Splitter::processExtractSigned()
     }
     QString baseName = selectedFile;
     baseName.chop(7);
+    progressInfo.clear(); // Clear at wrapper level when wrapper exists
     processExtract(baseName, signedFile->size(), 0);
     signedFile->close();
     delete signedFile;
@@ -74,7 +89,6 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         return;
     }
     QList<PartitionInfo> partInfo;
-    progressInfo.clear(); // Clear at wrapper level when wrapper exists
     signedFile->seek(signedPos+12);
 
     // We are now at the partition table

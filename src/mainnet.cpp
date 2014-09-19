@@ -142,7 +142,6 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     if (selectedFiles.empty())
         return;
     // TODO: Actually detect file by inspection
-    QSettings settings("Qtness","Sachesi");
     QFileInfo fileInfo(selectedFiles.first());
     if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
         QString errorMsg = "You can only extract apps from debrick OS images.";
@@ -151,7 +150,6 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
         QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
     }
-    settings.setValue("splitDir", fileInfo.absolutePath());
     _splitting = 3 + (_type == 2); emit splittingChanged();
     splitThread = new QThread;
     Splitter* splitter = new Splitter(selectedFiles.first());
@@ -168,15 +166,8 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     }
     splitter->extractTypes = _options;
     splitter->moveToThread(splitThread);
-    // Filesystem image or a container entry?
-    if (fileInfo.suffix() == "ifs" || fileInfo.suffix() == "rcfs" || fileInfo.suffix() == "qnx6")
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractType()));
-    else if (fileInfo.suffix() == "exe")
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractAutoloader()));
-    else if (fileInfo.suffix() == "signed")
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractSigned()));
-    else // Bar, Zip
-        connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractBar()));
+    // Wrapper should detect file type and deal extract everything inside, according to _options;
+    connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractWrapper()));
     connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
     connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
     connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
