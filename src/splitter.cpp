@@ -17,9 +17,19 @@
 
 #include "splitter.h"
 
+
+// This is our entry point for extraction that will determine which filetype we started with.
+// In general we have a container (.exe, .bar, .zip) which may contain further containers.
+// Underneath this we may have disk images with partition tables (.signed)
+// And below this we can have filesystem images (.rcfs, .qnx6, .ifs)
+// Although, the user could make us enter at any point!
 void Splitter::processExtractWrapper() {
     extracting = true;
+    progressInfo.clear();
+    partitionInfo.clear();
     QFileInfo fileInfo(selectedFile);
+
+    // We can probably use a better method, similar to processExtractType, for all files!
     if (fileInfo.suffix() == "exe")
         processExtractAutoloader();
     else if (fileInfo.suffix() == "signed")
@@ -29,70 +39,244 @@ void Splitter::processExtractWrapper() {
     else // Assume it is a rcfs/qnx6/ifs
         processExtractType();
 
-}
-
-void Splitter::processExtractType() {
-    extracting = true;
-    PartitionInfo partInfo(selectedFile); // Maybe wrapper will hold some class member form of this but it will need a QIODevice* member
-    progressInfo.clear(); // Clear at wrapper level when wrapper exists
-
-    int unique = newProgressInfo(QFileInfo(selectedFile).size());
-    QFileSystem* fs = createTypedFileSystem(partInfo.type);
-    connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
-        updateCurProgress(unique, fs->curSize, delta);
-    });
-    if (extractApps) {
-        // TODO: This should be cleaner
-        qobject_cast<FS::QNX6*>(fs)->extractApps = extractApps;
+    // Now we should be done parsing through the entire file and its components
+    // So run through the partition Info we collected
+    // First gather sizes so we can have an established goal in the UI
+    foreach(PartitionInfo info, partitionInfo) {
+        maxSize += info.size;
     }
-    fs->extractContents();
-    delete fs;
 
+    // All files will be extracted relative to the given container file
+    QString baseDir = QFileInfo(selectedFile).absolutePath();
+    foreach(PartitionInfo info, partitionInfo) {
+        int unique = newProgressInfo(info.size);
+        // If we are extracting FS images (only type supported for this method right now), then we want to create a filesystem type
+        QFileSystem* fs = createTypedFileSystem(selectedFile, info.dev, info.type, info.offset, info.size, baseDir);
+        connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
+            updateCurProgress(unique, fs->curSize, delta);
+        });
+        if (extractApps) {
+            // TODO: This should be cleaner
+            qobject_cast<FS::QNX6*>(fs)->extractApps = extractApps;
+        }
+        if (extractImage)
+            fs->extractImage();
+        else
+            fs->extractContents();
+
+        delete fs;
+    }
     emit finished();
+
+    // Cleanup all pointers we had.
+    foreach(QIODevice* dev, devHandle) {
+        if (dev != nullptr) {
+            if (dev->isOpen()) {
+                dev->close();
+            }
+            delete dev;
+            dev = nullptr;
+        }
+    }
+    devHandle.clear();
+    partitionInfo.clear();
+    progressInfo.clear();
 }
 
+// Process an Autoloader with the aim of extracting files
+void Splitter::processExtractAutoloader() {
+    // We hardcode this only to speed it up. It isn't required and may cause issues later on.
+#define START_CAP_SEARCH 0x400000
+#define END_CAP_SEARCH 0x1000000
+    QFile* autoloaderFile = new QFile(selectedFile);
+    devHandle.append(autoloaderFile);
+    autoloaderFile->open(QIODevice::ReadOnly);
+    read = 0;
+    maxSize = 1;
+    int findHeader = 0;
+    autoloaderFile->seek(START_CAP_SEARCH);
+    for (int b = START_CAP_SEARCH; b < END_CAP_SEARCH; )
+    {
+        QByteArray tmp = autoloaderFile->read(BUFFER_LEN);
+        for (int i = 0; i < BUFFER_LEN - 12; i++) {
+            if (tmp.at(i) == (char)0x9C && tmp.at(i+1) == (char)0xD5 && tmp.at(i+2) == (char)0xC5 && tmp.at(i+3) == (char)0x97 &&
+                    tmp.at(i+8) == (char)0x9C && tmp.at(i+9) == (char)0xD5 && tmp.at(i+10) == (char)0xC5 && tmp.at(i+11) == (char)0x97) {
+                findHeader = b+i+20;
+            }
+        }
+        b += tmp.size();
+    }
+
+    if (!findHeader) {
+        return die("Was not a Blackberry Autoloader file.");
+    }
+
+    qint64 files;
+    QList<qint64> offsets;
+    QNXStream dataStream(autoloaderFile);
+    autoloaderFile->seek(findHeader);
+
+    // Search for offset table
+    for (int attempts = 0; attempts < 32; attempts++) {
+        qint64 tmp;
+        dataStream >> tmp;
+        if ((tmp - autoloaderFile->pos()) < 500 && (tmp - autoloaderFile->pos()) > -500) {
+            autoloaderFile->seek(autoloaderFile->pos() - 16);
+            dataStream >> files;
+            break;
+        }
+    }
+
+    if (files < 1 || files > 20) {
+        return die("Unknown Blackberry Autoloader file.");
+    }
+
+    // Collect offsets
+    for (int i = 0; i < files; i++) {
+        offsets.append(0); dataStream >> offsets[i];
+    }
+    offsets.append(autoloaderFile->size()); // End of file
+
+    // Create sizes and files
+    QString baseName = selectedFile;
+    baseName.chop(4);
+    // TODO: Use detection based on header. OS, Radio and PINList notify their header (but not RFOS?).
+    // Not a priority as the size indication is 100% accurate as long as it is actually an Autoloader
+    for (int i = 0; i < files; i++) {
+        QString filename = baseName;
+        qint64 size = offsets[i+1] - offsets[i];
+        int type = 0;
+        if (size > 1024*1024*120) {
+            type = PACKED_FILE_OS;
+            filename += QString("-OS.%1").arg(i);
+        } else if (size > 1024*1024*5) {
+            type = PACKED_FILE_RADIO;
+            filename += QString("-Radio.%1").arg(i);
+        } else {
+            type = PACKED_FILE_PINLIST;
+            filename += QString("-PINList.%1").arg(i);
+        }
+        if (splitting) {
+            if (option & type)
+            {
+                maxSize += size;
+                tmpFile.append(new QFile(filename+".signed"));
+            }
+            else
+                tmpFile.append(nullptr);
+        } else if (extracting) {
+            if (size > 1024*1024*5)
+                processExtract(autoloaderFile, size, offsets[i]);
+            // Deal with RCFS (OS+Radio), QNX6(OS), Apps(Large OS 500+MB)
+        }
+    }
+    if (splitting) {
+        // Write them out
+        for (int i = 0; i < files; i++) {
+            if (tmpFile.at(i) == nullptr)
+                continue;
+            autoloaderFile->seek(offsets[i]);
+            tmpFile.at(i)->open(QIODevice::WriteOnly);
+            tmpFile.at(i)->resize(offsets[i+1] - offsets[i]);
+            QByteArray tmp;
+            for (qint64 b = offsets[i]; b < offsets[i+1]; ) {
+                qint64 read_len = qMin(BUFFER_LEN, offsets[i+1] - b);
+                tmp = autoloaderFile->read(read_len);
+                tmpFile.at(i)->write(tmp);
+                b += updateProgress(tmp.size());
+            }
+            tmpFile.at(i)->close();
+        }
+        foreach (QFile* file, tmpFile)
+                file->deleteLater();
+        tmpFile.clear();
+        autoloaderFile->close();
+        delete autoloaderFile;
+        autoloaderFile = nullptr;
+    }
+}
+
+// Process a Disk Image with the aim of extracting files
 void Splitter::processExtractSigned()
 {
-    extracting = true;
-    signedFile = new QFile(selectedFile);
-    if (!signedFile->open(QIODevice::ReadOnly)) {
+    QFile* file = new QFile(selectedFile); // Gets cleaned up later
+    devHandle.append(file);                // By this
+    if (!file->open(QIODevice::ReadOnly)) {
         return die("Could not open " + selectedFile);
     }
-    QString baseName = selectedFile;
-    baseName.chop(7);
-    progressInfo.clear(); // Clear at wrapper level when wrapper exists
-    processExtract(baseName, signedFile->size(), 0);
-    signedFile->close();
-    delete signedFile;
-    emit finished();
+    processExtract(file, file->size(), 0);
 }
 
-QFileSystem* Splitter::createTypedFileSystem(FileSystemType type, qint64 offset, qint64 size, QString baseDir) {
+// Process a zip container with the aim of extracting files
+void Splitter::processExtractBar() {
+    QuaZip barFile(selectedFile);
+    barFile.open(QuaZip::mdUnzip);
+    foreach (QString signedName, barFile.getFileNameList()) {
+        if (QFileInfo(signedName).suffix() == "signed") {
+            QuaZipFile* signedFile = new QuaZipFile(&barFile);
+            devHandle.append(signedFile);
+            barFile.setCurrentFile(signedName);
+            signedFile->open(QIODevice::ReadOnly);
+            if (splitting) {
+                read = 0;
+                maxSize = signedFile->size();
+                progressChanged(0);
+                QFile outputSigned(QFileInfo(selectedFile).canonicalPath() + "/" + signedName);
+                outputSigned.open(QIODevice::WriteOnly);
+                outputSigned.resize(signedFile->size());
+                QByteArray tmp;
+                for (qint64 b = signedFile->size(); b > 0; ) {
+                    qint64 read_len = qMin(BUFFER_LEN, b);
+                    tmp = signedFile->read(read_len);
+                    outputSigned.write(tmp);
+                    b -= updateProgress(tmp.size());
+                }
+                outputSigned.close();
+            } else if (extracting) {
+                progressChanged(0);
+                if (signedFile->size() > 1024*1024*5)
+                    processExtract(signedFile, signedFile->size(), 0);
+            }
+        }
+    }
+    barFile.close();
+}
+
+// Process an Filesystem Image with the aim of extracting files
+void Splitter::processExtractType() {
+    QFile* imageFile = new QFile(selectedFile); // Gets cleaned up later
+    devHandle.append(imageFile);                // By this
+    if (!imageFile->open(QIODevice::ReadOnly)) {
+        return die("Could not open " + selectedFile);
+    }
+
+    partitionInfo.append(PartitionInfo(imageFile, 0, imageFile->size()));
+}
+
+QFileSystem* Splitter::createTypedFileSystem(QString name, QIODevice* dev, QFileSystemType type, qint64 offset, qint64 size, QString baseDir) {
     if (type == FS_RCFS)
-        return new FS::RCFS(selectedFile, signedFile, offset, size, baseDir);
+        return new FS::RCFS(name, dev, offset, size, baseDir);
     else if (type == FS_QNX6)
-        return new FS::QNX6(selectedFile, signedFile, offset, size, baseDir);
+        return new FS::QNX6(name, dev, offset, size, baseDir);
     else if (type == FS_IFS)
-        return new FS::IFS(selectedFile, signedFile, offset, size, baseDir);
+        return new FS::IFS(name, dev, offset, size, baseDir);
 
     return nullptr;
 }
 
-void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signedPos)
+void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPos)
 {
-    QString baseDir = QFileInfo(baseName).absolutePath();
-
     if (signedPos > 0)
-        signedFile->seek(signedPos);
-    if (signedFile->read(4) != QByteArray("mfcq", 4)) {
+        dev->seek(signedPos);
+    if (dev->read(4) != QByteArray("mfcq", 4)) {
         QMessageBox::information(nullptr, "Error", "Was not a Blackberry .signed image.");
         return;
     }
     QList<PartitionInfo> partInfo;
-    signedFile->seek(signedPos+12);
+    dev->seek(signedPos+12);
 
     // We are now at the partition table
-    QByteArray partitionTable = signedFile->read(4000);
+    QByteArray partitionTable = dev->read(4000);
     QBuffer buffer(&partitionTable);
     buffer.open(QIODevice::ReadOnly);
     QNXStream tableStream(&buffer);
@@ -104,7 +288,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
         return;
     }
 
-    partInfo.append(PartitionInfo(signedFile, signedPos + blockSize));
+    partInfo.append(PartitionInfo(dev, signedPos + blockSize));
     int scan_offset = 0;
     for (int i = 0; i < numPartitions; i++) {
         int max_scan = 3;
@@ -122,7 +306,7 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
                 break;
         }
         partInfo.last().size = blocks * (qint64)blockSize;
-        partInfo.append(PartitionInfo(signedFile, partInfo.last().size + partInfo.last().offset));
+        partInfo.append(PartitionInfo(dev, partInfo.last().size + partInfo.last().offset));
         if (max_scan > 3) {
             scan_offset += (max_scan - 3) * 8;
         }
@@ -130,36 +314,12 @@ void Splitter::processExtract(QString baseName, qint64 signedSize, qint64 signed
     }
     partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
 
-    // Would be great to get this at a container level (eg. for .exe or .zip) where multiple .signed partition tables are possible!
-    // To do this, we either need to calculate size beforehand or extract afterwards. Latter is most likely
-    // So, we would want a wrapper function for Image/Container and then go through each partition table, accumulating these info results.
-    // Finally, we would perform the code below.
-    foreach(PartitionInfo info, partInfo) {
-        if (extractTypes & info.type) {
-            maxSize += info.size;
-        }
-    }
-
+    // Add to the main partition list
     foreach(PartitionInfo info, partInfo) {
         if (info.type == FS_UNKNOWN)
             continue;
         if (extractTypes & info.type) {
-            int unique = newProgressInfo(info.size);
-            QFileSystem* fs = createTypedFileSystem(info.type, info.offset, info.size, baseDir);
-            connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
-                updateCurProgress(unique, fs->curSize, delta);
-            });
-            if (extractApps) {
-                // TODO: This should be cleaner
-                qobject_cast<FS::QNX6*>(fs)->extractApps = extractApps;
-            }
-            if (extractImage)
-                fs->extractImage();
-            else
-                fs->extractContents();
-
-            delete fs;
+            partitionInfo.append(info);
         }
     }
-
 }

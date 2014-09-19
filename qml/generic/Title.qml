@@ -6,7 +6,6 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    // TODO: Send version from C++
     title: "Sachesi " + version
     width: 820
     height: 680

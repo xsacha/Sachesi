@@ -21,9 +21,6 @@ public:
     explicit QNX6(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
         : QFileSystem(filename, file, offset, size, path, ".qnx6")
         , currentZip(nullptr) {}
-    explicit QNX6(QString filename)
-        : QFileSystem(filename)
-        , currentZip(nullptr) {}
 
     inline qint64 findSector(qint64 sector) {
         return _offset + ((sector - sectorOffset) * sectorSize);

@@ -1,5 +1,17 @@
 #include "fs.h"
 
+#ifdef _WIN32
+void fixFileTime(QString filename, int time) {
+    FILETIME pft;
+    LONGLONG ll = Int32x32To64(time, 10000000) + 116444736000000000;
+    pft.dwLowDateTime = (DWORD)ll;
+    pft.dwHighDateTime = ll >> 32;
+    HANDLE fd_handle = CreateFile(filename.toStdWString().c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    SetFileTime(fd_handle, &pft,(LPFILETIME) nullptr, &pft);
+    CloseHandle(fd_handle);
+}
+#endif
+
 QFileSystem::QFileSystem(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path, QString imageExt)
     : QObject(nullptr)
     , _file(file)

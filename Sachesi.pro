@@ -28,7 +28,7 @@ win32 {
 
     !contains(QT_CONFIG, openssl-linked) {
         mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
-        static: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
+        else:static: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
         else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lGDI32
     }
 
@@ -40,7 +40,7 @@ win32 {
 }
 else:blackberry {
     DEFINES += BLACKBERRY
-    LIBS += -lz #-lbbcascadespickers -lbbsystem -lQtXml #-lcrypto
+    LIBS += -lz #-lcrypto
 }
 else:mac {
     INCLUDEPATH += /opt/local/include

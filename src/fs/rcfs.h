@@ -22,8 +22,6 @@ class RCFS : public QFileSystem
 public:
     explicit RCFS(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
         : QFileSystem(filename, file, offset, size, path, ".rcfs") {}
-    explicit RCFS(QString filename)
-        : QFileSystem(filename) {}
 
     rinode createNode(int offset);
     QString generateName(QString imageExt = "");

@@ -23,9 +23,6 @@ public:
     explicit IFS(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
         : QFileSystem(filename, file, offset, size, path, ".ifs") {}
 
-    explicit IFS(QString filename)
-        : QFileSystem(filename) {}
-
     binode createBNode(int offset, qint64 startPos);
     QString generateName(QString imageExt = "");
     void extractDir(int offset, int numNodes, QString basedir, qint64 startPos);
