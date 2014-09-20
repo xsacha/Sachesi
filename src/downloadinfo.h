@@ -48,6 +48,12 @@ public:
         size = 0;
         totalSize = 0;
         toVerify = 0;
+        foreach(Apps* app, apps) {
+            if (app != nullptr) {
+                delete app;
+                app = nullptr;
+            }
+        }
         apps.clear();
         emit sizeChanged();
         emit idChanged();
@@ -82,10 +88,10 @@ public:
             if (status == 200 || (status > 300 && status <= 308)) {
                 uint realSize = reply->header(QNetworkRequest::ContentLengthHeader).toUInt();
                 // Adjust the expected size
-                foreach(Apps app, apps) {
-                    if (app.type() == type.toLower()) {
-                        totalSize += realSize - app.size();
-                        app.setSize(realSize);
+                foreach(Apps* app, apps) {
+                    if (app->type() == type.toLower()) {
+                        totalSize += realSize - app->size();
+                        app->setSize(realSize);
                     }
                 }
 
@@ -112,10 +118,11 @@ public:
         running = true;
         // OS and Radio files were just verified, so lets check if we already have them
         for (int i = 0; i < apps.count(); i++) {
-            if (apps[i].type() == "os" || apps[i].type() == "radio") {
-                QFileInfo fileInfo(baseDir + "/" + apps[i].name());
-                if (fileInfo.exists() && fileInfo.size() == apps[i].size()) {
-                    totalSize -= apps[i].size();
+            if (apps[i]->type() == "os" || apps[i]->type() == "radio") {
+                QFileInfo fileInfo(baseDir + "/" + apps[i]->name());
+                if (fileInfo.exists() && fileInfo.size() == apps[i]->size()) {
+                    totalSize -= apps[i]->size();
+                    delete apps[i];
                     apps.removeAt(i--);
                     maxId--;
                     emit appsChanged();
@@ -131,9 +138,9 @@ public:
         QNetworkRequest request(getUrl());
         request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
         // Set to a temporary filename
-        _updateFile.setFileName(baseDir + "/." + apps.at(id).name());
+        _updateFile.setFileName(baseDir + "/." + apps.at(id)->name());
         // Obviously something is wrong if this file is bigger than what we want
-        if (_updateFile.size() > apps.at(id).size())
+        if (_updateFile.size() > apps.at(id)->size())
             _updateFile.remove();
         // It is possible that it already exists and, in this case, we would want to resume
         if (_updateFile.size() > 0) {
@@ -174,8 +181,8 @@ public:
                 return;
 
             // This should always match otherwise I'm pretty sure something bad happened
-            if (_updateFile.size() == apps.at(id).size())
-                _updateFile.rename(baseDir + "/" + apps.at(id).name());
+            if (_updateFile.size() == apps.at(id)->size())
+                _updateFile.rename(baseDir + "/" + apps.at(id)->name());
             else {
                 // Pretend like that didn't happen and try again
                 size -= _updateFile.size();
@@ -221,7 +228,7 @@ public:
                 if (fileInfo.exists() && fileInfo.size() == newApp->size())
                     continue;
             }
-            apps.append(*newApp);
+            apps.append(new Apps(newApp, this));
             totalSize += newApp->size();
         }
 
@@ -234,7 +241,7 @@ public:
         if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
-            return apps[i].friendlyName();
+            return apps[i]->friendlyName();
         else
             return "";
     }
@@ -243,7 +250,7 @@ public:
         if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
-            return apps[i].packageId();
+            return apps[i]->packageId();
         else
             return "";
     }
@@ -252,14 +259,14 @@ public:
         if (i == CURR_FILE)
             i = id;
         if (i >= 0 && i < maxId)
-            return apps[i].size();
+            return apps[i]->size();
         else
             return 0;
     }
     void progressSize(qint64 bytes) {
         size += bytes;
         curSize += bytes;
-        curProgress = 100*curSize / apps.at(id).size();
+        curProgress = 100*curSize / apps.at(id)->size();
         if (totalSize == 0)
             progress = 0;
         else
@@ -280,7 +287,7 @@ public:
     }
 
     QString baseDir;
-    QList<Apps> apps;
+    QList<Apps*> apps;
     int id, maxId;
     int progress, curProgress;
     qint64 curSize, size, totalSize;

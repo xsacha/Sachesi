@@ -1011,18 +1011,17 @@ void InstallNet::restoreReply()
                 else if (element == "Success")
                 {
                     inProgress = false;
-                    setCurInstallName(_curInstallName + " (Sent)");
                     _dlDoneBytes += 100 * _dlTotal;
-                    _downgradePos++;
-                    emit dgPosChanged();
                     compressedFile->close();
-                    if (_downgradePos == _downgradeInfo.count())
+                    if (_downgradePos == _downgradeInfo.count() - 1)
                     {
                         postData.addQueryItem("status","success");
                         reply = manager->post(setData("update.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
                     }
                     else
                     {
+                        _downgradePos++;
+                        emit dgPosChanged();
                         compressedFile = new QFile(_downgradeInfo.at(_downgradePos));
                         compressedFile->open(QIODevice::ReadOnly);
                         _dlBytes = 0;
@@ -1030,13 +1029,13 @@ void InstallNet::restoreReply()
 
                         BarInfo info = _installInfo.at(_downgradePos);
                         if (info.type == OSType)
-                            setCurInstallName("Sending " + info.version + " Core OS");
+                            setCurInstallName(info.version + " Core OS");
                         else if (info.type == RadioType)
-                            setCurInstallName("Sending " + info.version + " Radio");
+                            setCurInstallName(info.version + " Radio");
                         else {
                             QString literal_name = compressedFile->fileName().split('/').last();
                             QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-                            setCurInstallName("Sending " + fileParts.at(0));
+                            setCurInstallName(fileParts.at(0));
                         }
 
                         QNetworkRequest request;

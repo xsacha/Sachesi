@@ -38,7 +38,7 @@ Item {
             overallValue: i.dgProgress
             curId: i.dgPos + 1
             maxId: i.dgMaxPos
-            text: i.curInstallName
+            text: (i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? "Sending " : "Installing ") : "Sent " + i.curInstallName
         }
     }
 

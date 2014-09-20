@@ -171,12 +171,12 @@ public slots:
     void die(QString message = "") {
         qDebug() << "Tool terminated early due to unforseen circumstances.";
         if (extracting) {
-            foreach (QIODevice* dev, devHandle)
-            if (dev != nullptr) {
-                if (dev->isOpen())
-                    dev->close();
-                delete dev;
-                dev = nullptr;
+            foreach (QIODevice* dev, devHandle) {
+                // QIODevice's are automatically closed.
+                if (dev != nullptr) {
+                    delete dev;
+                    dev = nullptr;
+                }
             }
             devHandle.clear();
         }
@@ -207,10 +207,8 @@ public slots:
         splitting = true;
         processExtractBar();
         foreach(QIODevice* dev, devHandle) {
+            // QIODevice's are automatically closed.
             if (dev != nullptr) {
-                if (dev->isOpen()) {
-                    dev->close();
-                }
                 delete dev;
                 dev = nullptr;
             }

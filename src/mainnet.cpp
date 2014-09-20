@@ -310,17 +310,17 @@ void MainNet::fixApps(int downloadDevice) {
     if (results.first == "" || results.second == "")
         return;
 
-    foreach (Apps app, currentDownload->apps) {
-        if (app.type() == "os") {
-            app.setPackageId(fixVariantName(app.packageId(), results.first, 0));
-            app.setName(app.packageId().split("/").last());
-            app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
-            currentDownload->verifyLink(app.packageId(), "OS");
-        } else if (app.type() == "radio") {
-            app.setPackageId(fixVariantName(app.packageId(), results.second, 1));
-            app.setName(app.packageId().split("/").last());
-            app.setFriendlyName(QFileInfo(app.name()).completeBaseName());
-            currentDownload->verifyLink(app.packageId(), "Radio");
+    foreach (Apps* app, currentDownload->apps) {
+        if (app->type() == "os") {
+            app->setPackageId(fixVariantName(app->packageId(), results.first, 0));
+            app->setName(app->packageId().split("/").last());
+            app->setFriendlyName(QFileInfo(app->name()).completeBaseName());
+            currentDownload->verifyLink(app->packageId(), "OS");
+        } else if (app->type() == "radio") {
+            app->setPackageId(fixVariantName(app->packageId(), results.second, 1));
+            app->setName(app->packageId().split("/").last());
+            app->setFriendlyName(QFileInfo(app->name()).completeBaseName());
+            currentDownload->verifyLink(app->packageId(), "Radio");
         }
     }
     // Refresh the names in QML

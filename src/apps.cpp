@@ -38,14 +38,14 @@ Apps::Apps(QObject *parent)
     , _checksum("")
 { }
 
-Apps::Apps(const Apps& app, QObject *parent)
+Apps::Apps(const Apps* app, QObject *parent)
     : QObject(parent)
-    , _name(app.name()), _friendlyName(app.friendlyName()), _packageId(app.packageId())
-    , _code(app.code()), _size(app.size())
-    , _isMarked(app.isMarked()), _isAvailable(app.isAvailable())
-    , _type(app.type())
-    , _version(app.version()), _versionId(app.versionId())
-    , _checksum(app.checksum())
+    , _name(app->name()), _friendlyName(app->friendlyName()), _packageId(app->packageId())
+    , _code(app->code()), _size(app->size())
+    , _isMarked(app->isMarked()), _isAvailable(app->isAvailable())
+    , _type(app->type())
+    , _version(app->version()), _versionId(app->versionId())
+    , _checksum(app->checksum())
 { }
 
 void appendApps(QQmlListProperty<Apps> * property, Apps * app)

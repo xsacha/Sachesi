@@ -70,10 +70,8 @@ void Splitter::processExtractWrapper() {
 
     // Cleanup all pointers we had.
     foreach(QIODevice* dev, devHandle) {
+        // QIODevice's are automatically closed.
         if (dev != nullptr) {
-            if (dev->isOpen()) {
-                dev->close();
-            }
             delete dev;
             dev = nullptr;
         }
@@ -213,7 +211,8 @@ void Splitter::processExtractBar() {
     barFile.open(QuaZip::mdUnzip);
     foreach (QString signedName, barFile.getFileNameList()) {
         if (QFileInfo(signedName).suffix() == "signed") {
-            QuaZipFile* signedFile = new QuaZipFile(&barFile);
+            // Create a new internal QuaZip instance so we can successfully close the search instance but leave devHandle open
+            QuaZipFile* signedFile = new QuaZipFile(selectedFile, signedName);
             devHandle.append(signedFile);
             barFile.setCurrentFile(signedName);
             signedFile->open(QIODevice::ReadOnly);

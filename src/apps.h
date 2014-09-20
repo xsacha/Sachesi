@@ -38,7 +38,6 @@ class Apps : public QObject {
 
 public:
     Apps(QObject *parent = 0);
-    Apps(const Apps& app, QObject *parent = 0);
     Apps(const Apps* app, QObject *parent = 0);
 
     QString name() const;
@@ -79,8 +78,8 @@ signals:
 
 private:
     QString _name;
-    QString _packageId;
     QString _friendlyName;
+    QString _packageId;
     int _code;
     int _size;
     bool _isMarked;
