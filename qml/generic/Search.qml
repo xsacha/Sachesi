@@ -252,7 +252,7 @@ Item {
             visible: settings.advanced
             id: server
             type: "Server"
-            listModel: [ "Production", "Beta" ]
+            listModel: [ "Production", "Beta", "Beta 2", "Alpha", "Alpha 2" ]
         }
 
         /*TextCoupleSelect {

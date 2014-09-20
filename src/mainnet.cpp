@@ -436,6 +436,15 @@ void MainNet::reverseLookup(int device, int variant, int server, QString OSver, 
 
     switch (server)
     {
+    case 4:
+        requestUrl = "https://alpha2.sl.eval.blackberry.com/slscse/srVersionLookup/";
+        break;
+    case 3:
+        requestUrl = "https://alpha.sl.eval.blackberry.com/slscse/srVersionLookup/";
+        break;
+    case 2:
+        requestUrl = "https://beta2.sl.eval.blackberry.com/slscse/srVersionLookup/";
+        break;
     case 1:
         requestUrl = "https://beta.sl.eval.blackberry.com/slscse/srVersionLookup/";
         break;
@@ -481,13 +490,13 @@ void MainNet::reverseLookupReply() {
     sender()->deleteLater();
 
     // Now verify the link
-    if (swRelease.at(0).isDigit()) {
+    if (!swRelease.isEmpty() && swRelease.at(0).isDigit()) {
         QCryptographicHash hash(QCryptographicHash::Sha1);
         hash.addData(swRelease.toLocal8Bit());
         QString server = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/";
-        if (reply->url().host().startsWith("beta")) {
+        /*if (reply->url().host().startsWith("beta")) {
             server = "http://cdn.fs.sl.blackberry.com/fs/qnx/beta/";
-        }
+        }*/
         QString url = server + QString(hash.result().toHex());
         QNetworkRequest request;
         request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
@@ -520,6 +529,15 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
 
     switch (server)
     {
+    case 4:
+        requestUrl = "https://alpha2.sl.eval.blackberry.com/slscse/updateDetails/";
+        break;
+    case 3:
+        requestUrl = "https://alpha.sl.eval.blackberry.com/slscse/updateDetails/";
+        break;
+    case 2:
+        requestUrl = "https://beta2.sl.eval.blackberry.com/slscse/updateDetails/";
+        break;
     case 1:
         requestUrl = "https://beta.sl.eval.blackberry.com/slscse/updateDetails/";
         break;
@@ -528,21 +546,22 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         requestUrl = "https://cs.sl.blackberry.com/cse/updateDetails/";
         break;
     }
-    /*
-    switch(version)
+    // Alpha and Beta servers use newer API
+    QString version;
+    switch(server)
     {
+    case 4:
+    case 3:
     case 2:
-        requestUrl += "1.0.0/";
-        break;
     case 1:
-        requestUrl += "2.0.0/";
+        version = "2.3.0";
         break;
     case 0:
     default:
-        requestUrl += "2.1.0/";
+        version = "2.2.0";
         break;
-    }*/
-    requestUrl += "2.2.0/";
+    }
+    requestUrl += version;
 
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
 
@@ -564,14 +583,14 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     if (_scanning > 1)
         setMultiscan(true);
     for (int i = start; i < end; i++) {
-        QString query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                "<updateDetailRequest version=\"2.2.0\" authEchoTS=\"1361763056140\">"
+        QString query = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                "<updateDetailRequest version=\"%1\" authEchoTS=\"1361763056140\">"
                 "<clientProperties>"
                 "<hardware>"
                 "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, i)+"</id><isBootROMSecure>true</isBootROMSecure>"
                 "</hardware>"
                 "<network>"
-                "<vendorId>0x0</vendorId><homeNPC>0x"+homeNPC+"</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
+                "<vendorId>0x0</vendorId><homeNPC>0x%2</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
                 "</network>"
                 "<software>"
                 "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
@@ -580,10 +599,15 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
                 "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
                 "<pollType>manual</pollType>"
                 "<resultPackageSetCriteria>"
-                "<softwareRelease softwareReleaseVersion=\"latest\" />"
+                "%3"
                 "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
-                "</resultPackageSetCriteria>" + delta +
-                "</updateDetailRequest>";
+                "</resultPackageSetCriteria>"
+                "%4"
+                "</updateDetailRequest>")
+                .arg(version)
+                .arg(homeNPC)
+                .arg((version == "2.2.0") ? "<softwareRelease softwareReleaseVersion=\"latest\" />" : "")
+                .arg(delta);
         _error = ""; emit errorChanged();
         // Pass the variant in the request so it can be retrieved out-of-order
         QNetworkRequest request;
@@ -698,7 +722,6 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         _versionRelease = ver;
         if (ver == "") {
             _updateMessage = "";
-            emit updateMessageChanged();
         } else {
             // Delete old list
             if (_updateAppList.count()) {
@@ -744,10 +767,10 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     .arg(desc);
 
             _error = ""; emit errorChanged();
-            // TODO: Putting it here makes user see the values changed. However, putting it in setMultiscan(false) crashes
-            emit updateMessageChanged();
-            emit updateCheckedCountChanged();
         }
+        // TODO: Putting it here makes user see the values changed. However, putting it below crashes
+        emit updateMessageChanged();
+        emit updateCheckedCountChanged();
     }
     setScanning(_scanning-1);
     // All scans complete
