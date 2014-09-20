@@ -744,14 +744,15 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     .arg(desc);
 
             _error = ""; emit errorChanged();
+            // TODO: Putting it here makes user see the values changed. However, putting it in setMultiscan(false) crashes
+            emit updateMessageChanged();
+            emit updateCheckedCountChanged();
         }
     }
     setScanning(_scanning-1);
     // All scans complete
     if (_scanning <= 0) {
         setMultiscan(false);
-        emit updateMessageChanged();
-        emit updateCheckedCountChanged();
     }
 }
 
