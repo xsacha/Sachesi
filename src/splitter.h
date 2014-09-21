@@ -112,7 +112,7 @@ public:
             dataStream << counter;
             counter += info.size();
         }
-        for (int i = _infos.count(); i < 6; i++)
+        for (int i = _infos.count() - 1; i < 6; i++)
             dataStream << (qint64)0;
         write(dataHeader);
         _read = 100 * pos();

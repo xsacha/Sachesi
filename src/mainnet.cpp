@@ -97,17 +97,21 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         _splitting = 5; emit splittingChanged();
         QNetworkReply* reply = manager->get(QNetworkRequest(capUrl));
         QObject::connect(reply, &QNetworkReply::readyRead, [=]() {
-            QFile capFile(capPath());
+            // Download to a temporary file first
+            QFile capFile(capPath(true));
             capFile.open(QIODevice::WriteOnly | QIODevice::Append);
             capFile.write(reply->readAll());
             capFile.close();
         });
         QObject::connect(reply, &QNetworkReply::finished, [=]() {
+            // If the download was successful, copy it to the path we check. Some users quit before this happens!
+            QFile::rename(capPath(true), capPath());
             _splitting = 2; emit splittingChanged();
             splitThread->start();
             reply->deleteLater();
         });
         QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
+            // Some users may experience difficult downloading it at all, or the link may be outdated.
             QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
             _splitting = 0; emit splittingChanged();
             splitThread->deleteLater();
@@ -456,12 +460,15 @@ void MainNet::reverseLookup(int device, int variant, int server, QString OSver, 
     requestUrl += "2.0/";
     //
     //0x8d00240a
-    QString query = "<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"1366644680359\">"
-            "<clientProperties>"
-                "<hardware><pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><id>0x"+id+"</id></hardware>"
-                "<software><osVersion>"+OSver+"</osVersion></software>"
-            "</clientProperties>"
-            "</srVersionLookupRequest>";
+    QString query = QString("<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"%1\">"
+                            "<clientProperties>"
+                            "<hardware><pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><id>0x%2</id></hardware>"
+                            "<software><osVersion>%3</osVersion></software>"
+                            "</clientProperties>"
+                            "</srVersionLookupRequest>")
+            .arg(QDateTime::currentMSecsSinceEpoch())
+            .arg(id)
+            .arg(OSver);
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     request.setUrl(QUrl(requestUrl));
@@ -554,7 +561,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     case 3:
     case 2:
     case 1:
-        version = "2.3.0";
+        version = "2.2.0"; // They support 2.3.0
         break;
     case 0:
     default:
@@ -584,30 +591,35 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         setMultiscan(true);
     for (int i = start; i < end; i++) {
         QString query = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                "<updateDetailRequest version=\"%1\" authEchoTS=\"1361763056140\">"
-                "<clientProperties>"
-                "<hardware>"
-                "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x"+hwidFromVariant(device, i)+"</id><isBootROMSecure>true</isBootROMSecure>"
-                "</hardware>"
-                "<network>"
-                "<vendorId>0x0</vendorId><homeNPC>0x%2</homeNPC><iccid>89014104255505565333</iccid><msisdn>15612133940</msisdn><imsi>310410550556533</imsi><ecid>0x0</ecid>"
-                "</network>"
-                "<software>"
-                "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale><osVersion>10.0.0.0</osVersion><radioVersion>10.0.0.0</radioVersion>"
-                "</software>"
-                "</clientProperties>"
-                "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>"+up+"</upgradeMode><provideDescriptions>true</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
-                "<pollType>manual</pollType>"
-                "<resultPackageSetCriteria>"
-                "%3"
-                "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
-                "</resultPackageSetCriteria>"
-                "%4"
-                "</updateDetailRequest>")
-                .arg(version)
-                .arg(homeNPC)
-                .arg((version == "2.2.0") ? "<softwareRelease softwareReleaseVersion=\"latest\" />" : "")
-                .arg(delta);
+                                "<updateDetailRequest version=\"%1\" authEchoTS=\"%2\">"
+                                "<clientProperties>"
+                                "<hardware>"
+                                "<pin>0x2FFFFFB3</pin><bsn>1128121361</bsn><imei>004401139269240</imei><id>0x%3</id>"
+                                "</hardware>"
+                                "<network>"
+                                "<homeNPC>0x%4</homeNPC><iccid>89014104255505565333</iccid>"
+                                "</network>"
+                                "<software>"
+                                "<currentLocale>en_US</currentLocale><legalLocale>en_US</legalLocale>"
+                                "</software>"
+                                "</clientProperties>"
+                                "<updateDirectives><allowPatching type=\"REDBEND\">true</allowPatching><upgradeMode>%5</upgradeMode><provideDescriptions>false</provideDescriptions><provideFiles>true</provideFiles><queryType>NOTIFICATION_CHECK</queryType></updateDirectives>"
+                                "<pollType>manual</pollType>"
+                                "<resultPackageSetCriteria>"
+                                "%6"
+                                "<releaseIndependent><packageType operation=\"include\">application</packageType></releaseIndependent>"
+                                "</resultPackageSetCriteria>"
+                                "%7"
+                                "</updateDetailRequest>")
+                .arg(version) // API Version
+                .arg(QDateTime::currentMSecsSinceEpoch()) // Current time, in case it cares one day
+                .arg(hwidFromVariant(device, i)) // Search Device HWID
+                .arg(homeNPC) // Country + Carrier
+                .arg(up) // Upgrade or Repair?
+                // 2.3.0 doesn't support 'latest'. Does this mean we need to do availableBundles lookup first?
+                .arg((version == "2.3.0") ? "" : "<softwareRelease softwareReleaseVersion=\"latest\" />")
+                .arg(delta); // User installed applications (to support REDBEND patching)
+
         _error = ""; emit errorChanged();
         // Pass the variant in the request so it can be retrieved out-of-order
         QNetworkRequest request;
@@ -636,7 +648,6 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
     QString ver = "";
     QString os = "";
     QString radio = "";
-    QString desc = "";
     QString addr = "";
     QString currentaddr = "";
     QList<Apps*> newApps;
@@ -694,10 +705,11 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 if (ver == "" || (ver.split(".").last().toInt() < newver.split(".").last().toInt()))
                     ver = newver;
             }
-            else if (xml.name() == "description" && desc == "")
+            // No longer check for descriptions
+            /*else if (xml.name() == "description" && desc == "")
             {
                 desc = xml.readElementText();
-            }
+            }*/
         }
         xml.readNext();
     }
@@ -759,12 +771,11 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
             }
             );
 
-            _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4<br><br>%5")
+            _updateMessage = QString("<b>Update %1 available for %2!</b><br>%3 %4")
                     .arg(ver)
                     .arg(variant)
                     .arg(os != "" ? QString("<b> OS: %1</b>").arg(os) : "")
-                    .arg(radio != "" ? QString("<b> Radio: %1</b>").arg(radio) : "")
-                    .arg(desc);
+                    .arg(radio != "" ? QString("<b> Radio: %1</b>").arg(radio) : "");
 
             _error = ""; emit errorChanged();
         }

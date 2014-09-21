@@ -23,9 +23,14 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 
-QString capPath() {
+QString capPath(bool temp) {
     QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     QString capPath = QFileInfo(ini.fileName()).absolutePath();
+    if (temp) {
+        // On Windows this folder may not exist even if the .ini is meant to be there! So make it when writing temp file.
+        QDir(capPath).mkdir(".");
+        return capPath + "/.cap.exe";
+    }
     return capPath + "/cap.exe";
 }
 

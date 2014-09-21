@@ -32,7 +32,7 @@
 
 typedef QFileDialog* FileSelect;
 
-QString capPath();
+QString capPath(bool temp = false);
 FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt);
 QString getSaveDir();
 bool checkCurPath();
