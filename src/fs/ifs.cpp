@@ -18,18 +18,32 @@ binode IFS::createBNode(int offset, qint64 startPos) {
 
 QString IFS::generateName(QString imageExt) {
     _file->seek(_offset + 0x40);
-    QString builder = QString(_file->readLine(16)); // ec_agent, developer
+    QString builder = QString(_file->readLine(16)); // ec_agent, developer or username
     if (builder == "ec_agent")
         builder = "prod";
     else if (builder == "developer")
         builder = "trunk";
 
     _file->seek(_offset + 0x50);
-    QString build_date = QString(_file->readLine(16)); // Mmm dd yyyy
+    QStringList buildDateList = QString(_file->readLine(16)).split(' '); // Mmm dd yyyy
+    buildDateList.swap(0,1); // Swap day and month
+    QString buildDate = buildDateList.join("");
 
-    QString name = QString("boot-%1-%2")
+    _file->seek(_offset + 0xAC);
+    QNXStream stream(_file);
+    READ_TMP(short, build);
+    READ_TMP(quint8, majorminor);
+    READ_TMP(quint8, os);
+    QString ifs_ver = QString("%1.%2.%3.%4")
+            .arg(os)
+            .arg(majorminor >> 3)
+            .arg(majorminor & 0x7)
+            .arg(build);
+
+    QString name = QString("boot-%1-%2-%3")
+            .arg(ifs_ver)
             .arg(builder)
-            .arg(build_date.replace(' ', '.'));
+            .arg(buildDate);
     if (imageExt.isEmpty())
         return uniqueDir(name);
 
@@ -39,6 +53,10 @@ QString IFS::generateName(QString imageExt) {
 void IFS::extractDir(int offset, int numNodes, QString basedir, qint64 startPos)
 {
 
+    Q_UNUSED(offset);
+    Q_UNUSED(numNodes);
+    Q_UNUSED(basedir);
+    Q_UNUSED(startPos);
     // TODO: Nodes seem to fall apart. This must be whole-image compressed?
     /*
     QNXStream stream(_file);
@@ -68,13 +86,17 @@ bool IFS::createContents() {
     QNXStream stream(_file);
     // boot @ 0 with boot_size;
     stream >> boot_size;
-    boot_size &= 0xffffff;
-    unsigned char ifsSig[] = {0xEB, 0x7E, 0xFF, 0x00};
+    boot_size &= 0xfffff;
 
     _file->seek(_offset + boot_size);
     // Make sure there is a startup header
-    if (_file->read(4) != QByteArray((char*)ifsSig, 4)) {
-        return false; // Not a valid IFS image
+    if (_file->read(4) != QByteArray::fromHex("EB7EFF00")) {
+        // It may be offset by 0x1000
+        boot_size += 0x1000;
+        _file->seek(_offset + boot_size);
+        if (_file->read(4) != QByteArray::fromHex("EB7EFF00")) {
+            return false; // Not a valid IFS image
+        }
     }
     _file->seek(_offset + boot_size + 0x20);
     // startup @ boot_size + 0x100 with startup_size - 0x100
@@ -86,7 +108,8 @@ bool IFS::createContents() {
     // Temporarily dump the components until a full extraction is available
     QDir(_path).mkpath(".");
     // -- Dump boot.bin --
-    QFileSystem::writeFile("boot.bin", _offset, boot_size);
+    if (boot_size > 0x1100) // Does it have a boot.bin? Some speciality images don't and start at 0x1008
+        QFileSystem::writeFile("boot.bin", _offset + 0x1100, boot_size - 0x1100);
     // -- Dump startup.bin
     QFileSystem::writeFile("startup.bin", _offset + boot_size + 0x100, startup_size - 0x100);
     // -- Dump imagefs.bin

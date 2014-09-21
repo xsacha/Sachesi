@@ -199,6 +199,7 @@ Item {
                     }
                     CheckBox {
                         id: bootImage
+                        checked: true
                         text: "IFS"
                     }
                 }

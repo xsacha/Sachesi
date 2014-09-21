@@ -174,7 +174,7 @@ public slots:
             foreach (QIODevice* dev, devHandle) {
                 // QIODevice's are automatically closed.
                 if (dev != nullptr) {
-                    delete dev;
+                    dev->deleteLater();
                     dev = nullptr;
                 }
             }
