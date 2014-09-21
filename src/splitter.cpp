@@ -52,6 +52,8 @@ void Splitter::processExtractWrapper() {
         int unique = newProgressInfo(info.size);
         // If we are extracting FS images (only type supported for this method right now), then we want to create a filesystem type
         QFileSystem* fs = createTypedFileSystem(selectedFile, info.dev, info.type, info.offset, info.size, baseDir);
+        if (fs == nullptr)
+            continue;
         connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
             updateCurProgress(unique, fs->curSize, delta);
         });
@@ -217,20 +219,30 @@ void Splitter::processExtractBar() {
             barFile.setCurrentFile(signedName);
             signedFile->open(QIODevice::ReadOnly);
             if (splitting) {
-                read = 0;
-                maxSize = signedFile->size();
-                progressChanged(0);
-                QFile outputSigned(QFileInfo(selectedFile).canonicalPath() + "/" + signedName);
-                outputSigned.open(QIODevice::WriteOnly);
-                outputSigned.resize(signedFile->size());
-                QByteArray tmp;
-                for (qint64 b = signedFile->size(); b > 0; ) {
-                    qint64 read_len = qMin(BUFFER_LEN, b);
-                    tmp = signedFile->read(read_len);
-                    outputSigned.write(tmp);
-                    b -= updateProgress(tmp.size());
+                qint64 size = signedFile->size();
+                int type = 0;
+                if (size > 1024 * 1024 * 120)
+                    type = PACKED_FILE_OS;
+                else if (size > 1024 * 1024 * 5)
+                    type = PACKED_FILE_RADIO;
+                else
+                    type = PACKED_FILE_PINLIST;
+                if (option & type) {
+                    read = 0;
+                    maxSize = size;
+                    progressChanged(0);
+                    QFile outputSigned(QFileInfo(selectedFile).canonicalPath() + "/" + signedName);
+                    outputSigned.open(QIODevice::WriteOnly);
+                    outputSigned.resize(size);
+                    QByteArray tmp;
+                    for (qint64 b = size; b > 0; ) {
+                        qint64 read_len = qMin(BUFFER_LEN, b);
+                        tmp = signedFile->read(read_len);
+                        outputSigned.write(tmp);
+                        b -= updateProgress(tmp.size());
+                    }
+                    outputSigned.close();
                 }
-                outputSigned.close();
             } else if (extracting) {
                 progressChanged(0);
                 if (signedFile->size() > 1024*1024*5)
@@ -241,7 +253,7 @@ void Splitter::processExtractBar() {
     barFile.close();
 }
 
-// Process an Filesystem Image with the aim of extracting files
+// Process a Filesystem Image with the aim of extracting files
 void Splitter::processExtractType() {
     QFile* imageFile = new QFile(selectedFile); // Gets cleaned up later
     devHandle.append(imageFile);                // By this

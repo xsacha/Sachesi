@@ -91,7 +91,7 @@ public:
     void create(QString name) {
         // Find potential file
         QString append = ".exe";
-        for (int f = 0; QFile::exists(name + append); f++) {
+        for (int f = 2; QFile::exists(name + append); f++) {
             append = QString("-%1.exe").arg(QString::number(f));
         }
         // Start the autoloader as a cap file

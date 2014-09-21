@@ -86,14 +86,11 @@ bool IFS::createContents() {
     // Temporarily dump the components until a full extraction is available
     QDir(_path).mkpath(".");
     // -- Dump boot.bin --
-    _file->seek(_offset);
-    QFileSystem::writeFile("boot.bin", boot_size);
+    QFileSystem::writeFile("boot.bin", _offset, boot_size);
     // -- Dump startup.bin
-    _file->seek(_offset + boot_size + 0x100);
-    QFileSystem::writeFile("startup.bin", startup_size - 0x100);
+    QFileSystem::writeFile("startup.bin", _offset + boot_size + 0x100, startup_size - 0x100);
     // -- Dump imagefs.bin
-    _file->seek(_offset + boot_size + startup_size);
-    QFileSystem::writeFile("imagefs.bin", maxSize - boot_size - startup_size);
+    QFileSystem::writeFile("imagefs.bin", _offset + boot_size + startup_size, maxSize - boot_size - startup_size);
 
     // Display result
     QDesktopServices::openUrl(QUrl(_path));

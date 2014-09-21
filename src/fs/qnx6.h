@@ -17,6 +17,7 @@ struct qinode {
 class QNX6 : public QFileSystem
 {
     Q_OBJECT
+
 public:
     explicit QNX6(QString filename, QIODevice* file, qint64 offset, qint64 size, QString path)
         : QFileSystem(filename, file, offset, size, path, ".qnx6")

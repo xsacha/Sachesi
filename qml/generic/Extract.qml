@@ -58,7 +58,7 @@ Item {
     }
 
     ColumnLayout {
-        anchors { fill: parent; topMargin: 20; leftMargin: 20; bottomMargin: 20 }
+        anchors { fill: parent; margins: 15 }
         Layout.fillHeight: true
         ColumnLayout {
             Layout.alignment: Qt.AlignTop | Qt.AlignLeft
@@ -70,7 +70,7 @@ Item {
             RowLayout {
                 FileDialog {
                     id: split_files
-                    title: "Split Autoloader"
+                    title: "Extract Signed"
                     folder: settings.installFolder
                     onAccepted: {
                         p.splitAutoloader(fileUrl, osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
@@ -81,7 +81,7 @@ Item {
                 }
 
                 Button {
-                    text: "Split";
+                    text: "Extract Signed";
                     enabled: !p.splitting
                     onClicked: split_files.open()
                 }
@@ -108,7 +108,7 @@ Item {
             RowLayout {
                 FileDialog {
                     id: combine_files
-                    title: "Combine Autoloader"
+                    title: "Create Autoloader"
                     folder: settings.installFolder
                     onAccepted: {
                         p.combineAutoloader(fileUrls);
@@ -118,7 +118,7 @@ Item {
                     nameFilters: [ "Signed Images (*.signed)" ]
                 }
                 Button {
-                    text: "Combine Folder"
+                    text: "Create from Folder"
                     enabled: !p.splitting
                     onClicked: {
                         combine_files.selectFolder = true
@@ -126,7 +126,7 @@ Item {
                     }
                 }
                 Button {
-                    text: "Combine Files";
+                    text: "Create from Files";
                     enabled: !p.splitting
                     onClicked: {
                         combine_files.selectFolder = false
@@ -136,14 +136,14 @@ Item {
                 }
             }
             Label {
-                text: "Combine .signed images in to an autoloader .exe"
+                text: "Create Autoloader .exe from .signed images"
                 font.bold: true;
             }
         }
         // Implicit spacing by breaking layout
         ColumnLayout {
             Text {
-                text: "Signed Image Tools"
+                text: "Extraction Tools"
                 font.pointSize: 14
                 font.bold: true
             }

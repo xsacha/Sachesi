@@ -553,7 +553,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
         requestUrl = "https://cs.sl.blackberry.com/cse/updateDetails/";
         break;
     }
-    // Alpha and Beta servers use newer API
+    // Alpha and Beta servers support newer API
     QString version;
     switch(server)
     {
@@ -561,14 +561,15 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     case 3:
     case 2:
     case 1:
-        version = "2.2.0"; // They support 2.3.0
+        requestUrl += "2.2/"; // They support 2.3
+        version = "2.2.1"; // They support 2.3.0
         break;
     case 0:
     default:
-        version = "2.2.0";
+        requestUrl += "2.2/";
+        version = "2.2.1";
         break;
     }
-    requestUrl += version;
 
     QString homeNPC = NPCFromLocale(carrier.toInt(), country.toInt());
 

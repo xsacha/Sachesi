@@ -66,13 +66,12 @@ QString QFileSystem::generateName(QString imageExt) {
 bool QFileSystem::extractImage() {
     curSize = 0;
     maxSize = _size;
-    _file->seek(_offset);
     return this->createImage(this->generateName(_imageExt));
 }
 
 // A generic method for extracting an entire image of maxSize
 bool QFileSystem::createImage(QString name) {
-    return writeFile(name, maxSize);
+    return writeFile(name, _offset, maxSize);
 }
 
 // Entry for requesting an extration of the filesystem contents
@@ -84,7 +83,8 @@ bool QFileSystem::extractContents() {
 }
 
 // A method to write writeSize bytes from a QIODevice to a new file, named filename
-bool QFileSystem::writeFile(QString fileName, qint64 writeSize, bool absolute) {
+bool QFileSystem::writeFile(QString fileName, qint64 offset, qint64 writeSize, bool absolute) {
+    _file->seek(offset);
     QFile newFile;
     if (absolute)
         newFile.setFileName(fileName);
@@ -98,7 +98,6 @@ bool QFileSystem::writeFile(QString fileName, qint64 writeSize, bool absolute) {
         if (diff <= 0)
             return false;
         increaseCurSize(diff);
-
     }
     newFile.close();
 
