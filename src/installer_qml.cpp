@@ -18,6 +18,7 @@
 // This file is just Qt hooks that don't need to be seen. It should really do this for you anyway.
 
 #include "installer.h"
+#include "ports.h"
 
 #define WRITE_QML(type, name, caps) \
     void InstallNet::caps(const type &var) { \
@@ -33,10 +34,8 @@ WRITE_QML(bool, loginBlock, setLoginBlock)
 WRITE_QML(int, possibleDevices, setPossibleDevices)
 void InstallNet::setState(const int &state) {
     if (!state) {
-        cookieJar->deleteLater();
-        cookieJar = nullptr;
-        manager->deleteLater();
-        manager = nullptr;
+        qSafeFree(manager);
+        qSafeFree(cookieJar);
     }
     _state = state;
     emit stateChanged();
