@@ -828,15 +828,18 @@ void InstallNet::restoreReply()
                         _appList.append(newApp);
                     else
                         _appRemList.append(newApp);
-                    if (newApp->type() == "os")
+                    if (newApp->type() == "os") {
                         _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop");
-                    else if (newApp->type() == "radio")
+                        setKnownOS(newApp->version());
+                    } else if (newApp->type() == "radio") {
                         _knownConnectedRadioType = newApp->name().split("radio.").last().remove(".omadm");
+                        setKnownRadio(newApp->version());
+                    }
                 }
-                else if (name == "PlatformVersion")
-                    setKnownOS(xml.readElementText());
-                else if (name == "RadioVersion")
-                    setKnownRadio(xml.readElementText());
+                // These give the wrong result some times. Installed apps are a better indication.
+                // Although they also sometimes don't match Settings -> About (eg. from a Core/Radio Autoloader).
+                // else if (name == "PlatformVersion")
+                // else if (name == "RadioVersion")
                 else if (name == "BatteryLevel")
                     setKnownBattery(xml.readElementText().toInt());
                 else if (name == "HardwareID") {
