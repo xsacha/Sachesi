@@ -69,8 +69,8 @@ InstallNet::~InstallNet()
 
 QNetworkRequest InstallNet::setData(QString page, QString contentType) {
     QNetworkRequest request = QNetworkRequest();
-    request.setRawHeader("User-Agent", "QNXWebClient/1.0");
     request.setUrl(QUrl("https://" + _ip + "/cgi-bin/" + page));
+    request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "QNXWebClient/1.0");
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/" + contentType);
     return request;
 }
@@ -519,7 +519,7 @@ void InstallNet::login()
     }
     for(QString ip_addr : ips) {
         QNetworkRequest request;
-        request.setRawHeader("User-Agent", "QNXWebClient/1.0");
+        request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "QNXWebClient/1.0");
         request.setAttribute(QNetworkRequest::CustomVerbAttribute, ip_addr);
         request.setUrl(QUrl("http://"+ip_addr+"/cgi-bin/discovery.cgi"));
         QNetworkReply* replyTemp = manager->get(request);

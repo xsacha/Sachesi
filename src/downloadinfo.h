@@ -44,6 +44,7 @@ public:
 
         starting = false;
         running = false;
+        id = 0;
         maxId = 0;
         size = 0;
         totalSize = 0;

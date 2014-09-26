@@ -402,7 +402,7 @@ static QStringList dev[] = {
     QStringList() << "STJ 100-1" << "Cafe NA" << "Cafe Europe/ME/Asia" << "Cafe ROW" << "Cafe AT/T" << "Cafe LatinAm" << "Cafe Verizon",
     QStringList() << "04002E07" << "87002A07" << "8C002A07" << "9600240A" << "9700240A" << "9C00240A" << "A700240A",
     // 4 = Passport / Q30 (W Series)
-    QStringList() << "Passport Europe/ME/Asia" << "Passport Verizon" << "Passport NA" << "Passport Sprint" << "Passport Wichita",
+    QStringList() << "SQW 100-1" << "SQW 100-2" << "SQW 100-3" << "SQW 100-4" << "Passport Wichita",
     QStringList() << "87002C0A" << "85002C0A" << "84002C0A" << "86002C0A" << "8C002C0A",
     // 5 = Q5 (R Series) + Q10 (N Series) + P9983 (QK Series)
     QStringList() << "SQR 100-1" << "SQR 100-2" << "SQR 100-3" << "SQN 100-1" << "SQN 100-2" << "SQN 100-3" << "SQN 100-4" << "SQN 100-5" << "SQK 100-1" << "SQK 100-2",
