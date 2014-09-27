@@ -51,7 +51,7 @@ public slots:
         QNetworkRequest request(QString("http://appworld.blackberry.com/ClientAPI/checkcarrier?homemcc=%1&homemnc=%2&devicevendorid=-1&pin=0")
                                 .arg(_mcc)
                                 .arg(_mnc));
-        request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/4.4.0.0");
+        request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
         QNetworkReply* reply = _manager->get(request);
         connect(reply, &QNetworkReply::finished, [=] {
             int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -66,6 +66,8 @@ public slots:
                         } else if (xml.name() == "carrier") {
                             _carrier = xml.attributes().value("name").toString().split(" ").first();
                             _image = xml.attributes().value("icon").toInt();
+
+                            // Don't show generic
                             if (_carrier == "default") {
                                 _carrier = "";
                                 _image = 0;

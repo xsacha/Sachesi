@@ -12,7 +12,6 @@
         <file>qml/generic/Boot.qml</file>
         <file>qml/generic/Extract.qml</file>
         <file>qml/generic/VersionLookup.qml</file>
-        <file>qml/generic/mcc.js</file>
         <file>qml/generic/showpass.png</file>
         <file>qml/generic/text.png</file>
         <file>qml/generic/trash.png</file>

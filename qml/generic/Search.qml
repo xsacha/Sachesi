@@ -2,7 +2,6 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
-import "mcc.js" as MCC
 import "UI" 1.0
 
 
@@ -169,7 +168,7 @@ Item {
             onClicked: searchButton.clicked();
         }
         Image {
-            source: carrierinfo.image <= 0 ? "" : "http://appworld.blackberry.com/ClientAPI/image/" + carrierinfo.image
+            source: carrierinfo.image <= 0 ? "" : "http://appworld.blackberry.com/ClientAPI/image/" + carrierinfo.image + "/150X/png"
             sourceSize {height: carrier.height * 2 }
         }
 
