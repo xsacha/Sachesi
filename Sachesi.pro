@@ -89,7 +89,8 @@ HEADERS += \
     src/fs/ifs.h \
     src/fs/fs.h \
     src/fs/rcfs.h \
-    src/fs/qnx6.h
+    src/fs/qnx6.h \
+    src/carrierinfo.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {
@@ -123,7 +124,6 @@ RESOURCES += UI.qrc
 # The qmldir is built in for dynamic libs but not static.
 static: RESOURCES += QML.qrc
 OTHER_FILES += \
-    qml/generic/mcc.js \
     qml/generic/*.qml \
     qml/generic/UI/*.qml \
     Android/AndroidManifest.xml

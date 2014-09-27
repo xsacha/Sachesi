@@ -27,6 +27,7 @@
 #include "installer.h"
 #include "backupinfo.h"
 #endif
+#include "carrierinfo.h"
 #ifdef BOOTLOADER_ACCESS
 #include "boot.h"
 #endif
@@ -91,6 +92,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     context->setContextProperty("p", &p);
     context->setContextProperty("download", p.currentDownload);
+    // Finds country and carrier name from Blackberry rather than a lookup table
+    CarrierInfo info;
+    context->setContextProperty("carrierinfo",  &info);
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
 #endif

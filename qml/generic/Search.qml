@@ -150,14 +150,11 @@ Item {
         TextCouple {
             id: country
             type: "Country"
-            subtext: "Indonesia"
             value: "510"
+            subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
-            onValueChanged: {
-                if (value.length == 3) subtext = MCC.to_country(value);
-                if (carrier != null) carrier.updateVal();
-            }
+            onValueChanged: if (value.length == 3) carrierinfo.mccChange(value);
             onClicked: searchButton.clicked();
             helpLink: "https://en.wikipedia.org/w/index.php?title=Mobile_country_code"
         }
@@ -165,15 +162,17 @@ Item {
             id: carrier
             type: "Carrier"
             value: "010"
+            subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
-            function updateVal() {
-                if (value.length <= 3) subtext = MCC.to_carrier(country.value, ("00" + value).slice(-3)); else subtext = "";
-            }
-
-            onValueChanged: updateVal();
+            onValueChanged: if (value.length <= 3) carrierinfo.mncChange(("00" + value).slice(-3));
             onClicked: searchButton.clicked();
         }
+        Image {
+            source: carrierinfo.image <= 0 ? "" : "http://appworld.blackberry.com/ClientAPI/image/" + carrierinfo.image
+            sourceSize {height: carrier.height * 2 }
+        }
+
         GroupBox {
             title: "Search For"
             ColumnLayout {
