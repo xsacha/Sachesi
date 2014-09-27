@@ -67,13 +67,15 @@ bool checkCurPath()
     QString path = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + "/Sachesi/";
     dir.mkpath(path);
     QDir::setCurrent(path);
+#elif defined(__APPLE__)
+    QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
     QString curPath = QDir::currentPath();
     // Use .app path instead of binary path. Should really use a different method.
 #ifdef __APPLE__
     if (curPath.endsWith("Contents/MacOS"))
-        QDir::setCurrent(QApplication::applicationDirPath()+"/../../../");
+        QDir::setCurrent(curPath+"/../../../");
 #endif
     if (curPath.endsWith(".tmp") || curPath.endsWith(".zip") || curPath.endsWith("/system32")) {
         QMessageBox::critical(nullptr, "Error", "Cannot be run from within a zip.\n Please extract first.");

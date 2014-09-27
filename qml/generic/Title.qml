@@ -40,7 +40,7 @@ ApplicationWindow {
         checkable: true
         checked: settings.advanced
         onClicked: settings.advanced = !settings.advanced
-        text: checked ? "/H\\" : "H"
+        text: checked ? "+H+" : "H"
         tooltip: "Advanced"
     }
     TabView {

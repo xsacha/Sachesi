@@ -22,6 +22,7 @@ Item {
         width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
         color: "lightgray"
         title: "Download"
+
         ColumnLayout {
             anchors.fill: parent
             CircleProgress {

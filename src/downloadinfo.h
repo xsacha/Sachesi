@@ -93,6 +93,8 @@ public:
                     if (app->type() == type.toLower()) {
                         totalSize += realSize - app->size();
                         app->setSize(realSize);
+                        emit sizeChanged();
+                        emit appsChanged();
                     }
                 }
 
@@ -127,6 +129,7 @@ public:
                     apps.removeAt(i--);
                     maxId--;
                     emit appsChanged();
+                    emit sizeChanged();
                 }
             }
         }
@@ -136,6 +139,7 @@ public:
     }
 
     void downloadNextFile() {
+        curSize = 0;
         QNetworkRequest request(getUrl());
         request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
         // Set to a temporary filename
@@ -189,7 +193,6 @@ public:
                 size -= _updateFile.size();
                 _updateFile.close();
                 _updateFile.remove();
-                curSize = 0;
                 downloadNextFile();
                 return;
             }
