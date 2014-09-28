@@ -102,6 +102,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(QString knownPIN         MEMBER _knownPIN        WRITE setKnownPIN         NOTIFY knownPINChanged)
     Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
     Q_PROPERTY(int     knownHWFamily    MEMBER _knownHWFamily                             NOTIFY appListChanged)
+    Q_PROPERTY(QString bbid             MEMBER _bbid            WRITE setBbid             NOTIFY bbidChanged)
     Q_PROPERTY(QQmlListProperty<Apps> appList READ appList                                NOTIFY appListChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 
@@ -173,6 +174,7 @@ public:
     void setKnownName(const QString &Name);
     void setKnownHW(const QString &HW);
     void setKnownPIN(const QString &PIN);
+    void setBbid(const QString &Bbid);
 signals:
     void passwordChanged();
     void newPassword(QString newPass);
@@ -204,6 +206,7 @@ signals:
     void knownNameChanged();
     void knownHWChanged();
     void knownPINChanged();
+    void bbidChanged();
     void appListChanged();
 private slots:
     bool checkLogin();
@@ -258,6 +261,7 @@ private:
     QString _knownConnectedRadioType;
     QString _knownPIN;
     int _knownProtocol;
+    QString _bbid;
 
     QStringList _firmwareInfo;
     QStringList _downgradeInfo;

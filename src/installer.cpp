@@ -845,14 +845,16 @@ void InstallNet::restoreReply()
                 else if (name == "HardwareID") {
                     // If the firmware reports the device as unknown (eg. Dev Alpha on 10.3), show the Hardware ID
                     if (_knownHW == "Unknown") {
-                        QString name = xml.readElementText().remove(0, 2);
+                        QString hwid = xml.readElementText().remove(0, 2);
                         // If we already know the name, make it nicer
-                        if (name == "8d00270a")
-                            name = "Alpha C";
-                        else if (name == "4002607")
-                            name = "Alpha B";
-                        setKnownHW(name);
+                        if (hwid == "8d00270a")
+                            hwid = "Alpha C";
+                        else if (hwid == "4002607")
+                            hwid = "Alpha B";
+                        setKnownHW(hwid);
                     }
+                } else if (name == "Bbid") {
+                    setBbid(xml.readElementText());
                 }
                 /* // DEPRECATED by discovery.cgi
                 else if (name == "DeviceName")

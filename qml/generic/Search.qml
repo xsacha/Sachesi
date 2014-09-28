@@ -164,7 +164,7 @@ Item {
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
-            onValueChanged: if (value.length <= 3) carrierinfo.mncChange(("00" + value).slice(-3));
+            onValueChanged: if (value.length > 0 && value.length <= 3) carrierinfo.mncChange(("00" + value).slice(-3));
             onClicked: searchButton.clicked();
         }
         Image {

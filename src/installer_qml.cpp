@@ -54,6 +54,7 @@ WRITE_QML(int,  knownBattery, setKnownBattery)
 WRITE_QML(QString, knownName, setKnownName)
 WRITE_QML(QString, knownPIN, setKnownPIN)
 WRITE_QML(QString, knownHW, setKnownHW)
+WRITE_QML(QString, bbid, setBbid)
 
 QQmlListProperty<Apps> InstallNet::appList()
 {
