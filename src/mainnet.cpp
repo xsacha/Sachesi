@@ -315,16 +315,16 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
 void MainNet::fixApps(int downloadDevice) {
 #ifndef BLACKBERRY
     QPair<QString,QString> results = _i->getConnected(downloadDevice);
-    if (results.first == "" || results.second == "")
+    if (results.first == "" && results.second == "")
         return;
 
     foreach (Apps* app, currentDownload->apps) {
-        if (app->type() == "os") {
+        if (results.first != "" && app->type() == "os") {
             app->setPackageId(fixVariantName(app->packageId(), results.first, 0));
             app->setName(app->packageId().split("/").last());
             app->setFriendlyName(QFileInfo(app->name()).completeBaseName());
             currentDownload->verifyLink(app->packageId(), "OS");
-        } else if (app->type() == "radio") {
+        } else if (results.second != "" && app->type() == "radio") {
             app->setPackageId(fixVariantName(app->packageId(), results.second, 1));
             app->setName(app->packageId().split("/").last());
             app->setFriendlyName(QFileInfo(app->name()).completeBaseName());
@@ -345,7 +345,7 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
     QPair<QString,QString> results;
 #ifndef BLACKBERRY
     results = _i->getConnected(downloadDevice);
-    if (results.first == "" || results.second == "")
+    if (results.first == "" && results.second == "")
         convert = false;
 #endif
 
@@ -355,9 +355,9 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
             continue;
         QString item = app->packageId();
         if (convert) {
-            if (app->type() == "os")
+            if (results.first != "" && app->type() == "os")
                 item = fixVariantName(item, results.first, 0);
-            else if (app->type() == "radio")
+            else if (results.second != "" && app->type() == "radio")
                 item = fixVariantName(item, results.second, 1);
         }
 
