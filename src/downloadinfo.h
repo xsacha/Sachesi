@@ -150,6 +150,10 @@ public:
                 }
             }
         }
+        if (apps.count() == 0) {
+            running = false;
+            return;
+        }
         emit idChanged(); // For above, running=true and if any apps changed
         QDir(baseDir).mkpath(".");
         downloadNextFile();
