@@ -138,7 +138,7 @@ public:
 
     Q_INVOKABLE void search(QString query) {
         QString server = currentServer();
-        searchRequest(QString("%1/ClientAPI/searchpage?s=%2&model=0x85002c0a" + currentOS())
+        searchRequest(QString("%1/ClientAPI/searchlist?s=%2&model=0x85002c0a" + currentOS())
                       .arg(server)
                       .arg(query));
     }
@@ -197,6 +197,10 @@ public:
                                 _appList.append(app);
                             } else if (linkType == 2 || linkType == 1) {
                                 _more.append(xml.attributes().value("displayname").toString() + "," + xml.attributes().value("url").toString()); emit moreChanged();
+                            } else if (linkType == 13) {
+                                // This is either used for next page (no name) or a specific task like Search
+                                if (!xml.attributes().hasAttribute("displayname"))
+                                    _more.append("Next Page," + xml.attributes().value("url").toString()); emit moreChanged();
                             }
                         }
                     }

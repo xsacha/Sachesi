@@ -42,8 +42,11 @@ void Splitter::processExtractWrapper() {
     // Now we should be done parsing through the entire file and its components
     // So run through the partition Info we collected
     // First gather sizes so we can have an established goal in the UI
-    foreach(PartitionInfo info, partitionInfo) {
-        maxSize += info.size;
+    for (int i = 0; i < partitionInfo.count(); i++) {
+        if (partitionInfo[i].size <= 65536) // Too small to have anything of value
+            partitionInfo.removeAt(i--);
+        else
+            maxSize += partitionInfo[i].size;
     }
 
     // All files will be extracted relative to the given container file

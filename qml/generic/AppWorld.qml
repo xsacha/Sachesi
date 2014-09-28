@@ -114,8 +114,9 @@ Item {
                 id: view
                 anchors.fill: parent
                 model: appworld.appList
-                cellWidth: 200
-                cellHeight: 200
+                // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
+                cellWidth: parent.width / 5
+                cellHeight: cellWidth
 
                 delegate: Item {
                     id: item
