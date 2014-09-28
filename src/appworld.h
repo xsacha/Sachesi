@@ -190,6 +190,10 @@ public:
                                     if (xml.tokenType() == QXmlStreamReader::StartElement) {
                                         if (xml.name() == "image" && xml.attributes().value("imagetype").toInt() == 1)
                                             app->setImage(xml.attributes().value("src").toString());
+                                        else if (xml.name() == "vendor") {
+                                            app->setVendorId(xml.attributes().value("id").toString());
+                                            app->setVendor(xml.readElementText());
+                                        }
                                     }
                                     if (xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "link")
                                         break;

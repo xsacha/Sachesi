@@ -115,8 +115,9 @@ Item {
                 anchors.fill: parent
                 model: appworld.appList
                 // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
-                cellWidth: parent.width / 5
+                cellWidth: (main.width - 20) / 5
                 cellHeight: cellWidth
+                footer: Label { visible: false; text: "."; } // Spacer
 
                 delegate: Item {
                     id: item
@@ -129,7 +130,7 @@ Item {
                     Image {
                         id: imageItem
                         visible: status == Image.Ready
-                        anchors { fill: parent; margins: 20 }
+                        anchors { fill: parent; margins: 30 }
                         height: item.height - textItem.implicitHeight
                         width: item.width
                         fillMode: Image.PreserveAspectFit
@@ -142,11 +143,15 @@ Item {
                             onClicked: appworld.showContentItem(id)
                         }
                     }
+                    // TODO: Probably make this two strings so we can elide properly
                     Label {
                         id: textItem
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: friendlyName
+                        text: "<b>" + friendlyName + "</b><br><a href=\"#\">" + vendor + "</a>"
+                        maximumLineCount: 2
+                        clip: true
+                        onLinkActivated: appworld.showVendor(vendorId)
                         anchors.top: imageItem.visible ? imageItem.bottom : item.top
                         height: imageItem.visible ? implicitHeight : item.height
                         width: item.width
