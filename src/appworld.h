@@ -17,6 +17,13 @@
 
 #pragma once
 
+// Notes:
+// Alternative solution is to use JSON-frontend
+// Example: https://appworld.blackberry.com/cas/producttype/all/listtype/search_listing/category/0/search/%1
+//          https://appworld.blackberry.com/cas/content/%1
+// Advantages: No user agent required, doesn't discriminate OS/model
+// Disadvantages: We need to use the ClientAPI for everything else anyway
+
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -28,18 +35,23 @@ class AppWorld : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool    listing         MEMBER _listing         NOTIFY listingChanged)
+    Q_PROPERTY(QStringList more        READ more               NOTIFY moreChanged)
     Q_PROPERTY(int     server          MEMBER _server          NOTIFY serverChanged)
+    Q_PROPERTY(int     osVer           MEMBER _osVer           NOTIFY osVerChanged)
     Q_PROPERTY(QQmlListProperty<AppWorldApps> appList READ appList NOTIFY appListChanged)
     Q_PROPERTY(AppWorldApps* contentItem MEMBER _contentItem NOTIFY contentItemChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 public:
     explicit AppWorld(QObject *parent = 0)
         : QObject(parent)
+        , _listing(false)
+        , _more()
         , _server(0)
+        , _osVer(0)
     {
         _manager = new QNetworkAccessManager();
         _contentItem = new AppWorldApps();
-        showFeatured();
+        showHome();
     }
 
     QQmlListProperty<AppWorldApps> appList() {
@@ -47,19 +59,33 @@ public:
     }
 
     int appCount() const { return _appList.count(); }
+
+    QStringList more() const { return _more; }
+
     QString currentServer() {
         switch (_server) {
-        case 1:
+        case 2:
             return "http://eval.appworld.blackberry.com";
+        case 1:
+            return "http://enterprise.appworld.blackberry.com";
         case 0:
         default:
             return "http://appworld.blackberry.com";
         }
     }
+    QString currentOS() {
+        switch (_osVer) {
+        case 1:
+            return "";
+        case 0:
+        default:
+            return "&os=10.9.0";
+        }
+    }
 
     Q_INVOKABLE void showFeatured() {
         QString server = currentServer();
-        QNetworkRequest request(QString("%1/ClientAPI/featured?model=0x85002c0a&os=10.3.0")
+        QNetworkRequest request(QString("%1/ClientAPI/featured?model=0x85002c0a" + currentOS())
                                 .arg(server));
         request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
         QNetworkReply* reply = _manager->get(request);
@@ -70,6 +96,7 @@ public:
                 foreach(AppWorldApps* app, _appList)
                     app->deleteLater();
                 _appList.clear();
+                _more.clear(); emit moreChanged();
                 emit appListChanged();
                 QString imageDepot = server + "/ClientAPI/image";
                 while(!xml.atEnd() && !xml.hasError()) {
@@ -111,10 +138,30 @@ public:
 
     Q_INVOKABLE void search(QString query) {
         QString server = currentServer();
+        searchRequest(QString("%1/ClientAPI/searchpage?s=%2&model=0x85002c0a" + currentOS())
+                      .arg(server)
+                      .arg(query));
+    }
 
-        QNetworkRequest request(QString("%1/ClientAPI/searchpage?s=%2&model=0x85002c0a&os=10.9.0")
-                                .arg(server)
-                                .arg(query));
+    Q_INVOKABLE void showVendor(QString id) {
+        QString server = currentServer();
+        searchRequest(QString("%1/ClientAPI/vendorlistforappsgames/%2?model=0x85002c0a" + currentOS())
+                      .arg(server)
+                      .arg(id));
+    }
+
+    Q_INVOKABLE void showHome() {
+        QString server = currentServer();
+        searchRequest(QString("%1/ClientAPI/usfpage/?model=0x85002c0a&os=10.9.0") // Requires an OS version, so use latest
+                      .arg(server));
+    }
+
+    Q_INVOKABLE void searchMore(QString url) {
+        searchRequest(url + "model=0x85002c0a");
+    }
+
+    void searchRequest(QString requestString) {
+        QNetworkRequest request(requestString);
         request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
         QNetworkReply* reply = _manager->get(request);
         connect(reply, &QNetworkReply::finished, [=] {
@@ -125,26 +172,32 @@ public:
                 foreach(AppWorldApps* app, _appList)
                     app->deleteLater();
                 _appList.clear();
+                _more.clear(); emit moreChanged();
                 while(!xml.atEnd() && !xml.hasError()) {
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
                         if (xml.name() == "panel") {
                             curType = xml.attributes().value("displayname").toString(); // Eg. Apps, Games
                         } else if (xml.name() == "link") {
-                            AppWorldApps* app = new AppWorldApps();
-                            app->setType(curType);
-                            app->setName(xml.attributes().value("name").toString());
-                            app->setFriendlyName(xml.attributes().value("displayname").toString());
-                            app->setId(xml.attributes().value("id").toString());
-                            while(!xml.atEnd() && !xml.hasError()) {
-                                xml.readNext();
-                                if (xml.tokenType() == QXmlStreamReader::StartElement) {
-                                    if (xml.name() == "image" && xml.attributes().value("imagetype").toInt() == 1)
-                                        app->setImage(xml.attributes().value("src").toString());
+                            int linkType = xml.attributes().value("linktype").toString().toInt();
+                            if (linkType == 3) {
+                                AppWorldApps* app = new AppWorldApps();
+                                app->setType(curType);
+                                app->setName(xml.attributes().value("name").toString());
+                                app->setFriendlyName(xml.attributes().value("displayname").toString());
+                                app->setId(xml.attributes().value("id").toString());
+                                while(!xml.atEnd() && !xml.hasError()) {
+                                    xml.readNext();
+                                    if (xml.tokenType() == QXmlStreamReader::StartElement) {
+                                        if (xml.name() == "image" && xml.attributes().value("imagetype").toInt() == 1)
+                                            app->setImage(xml.attributes().value("src").toString());
+                                    }
+                                    if (xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "link")
+                                        break;
                                 }
-                                if (xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "link")
-                                    break;
+                                _appList.append(app);
+                            } else if (linkType == 2 || linkType == 1) {
+                                _more.append(xml.attributes().value("displayname").toString() + "," + xml.attributes().value("url").toString()); emit moreChanged();
                             }
-                            _appList.append(app);
                         }
                     }
                     xml.readNext();
@@ -162,7 +215,7 @@ public:
     Q_INVOKABLE void showContentItem(QString item) {
         QString server = currentServer();
 
-        QNetworkRequest request(QString("%1/ClientAPI/content/%2?model=0x85002c0a&os=10.9.0")
+        QNetworkRequest request(QString("%1/ClientAPI/content/%2?model=0x85002c0a" + currentOS())
                                 .arg(server)
                                 .arg(item));
         request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
@@ -194,11 +247,14 @@ public:
                             _contentItem->_screenshots.append(imageDepot + "/" + xml.attributes().value("id").toString());
                             emit _contentItem->screenshotsChanged();
                         } else if (xml.name() == "vendor") {
+                            _contentItem->setVendorId(xml.attributes().value("id").toString());
                             _contentItem->setVendor(xml.readElementText());
                         } else if (xml.name() == "filebundle") {
                             _contentItem->setVersion(xml.attributes().value("version").toString());
                             _contentItem->setSize(xml.attributes().value("size").toString().toInt());
                             _contentItem->setFileId(xml.attributes().value("id").toString());
+                        } else if (xml.name() == "price" && _contentItem->price() == "") {
+                            _contentItem->setPrice(xml.readElementText());
                         }
                     }
                     xml.readNext();
@@ -215,15 +271,17 @@ public:
 
 signals:
     void listingChanged();
+    void moreChanged();
     void serverChanged();
+    void osVerChanged();
     void appListChanged();
     void contentItemChanged();
 
-public slots:
-
 private:
     bool _listing;
+    QStringList _more;
     int _server;
+    int _osVer;
     QList<AppWorldApps*> _appList;
     AppWorldApps* _contentItem;
     QNetworkAccessManager* _manager;

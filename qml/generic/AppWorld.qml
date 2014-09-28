@@ -11,7 +11,16 @@ Item {
         Layout.fillWidth: true
         RowLayout {
             Button {
+                visible: !appworld.listing
+                text: "Back"
+                onClicked: appworld.listing = true
+            }
+            Button {
                 text: "Home"
+                onClicked: appworld.showHome()
+            }
+            Button {
+                text: "Featured"
                 onClicked: appworld.showFeatured()
             }
             TextField {
@@ -26,6 +35,8 @@ Item {
                 onClicked: appworld.search(searchText.text)
             }
         }
+
+        // This is the app detail slide
         ScrollView {
             id: contentView
             Layout.fillHeight: true
@@ -35,6 +46,7 @@ Item {
             ColumnLayout {
                 RowLayout {
                     Image {
+                        visible: status == Image.Ready
                         source: appworld.contentItem.image == "" ? "" : appworld.contentItem.image + "/X96/png"
                     }
 
@@ -44,7 +56,8 @@ Item {
                     }
                 }
                 Label {
-                    text: "by <b>" + appworld.contentItem.vendor + "</b>"
+                    text: "by <b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>"
+                    onLinkActivated: appworld.showVendor(appworld.contentItem.vendorId)
                 }
 
                 RowLayout {
@@ -59,8 +72,11 @@ Item {
                     }
                     Button {
                         //enabled: false
-                        text: "Download"
-                        // Edit: Of course, this is wrong ;)
+                        visible: appworld.contentItem.size != 0
+                        text: appworld.contentItem.price
+                        // Edit: Of course, this is wrong ;) They've changed it so I need to login now. We'll do this later
+                        // Example: "http://appworld.blackberry.com/ClientAPI/usfdownload?contentid=" + appworld.contentItem.id
+                        // Replies:  <error id="30702" type="accounts">Invalid token, please login.</error>
                         onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/file/" + appworld.contentItem.fileId)
                     }
                 }
@@ -88,10 +104,12 @@ Item {
             }
         }
 
+        // This is the grid of apps slide
         ScrollView {
             visible: appworld.listing
             Layout.fillHeight: true
-            Layout.fillWidth: true
+            Layout.minimumWidth: main.width
+            Layout.maximumWidth: main.width
             GridView {
                 id: view
                 anchors.fill: parent
@@ -103,6 +121,10 @@ Item {
                     id: item
                     width: view.cellWidth
                     height: view.cellHeight
+                    BusyIndicator {
+                        running: !imageItem.visible
+                        anchors.fill: parent
+                    }
                     Image {
                         id: imageItem
                         visible: status == Image.Ready
@@ -132,6 +154,21 @@ Item {
                 }
             }
         }
+        ScrollView {
+            visible: appworld.listing && appworld.more.length > 0
+            Layout.minimumWidth: main.width
+            Layout.maximumWidth: main.width
+            GridLayout {
+                columns: 4
+                Repeater {
+                    model: appworld.more
+                    Button {
+                        text: modelData.split(",")[0].replace("Apps & Games", "")
+                        onClicked: appworld.searchMore(modelData.split(",")[1])
+                    }
+                }
+            }
+        }
         Text {
             text: "Options"
             font.pointSize: 14
@@ -144,14 +181,19 @@ Item {
             }
             ComboBox {
                 currentIndex: appworld.server
-                model: ["Production", "Eval"]
+                model: ["Production", "Enterprise", "Eval"]
                 onCurrentIndexChanged: appworld.server = currentIndex
             }
             Label {
                 text: "<b>Model</b>: Passport"
             }
             Label {
-                text: "<b>OS</b>: 10.9.0"
+                text: "OS"
+                font.bold: true
+            }
+            ComboBox {
+                currentIndex: appworld.osVer
+                model: ["Latest", "All"]
             }
         }
     }

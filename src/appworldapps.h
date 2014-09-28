@@ -37,6 +37,8 @@ class AppWorldApps : public QObject {
     Q_PROPERTY(QString versionId READ versionId WRITE setVersionId NOTIFY versionIdChanged)
     Q_PROPERTY(QString checksum READ checksum WRITE setChecksum NOTIFY checksumChanged)
     Q_PROPERTY(QString vendor READ vendor WRITE setVendor NOTIFY vendorChanged)
+    Q_PROPERTY(QString vendorId READ vendorId WRITE setVendorId NOTIFY vendorIdChanged)
+    Q_PROPERTY(QString price READ price WRITE setPrice NOTIFY priceChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QStringList screenshots READ screenshots NOTIFY screenshotsChanged)
 
@@ -58,6 +60,8 @@ public:
     QString versionId() const;
     QString checksum() const;
     QString vendor() const;
+    QString vendorId() const;
+    QString price() const;
     QString description() const;
     QStringList screenshots() const {
         return _screenshots;
@@ -76,6 +80,8 @@ public:
     void setVersionId(const QString &str);
     void setChecksum(const QString &str);
     void setVendor(const QString &str);
+    void setVendorId(const QString &str);
+    void setPrice(const QString &str);
     void setDescription(const QString &str);
     QStringList _screenshots;
 
@@ -94,6 +100,8 @@ signals:
     void versionIdChanged();
     void checksumChanged();
     void vendorChanged();
+    void vendorIdChanged();
+    void priceChanged();
     void descriptionChanged();
     void screenshotsChanged();
 
@@ -112,6 +120,8 @@ private:
     QString _versionId;
     QString _checksum;
     QString _vendor;
+    QString _vendorId;
+    QString _price;
     QString _description;
 };
 
