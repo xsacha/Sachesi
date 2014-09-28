@@ -216,8 +216,8 @@ Item {
                             anchors.fill: parent
                             color: { switch(type) {
                                 case "os": return "red";
-                                case "radio": return "maroon";
-                                case "application": if (friendlyName.indexOf("sys.data") === 0) return "purple"; else  return "steelblue";
+                                case "radio": return "purple";
+                                case "application": if (friendlyName.indexOf("sys.data") === 0) return "lightblue"; else  return "steelblue";
                                 default: return "transparent";
                                 }
                             }
