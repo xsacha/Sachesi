@@ -29,32 +29,60 @@ Item {
         ScrollView {
             id: contentView
             Layout.fillHeight: true
-            Layout.fillWidth: true
+            Layout.minimumWidth: main.width
+            Layout.maximumWidth: main.width
             visible: !appworld.listing
-            Rectangle {
-                anchors.fill: parent
-                ColumnLayout {
+            ColumnLayout {
+                RowLayout {
+                    Image {
+                        source: appworld.contentItem.image == "" ? "" : appworld.contentItem.image + "/X96/png"
+                    }
+
                     Label {
                         text: appworld.contentItem.friendlyName
-                        font.pointSize: 16
+                        font.pointSize: 24
                     }
+                }
+                Label {
+                    text: "by <b>" + appworld.contentItem.vendor + "</b>"
+                }
+
+                RowLayout {
                     Label {
-                        text: appworld.contentItem.description
+                        visible: appworld.contentItem.size != 0
+                        text: "<b>File Bundle</b>: " + appworld.contentItem.name + " <b>Version</b>: " + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + " MB]"
                     }
-                    ListView {
-                        // Force entire screen width otherwise it will be constrained by Layout
-                        Layout.minimumWidth: main.width
-                        // Hardcoded to the width set in image source
-                        height: 256
-                        spacing: 10
-                        orientation: ListView.Horizontal
-                        model: appworld.contentItem.screenshots
-                        delegate: Image {
-                            source: modelData + "/X256/png"
-                            Behavior on scale { SpringAnimation { spring: 2; damping: 0.2 } }
-                            scale: 0.0
-                            onStatusChanged: if (status == Image.Ready) scale = 1.0
-                        }
+
+                    Button {
+                        text: "View"
+                        onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/content/" + appworld.contentItem.id)
+                    }
+                    Button {
+                        //enabled: false
+                        text: "Download"
+                        // Edit: Of course, this is wrong ;)
+                        onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/file/" + appworld.contentItem.fileId)
+                    }
+                }
+
+                Label {
+                    Layout.maximumWidth: contentView.width * 0.75
+                    wrapMode: Text.Wrap
+                    text: appworld.contentItem.description
+                }
+                ListView {
+                    // Force entire screen width otherwise it will be constrained by Layout
+                    Layout.minimumWidth: contentView.width - 40
+                    // Hardcoded to the width set in image source
+                    height: 256
+                    spacing: 10
+                    orientation: ListView.Horizontal
+                    model: appworld.contentItem.screenshots
+                    delegate: Image {
+                        source: modelData + "/X256/png"
+                        Behavior on scale { SpringAnimation { spring: 2; damping: 0.2 } }
+                        scale: 0.0
+                        onStatusChanged: if (status == Image.Ready) scale = 1.0
                     }
                 }
             }
@@ -102,11 +130,6 @@ Item {
                         elide: Text.ElideRight
                     }
                 }
-                Rectangle {
-                    anchors.fill: parent
-                    color: "lightgrey"
-                    z: -1
-                }
             }
         }
         Text {
@@ -117,11 +140,18 @@ Item {
         RowLayout {
             Label {
                 text: "Server"
+                font.bold: true
             }
             ComboBox {
                 currentIndex: appworld.server
                 model: ["Production", "Eval"]
                 onCurrentIndexChanged: appworld.server = currentIndex
+            }
+            Label {
+                text: "<b>Model</b>: Passport"
+            }
+            Label {
+                text: "<b>OS</b>: 10.9.0"
             }
         }
     }

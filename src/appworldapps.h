@@ -27,6 +27,7 @@ class AppWorldApps : public QObject {
     Q_PROPERTY(QString packageId READ packageId WRITE setPackageId NOTIFY packageIdChanged)
     Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName NOTIFY friendlyNameChanged)
     Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString fileId READ fileId WRITE setFileId NOTIFY fileIdChanged)
     Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(QString image READ image WRITE setImage NOTIFY imageChanged)
     Q_PROPERTY(bool isMarked READ isMarked WRITE setIsMarked NOTIFY isMarkedChanged)
@@ -35,6 +36,7 @@ class AppWorldApps : public QObject {
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(QString versionId READ versionId WRITE setVersionId NOTIFY versionIdChanged)
     Q_PROPERTY(QString checksum READ checksum WRITE setChecksum NOTIFY checksumChanged)
+    Q_PROPERTY(QString vendor READ vendor WRITE setVendor NOTIFY vendorChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(QStringList screenshots READ screenshots NOTIFY screenshotsChanged)
 
@@ -46,6 +48,7 @@ public:
     QString packageId() const;
     QString friendlyName() const;
     QString id() const;
+    QString fileId() const;
     int size() const;
     QString image() const;
     bool isMarked() const;
@@ -54,6 +57,7 @@ public:
     QString version() const;
     QString versionId() const;
     QString checksum() const;
+    QString vendor() const;
     QString description() const;
     QStringList screenshots() const {
         return _screenshots;
@@ -62,6 +66,7 @@ public:
     void setPackageId(const QString &str);
     void setFriendlyName(const QString &str);
     void setId(const QString &id);
+    void setFileId(const QString &fileId);
     void setSize(const int &num);
     void setImage(const QString &image);
     void setIsMarked(const bool &marked);
@@ -70,6 +75,7 @@ public:
     void setVersion(const QString &str);
     void setVersionId(const QString &str);
     void setChecksum(const QString &str);
+    void setVendor(const QString &str);
     void setDescription(const QString &str);
     QStringList _screenshots;
 
@@ -78,6 +84,7 @@ signals:
     void packageIdChanged();
     void friendlyNameChanged();
     void idChanged();
+    void fileIdChanged();
     void sizeChanged();
     void imageChanged();
     void isMarkedChanged();
@@ -86,6 +93,7 @@ signals:
     void versionChanged();
     void versionIdChanged();
     void checksumChanged();
+    void vendorChanged();
     void descriptionChanged();
     void screenshotsChanged();
 
@@ -94,6 +102,7 @@ private:
     QString _friendlyName;
     QString _packageId;
     QString _id;
+    QString _fileId;
     int _size;
     QString _image;
     bool _isMarked;
@@ -102,6 +111,7 @@ private:
     QString _version;
     QString _versionId;
     QString _checksum;
+    QString _vendor;
     QString _description;
 };
 

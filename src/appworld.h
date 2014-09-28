@@ -112,7 +112,7 @@ public:
     Q_INVOKABLE void search(QString query) {
         QString server = currentServer();
 
-        QNetworkRequest request(QString("%1/ClientAPI/searchpage?s=%2&model=0x85002c0a&os=10.3.0")
+        QNetworkRequest request(QString("%1/ClientAPI/searchpage?s=%2&model=0x85002c0a&os=10.9.0")
                                 .arg(server)
                                 .arg(query));
         request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
@@ -162,7 +162,7 @@ public:
     Q_INVOKABLE void showContentItem(QString item) {
         QString server = currentServer();
 
-        QNetworkRequest request(QString("%1/ClientAPI/content/%2?model=0x85002c0a&os=10.3.0")
+        QNetworkRequest request(QString("%1/ClientAPI/content/%2?model=0x85002c0a&os=10.9.0")
                                 .arg(server)
                                 .arg(item));
         request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
@@ -178,6 +178,8 @@ public:
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
                         if (xml.name() == "content") {
                             imageDepot = xml.attributes().value("imagedepot").toString();
+                            _contentItem->setImage(imageDepot + "/" + xml.attributes().value("icon").toString());
+                            _contentItem->setId(xml.attributes().value("id").toString());
                         } else if (xml.name() == "name" && _contentItem->friendlyName() == "") {
                             _contentItem->setFriendlyName(xml.readElementText());
                         } else if (xml.name() == "product") {
@@ -191,6 +193,12 @@ public:
                         } else if (xml.name() == "screenshot") {
                             _contentItem->_screenshots.append(imageDepot + "/" + xml.attributes().value("id").toString());
                             emit _contentItem->screenshotsChanged();
+                        } else if (xml.name() == "vendor") {
+                            _contentItem->setVendor(xml.readElementText());
+                        } else if (xml.name() == "filebundle") {
+                            _contentItem->setVersion(xml.attributes().value("version").toString());
+                            _contentItem->setSize(xml.attributes().value("size").toString().toInt());
+                            _contentItem->setFileId(xml.attributes().value("id").toString());
                         }
                     }
                     xml.readNext();
