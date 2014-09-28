@@ -231,6 +231,9 @@ public:
                     if(xml.tokenType() == QXmlStreamReader::StartElement) {
                         if (xml.name() == "content") {
                             imageDepot = xml.attributes().value("imagedepot").toString();
+                            _contentItem->setDescription(QString("This application was created %1 and last updated %2.\n\n")
+                                                         .arg(QDateTime::fromMSecsSinceEpoch(xml.attributes().value("createddate").toString().toLongLong()).toString())
+                                                         .arg(QDateTime::fromMSecsSinceEpoch(xml.attributes().value("forsaledate").toString().toLongLong()).toString()));
                             _contentItem->setImage(imageDepot + "/" + xml.attributes().value("icon").toString());
                             _contentItem->setId(xml.attributes().value("id").toString());
                         } else if (xml.name() == "name" && _contentItem->friendlyName() == "") {
@@ -242,7 +245,7 @@ public:
                         } else if (xml.name() == "packagename") {
                             _contentItem->setName(xml.readElementText());
                         } else if (xml.name() == "description") {
-                            _contentItem->setDescription(xml.readElementText());
+                            _contentItem->setDescription(_contentItem->description() + xml.readElementText());
                         } else if (xml.name() == "screenshot") {
                             _contentItem->_screenshots.append(imageDepot + "/" + xml.attributes().value("id").toString());
                             emit _contentItem->screenshotsChanged();
@@ -255,6 +258,8 @@ public:
                             _contentItem->setFileId(xml.attributes().value("id").toString());
                         } else if (xml.name() == "price" && _contentItem->price() == "") {
                             _contentItem->setPrice(xml.readElementText());
+                        } else if (xml.name() == "releasenotes") {
+                            _contentItem->setDescription(_contentItem->description() + "\n\nRelease Notes (" + _contentItem->version() + ")\n" + xml.readElementText());
                         }
                     }
                     xml.readNext();
