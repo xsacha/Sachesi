@@ -15,5 +15,6 @@
         <file>qml/generic/showpass.png</file>
         <file>qml/generic/text.png</file>
         <file>qml/generic/trash.png</file>
+        <file>qml/generic/AppWorld.qml</file>
     </qresource>
 </RCC>

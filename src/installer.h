@@ -64,11 +64,6 @@ struct BarInfo {
     BarType type;
 };
 
-void appendApps(QQmlListProperty<Apps> * property, Apps * app);
-int appsSize(QQmlListProperty<Apps> * property);
-Apps* appsAt(QQmlListProperty<Apps> * property, int index);
-void clearApps(QQmlListProperty<Apps> *property);
-
 class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT

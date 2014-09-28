@@ -28,6 +28,7 @@
 #include "backupinfo.h"
 #endif
 #include "carrierinfo.h"
+#include "appworld.h"
 #ifdef BOOTLOADER_ACCESS
 #include "boot.h"
 #endif
@@ -76,13 +77,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("i", &i);
     MainNet p(&i);
 #endif
+    // AppWorld copycat
+    AppWorld world;
+    // Finds country and carrier name from Blackberry rather than a lookup table
+    CarrierInfo info;
 
     if (!checkCurPath())
         return 0;
 
 #ifdef BOOTLOADER_ACCESS
     Boot b;
-    context->setContextProperty("b", &b);
 
     QObject::connect(&b, SIGNAL(started()), &b, SLOT(search()));
     QObject::connect(&b, SIGNAL(finished()), &b, SLOT(exit()));
@@ -90,17 +94,21 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     b.start();
 #endif
 
-    context->setContextProperty("p", &p);
+    // Set contexts
+    context->setContextProperty("b", &b); // Boot
+    context->setContextProperty("p", &p); // MainNet
     context->setContextProperty("download", p.currentDownload);
-    // Finds country and carrier name from Blackberry rather than a lookup table
-    CarrierInfo info;
     context->setContextProperty("carrierinfo",  &info);
+    context->setContextProperty("appworld",  &world);
+
+    // Register types
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
 #endif
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
+    qmlRegisterType<AppWorldApps>("AppWorldLibrary", 1, 0, "AppWorldApps");
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(STATIC)
     engine.addImportPath("qrc:/qml/");
 #endif
     QScopedPointer<QQmlComponent> comp(new QQmlComponent(&engine));

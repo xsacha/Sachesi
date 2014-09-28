@@ -45,11 +45,16 @@ ApplicationWindow {
     }
     TabView {
         id: titleRow
-        currentIndex: 1 + p.hasBootAccess
+        currentIndex: 2 + p.hasBootAccess
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
         // Workaround for index moving on startup for Windows
-        onCountChanged: { titleRow.currentIndex = 0; if (count >= 1 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
+        onCountChanged: { titleRow.currentIndex = 0; if (count >= 2 + p.hasBootAccess) titleRow.currentIndex = 2 + p.hasBootAccess; }
+
+        Tab {
+            title: "AppWorld"
+            AppWorld { anchors.fill: parent }
+        }
 
         Tab {
             title: "Extract";
