@@ -117,6 +117,8 @@ public:
                                     }
                                     else if (xml.name() == "name")
                                         app->setFriendlyName(xml.readElementText());
+                                    else if (xml.name() == "vendor")
+                                        app->setVendor(xml.readElementText());
                                 }
                                 if (xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "content")
                                     break;
@@ -150,14 +152,23 @@ public:
                       .arg(id));
     }
 
+    Q_INVOKABLE void showCars() {
+        QString server = currentServer();
+        searchRequest(QString("%1/ClientAPI/autostorepages/?model=0x85002c0a&os=10.9.0") // Requires an OS version, so use latest
+                      .arg(server));
+    }
+
     Q_INVOKABLE void showHome() {
         QString server = currentServer();
         searchRequest(QString("%1/ClientAPI/usfpage/?model=0x85002c0a&os=10.9.0") // Requires an OS version, so use latest
                       .arg(server));
     }
 
-    Q_INVOKABLE void searchMore(QString url) {
-        searchRequest(url + "model=0x85002c0a");
+    Q_INVOKABLE void searchMore(QString url, bool os_required = false) {
+        if (os_required)
+            searchRequest(url + "model=0x85002c0a&os=10.9.0");
+        else
+            searchRequest(url + "model=0x85002c0a" + currentOS());
     }
 
     void searchRequest(QString requestString) {
@@ -178,21 +189,33 @@ public:
                         if (xml.name() == "panel") {
                             curType = xml.attributes().value("displayname").toString(); // Eg. Apps, Games
                         } else if (xml.name() == "link") {
-                            int linkType = xml.attributes().value("linktype").toString().toInt();
-                            if (linkType == 3) {
+                            int linkType = xml.attributes().value("linktype").toInt();
+                            if (linkType == 3
+                                    || (linkType == 1 && xml.attributes().value("onactionbar").toString() == "false")
+                                    || (linkType == 2 && xml.attributes().value("showicon").toString() == "true")) {
                                 AppWorldApps* app = new AppWorldApps();
-                                app->setType(curType);
-                                app->setName(xml.attributes().value("name").toString());
+                                if (linkType == 1 || linkType == 2) {
+                                    app->setType("category");
+                                    app->setId(xml.attributes().value("url").toString());
+                                }
+                                else {
+                                    app->setType(curType);
+                                    app->setName(xml.attributes().value("name").toString());
+                                    app->setId(xml.attributes().value("id").toString());
+                                }
                                 app->setFriendlyName(xml.attributes().value("displayname").toString());
-                                app->setId(xml.attributes().value("id").toString());
                                 while(!xml.atEnd() && !xml.hasError()) {
                                     xml.readNext();
                                     if (xml.tokenType() == QXmlStreamReader::StartElement) {
-                                        if (xml.name() == "image" && xml.attributes().value("imagetype").toInt() == 1)
+                                        if (xml.name() == "image"
+                                                && (xml.attributes().value("imagetype").toInt() == 1)
+                                                || (xml.attributes().value("imagetype").toInt() == 7))
                                             app->setImage(xml.attributes().value("src").toString());
                                         else if (xml.name() == "vendor") {
                                             app->setVendorId(xml.attributes().value("id").toString());
                                             app->setVendor(xml.readElementText());
+                                        } else if (xml.name() == "autocheck") {
+                                            app->setFriendlyName(xml.attributes().value("make").toString());
                                         }
                                     }
                                     if (xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "link")

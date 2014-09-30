@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QStandardPaths>
 #include <QMessageBox>
-#include <QDebug>
+
 QString capPath(bool temp) {
     QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     QString capPath = QFileInfo(ini.fileName()).absolutePath();

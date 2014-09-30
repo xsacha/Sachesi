@@ -33,6 +33,7 @@
 #include "boot.h"
 #endif
 
+// TODO: Sometimes Extract User actually extracts apps?
 // TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress

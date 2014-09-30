@@ -23,6 +23,11 @@ Item {
                 text: "Featured"
                 onClicked: appworld.showFeatured()
             }
+            Button {
+                text: "Cars"
+                onClicked: appworld.showCars();
+            }
+
             TextField {
                 id: searchText
                 placeholderText: "Search"
@@ -129,7 +134,7 @@ Item {
                     }
                     Image {
                         id: imageItem
-                        visible: status == Image.Ready
+                        visible: status == Image.Ready && image != ""
                         anchors { fill: parent; margins: 30 }
                         height: item.height - textItem.implicitHeight
                         width: item.width
@@ -140,7 +145,7 @@ Item {
                         onStatusChanged: if (status == Image.Ready) scale = 1.0
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: appworld.showContentItem(id)
+                            onClicked: type == "category" ? appworld.searchMore(id, true) : appworld.showContentItem(id)
                         }
                     }
                     // TODO: Probably make this two strings so we can elide properly
