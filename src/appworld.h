@@ -83,10 +83,11 @@ public:
         }
     }
 
-    Q_INVOKABLE void showFeatured() {
+    Q_INVOKABLE void searchLocker(QString type) {
         QString server = currentServer();
-        QNetworkRequest request(QString("%1/ClientAPI/featured?model=0x85002c0a" + currentOS())
-                                .arg(server));
+        QNetworkRequest request(QString("%1/ClientAPI/%2?model=0x85002c0a" + currentOS())
+                                .arg(server)
+                                .arg(type));
         request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
         QNetworkReply* reply = _manager->get(request);
         connect(reply, &QNetworkReply::finished, [=] {
@@ -115,6 +116,8 @@ public:
                                         app->setType(xml.attributes().value("name").toString());
                                         //app->setTypeImage(imageDepot + "/" + xml.attributes().value("icon").toString());
                                     }
+                                    else if (xml.name() == "image" && xml.attributes().value("imagetype").toInt() == 1)
+                                        app->setImage(xml.attributes().value("src").toString());
                                     else if (xml.name() == "name")
                                         app->setFriendlyName(xml.readElementText());
                                     else if (xml.name() == "vendor")

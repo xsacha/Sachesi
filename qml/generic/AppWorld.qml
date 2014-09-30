@@ -21,11 +21,15 @@ Item {
             }
             Button {
                 text: "Featured"
-                onClicked: appworld.showFeatured()
+                onClicked: appworld.searchLocker("featured")
+            }
+            Button {
+                text: "Carrier"
+                onClicked: appworld.searchLocker("mypreloadeditems")
             }
             Button {
                 text: "Cars"
-                onClicked: appworld.showCars();
+                onClicked: appworld.showCars()
             }
 
             TextField {
@@ -116,6 +120,11 @@ Item {
             Layout.minimumWidth: main.width
             Layout.maximumWidth: main.width
             GridView {
+                Rectangle {
+                    anchors.fill: parent
+                    color: "black"
+                    z: -1
+                }
                 id: view
                 anchors.fill: parent
                 model: appworld.appList
@@ -153,7 +162,9 @@ Item {
                         id: textItem
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: "<b>" + friendlyName + "</b><br><a href=\"#\">" + vendor + "</a>"
+                        text: "<b>" + friendlyName + (vendor == "" ? "" : "</b><br><a href=\"#\">" + vendor + "</a>")
+                        color: "white"
+                        linkColor: "lightblue"
                         maximumLineCount: 2
                         clip: true
                         onLinkActivated: appworld.showVendor(vendorId)
@@ -165,18 +176,13 @@ Item {
                 }
             }
         }
-        ScrollView {
+        RowLayout {
             visible: appworld.listing && appworld.more.length > 0
-            Layout.minimumWidth: main.width
-            Layout.maximumWidth: main.width
-            GridLayout {
-                columns: 4
-                Repeater {
-                    model: appworld.more
-                    Button {
-                        text: modelData.split(",")[0].replace("Apps & Games", "")
-                        onClicked: appworld.searchMore(modelData.split(",")[1])
-                    }
+            Repeater {
+                model: appworld.more
+                Button {
+                    text: modelData.split(",")[0].replace("Apps & Games", "")
+                    onClicked: appworld.searchMore(modelData.split(",")[1])
                 }
             }
         }
