@@ -93,7 +93,7 @@ ApplicationWindow {
         }
     }*/
     statusBar: StatusBar {
-        visible: !blackberry
+        visible: !mobile
         Label {
             visible: i.knownBattery < 0
             text: "No device connected"

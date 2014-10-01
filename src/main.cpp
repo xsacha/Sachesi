@@ -33,7 +33,6 @@
 #include "boot.h"
 #endif
 
-// TODO: Sometimes Extract User actually extracts apps?
 // TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress
@@ -66,6 +65,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Check if this is a Blackberry device. There are some restrictions such as no InstallNet
     context->setContextProperty("blackberry", QVariant::fromValue(
                                 #ifdef BLACKBERRY
+                                    1
+                                #else
+                                    0
+                                #endif
+                                    ));
+    // Check if this is a mobile device as they often do not have enough space.
+    context->setContextProperty("mobile", QVariant::fromValue(
+                                #if defined(BLACKBERRY) || defined(ANDROID)
                                     1
                                 #else
                                     0

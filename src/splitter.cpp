@@ -60,8 +60,8 @@ void Splitter::processExtractWrapper() {
         connect(fs, &QFileSystem::sizeChanged, [=] (qint64 delta) {
             updateCurProgress(unique, fs->curSize, delta);
         });
-        if (extractApps) {
-            // TODO: This should be cleaner
+        // TODO: This should be cleaner
+        if (info.type == FS_QNX6) {
             qobject_cast<FS::QNX6*>(fs)->extractApps = extractApps;
         }
         if (extractImage)
@@ -149,7 +149,7 @@ void Splitter::processExtractAutoloader() {
         QString filename = baseName;
         qint64 size = offsets[i+1] - offsets[i];
         int type = 0;
-        if (size > 1024*1024*120) {
+        if (size > 1024*1024*60) {
             type = PACKED_FILE_OS;
             filename += QString("-OS.%1").arg(i);
         } else if (size > 1024*1024*5) {

@@ -79,8 +79,11 @@ Item {
                         text: "View"
                         onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/content/" + appworld.contentItem.id)
                     }
+
+                    /*Button {
+                        text: "Download"
+                    }*/
                     Button {
-                        //enabled: false
                         visible: appworld.contentItem.size != 0
                         text: appworld.contentItem.price
                         // Edit: Of course, this is wrong ;) They've changed it so I need to login now. We'll do this later

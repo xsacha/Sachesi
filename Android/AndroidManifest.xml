@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="com.Qtness.Sachesi" android:versionName="1.9.0" android:installLocation="auto" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1">
+<manifest package="com.Qtness.Sachesi" android:versionName="1.9.1" android:installLocation="auto" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1">
     <application android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Sachesi" android:icon="@drawable/icon" android:hardwareAccelerated="true">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="@string/app_name" android:screenOrientation="unspecified">
             <intent-filter>
@@ -38,7 +38,7 @@
         </activity>
     </application>
     <uses-feature android:name="android.hardware.usb.host"/>
-    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="16"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->

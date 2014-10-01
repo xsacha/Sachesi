@@ -62,24 +62,33 @@ QString getSaveDir() {
 
 bool checkCurPath()
 {
-#ifdef BLACKBERRY
     QDir dir;
+#ifdef BLACKBERRY
     QString path = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + "/Sachesi/";
     dir.mkpath(path);
     QDir::setCurrent(path);
-#elif defined(__APPLE__)
-    QDir::setCurrent(QApplication::applicationDirPath());
-#endif
+#elif defined(ANDROID)
+    // Iterate through removable to local
+    QString sdcard = "/sdcard1/Sachesi/";
+    dir.mkpath(sdcard);
+    if (!dir.exists(sdcard)) {
+        sdcard = "/sdcard/Sachesi";
+        dir.mkpath(sdcard);
+    }
 
-    QDir dir(QDir::currentPath());
+    QDir::setCurrent(sdcard);
+#else
+    QDir::setCurrent(QApplication::applicationDirPath());
+#if defined(__APPLE__)
+    dir = QDir(QDir::currentPath());
     // Use .app path instead of binary path. Should really use a different method.
-#ifdef __APPLE__
     if (dir.absolutePath().endsWith("Contents/MacOS")) {
         while (!dir.absolutePath().endsWith(".app"))
             dir.cdUp();
         dir.cdUp();
     }
     QDir::setCurrent(dir.absolutePath());
+#endif
 #endif
 
     return true;
