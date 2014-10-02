@@ -77,9 +77,11 @@ struct PartitionInfo {
     }
 };
 
-#define PACKED_FILE_OS      (1 << 0)
-#define PACKED_FILE_RADIO   (1 << 1)
-#define PACKED_FILE_PINLIST (1 << 2)
+#define PACKED_FILE_USER    (1 << 0)
+#define PACKED_FILE_OS      (1 << 1)
+#define PACKED_FILE_RADIO   (1 << 2)
+#define PACKED_FILE_IFS     (1 << 3)
+#define PACKED_FILE_PINLIST (1 << 4)
 
 class AutoloaderWriter: public QFile {
     Q_OBJECT

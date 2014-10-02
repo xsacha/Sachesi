@@ -148,29 +148,64 @@ void Splitter::processExtractAutoloader() {
     for (int i = 0; i < files; i++) {
         QString filename = baseName;
         qint64 size = offsets[i+1] - offsets[i];
+
+        // Detection on type
         int type = 0;
-        if (size > 1024*1024*60) {
-            type = PACKED_FILE_OS;
-            filename += QString("-OS.%1").arg(i);
-        } else if (size > 1024*1024*5) {
-            type = PACKED_FILE_RADIO;
-            filename += QString("-Radio.%1").arg(i);
-        } else {
-            type = PACKED_FILE_PINLIST;
-            filename += QString("-PINList.%1").arg(i);
+        for (int index = 0; index < 1000 - 32; index += 4) {
+            autoloaderFile->seek(offsets[i] + index);
+            if (autoloaderFile->read(4) == QByteArray("pfcq",4)) {
+                autoloaderFile->seek(offsets[i] + index + 12);
+                qint8 typeChar;
+                dataStream >> typeChar;
+                if (typeChar == 5) {
+                    type |= PACKED_FILE_USER;
+                } else if (typeChar == 6) {
+                    type |= PACKED_FILE_OS;
+                } else if (typeChar == 10 || typeChar == 12) {
+                    type |= PACKED_FILE_RADIO;
+                } else if (typeChar == 8) {
+                    type |= PACKED_FILE_IFS;
+                    break;
+                }
+
+            }
         }
+        // Detect by size alone
+        if (type == 0) {
+            if (size > 1024*1024*70)
+                type = PACKED_FILE_OS;
+            else if (size > 1024*1024*5)
+                type = PACKED_FILE_RADIO;
+            else
+                type = PACKED_FILE_PINLIST;
+        }
+
+        // Append strings
+        if (type & PACKED_FILE_USER)
+            filename += "%User";
+        if (type & PACKED_FILE_OS)
+            filename += "%OS";
+        if (type & PACKED_FILE_RADIO)
+            filename += "%Radio";
+        if (type & PACKED_FILE_IFS)
+            filename += "%IFS";
+        if (type & PACKED_FILE_PINLIST)
+            filename += "%PINList";
+
         if (splitting) {
             if (option & type)
             {
                 maxSize += size;
+                QString unique = "";
+                for (int i = 0; QFile::exists(filename + unique + ".signed"); i++)
+                    unique = QString(".%1").arg(i);
                 tmpFile.append(new QFile(filename+".signed"));
             }
             else
                 tmpFile.append(nullptr);
         } else if (extracting) {
-            if (size > 1024*1024*5)
+            if (type != PACKED_FILE_PINLIST)
                 processExtract(autoloaderFile, size, offsets[i]);
-            // Deal with RCFS (OS+Radio), QNX6(OS), Apps(Large OS 500+MB)
         }
     }
     if (splitting) {
@@ -191,7 +226,7 @@ void Splitter::processExtractAutoloader() {
             tmpFile.at(i)->close();
         }
         foreach (QFile* file, tmpFile)
-                file->deleteLater();
+            file->deleteLater();
         tmpFile.clear();
         autoloaderFile->close();
         delete autoloaderFile;
@@ -302,7 +337,7 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
         QMessageBox::information(nullptr, "Error", "Bad partition table.");
         return;
     }
-    // Possible issue with other OS? So far this is always zero
+    // Possible issue with other Signed? So far this is always zero
     /*qint64 signedOffset;
     for (int i = startSearchOffset; i < 1000 - 32; i+=4) {
         dev->seek(signedPos+i);
@@ -346,36 +381,6 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
         }
     }
     partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
-
-
-    // Old Method:
-
-    /*partInfo.append(PartitionInfo(dev, signedPos + firstOffset));
-    int scan_offset = 0;
-    for (int i = 0; i < numPartitions; i++) {
-        int max_scan = 3;
-        buffer.seek(0x20 + 0x40 * i + scan_offset);
-        tableStream >> max_scan;
-        qint64 blocks = 0;
-        for (int j = 0; j < max_scan; j++) {
-            buffer.seek(0x40 + 0x40 * i + 8*j + scan_offset);
-            int nextOffset;
-            tableStream >> nextOffset;
-            if (nextOffset > 0) {
-                blocks += nextOffset;
-            }
-            else
-                break;
-        }
-        partInfo.last().size = blocks * (qint64)65536;
-        partInfo.append(PartitionInfo(dev, partInfo.last().size + partInfo.last().offset));
-        if (max_scan > 3) {
-            scan_offset += (max_scan - 3) * 8;
-        }
-
-    }
-    partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
-    */
 
     // Add to the main partition list
     foreach(PartitionInfo info, partInfo) {

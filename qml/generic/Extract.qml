@@ -73,7 +73,7 @@ Item {
                     title: "Extract Signed"
                     folder: settings.installFolder
                     onAccepted: {
-                        p.splitAutoloader(fileUrl, osSelect.checked * 1 + radioSelect.checked * 2 + pinSelect.checked * 4);
+                        p.splitAutoloader(fileUrl, userSelect.checked * 1 + osSelect.checked * 2 + radioSelect.checked * 4 + ifsSelect.checked * 8 + pinSelect.checked * 16);
                         settings.installFolder = folder;
                     }
 
@@ -86,6 +86,11 @@ Item {
                     onClicked: split_files.open()
                 }
                 CheckBox {
+                    id: userSelect
+                    text: "User"
+                    checked: true
+                }
+                CheckBox {
                     id: osSelect
                     text: "OS"
                     checked: true
@@ -94,6 +99,11 @@ Item {
                     id: radioSelect
                     text: "Radio"
                     checked: true
+                }
+                CheckBox {
+                    visible: settings.advanced
+                    id: ifsSelect
+                    text: "IFS"
                 }
                 CheckBox {
                     visible: settings.advanced

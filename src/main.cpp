@@ -44,9 +44,6 @@
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QApplication::setAttribute(Qt::AA_X11InitThreads, true);
-#ifdef BLACKBERRY
-    QApplication::setAttribute(Qt::AA_Use96Dpi, true);
-#endif
 
     QApplication app(argc, argv);
     app.setOrganizationName("Qtness");
