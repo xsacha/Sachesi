@@ -81,12 +81,21 @@ void IFS::extractDir(int offset, int numNodes, QString basedir, qint64 startPos)
 }
 
 bool IFS::createContents() {
-    _file->seek(_offset + 0x1020);
-    qint32 boot_size, startup_size;
     QNXStream stream(_file);
-    // boot @ 0 with boot_size;
-    stream >> boot_size;
-    boot_size &= 0xfffff;
+    _file->seek(2);
+    qint8 type;
+    qint32 boot_size, startup_size;
+    stream >> type;
+    if (type == 3) { // Qualcomm
+        _file->seek(_offset + 0x1020);
+        // boot @ 0 with boot_size;
+        stream >> boot_size;
+        boot_size &= 0xfffff;
+    }
+    else { // 1 // OMAP
+        // No boot.bin
+        boot_size = 0x808;
+    }
 
     _file->seek(_offset + boot_size);
     // Make sure there is a startup header

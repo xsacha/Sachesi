@@ -161,7 +161,7 @@ void Splitter::processExtractAutoloader() {
                     type |= PACKED_FILE_USER;
                 } else if (typeChar == 6) {
                     type |= PACKED_FILE_OS;
-                } else if (typeChar == 10 || typeChar == 12) {
+                } else if (typeChar == 12) { // Always seem to have 10 as well, sometimes 11
                     type |= PACKED_FILE_RADIO;
                 } else if (typeChar == 8) {
                     type |= PACKED_FILE_IFS;
@@ -376,11 +376,12 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
                 blocks += blockCount;
             }
             partInfo.last().size = blocks * (qint64)65536;
-            // Type is at partitionTable.at(i). 5 is UserFS, 8 is Sig
             partInfo.append(PartitionInfo(dev, partInfo.last().offset + partInfo.last().size));
         }
     }
     partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
+    if (partInfo.last().size < 65536)
+        partInfo.removeLast();
 
     // Add to the main partition list
     foreach(PartitionInfo info, partInfo) {

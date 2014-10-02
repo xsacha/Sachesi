@@ -70,7 +70,8 @@ struct PartitionInfo {
             type = FS_RCFS;
         else if (header == QByteArray::fromHex("EB109000"))
             type = FS_QNX6;
-        else if (header == QByteArray::fromHex("FE0300EA"))
+        else if (header == QByteArray::fromHex("FE0300EA")  // Qualcomm
+              || header == QByteArray::fromHex("FE0100EA")) // OMAP
             type = FS_IFS;
         else
             type = FS_UNKNOWN;
