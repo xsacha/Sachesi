@@ -142,6 +142,7 @@ Item {
                     height: view.cellHeight
                     BusyIndicator {
                         running: !imageItem.visible
+                        visible: running
                         anchors.fill: parent
                     }
                     Image {
