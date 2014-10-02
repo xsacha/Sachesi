@@ -294,15 +294,63 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
     QBuffer buffer(&partitionTable);
     buffer.open(QIODevice::ReadOnly);
     QNXStream tableStream(&buffer);
-    int numPartitions, blockSize;
-    tableStream >> numPartitions >> blockSize;
+    int numPartitions, firstOffset, unknown, startSearchOffset;
+    tableStream >> numPartitions >> firstOffset;
+    tableStream >> unknown >> startSearchOffset;
 
     if (numPartitions > 15) {
         QMessageBox::information(nullptr, "Error", "Bad partition table.");
         return;
     }
+    // Possible issue with other OS? So far this is always zero
+    /*qint64 signedOffset;
+    for (int i = startSearchOffset; i < 1000 - 32; i+=4) {
+        dev->seek(signedPos+i);
+        signedOffset = -1;
+        if (dev->read(4) == QByteArray("pfcq",4) && partitionTable.at(i) == 5) { // PFCQ User FS
+            int nextVal;
+            buffer.seek(i+8);
+            tableStream >> nextVal;
+            qDebug() << nextVal;
+            if (nextVal == 3) {
+                qDebug() << "Got a WEIRD offset";
+                int blockOffset, endOffset;
+                buffer.seek(i+44);
+                tableStream >> blockOffset;
+                buffer.seek(i+56);
+                tableStream >> endOffset;
+                signedOffset = endOffset - blockOffset*16;
+                break;
+            } else if (nextVal == 1) {
+                signedOffset = 0;
+                break;
+            }
+        }
+    }*/
 
-    partInfo.append(PartitionInfo(dev, signedPos + blockSize));
+    partInfo.append(PartitionInfo(dev, signedPos + firstOffset));
+    for (int i = startSearchOffset; i < 1000 - 32; i += 4) {
+        dev->seek(signedPos+i);
+        if (dev->read(4) == QByteArray("pfcq",4)) {
+            qint64 blocks = 0;
+            int count = partitionTable.at(i+8);
+            for (int j = 0; j < count; j++) {
+                buffer.seek(i + j*16 + 44);
+                int blockCount;
+                tableStream >> blockCount;
+                blocks += blockCount;
+            }
+            partInfo.last().size = blocks * (qint64)65536;
+            // Type is at partitionTable.at(i). 5 is UserFS, 8 is Sig
+            partInfo.append(PartitionInfo(dev, partInfo.last().offset + partInfo.last().size));
+        }
+    }
+    partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
+
+
+    // Old Method:
+
+    /*partInfo.append(PartitionInfo(dev, signedPos + firstOffset));
     int scan_offset = 0;
     for (int i = 0; i < numPartitions; i++) {
         int max_scan = 3;
@@ -319,7 +367,7 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
             else
                 break;
         }
-        partInfo.last().size = blocks * (qint64)blockSize;
+        partInfo.last().size = blocks * (qint64)65536;
         partInfo.append(PartitionInfo(dev, partInfo.last().size + partInfo.last().offset));
         if (max_scan > 3) {
             scan_offset += (max_scan - 3) * 8;
@@ -327,6 +375,7 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
 
     }
     partInfo.last().size = signedPos + signedSize - partInfo.last().offset;
+    */
 
     // Add to the main partition list
     foreach(PartitionInfo info, partInfo) {
