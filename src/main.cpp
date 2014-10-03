@@ -34,10 +34,10 @@
 #endif
 
 // TODO: Make extraction handle decent % tracking for QNX FS
-// TODO: Check and improve the USB Loader (Boot).
+// Need help: Check and improve the USB Loader (Boot).
 // TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress
-// TODO: Window {} not working on Android. Maybe special QML files?
-// TODO: Check PolicyRestrictions somehow?
+// TODO: Window {} not working on Android. Maybe special QML files required?
+// Need testing: Check PolicyRestrictions somehow?
 // Personal: policy_block_backup_and_restore, policy_backup_and_restore
 // Enterprise: policy_disable_devmode, policy_log_submission, policy_block_computer_access_to_device
 
@@ -54,6 +54,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
+
+    // Do we have a suitable place to store files that the user will be able to find?
+    if (!checkCurPath()) {
+        QMessageBox::critical(NULL, "Error", "Could not find a suitable storage path.\nPlease report this.");
+        return 0;
+    }
+
+    // *** Static QML Variables that describe the environment
+    // Useful as QML is unable to detect this natively
 
     // Send the version across. Preferably via the .pro
     context->setContextProperty("version", QVariant::fromValue(QApplication::applicationVersion()));
@@ -75,6 +84,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                     0
                                 #endif
                                     ));
+
+    // *** C++ Classes that are passed to the QML pages.
+    // Heavy lifting to be done by the compiled and feature-packed language.
 #ifdef BLACKBERRY
     MainNet p;
 #else
@@ -82,14 +94,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("i", &i);
     MainNet p(&i);
 #endif
-    // AppWorld copycat
-    AppWorld world;
-    // Finds country and carrier name from Blackberry rather than a lookup table
-    CarrierInfo info;
-
-    if (!checkCurPath())
-        return 0;
-
 #ifdef BOOTLOADER_ACCESS
     Boot b;
 
@@ -99,14 +103,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     b.start();
     context->setContextProperty("b", &b); // Boot
 #endif
+    AppWorld world;
+    CarrierInfo info;
 
-    // Set contexts
+    // Set contexts for the classes
     context->setContextProperty("p", &p); // MainNet
     context->setContextProperty("download", p.currentDownload);
     context->setContextProperty("carrierinfo",  &info);
     context->setContextProperty("appworld",  &world);
 
-    // Register types
+    // *** Register types for the QML language to understand types used by C++, when passed
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
 #endif
@@ -116,6 +122,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #if defined(_WIN32) && defined(STATIC)
     engine.addImportPath("qrc:/qml/");
 #endif
+
+    // *** Now let's try to show the QML file and check for errors
     QScopedPointer<QQmlComponent> comp(new QQmlComponent(&engine));
     comp->loadUrl(QUrl("qrc:/qml/generic/Title.qml"));
     if (comp->status() == QQmlComponent::Error) {
@@ -126,6 +134,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     window->show();
 
     int ret = app.exec();
+
 #ifdef BOOTLOADER_ACCESS
     b.quit();
     b.wait(1000);

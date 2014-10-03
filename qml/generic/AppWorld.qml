@@ -19,6 +19,11 @@ Item {
                 text: "Home"
                 onClicked: appworld.showHome()
             }
+            TextField {
+                id: searchText
+                placeholderText: "Search"
+                onAccepted: if (searchButton.enabled) searchButton.clicked()
+            }
             Button {
                 text: "Featured"
                 onClicked: appworld.searchLocker("featured")
@@ -28,15 +33,11 @@ Item {
                 onClicked: appworld.searchLocker("mypreloadeditems")
             }
             Button {
+                visible: !blackberry
                 text: "Cars"
                 onClicked: appworld.showCars()
             }
 
-            TextField {
-                id: searchText
-                placeholderText: "Search"
-                onAccepted: if (searchButton.enabled) searchButton.clicked()
-            }
             Button {
                 enabled: searchText.length > 0
                 id: searchButton
@@ -76,15 +77,18 @@ Item {
                     }
 
                     Button {
+                        visible: !blackberry
                         text: "View"
                         onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/content/" + appworld.contentItem.id)
                     }
 
-                    /*Button {
-                        text: "Download"
-                    }*/
                     Button {
-                        visible: appworld.contentItem.size != 0
+                        visible: blackberry
+                        text: "Download"
+                        // EMBARGO: Exploit not available open-source
+                    }
+                    Button {
+                        visible: !blackberry && appworld.contentItem.size != 0
                         text: appworld.contentItem.price
                         // Edit: Of course, this is wrong ;) They've changed it so I need to login now. We'll do this later
                         // Example: "http://appworld.blackberry.com/ClientAPI/usfdownload?contentid=" + appworld.contentItem.id

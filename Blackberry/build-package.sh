@@ -30,10 +30,10 @@ blackberry-nativepackager \
     -e ${QT_INSTALL_PATH}/qml/Qt imports/Qt \
     -e ${QT_INSTALL_PATH}/qml/QtQuick imports/QtQuick \
     -e ${QT_INSTALL_PATH}/qml/QtQuick.2 imports/QtQuick.2 \
-    -e ${QT_INSTALL_PATH}/lib/libQt5Core.so.5 lib/libQt5Core.so.5 \
-    -e ${QT_INSTALL_PATH}/lib/libQt5Gui.so.5 lib/libQt5Gui.so.5 \
-    -e ${QT_INSTALL_PATH}/lib/libQt5Widgets.so.5 lib/libQt5Widgets.so.5 \
-    -e ${QT_INSTALL_PATH}/lib/libQt5Network.so.5 lib/libQt5Network.so.5 \
-    -e ${QT_INSTALL_PATH}/lib/libQt5Qml.so.5 lib/libQt5Qml.so.5 \
-    -e ${QT_INSTALL_PATH}/lib/libQt5Quick.so.5 lib/libQt5Quick.so.5
+    -e ${QT_INSTALL_PATH}/lib/libQt5Core.so.5.2.0 lib/libQt5Core.so.5 \
+    -e ${QT_INSTALL_PATH}/lib/libQt5Gui.so.5.2.0 lib/libQt5Gui.so.5 \
+    -e ${QT_INSTALL_PATH}/lib/libQt5Widgets.so.5.2.0 lib/libQt5Widgets.so.5 \
+    -e ${QT_INSTALL_PATH}/lib/libQt5Network.so.5.2.0 lib/libQt5Network.so.5 \
+    -e ${QT_INSTALL_PATH}/lib/libQt5Qml.so.5.2.0 lib/libQt5Qml.so.5 \
+    -e ${QT_INSTALL_PATH}/lib/libQt5Quick.so.5.2.0 lib/libQt5Quick.so.5
 

@@ -82,7 +82,7 @@ void IFS::extractDir(int offset, int numNodes, QString basedir, qint64 startPos)
 
 bool IFS::createContents() {
     QNXStream stream(_file);
-    _file->seek(2);
+    _file->seek(_offset + 1);
     qint8 type;
     qint32 boot_size, startup_size;
     stream >> type;
