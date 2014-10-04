@@ -21,7 +21,7 @@ Item {
             }
             TextField {
                 id: searchText
-                placeholdertext:  qsTr("Search")
+                text: qsTr("Search")
                 onAccepted: if (searchButton.enabled) searchButton.clicked()
             }
             Button {
@@ -67,14 +67,14 @@ Item {
                     }
                 }
                 Label {
-                    text:  qsTr("by <b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>")
+                    text:  qsTr("by ") + "<b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>"
                     onLinkActivated: appworld.showVendor(appworld.contentItem.vendorId)
                 }
 
                 RowLayout {
                     Label {
                         visible: appworld.contentItem.size != 0
-                        text:  qsTr("<b>File Bundle</b>: " + appworld.contentItem.name + " <b>Version</b>: " + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + " MB]")
+                        text:  qsTr("<b>File Bundle</b>: ") + appworld.contentItem.name + qsTr(" <b>Version</b>: ") + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + qsTr(" MB]")
                     }
 
                     Button {
@@ -139,7 +139,7 @@ Item {
                 // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
                 cellWidth: (main.width - 20) / 9 //размер иконок
                 cellHeight: cellWidth
-                footer: Label { visible: false; text:  qsTr("."); } // Spacer
+                footer: Label { visible: false; text:  "."; } // Spacer
 
                 delegate: Item {
                     id: item
@@ -171,7 +171,7 @@ Item {
                         id: textItem
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text:  qsTr("<b>" + friendlyName + (vendor == "" ? "" : "</b><br><a href=\"#\">" + vendor + "</a>"))
+                        text:  "<b>" + friendlyName + (vendor == "" ? "" : "</b><br><a href=\"#\">" + vendor + "</a>")
                         color: "white"
                         linkColor: "lightblue"
                         maximumLineCount: 2
@@ -207,7 +207,7 @@ Item {
             }
             ComboBox {
                 currentIndex: appworld.server
-                model: ["Production", "Enterprise", "Eval"]
+                model: [qsTr("Production"), qsTr("Enterprise"), qsTr("Eval")]
                 onCurrentIndexChanged: appworld.server = currentIndex
             }
             Label {
@@ -219,7 +219,7 @@ Item {
             }
             ComboBox {
                 currentIndex: appworld.osVer
-                model: ["Latest", "All"]
+                model: [qsTr("Latest"), qsTr("All")]
             }
         }
     }

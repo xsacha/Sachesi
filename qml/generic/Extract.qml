@@ -20,7 +20,7 @@ Item {
 
                 Text {
                     id: splitText
-                    property string typetext:  qsTr("");
+                    property string typetext:  "";
                     property int splitType: p.splitting
                     onSplitTypeChanged: {
                         switch(splitType) {

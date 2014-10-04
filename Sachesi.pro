@@ -137,3 +137,9 @@ phony.depends = install uninstall
 phony.target = .PHONY
 QMAKE_EXTRA_TARGETS += phony
 
+lupdate_only{
+SOURCES = \
+    qml/generic/mcc.js \
+    qml/generic/*.qml \
+    qml/generic/UI/*.qml
+}

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
 Window {
-    title: qsTr("Sachesi " + version + " - Version Lookup")
+    title: qsTr("Sachesi " )+ version + qsTr(" - Version Lookup")
     visible: false
     onVisibleChanged: if (visible) {
                           x = window.x + (window.width - width) / 2
@@ -52,7 +52,7 @@ Window {
             }
             Button {
                 property bool looking: false
-                text: qsTr(looking ? "Stop Scan" : "Autoscan")
+                text: looking ? qsTr("Stop Scan") : qsTr("Autoscan")
                 enabled: !p.scanning || looking
                 onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
                 Timer {
@@ -97,7 +97,7 @@ Window {
             Layout.alignment: Qt.AlignVCenter
             Text {
                 Layout.alignment: Qt.AlignLeft
-                text:  qsTr("Software Release: " + p.softwareRelease)
+                text:  qsTr("Software Release: ") + p.softwareRelease
                 font.pointSize: 12
             }
             RowLayout {
@@ -108,7 +108,7 @@ Window {
                 Button {
                     id: grabPotential
                     enabled: p.hasPotentialLinks // Exists?
-                    text:qsTr( enabled ? "Grab Public Links" : "No Links Available")
+                    text: enabled ? qsTr("Grab Public Links") : qsTr("No Links Available")
                     onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion, check_sdk.checked)
                 }
             }

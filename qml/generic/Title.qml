@@ -103,12 +103,12 @@ ApplicationWindow {
         Label {
             visible: i.knownBattery > -1
             property bool hasSpace: window.width > 700
-            text:  qsTr("<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + " Radio:" + i.knownRadio + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : ""));
+            text:  "<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + " Radio:" + i.knownRadio + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : "");
         }
         Label {
             visible: i.knownBattery > -1
             anchors.right: parent.right
-            text:  qsTr("<b>[</b>"+i.knownHW+"<b>]</b>")
+            text:  "<b>[</b>"+i.knownHW+"<b>]</b>"
         }
     }
 }

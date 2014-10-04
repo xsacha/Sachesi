@@ -56,7 +56,7 @@ Item {
                 Button {
                     id: searchButton
                     enabled: !p.scanning
-                    text: qsTr(p.scanning ? "Searching..." : "Search")
+                    text: p.scanning ? qsTr("Searching...") : qsTr("Search")
                     onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
                 }
 
@@ -87,19 +87,19 @@ Item {
             visible: !blackberry
             TextCoupleSelect {
                 id: downloadDevice
-                type: "Device"
+                type: qsTr("Device")
                 selectedItem: 0
 
                 //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
                 property string hwid: typeof i == 'undefined' ? "" : i.knownHW
                 property int hwfam: typeof i == 'undefined' ? "" : i.knownHWFamily
-                property string familyName: (hwfam == 0 || hwfam > listModel.count) ? "Unknown" : listModel.get(hwfam).text
+                property string familyName: (hwfam == 0 || hwfam > listModel.count) ? qsTr("Unknown") : listModel.get(hwfam).text
                 subtext: hwid != "" ? hwid + " (" + familyName + ")" : ""
                 onSubtextChanged: generateModel()
                 Component.onCompleted: generateModel()
 
                 function generateModel() {
-                    var newText = (hwid != "Unknown" && hwid != "") ? "Connected" : "As Searched"
+                    var newText = (hwid != "Unknown" && hwid != "") ? qsTr("Connected") : qsTr("As Searched")
                     if (listModel.count < 2 || listModel.get(0).text !== newText) {
                         listModel.clear()
                         listModel.append({"text" : newText })
@@ -109,7 +109,7 @@ Item {
                 }
 
                 listModel: ListModel {
-                    ListElement { text:  qsTr("As Searched" )}
+                    ListElement { text:  "As Searched" }
                 }
             }
         }
@@ -124,7 +124,7 @@ Item {
                 enabled: p.updateCheckedAvailableCount > 0 && !download.verifying
                 visible: !download.running
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr(download.verifying ? "Verifying" : "Download")
+                text: download.verifying ? qsTr("Verifying") : qsTr("Download")
                 onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
             }
             Button {
@@ -148,7 +148,7 @@ Item {
         height: (parent.height * 4) / 6
         TextCouple {
             id: country
-            type: "Country"
+            type: qsTr("Country")
             value: "510"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
@@ -159,7 +159,7 @@ Item {
         }
         TextCouple {
             id: carrier
-            type: "Carrier"
+            type: qsTr("Carrier")
             value: "010"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
@@ -178,29 +178,29 @@ Item {
                 TextCoupleSelect {
                     id: device
                     selectedItem: 5
-                    type: "Device"
+                    type: qsTr("Device")
 
                     // List everything we know except abandoned models
                     ListModel {
                         id: advancedModel
-                        ListElement { text:  qsTr("Z30 + Classic") }
-                        ListElement { text:  qsTr("Z10 (OMAP)") }
-                        ListElement { text:  qsTr("Z10 (QCOM) + P9982" )}
-                        ListElement { text:  qsTr("Z3 + Cafe" )}
-                        ListElement { text:  qsTr("Passport" )}
-                        ListElement { text:  qsTr("Q5 + Q10 + P9983") }
-                        ListElement { text:  qsTr("Developer") }
-                        ListElement { text:  qsTr("Ontario") }
+                        ListElement { text:  "Z30 + Classic"}
+                        ListElement { text:  "Z10 (OMAP)" }
+                        ListElement { text:  "Z10 (QCOM) + P9982" }
+                        ListElement { text:  "Z3 + Cafe" }
+                        ListElement { text:  "Passport" }
+                        ListElement { text:  "Q5 + Q10 + P9983" }
+                        ListElement { text:  "Developer" }
+                        ListElement { text:  "Ontario"}
                     }
                     // Only list released models
                     ListModel {
                         id: babyModel
-                        ListElement { text:  qsTr("Z30") }
-                        ListElement { text:  qsTr("Z10 (STL 100-1)" )}
-                        ListElement { text:  qsTr("Z10 (STL 100-2/3/4) + P9982") }
-                        ListElement { text:  qsTr("Z3") }
-                        ListElement { text:  qsTr("Passport") }
-                        ListElement { text:  qsTr("Q5 + Q10 + P9983" )}
+                        ListElement { text:  "Z30" }
+                        ListElement { text:  "Z10 (STL 100-1)" }
+                        ListElement { text:  "Z10 (STL 100-2/3/4) + P9982" }
+                        ListElement { text:  "Z3"}
+                        ListElement { text:  "Passport"}
+                        ListElement { text:  "Q5 + Q10 + P9983"}
                     }
                     function changeModel() {
                         var selected = selectedItem
@@ -211,7 +211,7 @@ Item {
                         if (variantModel != null) {
                             variantModel.clear()
                             if (p.variantCount(selectedItem) > 1)
-                                variantModel.append({ 'text': 'Any'});
+                                variantModel.append({ 'text': qsTr('Any')});
                             for (var i = 0; i < p.variantCount(selectedItem); i++)
                                 variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
 
@@ -227,7 +227,7 @@ Item {
                 TextCoupleSelect {
                     visible: settings.advanced
                     id: variant
-                    type: "Variant"
+                    type: qsTr("Variant")
                     selectedItem: 0
                     // This is going to be hell to maintain. Maybe an identifier in dev[] for carrier-specific and its associated code?
                     /*onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
@@ -243,15 +243,15 @@ Item {
 
         TextCoupleSelect {
             id: mode
-            type: "Mode"
-            listModel: [ "Upgrade", "Debrick" ]
+            type: qsTr("Mode")
+            listModel: [ qsTr("Upgrade"), qsTr("Debrick") ]
         }
 
         TextCoupleSelect {
             visible: settings.advanced
             id: server
-            type: "Server"
-            listModel: [ "Production", "Beta", "Beta 2", "Alpha", "Alpha 2" ]
+            type: qsTr("Server")
+            listModel: [ qsTr("Production"), qsTr("Beta"), qsTr("Beta 2"), qsTr("Alpha"), qsTr("Alpha 2") ]
         }
 
         /*TextCoupleSelect {
@@ -340,7 +340,7 @@ Item {
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
-        property string selectedMsg: "Selected: " + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
+        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
                                      + ((p.updateAvailableCount !== p.updateAppCount) ? ". Needed: " + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
         title: !blackberry ? selectedMsg : ""
 
@@ -411,7 +411,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: qsTr(friendlyName + (isAvailable ? "" : " (downloaded)"))
+                        text: qsTr(friendlyName + (isAvailable ? "" : qsTr(" (downloaded)")))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked

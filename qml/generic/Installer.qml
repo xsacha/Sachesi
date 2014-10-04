@@ -18,7 +18,7 @@ Item {
     Button {
         visible: i.dgProgress >= 0 && !installWin.visible
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        text:  qsTr("View Install (" + i.dgProgress + ")")
+        text:  qsTr("View Install (") + i.dgProgress + ")"
         onClicked: installWin.visible = true
     }
 
@@ -31,14 +31,14 @@ Item {
                               y = window.y + (window.height - height) / 2
                           }
         color: "lightgray"
-        title: qsTr(i.firmwareUpdate ? "Firmware Update" : "Install")
+        title: i.firmwareUpdate ? qsTr("Firmware Update") : qsTr("Install")
         CircleProgress {
             anchors.fill: parent
             currentValue: i.curDGProgress
             overallValue: i.dgProgress
             curId: i.dgPos + 1
             maxId: i.dgMaxPos
-            text: (i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? "Sending " : "Installing ") : "Sent " + i.curInstallName
+            text: (i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending ") : qsTr("Installing ")) : qsTr("Sent ") + i.curInstallName
         }
     }
 
