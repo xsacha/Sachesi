@@ -56,13 +56,14 @@ Item {
             ColumnLayout {
                 RowLayout {
                     Image {
+                        fillMode: Image.Stretch
                         visible: status == Image.Ready
                         source: appworld.contentItem.image == "" ? "" : appworld.contentItem.image + "/X96/png"
                     }
 
                     Label {
                         text: appworld.contentItem.friendlyName
-                        font.pointSize: 24
+                        font.pointSize: 12
                     }
                 }
                 Label {
@@ -136,7 +137,7 @@ Item {
                 anchors.fill: parent
                 model: appworld.appList
                 // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
-                cellWidth: (main.width - 20) / 5
+                cellWidth: (main.width - 20) / 9 //размер иконок
                 cellHeight: cellWidth
                 footer: Label { visible: false; text: "."; } // Spacer
 
@@ -156,7 +157,7 @@ Item {
                         height: item.height - textItem.implicitHeight
                         width: item.width
                         fillMode: Image.PreserveAspectFit
-                        source: image == "" ? "" : image + "/128X/png"
+                        source: image == "" ? "" : image + "/128X/png" //качество иконок
                         Behavior on scale { SpringAnimation { spring: 2; damping: 0.2 } }
                         scale: 0.0
                         onStatusChanged: if (status == Image.Ready) scale = 1.0
@@ -210,7 +211,7 @@ Item {
                 onCurrentIndexChanged: appworld.server = currentIndex
             }
             Label {
-                text: "<b>Model</b>: Passport"
+                text: "<b>Model</b>: Z10-STL100-2"
             }
             Label {
                 text: "OS"
