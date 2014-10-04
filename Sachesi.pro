@@ -1,7 +1,8 @@
 QT += network gui widgets quick qml
 
 TARGET="Sachesi"
-TRANSLATIONS = translations/ru.ts
+TRANSLATIONS = translations/global.ts\
+translations/ru.ts
 win32: RC_ICONS += assets/sachesi-114.ico
 else:mac: ICON = assets/sachesi-114.icns
 else: ICON = assets/sachesi-114.png
