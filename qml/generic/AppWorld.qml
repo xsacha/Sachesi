@@ -12,36 +12,36 @@ Item {
         RowLayout {
             Button {
                 visible: !appworld.listing
-                text: "Back"
+                text:  qsTr("Back")
                 onClicked: appworld.listing = true
             }
             Button {
-                text: "Home"
+                text:  qsTr("Home")
                 onClicked: appworld.showHome()
             }
             TextField {
                 id: searchText
-                placeholderText: "Search"
+                placeholdertext:  qsTr("Search")
                 onAccepted: if (searchButton.enabled) searchButton.clicked()
             }
             Button {
-                text: "Featured"
+                text:  qsTr("Featured")
                 onClicked: appworld.searchLocker("featured")
             }
             Button {
-                text: "Carrier"
+                text:  qsTr("Carrier")
                 onClicked: appworld.searchLocker("mypreloadeditems")
             }
             Button {
                 visible: !blackberry
-                text: "Cars"
+                text:  qsTr("Cars")
                 onClicked: appworld.showCars()
             }
 
             Button {
                 enabled: searchText.length > 0
                 id: searchButton
-                text: "Search"
+                text:  qsTr("Search")
                 onClicked: appworld.search(searchText.text)
             }
         }
@@ -67,25 +67,25 @@ Item {
                     }
                 }
                 Label {
-                    text: "by <b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>"
+                    text:  qsTr("by <b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>")
                     onLinkActivated: appworld.showVendor(appworld.contentItem.vendorId)
                 }
 
                 RowLayout {
                     Label {
                         visible: appworld.contentItem.size != 0
-                        text: "<b>File Bundle</b>: " + appworld.contentItem.name + " <b>Version</b>: " + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + " MB]"
+                        text:  qsTr("<b>File Bundle</b>: " + appworld.contentItem.name + " <b>Version</b>: " + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + " MB]")
                     }
 
                     Button {
                         visible: !blackberry
-                        text: "View"
+                        text:  qsTr("View")
                         onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/content/" + appworld.contentItem.id)
                     }
 
                     Button {
                         visible: blackberry
-                        text: "Download"
+                        text:  qsTr("Download")
                         // EMBARGO: Exploit not available open-source
                     }
                     Button {
@@ -139,7 +139,7 @@ Item {
                 // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
                 cellWidth: (main.width - 20) / 9 //размер иконок
                 cellHeight: cellWidth
-                footer: Label { visible: false; text: "."; } // Spacer
+                footer: Label { visible: false; text:  qsTr("."); } // Spacer
 
                 delegate: Item {
                     id: item
@@ -171,7 +171,7 @@ Item {
                         id: textItem
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: "<b>" + friendlyName + (vendor == "" ? "" : "</b><br><a href=\"#\">" + vendor + "</a>")
+                        text:  qsTr("<b>" + friendlyName + (vendor == "" ? "" : "</b><br><a href=\"#\">" + vendor + "</a>"))
                         color: "white"
                         linkColor: "lightblue"
                         maximumLineCount: 2
@@ -196,13 +196,13 @@ Item {
             }
         }
         Text {
-            text: "Options"
+            text:  qsTr("Options")
             font.pointSize: 14
             font.bold: true
         }
         RowLayout {
             Label {
-                text: "Server"
+                text:  qsTr("Server")
                 font.bold: true
             }
             ComboBox {
@@ -211,10 +211,10 @@ Item {
                 onCurrentIndexChanged: appworld.server = currentIndex
             }
             Label {
-                text: "<b>Model</b>: Z10-STL100-2"
+                text:  qsTr("<b>Model</b>: Z10-STL100-2")
             }
             Label {
-                text: "OS"
+                text:  qsTr("OS")
                 font.bold: true
             }
             ComboBox {

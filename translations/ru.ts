@@ -5,531 +5,452 @@
     <name>Backup</name>
     <message>
         <source>Options</source>
-        <translation>Параметры</translation>
+        <translation type="vanished">Параметры</translation>
     </message>
     <message>
         <source>Loading Backup Options</source>
-        <translation>Загрузить варианты восстановления</translation>
+        <translation type="vanished">Загрузить варианты восстановления</translation>
     </message>
     <message>
         <source>Total: </source>
-        <translation>Доступно:</translation>
+        <translation type="vanished">Доступно:</translation>
     </message>
     <message>
         <source>Load Backup Options</source>
-        <translation>Загрузка вариантов восстановления</translation>
+        <translation type="vanished">Загрузка вариантов восстановления</translation>
     </message>
     <message>
         <source>Choose backup filename</source>
-        <translation>Выберите имя резервной копии</translation>
+        <translation type="vanished">Выберите имя резервной копии</translation>
     </message>
     <message>
         <source>Select restore file</source>
-        <translation>Выберите файл резервной копии</translation>
+        <translation type="vanished">Выберите файл резервной копии</translation>
     </message>
     <message>
         <source>Create backup</source>
-        <translation>Создать резервную копию</translation>
+        <translation type="vanished">Создать резервную копию</translation>
     </message>
     <message>
         <source>Restore backup</source>
-        <translation>Восстановить резервную копию</translation>
+        <translation type="vanished">Восстановить резервную копию</translation>
     </message>
     <message>
         <source>Creating</source>
-        <translation>Создано</translation>
+        <translation type="vanished">Создано</translation>
     </message>
     <message>
         <source>Restoring</source>
-        <translation>Восстановлено</translation>
+        <translation type="vanished">Восстановлено</translation>
     </message>
 </context>
 <context>
     <name>Boot</name>
     <message>
         <source>Boot Communication</source>
-        <translation>Инструменты загрузчика</translation>
+        <translation type="vanished">Инструменты загрузчика</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation type="vanished">Информация</translation>
     </message>
     <message>
         <source>RimBoot</source>
-        <translation>RimBoot</translation>
+        <translation type="vanished">RimBoot</translation>
     </message>
     <message>
         <source>Nuke</source>
-        <translation>Nuke</translation>
+        <translation type="vanished">Nuke</translation>
     </message>
     <message>
         <source>Debug Mode</source>
-        <translation>Режим отладки</translation>
+        <translation type="vanished">Режим отладки</translation>
     </message>
     <message>
         <source>Reboot after</source>
-        <translation>Перезагрузить по окончанию</translation>
+        <translation type="vanished">Перезагрузить по окончанию</translation>
     </message>
     <message>
         <source>Connecting to bootrom</source>
-        <translation>Подключение к загрузчику</translation>
+        <translation type="vanished">Подключение к загрузчику</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="vanished">Отмена</translation>
     </message>
     <message>
         <source>Detected devices:</source>
-        <translation>Обнаруженные устройства:</translation>
+        <translation type="vanished">Обнаруженные устройства:</translation>
     </message>
 </context>
 <context>
     <name>Downloader</name>
     <message>
         <source>#1. Start RTAS (Requires OS10.2)</source>
-        <translation>#1. Запуск RTAS (требуется OS10.2)</translation>
+        <translation type="vanished">#1. Запуск RTAS (требуется OS10.2)</translation>
     </message>
     <message>
         <source>Start RTAS</source>
-        <translation>Запуск RTAS</translation>
+        <translation type="vanished">Запуск RTAS</translation>
     </message>
 </context>
 <context>
     <name>Extract</name>
     <message>
-        <source>Splitting Autoloader </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Combining Autoloader </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extracting Image </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extracting Apps </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fetching required files </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Waiting </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Percentages are not entirely accurate for QNX6 files.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
-    </message>
-    <message>
-        <source>Autoloader Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract Signed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Radio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PINList</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create Autoloader</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create from Folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create from Files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create Autoloader .exe from .signed images</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extraction Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dump Contents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Core</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Отмена</translation>
     </message>
     <message>
         <source>Boot</source>
-        <translation type="unfinished">Загрузчик</translation>
-    </message>
-    <message>
-        <source>Dump all file contents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RCFS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QNX6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IFS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extracts filesystem image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract Apps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extract all bar archives</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Загрузчик</translation>
     </message>
 </context>
 <context>
     <name>Installer</name>
     <message>
         <source>Firmware Update</source>
-        <translation>Обновление прошивки</translation>
+        <translation type="vanished">Обновление прошивки</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation>Установка</translation>
+        <translation type="vanished">Установка</translation>
     </message>
     <message>
         <source>Sending </source>
-        <translation>Отправка</translation>
+        <translation type="vanished">Отправка</translation>
     </message>
     <message>
         <source>Installing </source>
-        <translation>Установка</translation>
+        <translation type="vanished">Установка</translation>
     </message>
     <message>
         <source>Sent </source>
-        <translation>Отправить</translation>
+        <translation type="vanished">Отправить</translation>
     </message>
     <message>
         <source>To install &lt;b&gt;.bar&lt;/b&gt; files such as applications or firmware, you can just &lt;b&gt;Drag and Drop&lt;/b&gt; to this page. Otherwise, select the options below:</source>
-        <translation type="unfinished">Для установки &lt;b&gt; .bar &lt;/b&gt; файлов, таких, как приложения или прошивки, вы можете просто &lt;b&gt; перетащить их &lt;/b&gt; на эту страницу. В противном случае, выберите параметры ниже:</translation>
+        <translation type="obsolete">Для установки &lt;b&gt; .bar &lt;/b&gt; файлов, таких, как приложения или прошивки, вы можете просто &lt;b&gt; перетащить их &lt;/b&gt; на эту страницу. В противном случае, выберите параметры ниже:</translation>
     </message>
     <message>
         <source>Install applications to device</source>
-        <translation>Установка приложений на устройство</translation>
+        <translation type="vanished">Установка приложений на устройство</translation>
     </message>
     <message>
         <source>Install Folder</source>
-        <translation>Установить из папки</translation>
+        <translation type="vanished">Установить из папки</translation>
     </message>
     <message>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation>Ошибка: Устройство может обрабатывать только одну задачу одновременно. Пожалуйста, подождите завершения предыдущей установки&lt;br&gt;;</translation>
+        <translation type="vanished">Ошибка: Устройство может обрабатывать только одну задачу одновременно. Пожалуйста, подождите завершения предыдущей установки&lt;br&gt;;</translation>
     </message>
     <message>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
-        <translation>Ошибка: Устройство может обрабатывать только одну задачу одновременно. Пожалуйста, подождите завершения текущего задания.&lt;br&gt;</translation>
+        <translation type="vanished">Ошибка: Устройство может обрабатывать только одну задачу одновременно. Пожалуйста, подождите завершения текущего задания.&lt;br&gt;</translation>
     </message>
     <message>
         <source>Select Folder</source>
-        <translation>Выбор папки</translation>
+        <translation type="vanished">Выбор папки</translation>
     </message>
     <message>
         <source>Install Files</source>
-        <translation>Установить файл</translation>
+        <translation type="vanished">Установить файл</translation>
     </message>
     <message>
         <source>Select Files</source>
-        <translation>Выбор файла</translation>
+        <translation type="vanished">Выбор файла</translation>
     </message>
     <message>
         <source>Advanced Tools</source>
-        <translation>Расширенные настройки</translation>
+        <translation type="vanished">Расширенные настройки</translation>
     </message>
     <message>
         <source>Wipe</source>
-        <translation>Очистка</translation>
+        <translation type="vanished">Очистка</translation>
     </message>
     <message>
         <source>Factory Reset</source>
-        <translation>Сброс настроек</translation>
+        <translation type="vanished">Сброс настроек</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Перезагрузка</translation>
+        <translation type="vanished">Перезагрузка</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Обновить</translation>
+        <translation type="vanished">Обновить</translation>
     </message>
     <message>
         <source>Your Applications</source>
-        <translation>Установленные приложения</translation>
+        <translation type="vanished">Установленные приложения</translation>
     </message>
     <message>
         <source>Log</source>
-        <translation>Лог</translation>
+        <translation type="vanished">Лог</translation>
     </message>
     <message>
         <source>Use &apos;Refresh&apos; to update list</source>
-        <translation>Нажмите &quot;Обновить&quot; для обновления списка</translation>
+        <translation type="vanished">Нажмите &quot;Обновить&quot; для обновления списка</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation>Параметры</translation>
+        <translation type="vanished">Параметры</translation>
     </message>
     <message>
         <source>Uninstall Marked</source>
-        <translation>Удалить отмеченные</translation>
+        <translation type="vanished">Удалить отмеченные</translation>
     </message>
     <message>
         <source>Show Installed Apps</source>
-        <translation>Показать установленные приложения</translation>
+        <translation type="vanished">Показать установленные приложения</translation>
+    </message>
+</context>
+<context>
+    <name>QuaGzipFile</name>
+    <message>
+        <source>QIODevice::Append is not supported for GZIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening gzip for both reading and writing is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can open a gzip either for reading or for writing. Which is it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not gzopen() file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZIODevice</name>
+    <message>
+        <source>QIODevice::Append is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZipFile</name>
+    <message>
+        <source>ZIP/UNZIP API error %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Search</name>
     <message>
         <source>Download</source>
-        <translation>Загрузить</translation>
+        <translation type="vanished">Загрузить</translation>
     </message>
     <message>
         <source>Cancel Download</source>
-        <translation>Отменить загрузку</translation>
+        <translation type="vanished">Отменить загрузку</translation>
     </message>
     <message>
         <source>Searching...</source>
-        <translation>Поиск...</translation>
+        <translation type="vanished">Поиск...</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Найти</translation>
+        <translation type="vanished">Найти</translation>
     </message>
     <message>
         <source>Version Lookup</source>
-        <translation>Поиск версии</translation>
+        <translation type="vanished">Поиск версии</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation>Готово</translation>
+        <translation type="vanished">Готово</translation>
     </message>
     <message>
         <source>Success. No updates were available.</source>
-        <translation>Готово. Обновления отсутствуют.</translation>
+        <translation type="vanished">Готово. Обновления отсутствуют.</translation>
     </message>
     <message>
         <source>Download For</source>
-        <translation>Загрузить для</translation>
+        <translation type="vanished">Загрузить для</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation>Устройство</translation>
+        <translation type="vanished">Устройство</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Неизвестное устройство</translation>
+        <translation type="vanished">Неизвестное устройство</translation>
     </message>
     <message>
         <source>Connected</source>
-        <translation>Подключенное</translation>
+        <translation type="vanished">Подключенное</translation>
     </message>
     <message>
         <source>As Searched</source>
-        <translation>Как искали</translation>
+        <translation type="vanished">Как искали</translation>
     </message>
     <message>
         <source>Grab Links</source>
-        <translation>Получить ссылки</translation>
+        <translation type="vanished">Получить ссылки</translation>
     </message>
     <message>
         <source>Verifying</source>
-        <translation>Проверка</translation>
+        <translation type="vanished">Проверка</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>Страна</translation>
+        <translation type="vanished">Страна</translation>
     </message>
     <message>
         <source>Indonesia</source>
-        <translation>Индонезия</translation>
+        <translation type="vanished">Индонезия</translation>
     </message>
     <message>
         <source>Carrier</source>
-        <translation>Оператор</translation>
+        <translation type="vanished">Оператор</translation>
     </message>
     <message>
         <source>Search For</source>
-        <translation>Искать для</translation>
+        <translation type="vanished">Искать для</translation>
     </message>
     <message>
         <source>Variant</source>
-        <translation>Вариант</translation>
+        <translation type="vanished">Вариант</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation>Режим</translation>
+        <translation type="vanished">Режим</translation>
     </message>
     <message>
         <source>Upgrade</source>
-        <translation>Обновление</translation>
+        <translation type="vanished">Обновление</translation>
     </message>
     <message>
         <source>Debrick</source>
-        <translation>Восстановление</translation>
+        <translation type="vanished">Восстановление</translation>
     </message>
     <message>
         <source>Server</source>
-        <translation>Сервер</translation>
+        <translation type="vanished">Сервер</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation>Параметры</translation>
+        <translation type="vanished">Параметры</translation>
     </message>
     <message>
         <source>Check All Needed</source>
-        <translation>Проверить все необходимые</translation>
+        <translation type="vanished">Проверить все необходимые</translation>
     </message>
     <message>
         <source>Uncheck All</source>
-        <translation>Снять все отметки</translation>
+        <translation type="vanished">Снять все отметки</translation>
     </message>
     <message>
         <source> (downloaded)</source>
-        <translation>(загружено)</translation>
+        <translation type="vanished">(загружено)</translation>
     </message>
 </context>
 <context>
     <name>Title</name>
     <message>
         <source>Advanced</source>
-        <translation>Расширенный режим</translation>
+        <translation type="vanished">Расширенный режим</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Распаковка</translation>
+        <translation type="vanished">Распаковка</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Поиск</translation>
+        <translation type="vanished">Поиск</translation>
     </message>
     <message>
         <source>Backup</source>
-        <translation>Восстановление</translation>
+        <translation type="vanished">Восстановление</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation>Установка</translation>
+        <translation type="vanished">Установка</translation>
     </message>
     <message>
         <source>Boot</source>
-        <translation>Загрузчик</translation>
+        <translation type="vanished">Загрузчик</translation>
     </message>
     <message>
         <source>No device connected</source>
-        <translation>Нет подключенных устройств</translation>
+        <translation type="vanished">Нет подключенных устройств</translation>
     </message>
 </context>
 <context>
     <name>USBConnect</name>
     <message>
         <source>These tools require a USB connection</source>
-        <translation>Эти параметры доступны для подключенных устройств</translation>
+        <translation type="vanished">Эти параметры доступны для подключенных устройств</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
         <source>Incorrect</source>
-        <translation>Неверный</translation>
+        <translation type="vanished">Неверный</translation>
     </message>
     <message>
         <source>Hide password</source>
-        <translation>Скрыть пароль</translation>
+        <translation type="vanished">Скрыть пароль</translation>
     </message>
     <message>
         <source>Show password</source>
-        <translation>Показать пароль</translation>
+        <translation type="vanished">Показать пароль</translation>
     </message>
     <message>
         <source>There was an issue connecting.</source>
-        <translation>Проблема с подключением.</translation>
+        <translation type="vanished">Проблема с подключением.</translation>
     </message>
     <message>
         <source>Try Again</source>
-        <translation>Попробуйте ещё</translation>
+        <translation type="vanished">Попробуйте ещё</translation>
     </message>
     <message>
         <source>Searching for USB device</source>
-        <translation>Поиск устройств</translation>
+        <translation type="vanished">Поиск устройств</translation>
     </message>
     <message>
         <source>Detected </source>
-        <translation>Обнаружено</translation>
+        <translation type="vanished">Обнаружено</translation>
     </message>
 </context>
 <context>
     <name>VersionLookup</name>
     <message>
         <source>Stop Scan</source>
-        <translation>Стоп</translation>
+        <translation type="vanished">Стоп</translation>
     </message>
     <message>
         <source>Autoscan</source>
-        <translation>Автопоиск</translation>
+        <translation type="vanished">Автопоиск</translation>
     </message>
     <message>
         <source>Find next available links</source>
-        <translation>Искать следующий доступный адрес</translation>
+        <translation type="vanished">Искать следующий доступный адрес</translation>
     </message>
     <message>
         <source>Software Release: </source>
-        <translation>Версия ПО:</translation>
+        <translation type="vanished">Версия ПО:</translation>
     </message>
     <message>
         <source>Grab Public Links</source>
-        <translation>Получить публичные ссылки</translation>
+        <translation type="vanished">Получить публичные ссылки</translation>
     </message>
     <message>
         <source>No Links Available</source>
-        <translation>Нет доступных ссылок</translation>
+        <translation type="vanished">Нет доступных ссылок</translation>
     </message>
     <message>
         <source>Hide</source>
-        <translation>Скрыть</translation>
+        <translation type="vanished">Скрыть</translation>
     </message>
 </context>
 </TS>

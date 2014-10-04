@@ -50,6 +50,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
     app.setApplicationVersion("1.9.2");
+    QTranslator appTranslator;
+    appTranslator.load(QLocale::system().name());
+    app.installTranslator(&appTranslator);
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     QQmlApplicationEngine engine;

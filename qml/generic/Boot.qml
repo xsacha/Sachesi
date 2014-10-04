@@ -8,51 +8,51 @@ Column {
     width: parent.width - 40;
     spacing: 15
     Text {
-        text: "Boot Communication"
+        text:  qsTr("Boot Communication")
         font.pointSize: 14
         font.bold: true
     }
     Row {
         spacing: 20
         Button {
-            text: "Info"
+            text:  qsTr("Info")
             onClicked: b.setCommandMode(1, postReboot.checked);
         }
         Button {
-            text: "RimBoot"
+            text:  qsTr("RimBoot")
             onClicked: b.setCommandMode(2, postReboot.checked);
         }
         Button {
-            text: "Nuke"
+            text:  qsTr("Nuke")
             onClicked: b.setCommandMode(3, postReboot.checked);
         }
         Button {
-            text: "Debug Mode"
+            text:  qsTr("Debug Mode")
             onClicked: b.setCommandMode(4, postReboot.checked);
         }
     }
     CheckBox {
         id: postReboot
-        text: "Reboot after"
+        text:  qsTr("Reboot after")
     }
 
     Row {
         visible: b.connecting
         spacing: 15
         Text {
-            text: "Connecting to bootrom"
+            text:  qsTr("Connecting to bootrom")
         }
         BusyIndicator {
             height: parent.implicitHeight
             width: height
         }
         Button {
-            text: "Cancel"
+            text:  qsTr("Cancel")
             onClicked: b.disconnect();
         }
     }
     GroupBox {
-        title: "Detected devices:"
+        title:  qsTr("Detected devices:")
         ScrollView {
             frameVisible: true
             ListView {
@@ -62,7 +62,7 @@ Column {
                 spacing: 3
 
                 delegate: Label {
-                    text: "Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)"));
+                    text:  qsTr("Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)")));
                     font.pointSize: 12
                 }
             }

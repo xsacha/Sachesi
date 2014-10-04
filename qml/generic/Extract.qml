@@ -20,7 +20,7 @@ Item {
 
                 Text {
                     id: splitText
-                    property string typeText: "";
+                    property string typetext:  qsTr("");
                     property int splitType: p.splitting
                     onSplitTypeChanged: {
                         switch(splitType) {
@@ -43,7 +43,7 @@ Item {
             }
             Text {
                 visible: p.splitProgress > 100
-                text: "Percentages are not entirely accurate for QNX6 files."
+                text:  qsTr("Percentages are not entirely accurate for QNX6 files.")
                 font.pointSize: 10
             }
         }
@@ -52,7 +52,7 @@ Item {
             z: 6;
             visible: p.splitting == 2
             anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter}
-            text: "Cancel";
+            text:  qsTr("Cancel");
             onClicked: p.abortSplit();
         }
     }
@@ -63,14 +63,14 @@ Item {
         ColumnLayout {
             Layout.alignment: Qt.AlignTop | Qt.AlignLeft
             Text {
-                text: "Autoloader Tools"
+                text:  qsTr("Autoloader Tools")
                 font.pointSize: 14
                 font.bold: true
             }
             RowLayout {
                 FileDialog {
                     id: split_files
-                    title: "Extract Signed"
+                    title:  qsTr("Extract Signed")
                     folder: settings.installFolder
                     onAccepted: {
                         p.splitAutoloader(fileUrl, userSelect.checked * 1 + osSelect.checked * 2 + radioSelect.checked * 4 + ifsSelect.checked * 8 + pinSelect.checked * 16);
@@ -81,44 +81,44 @@ Item {
                 }
 
                 Button {
-                    text: "Extract Signed";
+                    text:  qsTr("Extract Signed");
                     enabled: !p.splitting
                     onClicked: split_files.open()
                 }
                 CheckBox {
                     id: userSelect
-                    text: "User"
+                    text:  qsTr("User")
                     checked: true
                 }
                 CheckBox {
                     id: osSelect
-                    text: "OS"
+                    text:  qsTr("OS")
                     checked: true
                 }
                 CheckBox {
                     id: radioSelect
-                    text: "Radio"
+                    text:  qsTr("Radio")
                     checked: true
                 }
                 CheckBox {
                     visible: settings.advanced
                     id: ifsSelect
-                    text: "IFS"
+                    text:  qsTr("IFS")
                 }
                 CheckBox {
                     visible: settings.advanced
                     id: pinSelect
-                    text: "PINList"
+                    text:  qsTr("PINList")
                 }
             }
             Label {
-                text: "Split signed images from autoloader .exe, .bar or .zip"
+                text:  qsTr("Split signed images from autoloader .exe, .bar or .zip")
                 font.bold: true;
             }
             RowLayout {
                 FileDialog {
                     id: combine_files
-                    title: "Create Autoloader"
+                    title:  qsTr("Create Autoloader")
                     folder: settings.installFolder
                     onAccepted: {
                         p.combineAutoloader(fileUrls);
@@ -128,7 +128,7 @@ Item {
                     nameFilters: [ "Signed Images (*.signed)" ]
                 }
                 Button {
-                    text: "Create from Folder"
+                    text:  qsTr("Create from Folder")
                     enabled: !p.splitting
                     onClicked: {
                         combine_files.selectFolder = true
@@ -136,7 +136,7 @@ Item {
                     }
                 }
                 Button {
-                    text: "Create from Files";
+                    text:  qsTr("Create from Files");
                     enabled: !p.splitting
                     onClicked: {
                         combine_files.selectFolder = false
@@ -146,14 +146,14 @@ Item {
                 }
             }
             Label {
-                text: "Create Autoloader .exe from .signed images"
+                text:  qsTr("Create Autoloader .exe from .signed images")
                 font.bold: true;
             }
         }
         // Implicit spacing by breaking layout
         ColumnLayout {
             Text {
-                text: "Extraction Tools"
+                text:  qsTr("Extraction Tools")
                 font.pointSize: 14
                 font.bold: true
             }
@@ -163,28 +163,28 @@ Item {
                 RowLayout {
                     property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
                     Button {
-                        text: "Dump Contents"
+                        text:  qsTr("Dump Contents")
                         enabled: !p.splitting && parent.partValue
                         onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
                     }
                     CheckBox {
                         id: corePart
                         checked: true
-                        text: "Core"
+                        text:  qsTr("Core")
                     }
                     CheckBox {
                         id: userPart
                         checked: true
-                        text: "User"
+                        text:  qsTr("User")
                     }
                     CheckBox {
                         id: bootPart
                         checked: false
-                        text: "Boot"
+                        text:  qsTr("Boot")
                     }
                 }
                 Label {
-                    text: "Dump all file contents"
+                    text:  qsTr("Dump all file contents")
                     font.bold: true;
                 }
             }
@@ -194,38 +194,38 @@ Item {
                 RowLayout {
                     property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + bootImage.checked * 4
                     Button {
-                        text: "Extract Image"
+                        text:  qsTr("Extract Image")
                         enabled: !p.splitting && parent.imageValue
                         onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
                     }
                     CheckBox {
                         id: rcfsImage
                         checked: true
-                        text: "RCFS"
+                        text:  qsTr("RCFS")
                     }
                     CheckBox {
                         id: qnxImage
-                        text: "QNX6"
+                        text:  qsTr("QNX6")
                     }
                     CheckBox {
                         id: bootImage
                         checked: true
-                        text: "IFS"
+                        text:  qsTr("IFS")
                     }
                 }
                 Label {
-                    text: "Extracts filesystem image"
+                    text:  qsTr("Extracts filesystem image")
                     font.bold: true;
                 }
             }
             ColumnLayout {
                 Button {
-                    text: "Extract Apps"
+                    text:  qsTr("Extract Apps")
                     enabled: !p.splitting
                     onClicked: if (!p.splitting) p.extractImage(2, 2);
                 }
                 Label {
-                    text: "Extract all bar archives"
+                    text:  qsTr("Extract all bar archives")
                     font.bold: true;
                 }
             }

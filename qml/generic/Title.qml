@@ -6,7 +6,7 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    title: "Sachesi " + version
+    title: qsTr("Sachesi " + version)
     width: 820
     height: 680
     minimumHeight: 540
@@ -27,7 +27,7 @@ ApplicationWindow {
         visible: !blackberry
         id: title
         font.pointSize: 22
-        text: "SACHESI"
+        text:  qsTr("SACHESI")
         font.letterSpacing: (parent.width - 280) / text.length
         font.weight: Font.DemiBold
         smooth: true
@@ -43,7 +43,7 @@ ApplicationWindow {
         checked: settings.advanced
         onClicked: settings.advanced = !settings.advanced
         text: checked ? "+H+" : "H"
-        tooltip: "Advanced"
+        tooltip: qsTr("Advanced")
     }
     TabView {
         id: titleRow
@@ -54,26 +54,26 @@ ApplicationWindow {
         onCountChanged: { titleRow.currentIndex = 0; if (count >= 2 + p.hasBootAccess) titleRow.currentIndex = 2 + p.hasBootAccess; }
 
         Tab {
-            title: "AppWorld"
+            title: qsTr("AppWorld")
             AppWorld { anchors.fill: parent }
         }
 
         Tab {
-            title: "Extract";
+            title: qsTr("Extract");
             Extract { anchors.fill: parent }
         }
         Tab {
-            title: "Search"
+            title: qsTr("Search")
             Search { anchors.fill: parent
                 Component.onCompleted: if (!blackberry) {
-                    titleRow.addTab("Backup", Qt.createComponent("Backup.qml") )
-                    titleRow.addTab("Install", Qt.createComponent("Installer.qml") )
+                    titleRow.addTab(qsTr("Backup"), Qt.createComponent("Backup.qml") )
+                    titleRow.addTab(qsTr("Install"), Qt.createComponent("Installer.qml") )
                 }
             }
         }
         Component.onCompleted: {
             if (p.hasBootAccess)
-                titleRow.addTab("Boot", Qt.createComponent("Boot.qml") )
+                titleRow.addTab(qsTr("Boot"), Qt.createComponent("Boot.qml") )
         }
 
         USBConnect { anchors.fill: parent }
@@ -84,7 +84,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         Label {
             anchors.centerIn: parent
-            text: "If you enjoy using this tool. Please consider donating."
+            text:  qsTr("If you enjoy using this tool. Please consider donating.")
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
@@ -98,17 +98,17 @@ ApplicationWindow {
         visible: !mobile
         Label {
             visible: i.knownBattery < 0
-            text: "No device connected"
+            text:  qsTr("No device connected")
         }
         Label {
             visible: i.knownBattery > -1
             property bool hasSpace: window.width > 700
-            text: "<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + " Radio:" + i.knownRadio + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : "");
+            text:  qsTr("<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + " Radio:" + i.knownRadio + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : ""));
         }
         Label {
             visible: i.knownBattery > -1
             anchors.right: parent.right
-            text: "<b>[</b>"+i.knownHW+"<b>]</b>"
+            text:  qsTr("<b>[</b>"+i.knownHW+"<b>]</b>")
         }
     }
 }

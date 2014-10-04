@@ -20,7 +20,7 @@ Item {
                           }
         width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
         color: "lightgray"
-        title: "Download"
+        title: qsTr("Download")
 
         ColumnLayout {
             anchors.fill: parent
@@ -35,7 +35,7 @@ Item {
             }
             Button {
                 id: cancelButton
-                text: "Cancel Download"
+                text:  qsTr("Cancel Download")
                 onClicked: download.reset();
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -51,18 +51,18 @@ Item {
                 /*RadioButton {
                 id: delta
                 visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
-                text: "Delta"
+                text:  qsTr("Delta")
             }*/
                 Button {
                     id: searchButton
                     enabled: !p.scanning
-                    text: p.scanning ? "Searching..." : "Search"
+                    text: qsTr(p.scanning ? "Searching..." : "Search")
                     onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
                 }
 
             }
             Button {
-                text: "Version Lookup"
+                text:  qsTr("Version Lookup")
                 onClicked: versionLookup.visible = !versionLookup.visible
             }
         }
@@ -72,9 +72,9 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)
-                                  text = "Server did not respond as expected [" + message + "]."
+                                  text = qsTr("Server did not respond as expected [" + message + "].")
                               else if (message === "Success")
-                                  text = "Success. No updates were available."
+                                  text = qsTr("Success. No updates were available.")
                               else
                                   text = message;
         }
@@ -83,7 +83,7 @@ Item {
         id: urlLinks
         anchors { left: variables.right; right: parent.right; bottom: parent.bottom; margins: 15 }
         GroupBox {
-            title: "Download For"
+            title: qsTr("Download For")
             visible: !blackberry
             TextCoupleSelect {
                 id: downloadDevice
@@ -109,7 +109,7 @@ Item {
                 }
 
                 listModel: ListModel {
-                    ListElement { text: "As Searched" }
+                    ListElement { text:  qsTr("As Searched" )}
                 }
             }
         }
@@ -117,24 +117,24 @@ Item {
             Button {
                 enabled: p.updateCheckedCount > 0
                 Layout.alignment: Qt.AlignHCenter
-                text: "Grab Links"
+                text:  qsTr("Grab Links")
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {
                 enabled: p.updateCheckedAvailableCount > 0 && !download.verifying
                 visible: !download.running
                 Layout.alignment: Qt.AlignHCenter
-                text: download.verifying ? "Verifying" : "Download"
+                text: qsTr(download.verifying ? "Verifying" : "Download")
                 onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
             }
             Button {
                 visible: download.running
-                text: "View Download (" + download.progress + "%)"
+                text:  qsTr("View Download (" + download.progress + "%)")
                 onClicked: downloadWin.visible = true
             }
             Button {
                 visible: download.running
-                text: "Cancel Download"
+                text:  qsTr("Cancel Download")
                 onClicked: download.reset();
             }
         }
@@ -173,7 +173,7 @@ Item {
         }
 
         GroupBox {
-            title: "Search For"
+            title: qsTr("Search For")
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
@@ -183,24 +183,24 @@ Item {
                     // List everything we know except abandoned models
                     ListModel {
                         id: advancedModel
-                        ListElement { text: "Z30 + Classic" }
-                        ListElement { text: "Z10 (OMAP)" }
-                        ListElement { text: "Z10 (QCOM) + P9982" }
-                        ListElement { text: "Z3 + Cafe" }
-                        ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10 + P9983" }
-                        ListElement { text: "Developer" }
-                        ListElement { text: "Ontario" }
+                        ListElement { text:  qsTr("Z30 + Classic") }
+                        ListElement { text:  qsTr("Z10 (OMAP)") }
+                        ListElement { text:  qsTr("Z10 (QCOM) + P9982" )}
+                        ListElement { text:  qsTr("Z3 + Cafe" )}
+                        ListElement { text:  qsTr("Passport" )}
+                        ListElement { text:  qsTr("Q5 + Q10 + P9983") }
+                        ListElement { text:  qsTr("Developer") }
+                        ListElement { text:  qsTr("Ontario") }
                     }
                     // Only list released models
                     ListModel {
                         id: babyModel
-                        ListElement { text: "Z30" }
-                        ListElement { text: "Z10 (STL 100-1)" }
-                        ListElement { text: "Z10 (STL 100-2/3/4) + P9982" }
-                        ListElement { text: "Z3" }
-                        ListElement { text: "Passport" }
-                        ListElement { text: "Q5 + Q10 + P9983" }
+                        ListElement { text:  qsTr("Z30") }
+                        ListElement { text:  qsTr("Z10 (STL 100-1)" )}
+                        ListElement { text:  qsTr("Z10 (STL 100-2/3/4) + P9982") }
+                        ListElement { text:  qsTr("Z3") }
+                        ListElement { text:  qsTr("Passport") }
+                        ListElement { text:  qsTr("Q5 + Q10 + P9983" )}
                     }
                     function changeModel() {
                         var selected = selectedItem
@@ -291,7 +291,7 @@ Item {
             id: options_menu
             signal checkAll()
             signal uncheckAll()
-            title: "Options"
+            title:  qsTr("Options")
             MenuItem {
                 enabled: p.updateCheckedCount != p.updateAppCount
                 text: "Check All"
@@ -311,9 +311,9 @@ Item {
                 }
             }
         }
-        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title: "Name" }
-        TableViewColumn { id: verCol;  role: "version"; title: "Version"; resizable: false; }
-        TableViewColumn { id: sizeCol;  role: "size"; title: "Size"; resizable: false; }
+        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title:  qsTr("Name" )}
+        TableViewColumn { id: verCol;  role: "version"; title:  qsTr("Version"; resizable: false); }
+        TableViewColumn { id: sizeCol;  role: "size"; title:  qsTr("Size"); resizable: false; }
         //onModelChanged: { verCol.resizeToContents(); sizeCol.resizeToContents(); }
         rowDelegate: Rectangle {
             opacity: 0.2
@@ -336,7 +336,7 @@ Item {
 
     // Cheat to get system widths of text here. Should use a TableView (above) later to replace it.
     // A Label with 6 characters and ' MB', like the maximum filesize of an app
-    Label { visible: false; id: sizeHint; font.pointSize: 12; text: "1700.0 MB"; }
+    Label { visible: false; id: sizeHint; font.pointSize: 12; text:  qsTr("1700.0 MB"); }
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
@@ -359,10 +359,10 @@ Item {
                     signal checkAll()
                     signal checkAllAvailable()
                     signal uncheckAll()
-                    title: "Options"
+                    title:  qsTr("Options")
                     MenuItem {
                         enabled: p.updateCheckedCount !== p.updateAppCount
-                        text: "Check All"
+                        text:  qsTr("Check All")
                         onTriggered: {
                             options_menu.checkAll();
                             for (var i = 0; i < p.updateAppCount; i++)
@@ -371,7 +371,7 @@ Item {
                     }
                     MenuItem {
                         enabled: p.updateCheckedAvailableCount !== p.updateAppAvailableCount
-                        text: "Check All Needed"
+                        text:  qsTr("Check All Needed")
                         onTriggered: {
                             options_menu.checkAllAvailable();
                             for (var i = 0; i < p.updateAppCount; i++)
@@ -380,7 +380,7 @@ Item {
                     }
                     MenuItem {
                         enabled: p.updateCheckedCount > 0
-                        text: "Uncheck All"
+                        text:  qsTr("Uncheck All")
                         onTriggered: {
                             options_menu.uncheckAll()
                             for (var i = 0; i < p.updateAppCount; i++)
@@ -411,7 +411,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: friendlyName + (isAvailable ? "" : " (downloaded)")
+                        text: qsTr(friendlyName + (isAvailable ? "" : " (downloaded)"))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked

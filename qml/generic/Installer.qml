@@ -18,7 +18,7 @@ Item {
     Button {
         visible: i.dgProgress >= 0 && !installWin.visible
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        text: "View Install (" + i.dgProgress + ")"
+        text:  qsTr("View Install (" + i.dgProgress + ")")
         onClicked: installWin.visible = true
     }
 
@@ -31,7 +31,7 @@ Item {
                               y = window.y + (window.height - height) / 2
                           }
         color: "lightgray"
-        title: i.firmwareUpdate ? "Firmware Update" : "Install"
+        title: qsTr(i.firmwareUpdate ? "Firmware Update" : "Install")
         CircleProgress {
             anchors.fill: parent
             currentValue: i.curDGProgress
@@ -55,7 +55,7 @@ Item {
         anchors {fill: parent; margins: 15 }
         Label {
             Layout.fillWidth: true
-            text: "To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b> to this page. Otherwise, select the options below:"
+            text:  qsTr("To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b> to this page. Otherwise, select the options below:")
             wrapMode: Text.Wrap
             font.pointSize: 12
         }
@@ -63,7 +63,7 @@ Item {
             spacing: 15
             FileDialog {
                 id: install_files
-                title: "Install applications to device"
+                title: qsTr("Install applications to device")
                 folder: settings.installFolder
                 onAccepted: {
                     i.install(fileUrls)
@@ -72,31 +72,31 @@ Item {
                 }
 
                 selectMultiple: true
-                nameFilters: [ "Blackberry Installable (*.bar)" ]
+                nameFilters: [ qsTr("Blackberry Installable (*.bar)") ]
             }
             Button {
-                text: "Install Folder"
+                text:  qsTr("Install Folder")
                 onClicked: {
                     if (i.installing)
-                        details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;"
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;")
                     else if (i.backing || i.restoring)
-                        details += "Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>"
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
                     else {
-                        install_files.title = "Select Folder"
+                        install_files.title = qsTr("Select Folder")
                         install_files.selectFolder = true;
                         install_files.open();
                     }
                 }
             }
             Button {
-                text: "Install Files"
+                text:  qsTr("Install Files")
                 onClicked: {
                     if (i.installing)
-                        details += "Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;"
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;")
                     else if (i.backing || i.restoring)
-                        details += "Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>"
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
                     else {
-                        install_files.title = "Select Files"
+                        install_files.title = qsTr("Select Files")
                         install_files.selectFolder = false;
                         install_files.selectMultiple = true;
                         install_files.open();
@@ -105,22 +105,22 @@ Item {
             }
         }
         GroupBox {
-            title: "Advanced Tools"
+            title:  qsTr("Advanced Tools")
             visible: settings.advanced
             RowLayout {
                 Button {
                     id: wipe
-                    text: "Wipe"
+                    text:  qsTr("Wipe")
                     onClicked: i.wipe();
                 }
                 Button {
                     id: factorywipe
-                    text: "Factory Reset"
+                    text:  qsTr("Factory Reset")
                     onClicked: i.factorywipe();
                 }
                 Button {
                     id: reboot
-                    text: "Reboot"
+                    text:  qsTr("Reboot")
                     onClicked: i.reboot();
                 }
             }
@@ -133,10 +133,10 @@ Item {
             Button {
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
                 id: list_files
-                text: "Refresh"
+                text:  qsTr("Refresh")
                 onClicked: i.scanProps();
             }
-            Component.onCompleted: { addTab("Your Applications", app_tab); addTab("Log", log_tab); }
+            Component.onCompleted: { addTab(qsTr("Your Applications"), app_tab); addTab(qsTr("Log"), log_tab); }
         }
     }
 
@@ -174,7 +174,7 @@ Item {
                 visible: appView.count == 0
                 anchors.centerIn: parent
                 font.pointSize: 14
-                text: "Use 'Refresh' to update list"
+                text:  qsTr("Use 'Refresh' to update list")
             }
             ScrollView {
                 anchors.fill: parent
@@ -187,16 +187,16 @@ Item {
                     Menu {
                         id: apps_menu
                         visible: appView.count > 0
-                        title: "Options"
+                        title:  qsTr("Options")
                         MenuItem {
-                            text: "Uninstall Marked"
+                            text:  qsTr("Uninstall Marked")
                             iconSource: "trash.png"
                             enabled: !i.installing
                             onEnabledChanged: if (enabled && uninstall_notifier.uninstalling) { uninstall_notifier.uninstalling = false; }
                             onTriggered: { if (i.uninstallMarked()) uninstall_notifier.uninstalling = true; }
                         }
                         MenuItem {
-                            text: "Show Installed Apps"
+                            text:  qsTr("Show Installed Apps")
                             iconSource: "text.png"
                             onTriggered: i.exportInstalled();
                         }

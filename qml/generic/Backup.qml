@@ -21,7 +21,7 @@ Item {
     ColumnLayout {
         ColumnLayout {
             Text {
-                text: "Options"
+                text:  qsTr("Options")
                 font.pointSize: 14
                 font.bold: true
             }
@@ -30,7 +30,7 @@ Item {
             RowLayout {
                 visible: !i.backMethods && attemptLookup.running
                 Text {
-                    text: "Loading Backup Options"
+                    text:  qsTr("Loading Backup Options")
                     font.pointSize: 12
                 }
                 BusyIndicator {
@@ -59,14 +59,14 @@ Item {
                 visible: i.backMethods
                 id: totalText
                 property double totalVal: 0.0
-                text: "Total: " + totalVal.toFixed(1) + " MB"
+                text:  qsTr("Total: " + totalVal.toFixed(1) + " MB")
                 font.pointSize: 12
             }
         }
 
         Button {
             visible: !i.backMethods && !attemptLookup.running
-            text: "Load Backup Options"
+            text:  qsTr("Load Backup Options")
             onClicked: { totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
         }
 
@@ -74,7 +74,7 @@ Item {
             visible: i.backMethods
             FileDialog {
                 id: backup_files
-                title: "Choose backup filename"
+                title:  qsTr("Choose backup filename")
                 folder: settings.backupFolder
                 onAccepted: {
                     i.backup(fileUrl, options.value)
@@ -82,11 +82,11 @@ Item {
                 }
                 selectExisting: false
 
-                nameFilters: [ "Blackberry Backup (*.bbb)" ]
+                nameFilters: [ qsTr("Blackberry Backup (*.bbb)") ]
             }
             FileDialog {
                 id: restore_files
-                title: "Select restore file"
+                title:  qsTr("Select restore file")
                 folder: settings.backupFolder
                 onAccepted: {
                     i.restore(fileUrl, options.value)
@@ -97,12 +97,12 @@ Item {
             }
 
             Button {
-                text: "Create backup"
+                text:  qsTr("Create backup")
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
                 onClicked: backup_files.open();
             }
             Button {
-                text: "Restore backup"
+                text:  qsTr("Restore backup")
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
                 onClicked: restore_files.open();
             }

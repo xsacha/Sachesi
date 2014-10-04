@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
 Window {
-    title: "Sachesi " + version + " - Version Lookup"
+    title: qsTr("Sachesi " + version + " - Version Lookup")
     visible: false
     onVisibleChanged: if (visible) {
                           x = window.x + (window.width - width) / 2
@@ -46,13 +46,13 @@ Window {
             }
             Button {
                 id: relookup
-                text: "Lookup"
+                text:  qsTr("Lookup")
                 enabled: !p.scanning
                 onClicked: p.reverseLookup(device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value, skip_badlinks.checked, check_sdk.checked);
             }
             Button {
                 property bool looking: false
-                text: looking ? "Stop Scan" : "Autoscan"
+                text: qsTr(looking ? "Stop Scan" : "Autoscan")
                 enabled: !p.scanning || looking
                 onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
                 Timer {
@@ -80,11 +80,11 @@ Window {
             CheckBox {
                 id: skip_badlinks
                 enabled: !check_sdk.checked
-                text: "Find next available links"
+                text:  qsTr("Find next available links")
             }
             CheckBox {
                 id: check_sdk
-                text: "Check for SDK"
+                text:  qsTr("Check for SDK")
                 onCheckedChanged: {
                     if (checked) build.value--
                     else build.value++
@@ -97,7 +97,7 @@ Window {
             Layout.alignment: Qt.AlignVCenter
             Text {
                 Layout.alignment: Qt.AlignLeft
-                text: "Software Release: " + p.softwareRelease
+                text:  qsTr("Software Release: " + p.softwareRelease)
                 font.pointSize: 12
             }
             RowLayout {
@@ -108,14 +108,14 @@ Window {
                 Button {
                     id: grabPotential
                     enabled: p.hasPotentialLinks // Exists?
-                    text: enabled ? "Grab Public Links" : "No Links Available"
+                    text:qsTr( enabled ? "Grab Public Links" : "No Links Available")
                     onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion, check_sdk.checked)
                 }
             }
         }
         Button {
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
-            text: "Hide"
+            text:  qsTr("Hide")
             onClicked: close();
         }
     }
