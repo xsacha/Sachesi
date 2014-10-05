@@ -21,8 +21,14 @@ Item {
             }
             TextField {
                 id: searchText
-                text: qsTr("Search")
+                placeholderText: qsTr("Search")
                 onAccepted: if (searchButton.enabled) searchButton.clicked()
+            }
+            Button {
+                enabled: searchText.length > 0
+                id: searchButton
+                text:  qsTr("Search")
+                onClicked: appworld.search(searchText.text)
             }
             Button {
                 text:  qsTr("Featured")
@@ -37,13 +43,6 @@ Item {
                 text:  qsTr("Cars")
                 onClicked: appworld.showCars()
             }
-
-            Button {
-                enabled: searchText.length > 0
-                id: searchButton
-                text:  qsTr("Search")
-                onClicked: appworld.search(searchText.text)
-            }
         }
 
         // This is the app detail slide
@@ -56,14 +55,14 @@ Item {
             ColumnLayout {
                 RowLayout {
                     Image {
-                        fillMode: Image.Stretch
+                        fillMode: Image.PreserveAspectFit
                         visible: status == Image.Ready
                         source: appworld.contentItem.image == "" ? "" : appworld.contentItem.image + "/X96/png"
                     }
 
                     Label {
                         text: appworld.contentItem.friendlyName
-                        font.pointSize: 12
+                        font.pointSize: 24
                     }
                 }
                 Label {
@@ -93,7 +92,6 @@ Item {
                         text: appworld.contentItem.price
                         // Edit: Of course, this is wrong ;) They've changed it so I need to login now. We'll do this later
                         // Example: "http://appworld.blackberry.com/ClientAPI/usfdownload?contentid=" + appworld.contentItem.id
-                        // Replies:  <error id="30702" type="accounts">Invalid token, please login.</error>
                         onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/file/" + appworld.contentItem.fileId)
                     }
                 }
@@ -137,7 +135,9 @@ Item {
                 anchors.fill: parent
                 model: appworld.appList
                 // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
-                cellWidth: (main.width - 20) / 9 //размер иконок
+                property int iconsInRow: mobile ? 5 : 9
+                // Size of icons
+                cellWidth: (main.width - 20) / iconsInRow
                 cellHeight: cellWidth
                 footer: Label { visible: false; text:  "."; } // Spacer
 
@@ -157,7 +157,8 @@ Item {
                         height: item.height - textItem.implicitHeight
                         width: item.width
                         fillMode: Image.PreserveAspectFit
-                        source: image == "" ? "" : image + "/128X/png" //качество иконок
+                        // Quality of image can be requested from server. 128X = 128 pixels wide. X96 = 96 pixels high
+                        source: image == "" ? "" : image + "/128X/png"
                         Behavior on scale { SpringAnimation { spring: 2; damping: 0.2 } }
                         scale: 0.0
                         onStatusChanged: if (status == Image.Ready) scale = 1.0
@@ -211,7 +212,7 @@ Item {
                 onCurrentIndexChanged: appworld.server = currentIndex
             }
             Label {
-                text:  qsTr("<b>Model</b>: Z10-STL100-2")
+                text:  "<b>" + qsTr("Model") + "</b>: Passport"
             }
             Label {
                 text:  qsTr("OS")

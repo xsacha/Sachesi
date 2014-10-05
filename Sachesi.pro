@@ -1,8 +1,6 @@
 QT += network gui widgets quick qml
 
 TARGET="Sachesi"
-TRANSLATIONS = translations/global.ts\
-translations/ru.ts
 win32: RC_ICONS += assets/sachesi-114.ico
 else:mac: ICON = assets/sachesi-114.icns
 else: ICON = assets/sachesi-114.png
@@ -125,7 +123,8 @@ contains(DEFINES, BOOTLOADER_ACCESS) {
     HEADERS += src/lzo.h
 }
 
-RESOURCES += UI.qrc
+RESOURCES += UI.qrc \
+    translations.qrc
 # The qmldir is built in for dynamic libs but not static.
 static: RESOURCES += QML.qrc
 OTHER_FILES += \
@@ -137,6 +136,25 @@ OTHER_FILES += \
 phony.depends = install uninstall
 phony.target = .PHONY
 QMAKE_EXTRA_TARGETS += phony
+
+# Translations
+LREL_TOOL = lrelease
+# Grab all possible directories (win32/unix)
+win32: PATHS = $$split($$(PATH), ;)
+else: PATHS = $$split($$(PATH), :)
+# Maybe it has -qt5 extension?
+for(bin, PATHS): exists($${bin}/$${LREL_TOOL}-qt5): LREL_TOOL=$${bin}/$${LREL_TOOL}-qt5
+
+TRANSLATIONS = $$files($$P/translations/*.ts)
+
+lang.name = $$LREL_TOOL ${QMAKE_FILE_IN}
+lang.input = TRANSLATIONS
+lang.output = ${QMAKE_FILE_PATH}/${QMAKE_FILE_BASE}.qm
+
+lang.commands = $$LREL_TOOL ${QMAKE_FILE_IN}
+lang.CONFIG = no_link
+QMAKE_EXTRA_COMPILERS += lang
+PRE_TARGETDEPS += compiler_lang_make_all
 
 lupdate_only{
 SOURCES = \

@@ -50,9 +50,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
     app.setApplicationVersion("1.9.2");
+
+    // Install translator by locale language string
     QTranslator appTranslator;
-    appTranslator.load(QLocale::system().name());
-    app.installTranslator(&appTranslator);
+    if (appTranslator.load(QString(":/translations/%1.qm")
+                                  .arg(QLocale::languageToString(QLocale::system().language())))
+            ) {
+        app.installTranslator(&appTranslator);
+    }
+    // Use system proxy except where not possible
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     QQmlApplicationEngine engine;
