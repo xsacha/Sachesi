@@ -66,14 +66,14 @@ Item {
                     }
                 }
                 Label {
-                    text:  qsTr("by ") + "<b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>"
+                    text:  qsTr("by") + " <b><a href=\"#\">" + appworld.contentItem.vendor + "</a></b>"
                     onLinkActivated: appworld.showVendor(appworld.contentItem.vendorId)
                 }
 
                 RowLayout {
                     Label {
                         visible: appworld.contentItem.size != 0
-                        text:  qsTr("<b>File Bundle</b>: ") + appworld.contentItem.name + qsTr(" <b>Version</b>: ") + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + qsTr(" MB]")
+                        text: "<b>" + qsTr("File Bundle") + "</b>: " + appworld.contentItem.name + " <b>" + qsTr("Version") + "</b>: " + appworld.contentItem.version + " [" + (appworld.contentItem.size / 1024 / 1024).toFixed(2) + " " + qsTr("MB") + "]"
                     }
 
                     Button {

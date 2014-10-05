@@ -35,28 +35,24 @@
         <translation>Автомобили</translation>
     </message>
     <message>
-        <source>by</source>
-        <translation type="vanished">от</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/AppWorld.qml" line="70"/>
-        <source>by </source>
-        <translation>от </translation>
+        <source>by</source>
+        <translation>от</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="77"/>
-        <source>&lt;b&gt;File Bundle&lt;/b&gt;: </source>
-        <translation>&lt;b&gt;Имя пакета&lt;/b&gt;: </translation>
+        <source>File Bundle</source>
+        <translation>Имя пакета</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="77"/>
-        <source> &lt;b&gt;Version&lt;/b&gt;: </source>
-        <translation> &lt;b&gt;Версия&lt;/b&gt;: </translation>
+        <source>Version</source>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="77"/>
-        <source> MB]</source>
-        <translation> МБ]</translation>
+        <source>MB</source>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="82"/>
@@ -67,10 +63,6 @@
         <location filename="../qml/generic/AppWorld.qml" line="88"/>
         <source>Download</source>
         <translation>Загрузить</translation>
-    </message>
-    <message>
-        <source>Apps &amp; Games</source>
-        <translation type="vanished">Игры и приложения</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="199"/>
@@ -749,13 +741,13 @@
     <name>VersionLookup</name>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
-        <source>Sachesi </source>
-        <translation>Sachesi </translation>
+        <source>Sachesi</source>
+        <translation>Sachesi</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
-        <source> - Version Lookup</source>
-        <translation> - Поиск версии</translation>
+        <source>Version Lookup</source>
+        <translation>Поиск версии</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="49"/>

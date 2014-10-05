@@ -6,7 +6,7 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    title: qsTr("Sachesi " + version)
+    title: qsTr("Sachesi") + " " + version
     width: 820
     height: 680
     minimumHeight: 540
