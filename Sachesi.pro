@@ -72,7 +72,7 @@ else:android {
 }
 
 SOURCES += \
-    src/main.cpp \
+    src/sachesi.cpp \
     src/mainnet.cpp \
     src/splitter.cpp \
     src/ports.cpp \

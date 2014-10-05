@@ -24,10 +24,9 @@
 // Advantages: No user agent required, doesn't discriminate OS/model
 // Disadvantages: We need to use the ClientAPI for everything else anyway
 
-#include <QObject>
+#include <QDateTime>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QQmlListProperty>
 #include <QXmlStreamReader>
 #include "appworldapps.h"
 
@@ -88,7 +87,7 @@ public:
         QNetworkRequest request(QString("%1/ClientAPI/%2?model=0x85002c0a" + currentOS())
                                 .arg(server)
                                 .arg(type));
-        request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, "AppWorld/5.1.0.60");
+        request.setRawHeader("User-Agent", "AppWorld/5.1.0.60");
         QNetworkReply* reply = _manager->get(request);
         connect(reply, &QNetworkReply::finished, [=] {
             int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
