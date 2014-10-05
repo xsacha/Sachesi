@@ -254,12 +254,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="106"/>
-        <location filename="../qml/generic/Extract.qml" line="213"/>
-        <source>IFS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
         <source>PINList</source>
         <translation type="unfinished"></translation>
@@ -317,16 +311,6 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="197"/>
         <source>Extract Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="204"/>
-        <source>RCFS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="208"/>
-        <source>QNX6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

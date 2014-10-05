@@ -14,26 +14,26 @@ Item {
         opacity: 0.95
         Column {
             spacing: 5
-            anchors {top: parent.top; topMargin: 10; left: parent.left; leftMargin: parent.width * 0.5 - splitText.typeText.length * 9 }
+            anchors {top: parent.top; topMargin: 10; left: parent.left; leftMargin: parent.width * 0.5 - splitText.splitType.length * 9 }
             Row {
                 spacing: 10
 
                 Text {
                     id: splitText
-                    property string typetext:  "";
-                    property int splitType: p.splitting
-                    onSplitTypeChanged: {
-                        switch(splitType) {
-                        case 1: typeText = "Splitting Autoloader "; break;
-                        case 2: typeText = "Combining Autoloader "; break;
-                        case 3: typeText = "Extracting Image "; break;
-                        case 4: typeText = "Extracting Apps "; break;
-                        case 5: typeText = "Fetching required files "; break;
-                        default: typeText = "Waiting "; break;
+                    property string splitType: "";
+                    property int splitting: p.splitting
+                    onSplittingChanged: {
+                        switch(splitting) {
+                        case 1: splittype = "Splitting Autoloader "; break;
+                        case 2: splitType = "Combining Autoloader "; break;
+                        case 3: splitType = "Extracting Image "; break;
+                        case 4: splitType = "Extracting Apps "; break;
+                        case 5: splitType = "Fetching required files "; break;
+                        default: splitType = "Waiting "; break;
                         }
                     }
 
-                    text: typeText + ((p.splitting == 5) ? "" : "(" + p.splitProgress + "%)");
+                    text: splitType + ((p.splitting == 5) ? "" : "(" + p.splitProgress + "%)");
                     font.pointSize: 14
                 }
                 BusyIndicator {
@@ -103,7 +103,7 @@ Item {
                 CheckBox {
                     visible: settings.advanced
                     id: ifsSelect
-                    text:  qsTr("IFS")
+                    text:  "IFS"
                 }
                 CheckBox {
                     visible: settings.advanced
@@ -201,16 +201,16 @@ Item {
                     CheckBox {
                         id: rcfsImage
                         checked: true
-                        text:  qsTr("RCFS")
+                        text:  "RCFS"
                     }
                     CheckBox {
                         id: qnxImage
-                        text:  qsTr("QNX6")
+                        text:  "QNX6"
                     }
                     CheckBox {
                         id: bootImage
                         checked: true
-                        text:  qsTr("IFS")
+                        text:  "IFS"
                     }
                 }
                 Label {

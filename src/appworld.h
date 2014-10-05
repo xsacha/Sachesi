@@ -135,9 +135,7 @@ public:
             _listing = true; emit listingChanged();
             reply->deleteLater();
         });
-        connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            reply->deleteLater();
-        });
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), reply, SLOT(deleteLater()));
     }
 
     Q_INVOKABLE void search(QString query) {
@@ -240,9 +238,7 @@ public:
             _listing = true; emit listingChanged();
             reply->deleteLater();
         });
-        connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            reply->deleteLater();
-        });
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), reply, SLOT(deleteLater()));
     }
 
     Q_INVOKABLE void showContentItem(QString item) {
@@ -302,9 +298,7 @@ public:
             _listing = false; emit listingChanged();
             reply->deleteLater();
         });
-        connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            reply->deleteLater();
-        });
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), reply, SLOT(deleteLater()));
     }
 
 signals:

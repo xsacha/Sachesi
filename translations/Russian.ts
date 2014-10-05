@@ -254,12 +254,6 @@
         <translation>Radio</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="106"/>
-        <location filename="../qml/generic/Extract.qml" line="213"/>
-        <source>IFS</source>
-        <translation>IFS</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
         <source>PINList</source>
         <translation>PIN-лист</translation>
@@ -318,16 +312,6 @@
         <location filename="../qml/generic/Extract.qml" line="197"/>
         <source>Extract Image</source>
         <translation>Извлечь образ</translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="204"/>
-        <source>RCFS</source>
-        <translation>RCFS</translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="208"/>
-        <source>QNX6</source>
-        <translation>QNX6</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
