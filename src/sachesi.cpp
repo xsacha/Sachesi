@@ -49,7 +49,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
-    app.setApplicationVersion("1.9.2");
+    app.setApplicationVersion("1.9.3");
 
     // Install translator by locale language string
     QTranslator appTranslator;

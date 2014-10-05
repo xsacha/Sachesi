@@ -364,7 +364,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="58"/>
         <source>To install &lt;b&gt;.bar&lt;/b&gt; files such as applications or firmware, you can just &lt;b&gt;Drag and Drop&lt;/b&gt; to this page. Otherwise, select the options below:</source>
-        <translation>Pour installer des &lt;b&gt;.bar fichiers&lt;/b&gt; tels que des applications ou firmware, vous pouvez simplement &lte;b&gt;glisser-déposer&lt;/b&gt;. Sinon, sélectionnez les options ci-dessous:</translation>
+        <translation>Pour installer des &lt;b&gt;.bar fichiers&lt;/b&gt; tels que des applications ou firmware, vous pouvez simplement &lt;b&gt;glisser-déposer&lt;/b&gt;. Sinon, sélectionnez les options ci-dessous:</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="66"/>
