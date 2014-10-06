@@ -15,97 +15,97 @@
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="24"/>
-        <location filename="../qml/generic/AppWorld.qml" line="44"/>
+        <location filename="../qml/generic/AppWorld.qml" line="30"/>
         <source>Search</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="28"/>
+        <location filename="../qml/generic/AppWorld.qml" line="34"/>
         <source>Featured</source>
         <translation>Рекомендации</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="32"/>
+        <location filename="../qml/generic/AppWorld.qml" line="38"/>
         <source>Carrier</source>
         <translation>Оператор</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="37"/>
+        <location filename="../qml/generic/AppWorld.qml" line="43"/>
         <source>Cars</source>
         <translation>Автомобили</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="70"/>
+        <location filename="../qml/generic/AppWorld.qml" line="69"/>
         <source>by</source>
         <translation>от</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>File Bundle</source>
         <translation>Имя пакета</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="82"/>
+        <location filename="../qml/generic/AppWorld.qml" line="81"/>
         <source>View</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="88"/>
+        <location filename="../qml/generic/AppWorld.qml" line="87"/>
         <source>Download</source>
         <translation>Загрузить</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="199"/>
+        <location filename="../qml/generic/AppWorld.qml" line="200"/>
         <source>Options</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="205"/>
+        <location filename="../qml/generic/AppWorld.qml" line="206"/>
         <source>Server</source>
         <translation>Сервер</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="211"/>
         <source>Production</source>
         <translation>Производство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="211"/>
         <source>Enterprise</source>
         <translation>Предприятие</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="211"/>
         <source>Eval</source>
         <translation>Оценки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="214"/>
+        <location filename="../qml/generic/AppWorld.qml" line="215"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="217"/>
+        <location filename="../qml/generic/AppWorld.qml" line="218"/>
         <source>OS</source>
         <translation>ОС</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="223"/>
         <source>Latest</source>
         <translation>Последние</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="223"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -470,7 +470,7 @@
         <location filename="../qml/generic/Search.qml" line="23"/>
         <location filename="../qml/generic/Search.qml" line="127"/>
         <source>Download</source>
-        <translation>Скачать</translation>
+        <translation>Загрузить прошивку</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="38"/>
@@ -501,7 +501,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="86"/>
         <source>Download For</source>
-        <translation>Загружать для</translation>
+        <translation>Загрузить для  </translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="90"/>
@@ -535,6 +535,11 @@
         <translation>Проверка</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Search.qml" line="132"/>
+        <source>View Download (</source>
+        <translation>Посмотреть загрузку (</translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Search.qml" line="151"/>
         <source>Country</source>
         <translation>Страна</translation>
@@ -547,7 +552,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="176"/>
         <source>Search For</source>
-        <translation>Искать для:   </translation>
+        <translation>Искать для  </translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="214"/>
@@ -582,7 +587,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="254"/>
         <source>Production</source>
-        <translation>Производство</translation>
+        <translation>Релиз</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="254"/>
@@ -612,7 +617,12 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="343"/>
         <source>Selected: </source>
-        <translation>Выбрано:</translation>
+        <translation>Выбрано: </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="344"/>
+        <source>. Needed: </source>
+        <translation>. Нужно: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="362"/>
@@ -642,6 +652,11 @@
 </context>
 <context>
     <name>Title</name>
+    <message>
+        <location filename="../qml/generic/Title.qml" line="9"/>
+        <source>Sachesi</source>
+        <translation>Sachesi</translation>
+    </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
         <source>SACHESI</source>

@@ -129,7 +129,7 @@ Item {
             }
             Button {
                 visible: download.running
-                text:  qsTr("View Download (" + download.progress + "%)")
+                text:  qsTr("View Download (") + download.progress + "%)"
                 onClicked: downloadWin.visible = true
             }
             Button {
@@ -341,7 +341,7 @@ Item {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
         property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
-                                     + ((p.updateAvailableCount !== p.updateAppCount) ? ". Needed: " + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
+                                     + ((p.updateAvailableCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
         title: !blackberry ? selectedMsg : ""
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
