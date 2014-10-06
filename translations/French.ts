@@ -15,97 +15,97 @@
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="24"/>
-        <location filename="../qml/generic/AppWorld.qml" line="44"/>
+        <location filename="../qml/generic/AppWorld.qml" line="30"/>
         <source>Search</source>
         <translation>Chercher</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="28"/>
+        <location filename="../qml/generic/AppWorld.qml" line="34"/>
         <source>Featured</source>
         <translation>Sélectionnée</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="32"/>
+        <location filename="../qml/generic/AppWorld.qml" line="38"/>
         <source>Carrier</source>
         <translation>Pourvoyeur</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="37"/>
+        <location filename="../qml/generic/AppWorld.qml" line="43"/>
         <source>Cars</source>
         <translation>Аutos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="70"/>
+        <location filename="../qml/generic/AppWorld.qml" line="69"/>
         <source>by</source>
         <translation>par</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>File Bundle</source>
         <translation>Bundle de fichier</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>MB</source>
         <translation>Мo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="82"/>
+        <location filename="../qml/generic/AppWorld.qml" line="81"/>
         <source>View</source>
         <translation>Voir</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="88"/>
+        <location filename="../qml/generic/AppWorld.qml" line="87"/>
         <source>Download</source>
         <translation>Télécharger</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="199"/>
+        <location filename="../qml/generic/AppWorld.qml" line="200"/>
         <source>Options</source>
         <translation>Choix</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="205"/>
+        <location filename="../qml/generic/AppWorld.qml" line="206"/>
         <source>Server</source>
         <translation>Serveur</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="211"/>
         <source>Production</source>
         <translation>Production</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="211"/>
         <source>Enterprise</source>
         <translation>Enterprise</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="211"/>
         <source>Eval</source>
         <translation>Eval</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="214"/>
+        <location filename="../qml/generic/AppWorld.qml" line="215"/>
         <source>Model</source>
         <translation>Мodèle</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="217"/>
+        <location filename="../qml/generic/AppWorld.qml" line="218"/>
         <source>OS</source>
         <translation>ОS</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="223"/>
         <source>Latest</source>
         <translation>Dernier</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="223"/>
         <source>All</source>
         <translation>Tous</translation>
     </message>
@@ -281,12 +281,12 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="149"/>
         <source>Create Autoloader .exe from .signed images</source>
-        <translation>Créer Autochargeur .exe à partir d'images .signed</translation>
+        <translation>Créer Autochargeur .exe à partir d&apos;images .signed</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="156"/>
         <source>Extraction Tools</source>
-        <translation>Outils d'Extraction</translation>
+        <translation>Outils d&apos;Extraction</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
@@ -316,7 +316,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
         <source>Extracts filesystem image</source>
-        <translation>Extrait d'image du système de fichiers</translation>
+        <translation>Extrait d&apos;image du système de fichiers</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="223"/>
@@ -379,19 +379,19 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="78"/>
         <source>Install Folder</source>
-        <translation>Dossier d'Installation</translation>
+        <translation>Dossier d&apos;Installation</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="81"/>
         <location filename="../qml/generic/Installer.qml" line="95"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation>Erreur: Votre appareil ne peut traiter qu'une seule tâche à la fois. S'il vous plaît attendez installation précédente pour terminer.&lt;br&gt;;</translation>
+        <translation>Erreur: Votre appareil ne peut traiter qu&apos;une seule tâche à la fois. S&apos;il vous plaît attendez installation précédente pour terminer.&lt;br&gt;;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="83"/>
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
-        <translation>Erreur: Votre appareil ne peut traiter qu'une seule tâche à la fois. S'il vous plaît attendre pour la sauvegarde / processus de restauration à compléter.&lt;br&gt;</translation>
+        <translation>Erreur: Votre appareil ne peut traiter qu&apos;une seule tâche à la fois. S&apos;il vous plaît attendre pour la sauvegarde / processus de restauration à compléter.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="85"/>
@@ -535,6 +535,11 @@
         <translation>Vérification</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Search.qml" line="132"/>
+        <source>View Download (</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Search.qml" line="151"/>
         <source>Country</source>
         <translation>Pays</translation>
@@ -615,6 +620,11 @@
         <translation>Sélectionné: </translation>
     </message>
     <message>
+        <location filename="../qml/generic/Search.qml" line="344"/>
+        <source>. Needed: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Search.qml" line="362"/>
         <source>Options</source>
         <translation>Choix</translation>
@@ -642,6 +652,11 @@
 </context>
 <context>
     <name>Title</name>
+    <message>
+        <location filename="../qml/generic/Title.qml" line="9"/>
+        <source>Sachesi</source>
+        <translation type="unfinished">Sachesi</translation>
+    </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
         <source>SACHESI</source>
@@ -718,7 +733,7 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="68"/>
         <source>Searching for USB device</source>
-        <translation>Recherche d'un appareil USB</translation>
+        <translation>Recherche d&apos;un appareil USB</translation>
     </message>
 </context>
 <context>
