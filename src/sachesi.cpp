@@ -54,7 +54,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Install translator by locale language string
     QTranslator appTranslator;
     if (appTranslator.load(QString(":/translations/%1.qm")
-                                  .arg(QLocale::languageToString(QLocale::system().language())))
+                                  .arg(QLocale::languageToString(QLocale().language())))
             ) {
         app.installTranslator(&appTranslator);
     }

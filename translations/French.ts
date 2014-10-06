@@ -42,7 +42,7 @@
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>File Bundle</source>
-        <translation>Bundle de fichier</translation>
+        <translation>Paquet de Fichier</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="76"/>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="66"/>
         <source>Install applications to device</source>
-        <translation>Installer des applications à dispositif</translation>
+        <translation>Installer des applications à appareil</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="75"/>
