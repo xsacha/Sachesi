@@ -829,7 +829,7 @@ void InstallNet::restoreReply()
                     else
                         _appRemList.append(newApp);
                     if (newApp->type() == "os") {
-                        _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop");
+                        _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop").replace("verizon", "factory");
                         setKnownOS(newApp->version());
                     } else if (newApp->type() == "radio") {
                         _knownConnectedRadioType = newApp->name().split("radio.").last().remove(".omadm");

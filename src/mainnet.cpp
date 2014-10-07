@@ -222,10 +222,19 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
     auto appendNewHeader = [&potentialText] (QString name, QString devices) {
         potentialText.append("\n" + name + ": " + devices + " (Debrick + Core OS)\n");
     };
-    auto appendNewLink = [&potentialText, &hashval] (QString linkType, bool OS, bool OMAP, QString hwType, QString version) {
-        if (!OS)
+    auto appendNewLink = [&potentialText, &hashval] (QString linkType, int type, bool OMAP, QString hwType, QString version) {
+        QString typeString;
+        if (type == 2) {
+            potentialText.append(linkType + " IFS\n");
+            typeString = "qcfm.ifs.";
+        } else if (type == 1) {
+            typeString = "coreos.qcfm.os.";
+        } else if (type == 0) {
             potentialText.append(linkType + " Radio\n");
-        potentialText.append("http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + (OS ? "coreos.qcfm.os." : "qcfm.radio."));
+            typeString = "qcfm.radio.";
+        }
+
+        potentialText.append("http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + typeString);
 
         if (OMAP) // Old Playbook style
             potentialText.append("factory" + hwType + "/" + version + "/winchester.factory_sfi" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
@@ -233,26 +242,26 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
             potentialText.append(hwType + "/" + version + "/" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
     };
     appendNewHeader("QC8974", "Blackberry Passport");
-    appendNewLink("Debrick", true, false, "qc8974.factory_sfi.desktop", osVersion);
-    appendNewLink("Core",    true, false, "qc8974.factory_sfi", osVersion);
+    appendNewLink("Debrick", 1, false, "qc8974.factory_sfi.desktop", osVersion);
+    appendNewLink("Core",    1, false, "qc8974.factory_sfi", osVersion);
 
     appendNewHeader("QC8960", "Blackberry Z3/Z10/Z30/Q5/Q10");
-    appendNewLink("Debrick", true, false, "qc8960.factory_sfi.desktop", osVersion);
-    appendNewLink("Core",    true, false, "qc8960.factory_sfi", osVersion);
+    appendNewLink("Debrick", 1, false, "qc8960.factory_sfi.desktop", osVersion);
+    appendNewLink("Core",    1, false, "qc8960.factory_sfi", osVersion);
 
     appendNewHeader("OMAP", "Blackberry Z10 STL 100-1");
-    appendNewLink("Debrick", true, true, ".desktop", osVersion);
-    appendNewLink("Core",    true, true, "", osVersion);
+    appendNewLink("Debrick", 1, true, ".desktop", osVersion);
+    appendNewLink("Core",    1, true, "", osVersion);
 
     potentialText.append("\n\n* Radios *\n");
     // Touch
-    appendNewLink("Z30 + Classic", false, false, "qc8960.wtr5", radioVersion);
-    appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
-    appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", false, false, "qc8960", radioVersion);
-    appendNewLink("Z3 (Jakarta) + Cafe", false, false, "qc8930.wtr5", radioVersion);
+    appendNewLink("Z30 + Classic", 0, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Z10 (STL 100-1)",   0, false, "m5730", radioVersion);
+    appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", 0, false, "qc8960", radioVersion);
+    appendNewLink("Z3 (Jakarta) + Cafe", 0, false, "qc8930.wtr5", radioVersion);
     // QWERTY
-    appendNewLink("Passport + Ontario", false, false, "qc8974.wtr2", radioVersion);
-    appendNewLink("Q5 + Q10 + Khan", false, false, "qc8960.wtr", radioVersion);
+    appendNewLink("Passport + Ontario", 0, false, "qc8974.wtr2", radioVersion);
+    appendNewLink("Q5 + Q10 + Khan", 0, false, "qc8960.wtr", radioVersion);
 
 
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
