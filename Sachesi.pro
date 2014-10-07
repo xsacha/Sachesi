@@ -160,5 +160,7 @@ lupdate_only{
 SOURCES = \
     qml/generic/mcc.js \
     qml/generic/*.qml \
-    qml/generic/UI/*.qml
+    qml/generic/UI/*.qml\
+    src/*.cpp\
+    ext/quazip/*.cpp
 }

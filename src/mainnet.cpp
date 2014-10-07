@@ -112,7 +112,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         });
         QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
             // Some users may experience difficult downloading it at all, or the link may be outdated.
-            QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
+            QMessageBox::information(NULL, tr("Error"), tr("Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to ") + capPath());
             _splitting = 0; emit splittingChanged();
             splitThread->deleteLater();
             splitter->deleteLater();
@@ -148,9 +148,9 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     // TODO: Actually detect file by inspection
     QFileInfo fileInfo(selectedFiles.first());
     if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
-        QString errorMsg = "You can only extract apps from debrick OS images.";
+        QString errorMsg = tr("You can only extract apps from debrick OS images.");
         if (fileInfo.size() < 120 * 1024 * 1024)
-            errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
+            errorMsg.append(tr("\nThis appears to be a Radio file. Radios have no apps."));
         QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
     }
@@ -194,7 +194,7 @@ void MainNet::abortSplit()
 
 void MainNet::grabLinks(int downloadDevice)
 {
-    writeDisplayFile("updates.txt", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
+    writeDisplayFile("updates.txt", convertLinks(downloadDevice, tr("Links have been converted to work on your selected device.\n\n")).toLocal8Bit());
 }
 
 void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, bool sdk) {
@@ -214,13 +214,13 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
         radioVersion += parts.at(i) + ".";
     radioVersion += QString::number(build);
 
-    QString potentialText = QString("Potential OS and Radio links for SR" + softwareRelease + " (OS:" + osVersion + " + Radio:" + radioVersion + ")\n\n"
-                                    "* Operating Systems *\n");
+    QString potentialText = QString(tr("Potential OS and Radio links for SR") + softwareRelease + tr(" (OS:") + osVersion + tr(" + Radio:") + radioVersion + tr(")\n\n"
+                                    "* Operating Systems *\n"));
 
     // Lambda function to append link for signed bars
     // Arch hardcoded to armv7
     auto appendNewHeader = [&potentialText] (QString name, QString devices) {
-        potentialText.append("\n" + name + ": " + devices + " (Debrick + Core OS)\n");
+        potentialText.append("\n" + name + ": " + devices + tr(" (Debrick + Core OS)\n"));
     };
     auto appendNewLink = [&potentialText, &hashval] (QString linkType, bool OS, bool OMAP, QString hwType, QString version) {
         if (!OS)
@@ -272,7 +272,7 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
         // Fetch version
         components = components[1].split("/");
         if (components.count() < 2) {
-            QMessageBox::information(nullptr, "Error", "Was unable to convert the OS to your selected device! Falling back to original search results.");
+            QMessageBox::information(nullptr, tr("Error"), tr("Was unable to convert the OS to your selected device! Falling back to original search results."));
             return name;
         }
         if (components[0].endsWith(".desktop"))
@@ -295,7 +295,7 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
         // Fetch version
         components = components[1].split("/");
         if (components.count() < 2) {
-            QMessageBox::information(nullptr, "Error", "Was unable to convert the Radio to your selected device! Falling back to original search results.");
+            QMessageBox::information(nullptr, tr("Error"), tr("Was unable to convert the Radio to your selected device! Falling back to original search results."));
             return name;
         }
         newPath.append(components[1] + "/" + replace);
@@ -449,14 +449,14 @@ void MainNet::reverseLookup(int device, int variant, int server, QString OSver, 
                 _softwareRelease = OSver;
                 _hasPotentialLinks = true; emit hasPotentialLinksChanged();
             } else {
-                _softwareRelease = "SR not in system";
+                _softwareRelease = tr("SR not in system");
             }
             emit softwareReleaseChanged();
             replyTmp->deleteLater();
             setScanning(0);
         });
         QObject::connect(replyTmp, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            _softwareRelease = "SR not in system";
+            _softwareRelease = tr("SR not in system");
             emit softwareReleaseChanged();
             replyTmp->deleteLater();
             setScanning(0);
@@ -545,7 +545,7 @@ void MainNet::reverseLookupReply() {
                 _hasPotentialLinks = true; emit hasPotentialLinksChanged();
             } else if (skip) {
                 // Instead of using version, report 'not in system' so that it is skipped
-                _softwareRelease = "SR not in system";
+                _softwareRelease = tr("SR not in system");
             }
             emit softwareReleaseChanged();
             setScanning(0);

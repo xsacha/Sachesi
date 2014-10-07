@@ -66,7 +66,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Do we have a suitable place to store files that the user will be able to find?
     if (!checkCurPath()) {
-        QMessageBox::critical(NULL, "Error", "Could not find a suitable storage path.\nPlease report this.");
+        QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not find a suitable storage path.\nPlease report this."));
         return 0;
     }
 

@@ -138,7 +138,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     if (barInfo.type == OSType) {
         QString installableOS = appName.split("os.").last().remove(".desktop");
         if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
-            int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Ignore Warning [Stupid]", "Skip OS", "Cancel Install", 2);
+            int choice = QMessageBox::critical(nullptr, tr("WARNING"), tr("The OS file you have selected to install is for a different device!\nOS Type: ") + installableOS + tr("\nYour Device: ") + _knownConnectedOSType, tr("Ignore Warning [Stupid]"), tr("Skip OS"), tr("Cancel Install"), 2);
             if (choice == 1) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
@@ -151,7 +151,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     } else if (barInfo.type == RadioType) {
         QString installableRadio = appName.split("radio.").last().remove(".omadm");
         if (_knownConnectedRadioType != "" && installableRadio != _knownConnectedRadioType) {
-            int choice = QMessageBox::critical(nullptr, "WARNING", "The Radio file you have selected to install is for a different device!\nRadio Type: " + installableRadio + "\nYour Device: " + _knownConnectedRadioType, "Ignore Warning [Stupid]", "Skip Radio", "Cancel Install", 2);
+            int choice = QMessageBox::critical(nullptr, tr("WARNING"), tr("The Radio file you have selected to install is for a different device!\nRadio Type: ") + installableRadio + tr("\nYour Device: ") + _knownConnectedRadioType, tr("Ignore Warning [Stupid]"), tr("Skip Radio"), tr("Cancel Install"), 2);
             if (choice == 1) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
@@ -166,7 +166,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     // Check if we are upgrading firmware or just installing apps.
     if (type == "system") {
         // Only if installing
-        setNewLine(QString("<b>Installing ") + (barInfo.type == OSType ? "OS: " : "Radio: " ) + barInfo.version + "</b>");
+        setNewLine(QString(tr("<b>Installing ")) + (barInfo.type == OSType ? tr("OS: ") : tr("Radio: ") ) + barInfo.version + "</b>");
         setFirmwareUpdate(true);
     } else if (!type.isEmpty())
         barInfo.type = AppType;
@@ -192,7 +192,7 @@ void InstallNet::install(QList<QUrl> files)
             {
                 BarInfo info = checkInstallableInfo(name + "/" + barFile);
                 if (info.name == "EXIT")
-                    return setNewLine("Install aborted.");
+                    return setNewLine(tr("Install aborted."));
 
                 if (info.type != NotInstallableType)
                     _installInfo.append(info);
@@ -200,17 +200,17 @@ void InstallNet::install(QList<QUrl> files)
         } else {
             BarInfo info = checkInstallableInfo(name);
             if (info.name == "EXIT")
-                return setNewLine("Install aborted.");
+                return setNewLine(tr("Install aborted."));
 
             if (info.type != NotInstallableType)
                 _installInfo.append(info);
         }
     }
     if (_installInfo.isEmpty()) {
-        setNewLine("None of the selected files were installable.");
+        setNewLine(tr("None of the selected files were installable."));
         return;
     }
-    setNewLine(QString("Installing <b>%1</b> .bar(s).")
+    setNewLine(QString(tr("Installing <b>%1</b> .bar(s)."))
                .arg(_installInfo.count()));
     install();
 }
@@ -297,7 +297,7 @@ void InstallNet::backup()
         currentBackupZip->setZip64Enabled(true);
         currentBackupZip->open(QuaZip::mdCreate);
         if (!currentBackupZip->isOpen()) {
-            QMessageBox::critical(nullptr, "Error", "Unable to write backup. Please ensure you have permission to write to " + _backupFileName);
+            QMessageBox::critical(nullptr, tr("Error"), tr("Unable to write backup. Please ensure you have permission to write to ") + _backupFileName);
             delete currentBackupZip;
             currentBackupZip = nullptr;
             setBacking(false);
@@ -374,7 +374,7 @@ void InstallNet::restore(QUrl url, int options)
     currentBackupZip = new QuaZip(_backupFileName);
     currentBackupZip->open(QuaZip::mdUnzip);
     if (!currentBackupZip->isOpen()) {
-        QMessageBox::critical(nullptr, "Error", "Could not open backup file.");
+        QMessageBox::critical(nullptr, tr("Error"), tr("Could not open backup file."));
         delete currentBackupZip;
         currentBackupZip = nullptr;
         return;
@@ -404,7 +404,7 @@ void InstallNet::restore(QUrl url, int options)
 }
 
 void InstallNet::wipe() {
-    if (QMessageBox::critical(nullptr, "Loss of data", "Are you sure you want to wipe your device?\nThis will result in a permanent loss of data.", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+    if (QMessageBox::critical(nullptr, tr("Loss of data"), tr("Are you sure you want to wipe your device?\nThis will result in a permanent loss of data."), QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
         return;
     QUrlQuery postData;
     postData.addQueryItem("wipe", "wipe");
@@ -431,7 +431,7 @@ void InstallNet::resignNVRAM() {
 }
 
 void InstallNet::factorywipe() {
-    if (QMessageBox::critical(nullptr, "Loss of data", "Are you sure you want to wipe your device?\nThis will result in a permanent loss of data.", QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+    if (QMessageBox::critical(nullptr, tr("Loss of data"), tr("Are you sure you want to wipe your device?\nThis will result in a permanent loss of data."), QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
         return;
     QUrlQuery postData;
     postData.addQueryItem("wipe", "wipe");
@@ -691,7 +691,7 @@ void InstallNet::restoreReply()
     //for (int s = 0; s < data.size(); s+=3000) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3000);
     if (data.size() == 0) {
         if (_restoring) {
-            QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
+            QMessageBox::information(nullptr, tr("Restore Error"), tr("There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup."));
             qIoSafeFree(_zipFile);
             ioSafeFree(currentBackupZip);
             setRestoring(false);
@@ -897,7 +897,7 @@ void InstallNet::restoreReply()
         }
         setCompleted(false);
         setState(false);
-        QMessageBox::information(nullptr, "Success", "RTAS has been started.\nSachesi will now terminate its connection.", QMessageBox::Ok);
+        QMessageBox::information(nullptr, tr("Success"), tr("RTAS has been started.\nSachesi will now terminate its connection."), QMessageBox::Ok);
         openFile(rtasData.fileName());
         rtasData.close();
     }
@@ -927,7 +927,7 @@ void InstallNet::restoreReply()
             if (xml.isStartElement())
             {
                 if (xml.name() == "Log") {
-                    QMessageBox::critical(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
+                    QMessageBox::critical(nullptr, tr("Error"), xml.readElementText(), QMessageBox::Ok);
                 }
             }
         }
@@ -967,7 +967,7 @@ void InstallNet::restoreReply()
                 // TODO: Extract naming from bar too, if possible
                 QString literal_name = compressedFile->fileName().split('/').last();
                 QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-                setCurInstallName("Sending " + fileParts.at(0));
+                setCurInstallName(tr("Sending ") + fileParts.at(0));
             }
 
             if (info.type == RadioType)
@@ -999,7 +999,7 @@ void InstallNet::restoreReply()
                         return;
                     }
                 } else if (xml.name() == "ErrorDescription") {
-                    QMessageBox::critical(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
+                    QMessageBox::critical(nullptr, tr("Error"), xml.readElementText(), QMessageBox::Ok);
                 }
             }
         }
@@ -1060,8 +1060,8 @@ void InstallNet::restoreReply()
                 {
                     QString errorText = QString(data).split("ErrorDescription>").at(1);
                     errorText.chop(2);
-                    setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last());
-                    setNewLine("&nbsp;&nbsp;Error: " + errorText);
+                    setNewLine(tr("<br>While sending: ") + _downgradeInfo.at(_downgradePos).split("/").last());
+                    setNewLine(tr("&nbsp;&nbsp;Error: ") + errorText);
                     setInstalling(false);
                     _dgProgress = -1;
                     setCurDGProgress(-1);
@@ -1109,7 +1109,7 @@ void InstallNet::restoreReply()
                             _hadPassword = false;
                     }
                 } else if (xml.name() == "ErrorDescription") {
-                    QMessageBox::information(nullptr, "Error", xml.readElementText().remove("HTTP_COOKIE="), QMessageBox::Ok);
+                    QMessageBox::information(nullptr, tr("Error"), xml.readElementText().remove("HTTP_COOKIE="), QMessageBox::Ok);
                 }
             }
         }
@@ -1278,7 +1278,7 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
     if (_state && this_ip == _ip) {
         resetVars();
     }
-    QString errString = QString("Communication Error: %1 (%2) from %3")
+    QString errString = QString(tr("Communication Error: %1 (%2) from %3"))
             .arg(error)
             .arg( ((QNetworkReply*)sender())->errorString() )
             .arg(this_ip);

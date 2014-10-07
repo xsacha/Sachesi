@@ -21,7 +21,7 @@ void InstallNet::requestConfigure()
 {
     if (!_state)
         return;
-    logadd(QString("1. Request Configuration"));
+    logadd(QString(tr("1. Request Configuration")));
     QByteArray buffer;
     QDataStream config(&buffer, QIODevice::WriteOnly);
     config << qint16(6) /*messageSize*/ << qint16(2) /*version*/ << qint16(1) /*code*/;
@@ -30,7 +30,7 @@ void InstallNet::requestConfigure()
 
 void InstallNet::requestChallenge()
 {
-    logadd(QString("3. Request Challenge"));
+    logadd(QString(tr("3. Request Challenge")));
     BIGNUM* e = BN_new(); BN_set_word(e, 65537);
     privkey = RSA_new();
     RSA_generate_key_ex(privkey, 1024, e, nullptr);
@@ -48,7 +48,7 @@ void InstallNet::requestChallenge()
 
 void InstallNet::replyChallenge()
 {
-    logadd(QString("5. Reply Challenge"));
+    logadd(QString(tr("5. Reply Challenge")));
     const signed char QCONNDOOR_PERMISSIONS[] = {3, 4, 118, -125, 1};
     const char EMSA_SHA1_HASH[] = {48, 33, 48, 9, 6, 5, 43, 14, 3, 2, 26, 5, 0, 4, 20};
     QCryptographicHash sha1(QCryptographicHash::Sha1);
