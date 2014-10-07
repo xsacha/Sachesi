@@ -41,6 +41,14 @@ public:
                 perimetertype = (val != "personal") ? "1" : "0";
         }
     }
+    BackupCategory(QString idGiven, QString nameGiven) {
+        id = idGiven;
+        name = nameGiven;
+        count = "0";
+        bytesize = "-1";
+        perimetertype = "0";
+    }
+
     ~BackupCategory() {}
 
     QString id;
