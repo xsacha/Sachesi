@@ -136,7 +136,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
 
     // Check if we are about to make a huge mistake!
     if (barInfo.type == OSType) {
-        QString installableOS = appName.split("os.").last().remove(".desktop");
+        QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
         if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
             int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Ignore Warning [Stupid]", "Skip OS", "Cancel Install", 2);
             if (choice == 1) {
@@ -482,9 +482,6 @@ void InstallNet::login()
     int flags = QNetworkInterface::IsUp | QNetworkInterface::IsRunning | QNetworkInterface::CanBroadcast | QNetworkInterface::CanMulticast;
     foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
     {
-        // VMWare responds for some reason. Who else does?
-        if (inter.humanReadableName().startsWith("VMware"))
-            continue;
         if ((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
         {
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
@@ -494,10 +491,13 @@ void InstallNet::login()
                     QList<quint8> addrParts;
                     foreach(QString addrString, addr.ip().toString().split('.'))
                         addrParts.append(addrString.toInt());
-                    if ((addrParts.last() % 4) != 2)
-                        continue;
-                    if (addrParts.at(0) == 169 && addrParts.at(1) == 254)
-                        ips.append(QString("169.254.%1.%2").arg(addrParts.at(2)).arg(addrParts.at(3) - 1));
+
+                    if (addrParts.at(0) > 100) {
+                        int masked = addrParts.at(3) - 1;
+                        if (masked == 0)
+                            masked = 128;
+                        ips.append(QString("%1.%2.%3.%4").arg(addrParts.at(0)).arg(addrParts.at(1)).arg(addrParts.at(2)).arg(masked));
+                    }
                 }
             }
         }
@@ -770,7 +770,7 @@ void InstallNet::restoreReply()
             backup();
         else if (_restoring)
             restore();
-        else if (_hadPassword)
+        else /*if (_hadPassword)*/
             scanProps();
         // This can take up to 15 seconds to respond and all communication on device is Blocking!
         // backupQuery();
@@ -1266,7 +1266,7 @@ void InstallNet::resetVars()
 
 void InstallNet::restoreError(QNetworkReply::NetworkError error)
 {
-    if (error == 5) // On purpose
+    if (error == 5 || error == 99) // On purpose or unreachable
         return;
 
     // This is only if it's a discovery pong. Otherwise it will be empty string.
