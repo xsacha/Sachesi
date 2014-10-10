@@ -38,7 +38,7 @@ Window {
                 SpinBox {
                     id: build
                     width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 1154
+                    value: 1418
                     maximumValue: 9999
                     stepSize: 3
                     onEditingFinished: relookup.clicked()

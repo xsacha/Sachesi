@@ -20,20 +20,26 @@
 // For portability between platforms and Qt versions.
 // Clears up the code in the more important files.
 
+#ifndef BLACKBERRY
 #include <QFileDialog>
 #include <QListView>
 #include <QTreeView>
 #include <QDesktopServices>
+#endif
 #include <QSettings>
 #include <QUrl>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QUrl>
+#else
 #include <QUrlQuery>
 #define encodedQuery query(QUrl::FullyEncoded).toUtf8
-
-typedef QFileDialog* FileSelect;
+#endif
 
 QString capPath(bool temp = false);
-FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt);
+#ifndef BLACKBERRY
+QFileDialog* selectFiles(QString title, QString dir, QString nameString, QString nameExt);
+#endif
 QString getSaveDir();
 bool checkCurPath();
 void openFile(QString name);

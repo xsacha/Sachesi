@@ -135,7 +135,7 @@ void MainNet::extractImage(int type, int options)
         filter += " *.qnx6";
     if (type == 0 && _options & 4)
         filter += " *.ifs";
-    FileSelect finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
+    QFileDialog* finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
     if (finder->exec())
         extractImageSlot(finder->selectedFiles());
     finder->deleteLater();

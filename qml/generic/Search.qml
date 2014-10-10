@@ -149,7 +149,7 @@ Item {
         TextCouple {
             id: country
             type: qsTr("Country")
-            value: "510"
+            value: "302"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -160,7 +160,7 @@ Item {
         TextCouple {
             id: carrier
             type: qsTr("Carrier")
-            value: "010"
+            value: "720"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
