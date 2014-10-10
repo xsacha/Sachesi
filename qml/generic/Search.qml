@@ -177,7 +177,7 @@ Item {
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
-                    selectedItem: 5
+                    selectedItem: 4
                     type: qsTr("Device")
 
                     // List everything we know except abandoned models
