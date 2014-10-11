@@ -532,7 +532,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="127"/>
         <source>Verifying</source>
-        <translation type="finished">Verifiziere</translation>
+        <translation type="finished">Verifiziere ...</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="132"/>
