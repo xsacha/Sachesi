@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>translations/English.qm</file>
         <file>translations/Russian.qm</file>
+        <file>translations/French.qm</file>
+        <file>translations/Spanish.qm</file>
+        <file>translations/Chinese.qm</file>
     </qresource>
 </RCC>
