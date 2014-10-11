@@ -200,6 +200,68 @@
         <source>Detected devices:</source>
         <translation>Périphériques détectés:</translation>
     </message>
+    <message>
+        <location filename="../src/boot.cpp" line="52"/>
+        <location filename="../src/boot.cpp" line="54"/>
+        <location filename="../src/boot.cpp" line="65"/>
+        <location filename="../src/boot.cpp" line="74"/>
+        <location filename="../src/boot.cpp" line="77"/>
+        <location filename="../src/boot.cpp" line="110"/>
+        <location filename="../src/boot.cpp" line="123"/>
+        <location filename="../src/boot.cpp" line="125"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="52"/>
+        <source>You need to install WinUSB driver for the Blackberry device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="54"/>
+        <source>You need to run this application with root privileges (i.e. sudo).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="65"/>
+        <source>Error #1001</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="74"/>
+        <source>Please reboot your device manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="77"/>
+        <source>Error #1002 (</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="110"/>
+        <source>Was not able to send message to connected device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="123"/>
+        <source>Try rebooting your device manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="125"/>
+        <source>The connected device did not respond as expected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="238"/>
+        <source>Wrong Password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/boot.cpp" line="238"/>
+        <source>You entered the wrong password. I don&apos;t handle this yet but basically you will need to go to the Install tab, fix your password, then try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -327,6 +389,177 @@
         <location filename="../qml/generic/Extract.qml" line="228"/>
         <source>Extract all bar archives</source>
         <translation>Extrait toutes les archives de la bar</translation>
+    </message>
+</context>
+<context>
+    <name>InstallNet</name>
+    <message>
+        <location filename="../src/installer.cpp" line="141"/>
+        <location filename="../src/installer.cpp" line="154"/>
+        <source>WARNING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="141"/>
+        <source>The OS file you have selected to install is for a different device!
+OS Type: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="141"/>
+        <location filename="../src/installer.cpp" line="154"/>
+        <source>
+Your Device: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="141"/>
+        <location filename="../src/installer.cpp" line="154"/>
+        <source>Ignore Warning [Stupid]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="141"/>
+        <source>Skip OS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="141"/>
+        <location filename="../src/installer.cpp" line="154"/>
+        <source>Cancel Install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="154"/>
+        <source>The Radio file you have selected to install is for a different device!
+Radio Type: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="154"/>
+        <source>Skip Radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="169"/>
+        <source>&lt;b&gt;Installing </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="169"/>
+        <source>OS: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="169"/>
+        <source>Radio: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="195"/>
+        <location filename="../src/installer.cpp" line="203"/>
+        <source>Install aborted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="210"/>
+        <source>None of the selected files were installable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="213"/>
+        <source>Installing &lt;b&gt;%1&lt;/b&gt; .bar(s).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="300"/>
+        <location filename="../src/installer.cpp" line="377"/>
+        <location filename="../src/installer.cpp" line="930"/>
+        <location filename="../src/installer.cpp" line="1002"/>
+        <location filename="../src/installer.cpp" line="1112"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="300"/>
+        <source>Unable to write backup. Please ensure you have permission to write to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="377"/>
+        <source>Could not open backup file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="407"/>
+        <location filename="../src/installer.cpp" line="434"/>
+        <source>Loss of data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="407"/>
+        <location filename="../src/installer.cpp" line="434"/>
+        <source>Are you sure you want to wipe your device?
+This will result in a permanent loss of data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="694"/>
+        <source>Restore Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="694"/>
+        <source>There was an error loading the backup file.
+The device encountered an unrecoverable bug.
+It is not designed to restore this backup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="900"/>
+        <source>Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="900"/>
+        <source>RTAS has been started.
+Sachesi will now terminate its connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="970"/>
+        <source>Sending </source>
+        <translation type="unfinished">Envoi </translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="1063"/>
+        <source>&lt;br&gt;While sending: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="1064"/>
+        <source>&amp;nbsp;&amp;nbsp;Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer.cpp" line="1281"/>
+        <source>Communication Error: %1 (%2) from %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer_establish.cpp" line="24"/>
+        <source>1. Request Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer_establish.cpp" line="33"/>
+        <source>3. Request Challenge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/installer_establish.cpp" line="51"/>
+        <source>5. Reply Challenge</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -462,6 +695,144 @@
         <location filename="../qml/generic/Installer.qml" line="199"/>
         <source>Show Installed Apps</source>
         <translation>Voir les Apps Installées</translation>
+    </message>
+</context>
+<context>
+    <name>MainNet</name>
+    <message>
+        <location filename="../src/mainnet.cpp" line="115"/>
+        <location filename="../src/mainnet.cpp" line="275"/>
+        <location filename="../src/mainnet.cpp" line="298"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="115"/>
+        <source>Was unable to download CAP, which is a component of Autoloaders.
+As a workaround, you can provide your own CAP to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="151"/>
+        <source>You can only extract apps from debrick OS images.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="153"/>
+        <source>
+This appears to be a Radio file. Radios have no apps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="197"/>
+        <source>Links have been converted to work on your selected device.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="217"/>
+        <source>Potential OS and Radio links for SR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="217"/>
+        <source> (OS:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="217"/>
+        <source> + Radio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="217"/>
+        <source>)
+
+* Operating Systems *
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="223"/>
+        <source> (Debrick + Core OS)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="275"/>
+        <source>Was unable to convert the OS to your selected device! Falling back to original search results.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="298"/>
+        <source>Was unable to convert the Radio to your selected device! Falling back to original search results.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainnet.cpp" line="452"/>
+        <location filename="../src/mainnet.cpp" line="459"/>
+        <location filename="../src/mainnet.cpp" line="548"/>
+        <source>SR not in system</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../src/sachesi.cpp" line="69"/>
+        <source>Could not find a suitable storage path.
+Please report this.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/sachesi.cpp" line="69"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaGzipFile</name>
+    <message>
+        <location filename="../ext/quazip/quagzipfile.cpp" line="60"/>
+        <source>QIODevice::Append is not supported for GZIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ext/quazip/quagzipfile.cpp" line="66"/>
+        <source>Opening gzip for both reading and writing is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ext/quazip/quagzipfile.cpp" line="74"/>
+        <source>You can open a gzip either for reading or for writing. Which is it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ext/quazip/quagzipfile.cpp" line="80"/>
+        <source>Could not gzopen() file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZIODevice</name>
+    <message>
+        <location filename="../ext/quazip/quaziodevice.cpp" line="145"/>
+        <source>QIODevice::Append is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ext/quazip/quaziodevice.cpp" line="150"/>
+        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZipFile</name>
+    <message>
+        <location filename="../ext/quazip/quazipfile.cpp" line="218"/>
+        <source>ZIP/UNZIP API error %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -648,6 +1019,41 @@
         <location filename="../qml/generic/Search.qml" line="414"/>
         <source> (downloaded)</source>
         <translation> (téléchargé)</translation>
+    </message>
+</context>
+<context>
+    <name>Splitter</name>
+    <message>
+        <location filename="../src/splitter.cpp" line="114"/>
+        <source>Was not a Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="134"/>
+        <source>Unknown Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="243"/>
+        <location filename="../src/splitter.cpp" line="299"/>
+        <source>Could not open </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <source>Was not a Blackberry .signed image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Bad partition table.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
