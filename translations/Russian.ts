@@ -65,47 +65,47 @@
         <translation>Загрузить</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="200"/>
+        <location filename="../qml/generic/AppWorld.qml" line="198"/>
         <source>Options</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="206"/>
+        <location filename="../qml/generic/AppWorld.qml" line="204"/>
         <source>Server</source>
         <translation>Сервер</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="211"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Production</source>
         <translation>Производство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="211"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Enterprise</source>
         <translation>Предприятие</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="211"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Eval</source>
         <translation>Оценки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="215"/>
+        <location filename="../qml/generic/AppWorld.qml" line="213"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="218"/>
+        <location filename="../qml/generic/AppWorld.qml" line="216"/>
         <source>OS</source>
         <translation>ОС</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="223"/>
+        <location filename="../qml/generic/AppWorld.qml" line="221"/>
         <source>Latest</source>
         <translation>Последние</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="223"/>
+        <location filename="../qml/generic/AppWorld.qml" line="221"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -118,19 +118,46 @@
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Loading Backup Options</source>
-        <translation>Загрузка вариантов резервного копирования</translation>
+        <translation type="vanished">Загрузка вариантов резервного копирования</translation>
+    </message>
+    <message>
+        <source>Load Backup Options</source>
+        <translation type="vanished">Загрузить варианты резервного копирования</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="33"/>
+        <source>Refreshing Backup Sizes</source>
+        <translation>Обновление размера резервной копии</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="62"/>
+        <source>Total: </source>
+        <translation>Всего: </translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="vanished">Неизвестно</translation>
+    </message>
+    <message>
+        <source> MB)</source>
+        <translation type="vanished"> МБ)</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="45"/>
+        <location filename="../qml/generic/Backup.qml" line="62"/>
+        <source> MB</source>
+        <translation> МБ</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="69"/>
-        <source>Load Backup Options</source>
-        <translation>Загрузить варианты резервного копирования</translation>
+        <source>Refresh Backup Sizes</source>
+        <translation>Обновить размер резервной копии</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="77"/>
         <source>Choose backup filename</source>
-        <translation>Выберите имя файла резервной копии</translation>
+        <translation>Создание резервной копии</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="85"/>
@@ -140,17 +167,50 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="89"/>
         <source>Select restore file</source>
-        <translation>Выберите файл восстановления</translation>
+        <translation>Выбор файла резервной копии</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="100"/>
         <source>Create backup</source>
-        <translation>Создание резервной копии</translation>
+        <translation>Создать резервную копию</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Restore backup</source>
-        <translation>Восстановить резервную копию</translation>
+        <translation>Восстановить из резервной копии</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source>Creating</source>
+        <translation>Создание</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source>Restoring</source>
+        <translation>Восстановление</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source> Backup (</source>
+        <translation> Резервное копирование (</translation>
+    </message>
+</context>
+<context>
+    <name>BackupInfo</name>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="25"/>
+        <source>Application Data</source>
+        <translation>Параметры приложений</translation>
+    </message>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="26"/>
+        <source>Media</source>
+        <translation>Медиа</translation>
+    </message>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="27"/>
+        <source>Device Settings and Local Contacts/Calendar Data</source>
+        <translation>Параметры устройства и локальные данные контактов и календаря</translation>
     </message>
 </context>
 <context>
@@ -201,66 +261,24 @@
         <translation>Обнаруженные устройства:    </translation>
     </message>
     <message>
-        <location filename="../src/boot.cpp" line="52"/>
-        <location filename="../src/boot.cpp" line="54"/>
-        <location filename="../src/boot.cpp" line="65"/>
-        <location filename="../src/boot.cpp" line="74"/>
-        <location filename="../src/boot.cpp" line="77"/>
-        <location filename="../src/boot.cpp" line="110"/>
-        <location filename="../src/boot.cpp" line="123"/>
-        <location filename="../src/boot.cpp" line="125"/>
-        <source>Error</source>
-        <translation>Ошибка</translation>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>Blackberry </source>
+        <translation>Blackberry </translation>
     </message>
     <message>
-        <location filename="../src/boot.cpp" line="52"/>
-        <source>You need to install WinUSB driver for the Blackberry device.</source>
-        <translation>Вам нужно установить драйвер WinUSB для Blackberry устройства .</translation>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>Bootloader</source>
+        <translation>Загрузчик</translation>
     </message>
     <message>
-        <location filename="../src/boot.cpp" line="54"/>
-        <source>You need to run this application with root privileges (i.e. sudo).</source>
-        <translation>Вам необходимо запустить это приложение с правами администратора .</translation>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>USB (Unix)</source>
+        <translation>USB (Unix)</translation>
     </message>
     <message>
-        <location filename="../src/boot.cpp" line="65"/>
-        <source>Error #1001</source>
-        <translation>Ошибка #1001</translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="74"/>
-        <source>Please reboot your device manually.</source>
-        <translation>Пожалуйста, перезагрузите устройство вручную .</translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="77"/>
-        <source>Error #1002 (</source>
-        <translation>Ошибка #1002 (</translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="110"/>
-        <source>Was not able to send message to connected device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="123"/>
-        <source>Try rebooting your device manually.</source>
-        <translation>Попробуйте перезагрузить устройство вручную .</translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="125"/>
-        <source>The connected device did not respond as expected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="238"/>
-        <source>Wrong Password.</source>
-        <translation>Неверный пароль .</translation>
-    </message>
-    <message>
-        <location filename="../src/boot.cpp" line="238"/>
-        <source>You entered the wrong password. I don&apos;t handle this yet but basically you will need to go to the Install tab, fix your password, then try again.</source>
-        <translation>Вы ввели неверный пароль. Перейдите на вкладку &quot;Установка&quot;, исправте пароль, а затем повторите попытку .</translation>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>USB (Windows)</source>
+        <translation>USB (Windows)</translation>
     </message>
 </context>
 <context>
@@ -314,6 +332,12 @@
         <location filename="../qml/generic/Extract.qml" line="100"/>
         <source>Radio</source>
         <translation>Radio</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="106"/>
+        <location filename="../qml/generic/Extract.qml" line="213"/>
+        <source>IFS</source>
+        <translation>IFS</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
@@ -376,6 +400,16 @@
         <translation>Извлечь образ</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="204"/>
+        <source>RCFS</source>
+        <translation>RCFS</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="208"/>
+        <source>QNX6</source>
+        <translation>QNX6</translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
         <source>Extracts filesystem image</source>
         <translation>извлечение образа файловой системы</translation>
@@ -389,177 +423,6 @@
         <location filename="../qml/generic/Extract.qml" line="228"/>
         <source>Extract all bar archives</source>
         <translation>Извлечь все bar-файлы</translation>
-    </message>
-</context>
-<context>
-    <name>InstallNet</name>
-    <message>
-        <location filename="../src/installer.cpp" line="141"/>
-        <location filename="../src/installer.cpp" line="154"/>
-        <source>WARNING</source>
-        <translation>ВНИМАНИЕ</translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="141"/>
-        <source>The OS file you have selected to install is for a different device!
-OS Type: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="141"/>
-        <location filename="../src/installer.cpp" line="154"/>
-        <source>
-Your Device: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="141"/>
-        <location filename="../src/installer.cpp" line="154"/>
-        <source>Ignore Warning [Stupid]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="141"/>
-        <source>Skip OS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="141"/>
-        <location filename="../src/installer.cpp" line="154"/>
-        <source>Cancel Install</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="154"/>
-        <source>The Radio file you have selected to install is for a different device!
-Radio Type: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="154"/>
-        <source>Skip Radio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="169"/>
-        <source>&lt;b&gt;Installing </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="169"/>
-        <source>OS: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="169"/>
-        <source>Radio: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="195"/>
-        <location filename="../src/installer.cpp" line="203"/>
-        <source>Install aborted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="210"/>
-        <source>None of the selected files were installable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="213"/>
-        <source>Installing &lt;b&gt;%1&lt;/b&gt; .bar(s).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="300"/>
-        <location filename="../src/installer.cpp" line="377"/>
-        <location filename="../src/installer.cpp" line="930"/>
-        <location filename="../src/installer.cpp" line="1002"/>
-        <location filename="../src/installer.cpp" line="1112"/>
-        <source>Error</source>
-        <translation>Ошибка</translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="300"/>
-        <source>Unable to write backup. Please ensure you have permission to write to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="377"/>
-        <source>Could not open backup file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="407"/>
-        <location filename="../src/installer.cpp" line="434"/>
-        <source>Loss of data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="407"/>
-        <location filename="../src/installer.cpp" line="434"/>
-        <source>Are you sure you want to wipe your device?
-This will result in a permanent loss of data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="694"/>
-        <source>Restore Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="694"/>
-        <source>There was an error loading the backup file.
-The device encountered an unrecoverable bug.
-It is not designed to restore this backup.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="900"/>
-        <source>Success</source>
-        <translation>Готово</translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="900"/>
-        <source>RTAS has been started.
-Sachesi will now terminate its connection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="970"/>
-        <source>Sending </source>
-        <translation>Отправка </translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="1063"/>
-        <source>&lt;br&gt;While sending: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="1064"/>
-        <source>&amp;nbsp;&amp;nbsp;Error: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer.cpp" line="1281"/>
-        <source>Communication Error: %1 (%2) from %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer_establish.cpp" line="24"/>
-        <source>1. Request Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer_establish.cpp" line="33"/>
-        <source>3. Request Challenge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/installer_establish.cpp" line="51"/>
-        <source>5. Reply Challenge</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -698,370 +561,216 @@ Sachesi will now terminate its connection.</source>
     </message>
 </context>
 <context>
-    <name>MainNet</name>
-    <message>
-        <location filename="../src/mainnet.cpp" line="115"/>
-        <location filename="../src/mainnet.cpp" line="275"/>
-        <location filename="../src/mainnet.cpp" line="298"/>
-        <source>Error</source>
-        <translation>Ошибка</translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="115"/>
-        <source>Was unable to download CAP, which is a component of Autoloaders.
-As a workaround, you can provide your own CAP to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="151"/>
-        <source>You can only extract apps from debrick OS images.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="153"/>
-        <source>
-This appears to be a Radio file. Radios have no apps.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="197"/>
-        <source>Links have been converted to work on your selected device.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="217"/>
-        <source>Potential OS and Radio links for SR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="217"/>
-        <source> (OS:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="217"/>
-        <source> + Radio:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="217"/>
-        <source>)
-
-* Operating Systems *
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="223"/>
-        <source> (Debrick + Core OS)
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="275"/>
-        <source>Was unable to convert the OS to your selected device! Falling back to original search results.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="298"/>
-        <source>Was unable to convert the Radio to your selected device! Falling back to original search results.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainnet.cpp" line="452"/>
-        <location filename="../src/mainnet.cpp" line="459"/>
-        <location filename="../src/mainnet.cpp" line="548"/>
-        <source>SR not in system</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QMessageBox</name>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Ошибка</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="../src/sachesi.cpp" line="69"/>
-        <source>Could not find a suitable storage path.
-Please report this.</source>
-        <translation>Не удалось найти подходящий путь для хранения.
-Пожалуйста, сообщите об этом .</translation>
-    </message>
-    <message>
-        <location filename="../src/sachesi.cpp" line="69"/>
-        <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
-    </message>
-</context>
-<context>
-    <name>QuaGzipFile</name>
-    <message>
-        <location filename="../ext/quazip/quagzipfile.cpp" line="60"/>
-        <source>QIODevice::Append is not supported for GZIP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ext/quazip/quagzipfile.cpp" line="66"/>
-        <source>Opening gzip for both reading and writing is not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ext/quazip/quagzipfile.cpp" line="74"/>
-        <source>You can open a gzip either for reading or for writing. Which is it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ext/quazip/quagzipfile.cpp" line="80"/>
-        <source>Could not gzopen() file</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QuaZIODevice</name>
-    <message>
-        <location filename="../ext/quazip/quaziodevice.cpp" line="145"/>
-        <source>QIODevice::Append is not supported for QuaZIODevice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ext/quazip/quaziodevice.cpp" line="150"/>
-        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QuaZipFile</name>
-    <message>
-        <location filename="../ext/quazip/quazipfile.cpp" line="218"/>
-        <source>ZIP/UNZIP API error %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Search</name>
     <message>
         <location filename="../qml/generic/Search.qml" line="23"/>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Download</source>
         <translation>Загрузить прошивку</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="38"/>
-        <location filename="../qml/generic/Search.qml" line="137"/>
+        <location filename="../qml/generic/Search.qml" line="135"/>
         <source>Cancel Download</source>
         <translation>Прекратиь загрузку</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Searching...</source>
         <translation>Идет поиск...</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Search</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="65"/>
+        <location filename="../qml/generic/Search.qml" line="60"/>
+        <source>Delta</source>
+        <translation>Дельта</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="63"/>
         <source>Version Lookup</source>
         <translation>Поиск версии</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="77"/>
+        <location filename="../qml/generic/Search.qml" line="73"/>
+        <source>Server did not respond as expected [</source>
+        <translation>Нет ответа сервера [</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="75"/>
         <source>Success. No updates were available.</source>
         <translation>Готово. Нет доступных обновлений.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="86"/>
+        <location filename="../qml/generic/Search.qml" line="84"/>
         <source>Download For</source>
         <translation>Загрузить для  </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="90"/>
-        <location filename="../qml/generic/Search.qml" line="181"/>
+        <location filename="../qml/generic/Search.qml" line="88"/>
+        <location filename="../qml/generic/Search.qml" line="179"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="96"/>
+        <location filename="../qml/generic/Search.qml" line="94"/>
         <source>Unknown</source>
         <translation>Неизвестное устройство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="100"/>
         <source>Connected</source>
-        <translation>Подключено</translation>
+        <translation>Подключенное</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="100"/>
         <source>As Searched</source>
         <translation>Как искали</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="120"/>
+        <location filename="../qml/generic/Search.qml" line="118"/>
         <source>Grab Links</source>
         <translation>Получить ссылки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Verifying</source>
         <translation>Проверка</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="132"/>
+        <location filename="../qml/generic/Search.qml" line="130"/>
         <source>View Download (</source>
         <translation>Посмотреть загрузку (</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="151"/>
+        <location filename="../qml/generic/Search.qml" line="149"/>
         <source>Country</source>
         <translation>Страна</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="162"/>
+        <location filename="../qml/generic/Search.qml" line="160"/>
         <source>Carrier</source>
         <translation>Оператор</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="176"/>
+        <location filename="../qml/generic/Search.qml" line="174"/>
         <source>Search For</source>
         <translation>Искать для  </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="214"/>
+        <location filename="../qml/generic/Search.qml" line="212"/>
         <source>Any</source>
-        <translation>Любая</translation>
+        <translation>Любой</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="230"/>
+        <location filename="../qml/generic/Search.qml" line="228"/>
         <source>Variant</source>
         <translation>Вариант</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="246"/>
+        <location filename="../qml/generic/Search.qml" line="244"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Upgrade</source>
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Debrick</source>
         <translation>Восстановление</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="253"/>
+        <location filename="../qml/generic/Search.qml" line="251"/>
         <source>Server</source>
         <translation>Сервер</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Production</source>
         <translation>Релиз</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Beta</source>
         <translation>Бета</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Beta 2</source>
         <translation>Бета2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Alpha</source>
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Alpha 2</source>
         <translation>Альфа2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="339"/>
+        <location filename="../qml/generic/Search.qml" line="337"/>
         <source>1700.0 MB</source>
         <translation>1700.0 МБ</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="343"/>
+        <location filename="../qml/generic/Search.qml" line="341"/>
         <source>Selected: </source>
         <translation>Выбрано: </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="344"/>
+        <location filename="../qml/generic/Search.qml" line="341"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source>All (</source>
+        <translation>Все (</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="341"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source> Apps</source>
+        <translation> Программ</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="342"/>
         <source>. Needed: </source>
         <translation>. Нужно: </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="362"/>
+        <location filename="../qml/generic/Search.qml" line="360"/>
         <source>Options</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="365"/>
+        <location filename="../qml/generic/Search.qml" line="363"/>
         <source>Check All</source>
         <translation>Отметить все</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="374"/>
+        <location filename="../qml/generic/Search.qml" line="372"/>
         <source>Check All Needed</source>
         <translation>Отметить все необходимые</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="383"/>
+        <location filename="../qml/generic/Search.qml" line="381"/>
         <source>Uncheck All</source>
         <translation>Снять все отметки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="414"/>
+        <location filename="../qml/generic/Search.qml" line="412"/>
         <source> (downloaded)</source>
         <translation> (загружено)</translation>
     </message>
-</context>
-<context>
-    <name>Splitter</name>
     <message>
-        <location filename="../src/splitter.cpp" line="114"/>
-        <source>Was not a Blackberry Autoloader file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/splitter.cpp" line="134"/>
-        <source>Unknown Blackberry Autoloader file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/splitter.cpp" line="243"/>
-        <location filename="../src/splitter.cpp" line="299"/>
-        <source>Could not open </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/splitter.cpp" line="321"/>
-        <location filename="../src/splitter.cpp" line="337"/>
-        <source>Error</source>
-        <translation>Ошибка</translation>
-    </message>
-    <message>
-        <location filename="../src/splitter.cpp" line="321"/>
-        <source>Was not a Blackberry .signed image.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/splitter.cpp" line="337"/>
-        <source>Bad partition table.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qml/generic/Search.qml" line="436"/>
+        <source> MB</source>
+        <translation> МБ</translation>
     </message>
 </context>
 <context>
@@ -1132,12 +841,22 @@ Please report this.</source>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="27"/>
         <source>Incorrect</source>
-        <translation>Неверно</translation>
+        <translation>Неверный пароль</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="47"/>
+        <source>Hide password</source>
+        <translation>Скрыть пароль</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="47"/>
+        <source>Show password</source>
+        <translation>Показать пароль</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
         <source>There was an issue connecting.</source>
-        <translation>Возникли проблемы с подключением</translation>
+        <translation>Возникли проблемы с подключением.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="59"/>
@@ -1148,6 +867,31 @@ Please report this.</source>
         <location filename="../qml/generic/USBConnect.qml" line="68"/>
         <source>Searching for USB device</source>
         <translation>Поиск USB устройств</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source>Detected </source>
+        <translation>Обнаружено </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source> Blackberry USB device(s) in </source>
+        <translation> USB устройство(а) Blackberry в </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source> mode.</source>
+        <translation> режиме.</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source>Talking to </source>
+        <translation>Запрос к </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source> possible device(s).</source>
+        <translation> доступным устройствам.</translation>
     </message>
 </context>
 <context>

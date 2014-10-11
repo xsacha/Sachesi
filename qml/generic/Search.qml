@@ -46,20 +46,18 @@ Item {
         anchors { bottom: parent.bottom; bottomMargin: 15; leftMargin: 15 }
         ColumnLayout {
             anchors.horizontalCenter: parent.horizontalCenter
-            RowLayout {
+            Button {
+                id: searchButton
                 anchors.horizontalCenter: parent.horizontalCenter
-                /*RadioButton {
+                enabled: !p.scanning
+                text: p.scanning ? qsTr("Searching...") : qsTr("Search")
+                onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
+            }
+            RadioButton {
                 id: delta
+                anchors.horizontalCenter: parent.horizontalCenter
                 visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 text:  qsTr("Delta")
-            }*/
-                Button {
-                    id: searchButton
-                    enabled: !p.scanning
-                    text: p.scanning ? qsTr("Searching...") : qsTr("Search")
-                    onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
-                }
-
             }
             Button {
                 text:  qsTr("Version Lookup")
@@ -72,7 +70,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)
-                                  text = qsTr("Server did not respond as expected [" + message + "].")
+                                  text = qsTr("Server did not respond as expected [") + message + "]."
                               else if (message === "Success")
                                   text = qsTr("Success. No updates were available.")
                               else
@@ -149,7 +147,7 @@ Item {
         TextCouple {
             id: country
             type: qsTr("Country")
-            value: "510"
+            value: "302"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -160,7 +158,7 @@ Item {
         TextCouple {
             id: carrier
             type: qsTr("Carrier")
-            value: "010"
+            value: "720"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -177,7 +175,7 @@ Item {
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
-                    selectedItem: 5
+                    selectedItem: 4
                     type: qsTr("Device")
 
                     // List everything we know except abandoned models
@@ -340,8 +338,8 @@ Item {
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
-        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
-                                     + ((p.updateAvailableCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
+        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? qsTr("All (") + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + qsTr(" Apps")
+                                     + ((p.updateAvailableCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? qsTr("All (") + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + qsTr(" Apps")) : "") + "        "
         title: !blackberry ? selectedMsg : ""
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
@@ -411,7 +409,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: qsTr(friendlyName + (isAvailable ? "" : qsTr(" (downloaded)")))
+                        text: friendlyName + (isAvailable ? "" : qsTr(" (downloaded)"))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked
@@ -435,7 +433,7 @@ Item {
                         anchors.right: parent.right
                         width: sizeHint.width
                         horizontalAlignment: Text.AlignRight
-                        text: (size / 1024 / 1024).toFixed(1) + " MB"
+                        text: (size / 1024 / 1024).toFixed(1) + qsTr(" MB")
                         font.pointSize: 12;
                     }
                 }

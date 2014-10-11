@@ -19,11 +19,17 @@
 // For portability between platforms and Qt versions.
 // Clears up the code in the more important files.
 
+#ifndef BLACKBERRY
 #include <QApplication>
-#include <QStandardPaths>
 #include <QMessageBox>
+#endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QStandardPaths>
+#endif
+#include <QDir>
 
 QString capPath(bool temp) {
+#ifndef BLACKBERRY
     QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     QString capPath = QFileInfo(ini.fileName()).absolutePath();
     if (temp) {
@@ -32,10 +38,14 @@ QString capPath(bool temp) {
         return capPath + "/.cap.exe";
     }
     return capPath + "/cap.exe";
+#else
+    return "cap.exe";
+#endif
 }
 
-FileSelect selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
-    FileSelect finder = new QFileDialog();
+#ifndef BLACKBERRY
+QFileDialog* selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
+    QFileDialog* finder = new QFileDialog();
     finder->setWindowTitle(title);
     finder->setDirectory(dir);
     finder->setNameFilter(nameString + "(" + nameExt + ")");
@@ -47,24 +57,34 @@ FileSelect selectFiles(QString title, QString dir, QString nameString, QString n
         t->setSelectionMode(QAbstractItemView::ExtendedSelection);
     return finder;
 }
+#endif
 
 QString getSaveDir() {
 #ifdef BLACKBERRY
-    QString writable = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/Sachesi/";
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    return "/accounts/1000/shared/misc/Sachesi/";
+#else
+    return QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + "/Sachesi/";
+#endif
 #else
     QString writable = QDir::currentPath() + "/";
-#endif
+
     if (QFileInfo(writable).isWritable())
         return writable;
 
     return QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+#endif
 }
 
 bool checkCurPath()
 {
     QDir dir;
 #ifdef BLACKBERRY
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    QString path = "/accounts/1000/shared/misc/Sachesi/";
+#else
     QString path = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + "/Sachesi/";
+#endif
     dir.mkpath(path);
     QDir::setCurrent(path);
 #elif defined(ANDROID)
@@ -96,7 +116,9 @@ bool checkCurPath()
 
 void openFile(QString name) {
     // This could get more complicated
+#ifndef BLACKBERRY
     QDesktopServices::openUrl(QUrl::fromLocalFile(name));
+#endif
 }
 
 void writeDisplayFile(QString name, QByteArray data) {
@@ -109,11 +131,6 @@ void writeDisplayFile(QString name, QByteArray data) {
     displayFile.close();
 
 #ifdef BLACKBERRY
-    // Clipboard has dependency on Qt4
-    //bb::system::Clipboard clipboard;
-    //clipboard.clear();
-    //clipboard.insert("text/plain", data);
-
     // Cascades code is not working
 /*#if defined(BLACKBERRY)
     QVariantMap data;

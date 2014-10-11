@@ -4,7 +4,7 @@ TARGET="Sachesi"
 win32: RC_ICONS += assets/sachesi-114.ico
 else:mac: ICON = assets/sachesi-114.icns
 else: ICON = assets/sachesi-114.png
-VERSION = 1.9.3
+VERSION = 1.9.4
 
 # Global specific
 CONFIG += c++11
@@ -160,7 +160,6 @@ lupdate_only{
 SOURCES = \
     qml/generic/mcc.js \
     qml/generic/*.qml \
-    qml/generic/UI/*.qml\
-    src/*.cpp\
-    ext/quazip/*.cpp
+    qml/generic/UI/*.qml \
+    src/backupinfo.cpp
 }

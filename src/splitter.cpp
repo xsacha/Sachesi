@@ -111,7 +111,7 @@ void Splitter::processExtractAutoloader() {
     }
 
     if (!findHeader) {
-        return die(tr("Was not a Blackberry Autoloader file."));
+        return die("Was not a Blackberry Autoloader file.");
     }
 
     qint64 files;
@@ -131,7 +131,7 @@ void Splitter::processExtractAutoloader() {
     }
 
     if (files < 1 || files > 20) {
-        return die(tr("Unknown Blackberry Autoloader file."));
+        return die("Unknown Blackberry Autoloader file.");
     }
 
     // Collect offsets
@@ -240,7 +240,7 @@ void Splitter::processExtractSigned()
     QFile* file = new QFile(selectedFile); // Gets cleaned up later
     devHandle.append(file);                // By this
     if (!file->open(QIODevice::ReadOnly)) {
-        return die(tr("Could not open ") + selectedFile);
+        return die("Could not open " + selectedFile);
     }
     processExtract(file, file->size(), 0);
 }
@@ -296,7 +296,7 @@ void Splitter::processExtractType() {
     QFile* imageFile = new QFile(selectedFile); // Gets cleaned up later
     devHandle.append(imageFile);                // By this
     if (!imageFile->open(QIODevice::ReadOnly)) {
-        return die(tr("Could not open ") + selectedFile);
+        return die("Could not open " + selectedFile);
     }
 
     partitionInfo.append(PartitionInfo(imageFile, 0, imageFile->size()));
@@ -318,7 +318,7 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
     if (signedPos > 0)
         dev->seek(signedPos);
     if (dev->read(4) != QByteArray("mfcq", 4)) {
-        QMessageBox::information(nullptr, tr("Error"), tr("Was not a Blackberry .signed image."));
+        QMessageBox::information(nullptr, "Error", "Was not a Blackberry .signed image.");
         return;
     }
     QList<PartitionInfo> partInfo;
@@ -334,7 +334,7 @@ void Splitter::processExtract(QIODevice* dev, qint64 signedSize, qint64 signedPo
     tableStream >> unknown >> startSearchOffset;
 
     if (numPartitions > 15) {
-        QMessageBox::information(nullptr, tr("Error"), tr("Bad partition table."));
+        QMessageBox::information(nullptr, "Error", "Bad partition table.");
         return;
     }
     // Possible issue with other Signed? So far this is always zero

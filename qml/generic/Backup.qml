@@ -15,7 +15,7 @@ Item {
     Timer {
         id: attemptLookup
         running: false
-        interval: 12000
+        interval: 22000
     }
 
     ColumnLayout {
@@ -28,9 +28,9 @@ Item {
             id: options
             property int value: 0
             RowLayout {
-                visible: !i.backMethods && attemptLookup.running
+                visible: /*!i.backMethods &&*/ attemptLookup.running
                 Text {
-                    text:  qsTr("Loading Backup Options")
+                    text:  qsTr("Refreshing Backup Sizes")
                     font.pointSize: 12
                 }
                 BusyIndicator {
@@ -42,7 +42,7 @@ Item {
                 Repeater {
                     model: i.backMethods
                     delegate: CheckBox {
-                        text: i.backNames[index] + " (" + i.backSizes[index].toFixed(1) + " MB)" // index
+                        text: i.backNames[index] + " (" + (i.backSizes[index] < 0 ? " <b> ? </b>" : i.backSizes[index].toFixed(1)) + qsTr(" MB") +" )" // index
                         onCheckedChanged: {
                             if (checked) {
                                 options.value += 1 << index;
@@ -59,14 +59,14 @@ Item {
                 visible: i.backMethods
                 id: totalText
                 property double totalVal: 0.0
-                text:  qsTr("Total: " + totalVal.toFixed(1) + " MB")
+                text:  qsTr("Total: ") + (totalVal < 0 ? " <b> ? </b>" : totalVal.toFixed(1)) + qsTr(" MB")
                 font.pointSize: 12
             }
         }
 
         Button {
-            visible: !i.backMethods && !attemptLookup.running
-            text:  qsTr("Load Backup Options")
+            visible: /*!i.backMethods &&*/ !attemptLookup.running
+            text:  qsTr("Refresh Backup Sizes")
             onClicked: { totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
         }
 
@@ -120,7 +120,7 @@ Item {
             anchors {verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: parent.width / 2 - 150 }
             Text {
                 font.pointSize: 12
-                text: (i.backing ? "Creating" : "Restoring") + " Backup (" + i.backProgress + "%)";
+                text: (i.backing ? qsTr("Creating") : qsTr("Restoring")) + qsTr(" Backup (") + i.backProgress + "%)";
             }
             Row {
                 spacing: 10

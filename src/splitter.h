@@ -26,7 +26,9 @@
 #include <QDataStream>
 #include <QDebug>
 #include <QCoreApplication>
+#ifndef BLACKBERRY
 #include <QMessageBox>
+#endif
 #include "ports.h"
 #include "fs/qnx6.h"
 #include "fs/rcfs.h"
@@ -199,8 +201,10 @@ public slots:
         extracting = false;
         combining = false;
         splitting = false;
+#ifndef BLACKBERRY
         if (!message.isEmpty())
             QMessageBox::information(nullptr, "Error", message);
+#endif
         emit finished();
     }
 

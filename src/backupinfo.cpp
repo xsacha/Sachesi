@@ -21,10 +21,17 @@ BackupInfo::BackupInfo() :
     _progress(0), _size(0), _maxSize(1),
     _mode(0), _curMode(0), _numMethods(0)
 {
+    _numMethods = 3;
+    categories.append(new BackupCategory("app", tr("Application Data")));
+    categories.append(new BackupCategory("media", tr("Media")));
+    categories.append(new BackupCategory("settings", tr("Device Settings and Local Contacts/Calendar Data")));
+    _curSize.append(QList<qint64>() << 0 << 0 << 0);
+    _curMaxSize.append(QList<qint64>() << 1 << 1 << 1);
 }
 
 void BackupInfo::clearModes() {
     _curMode = 0;
+    _numMethods = 0;
     categories.clear();
     _curSize.clear();
     _curMaxSize.clear();

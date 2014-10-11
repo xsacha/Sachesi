@@ -112,7 +112,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         });
         QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
             // Some users may experience difficult downloading it at all, or the link may be outdated.
-            QMessageBox::information(NULL, tr("Error"), tr("Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to ") + capPath());
+            QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
             _splitting = 0; emit splittingChanged();
             splitThread->deleteLater();
             splitter->deleteLater();
@@ -135,7 +135,7 @@ void MainNet::extractImage(int type, int options)
         filter += " *.qnx6";
     if (type == 0 && _options & 4)
         filter += " *.ifs";
-    FileSelect finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
+    QFileDialog* finder = selectFiles("Extract Image", getSaveDir(), "Filesystem Containers", filter);
     if (finder->exec())
         extractImageSlot(finder->selectedFiles());
     finder->deleteLater();
@@ -148,9 +148,9 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     // TODO: Actually detect file by inspection
     QFileInfo fileInfo(selectedFiles.first());
     if (_type == 2 && fileInfo.size() < 500 * 1024 * 1024) {
-        QString errorMsg = tr("You can only extract apps from debrick OS images.");
+        QString errorMsg = "You can only extract apps from debrick OS images.";
         if (fileInfo.size() < 120 * 1024 * 1024)
-            errorMsg.append(tr("\nThis appears to be a Radio file. Radios have no apps."));
+            errorMsg.append("\nThis appears to be a Radio file. Radios have no apps.");
         QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
     }
@@ -194,7 +194,7 @@ void MainNet::abortSplit()
 
 void MainNet::grabLinks(int downloadDevice)
 {
-    writeDisplayFile("updates.txt", convertLinks(downloadDevice, tr("Links have been converted to work on your selected device.\n\n")).toLocal8Bit());
+    writeDisplayFile("updates.txt", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
 }
 
 void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, bool sdk) {
@@ -214,18 +214,27 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
         radioVersion += parts.at(i) + ".";
     radioVersion += QString::number(build);
 
-    QString potentialText = QString(tr("Potential OS and Radio links for SR") + softwareRelease + tr(" (OS:") + osVersion + tr(" + Radio:") + radioVersion + tr(")\n\n"
-                                    "* Operating Systems *\n"));
+    QString potentialText = QString("Potential OS and Radio links for SR" + softwareRelease + " (OS:" + osVersion + " + Radio:" + radioVersion + ")\n\n"
+                                    "* Operating Systems *\n");
 
     // Lambda function to append link for signed bars
     // Arch hardcoded to armv7
     auto appendNewHeader = [&potentialText] (QString name, QString devices) {
-        potentialText.append("\n" + name + ": " + devices + tr(" (Debrick + Core OS)\n"));
+        potentialText.append("\n" + name + ": " + devices + " (Debrick + Core OS)\n");
     };
-    auto appendNewLink = [&potentialText, &hashval] (QString linkType, bool OS, bool OMAP, QString hwType, QString version) {
-        if (!OS)
+    auto appendNewLink = [&potentialText, &hashval] (QString linkType, int type, bool OMAP, QString hwType, QString version) {
+        QString typeString;
+        if (type == 2) {
+            potentialText.append(linkType + " IFS\n");
+            typeString = "qcfm.ifs.";
+        } else if (type == 1) {
+            typeString = "coreos.qcfm.os.";
+        } else if (type == 0) {
             potentialText.append(linkType + " Radio\n");
-        potentialText.append("http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + (OS ? "coreos.qcfm.os." : "qcfm.radio."));
+            typeString = "qcfm.radio.";
+        }
+
+        potentialText.append("http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + typeString);
 
         if (OMAP) // Old Playbook style
             potentialText.append("factory" + hwType + "/" + version + "/winchester.factory_sfi" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
@@ -233,26 +242,26 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
             potentialText.append(hwType + "/" + version + "/" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
     };
     appendNewHeader("QC8974", "Blackberry Passport");
-    appendNewLink("Debrick", true, false, "qc8974.factory_sfi.desktop", osVersion);
-    appendNewLink("Core",    true, false, "qc8974.factory_sfi", osVersion);
+    appendNewLink("Debrick", 1, false, "qc8974.factory_sfi.desktop", osVersion);
+    appendNewLink("Core",    1, false, "qc8974.factory_sfi", osVersion);
 
     appendNewHeader("QC8960", "Blackberry Z3/Z10/Z30/Q5/Q10");
-    appendNewLink("Debrick", true, false, "qc8960.factory_sfi.desktop", osVersion);
-    appendNewLink("Core",    true, false, "qc8960.factory_sfi", osVersion);
+    appendNewLink("Debrick", 1, false, "qc8960.factory_sfi.desktop", osVersion);
+    appendNewLink("Core",    1, false, "qc8960.factory_sfi", osVersion);
 
     appendNewHeader("OMAP", "Blackberry Z10 STL 100-1");
-    appendNewLink("Debrick", true, true, ".desktop", osVersion);
-    appendNewLink("Core",    true, true, "", osVersion);
+    appendNewLink("Debrick", 1, true, ".desktop", osVersion);
+    appendNewLink("Core",    1, true, "", osVersion);
 
     potentialText.append("\n\n* Radios *\n");
     // Touch
-    appendNewLink("Z30 + Classic", false, false, "qc8960.wtr5", radioVersion);
-    appendNewLink("Z10 (STL 100-1)",   false, false, "m5730", radioVersion);
-    appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", false, false, "qc8960", radioVersion);
-    appendNewLink("Z3 (Jakarta) + Cafe", false, false, "qc8930.wtr5", radioVersion);
+    appendNewLink("Z30 + Classic", 0, false, "qc8960.wtr5", radioVersion);
+    appendNewLink("Z10 (STL 100-1)",   0, false, "m5730", radioVersion);
+    appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", 0, false, "qc8960", radioVersion);
+    appendNewLink("Z3 (Jakarta) + Cafe", 0, false, "qc8930.wtr5", radioVersion);
     // QWERTY
-    appendNewLink("Passport + Ontario", false, false, "qc8974.wtr2", radioVersion);
-    appendNewLink("Q5 + Q10 + Khan", false, false, "qc8960.wtr", radioVersion);
+    appendNewLink("Passport + Ontario", 0, false, "qc8974.wtr2", radioVersion);
+    appendNewLink("Q5 + Q10 + Khan", 0, false, "qc8960.wtr", radioVersion);
 
 
     writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
@@ -272,7 +281,7 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
         // Fetch version
         components = components[1].split("/");
         if (components.count() < 2) {
-            QMessageBox::information(nullptr, tr("Error"), tr("Was unable to convert the OS to your selected device! Falling back to original search results."));
+            QMessageBox::information(nullptr, "Error", "Was unable to convert the OS to your selected device! Falling back to original search results.");
             return name;
         }
         if (components[0].endsWith(".desktop"))
@@ -295,7 +304,7 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
         // Fetch version
         components = components[1].split("/");
         if (components.count() < 2) {
-            QMessageBox::information(nullptr, tr("Error"), tr("Was unable to convert the Radio to your selected device! Falling back to original search results."));
+            QMessageBox::information(nullptr, "Error", "Was unable to convert the Radio to your selected device! Falling back to original search results.");
             return name;
         }
         newPath.append(components[1] + "/" + replace);
@@ -449,14 +458,14 @@ void MainNet::reverseLookup(int device, int variant, int server, QString OSver, 
                 _softwareRelease = OSver;
                 _hasPotentialLinks = true; emit hasPotentialLinksChanged();
             } else {
-                _softwareRelease = tr("SR not in system");
+                _softwareRelease = "SR not in system";
             }
             emit softwareReleaseChanged();
             replyTmp->deleteLater();
             setScanning(0);
         });
         QObject::connect(replyTmp, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            _softwareRelease = tr("SR not in system");
+            _softwareRelease = "SR not in system";
             emit softwareReleaseChanged();
             replyTmp->deleteLater();
             setScanning(0);
@@ -545,7 +554,7 @@ void MainNet::reverseLookupReply() {
                 _hasPotentialLinks = true; emit hasPotentialLinksChanged();
             } else if (skip) {
                 // Instead of using version, report 'not in system' so that it is skipped
-                _softwareRelease = tr("SR not in system");
+                _softwareRelease = "SR not in system";
             }
             emit softwareReleaseChanged();
             setScanning(0);

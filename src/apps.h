@@ -18,7 +18,12 @@
 #pragma once
 
 #include <QString>
+#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
 #include <QQmlListProperty>
+#else
+#include <QDeclarativeListProperty>
+#define QQmlListProperty QDeclarativeListProperty
+#endif
 
 class Apps : public QObject {
     Q_OBJECT

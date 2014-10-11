@@ -49,9 +49,9 @@ libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     libusb_open(dev, &handle);
     if (handle == nullptr) {
 #ifdef _WIN32
-        QMessageBox::information(nullptr, tr("Error"), tr("You need to install WinUSB driver for the Blackberry device."));
+        QMessageBox::information(nullptr, "Error", "You need to install WinUSB driver for the Blackberry device.");
 #else
-        QMessageBox::information(nullptr, tr("Error"), tr("You need to run this application with root privileges (i.e. sudo)."));
+        QMessageBox::information(nullptr, "Error", "You need to run this application with root privileges (i.e. sudo).");
 #endif
         libusb_close(handle);
         return nullptr;
@@ -62,7 +62,7 @@ libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     libusb_detach_kernel_driver(handle, 1);
     if(configuration != 1) {
         if (libusb_set_configuration(handle, 1) < 0) {
-            QMessageBox::information(nullptr, tr("Error"), tr("Error #1001"));
+            QMessageBox::information(nullptr, "Error", "Error #1001");
             return nullptr;
         }
     }
@@ -71,10 +71,10 @@ libusb_device_handle* Boot::openDevice(libusb_device* dev) {
     int err = libusb_claim_interface(handle, 0);
     if (err < 0) {
 #ifdef Q_OS_MAC
-        QMessageBox::information(nullptr, tr("Error"), tr("Please reboot your device manually."));
+        QMessageBox::information(nullptr, "Error", "Please reboot your device manually.");
         return nullptr;
 #else
-        QMessageBox::information(nullptr, tr("Error"), tr("Error #1002 (") + QString::number(err) + ")");
+        QMessageBox::information(nullptr, "Error", "Error #1002 (" + QString::number(err) + ")");
         return nullptr;
 #endif
     }
@@ -107,7 +107,7 @@ int Boot::sendControlMessage(libusb_device_handle* aHandle, uint8_t aCommand, QB
     int err = libusb_bulk_transfer(aHandle, _found == 0x1 ? 0x2 : 0x1, (unsigned char*)buffer.data(), aDataSize + 8, &transferred, 1000);
     if (err == -7)
     {
-        QMessageBox::information(nullptr, tr("Error"), tr("Was not able to send message to connected device."));
+        QMessageBox::information(nullptr, "Error", "Was not able to send message to connected device.");
         return -7;
     }
 
@@ -120,9 +120,9 @@ int Boot::receiveControlMessage(libusb_device_handle* aHandle, ControlMessageHea
     int ret = libusb_bulk_transfer(aHandle, _found == 0x1 ? 0x82 : 0x81, (unsigned char*)buffer.data(), BUFFER_SIZE, &transferred, 1000);
     if (ret == -7) {
         if (_found != 0x1) {
-            QMessageBox::information(nullptr, tr("Error"), tr("Try rebooting your device manually."));
+            QMessageBox::information(nullptr, "Error", "Try rebooting your device manually.");
         } else {
-            QMessageBox::information(nullptr, tr("Error"), tr("The connected device did not respond as expected."));
+            QMessageBox::information(nullptr, "Error", "The connected device did not respond as expected.");
         }
         return -7;
     }
@@ -235,7 +235,7 @@ bool Boot::commandSendPass(libusb_device_handle* aHandle) {
     if (header.command == 0x10)
         return true;
     else {
-        QMessageBox::information(nullptr,tr("Wrong Password."),tr("You entered the wrong password. I don't handle this yet but basically you will need to go to the Install tab, fix your password, then try again."));
+        QMessageBox::information(nullptr,"Wrong Password.","You entered the wrong password. I don't handle this yet but basically you will need to go to the Install tab, fix your password, then try again.");
         return false;
     }
 }

@@ -134,10 +134,8 @@ Item {
                 id: view
                 anchors.fill: parent
                 model: appworld.appList
-                // 5 is a special number that AppWorld makes the app count divisible by. If in doubt, read it directly from the XML.
-                property int iconsInRow: mobile ? 5 : 9
                 // Size of icons
-                cellWidth: (main.width - 20) / iconsInRow
+                cellWidth: Math.max(Math.min((main.width - 20) / 5, 200), (main.width - 20) / 9)
                 cellHeight: cellWidth
                 footer: Label { visible: false; text:  "."; } // Spacer
 
