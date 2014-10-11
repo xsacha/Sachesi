@@ -46,20 +46,18 @@ Item {
         anchors { bottom: parent.bottom; bottomMargin: 15; leftMargin: 15 }
         ColumnLayout {
             anchors.horizontalCenter: parent.horizontalCenter
-            RowLayout {
+            Button {
+                id: searchButton
                 anchors.horizontalCenter: parent.horizontalCenter
-                /*RadioButton {
+                enabled: !p.scanning
+                text: p.scanning ? qsTr("Searching...") : qsTr("Search")
+                onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
+            }
+            RadioButton {
                 id: delta
+                anchors.horizontalCenter: parent.horizontalCenter
                 visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 text:  qsTr("Delta")
-            }*/
-                Button {
-                    id: searchButton
-                    enabled: !p.scanning
-                    text: p.scanning ? qsTr("Searching...") : qsTr("Search")
-                    onClicked: { p.updateDetailRequest(/*delta.checked ? i.appDeltaMsg :*/ "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
-                }
-
             }
             Button {
                 text:  qsTr("Version Lookup")
