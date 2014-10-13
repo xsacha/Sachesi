@@ -297,6 +297,36 @@
 <context>
     <name>Extract</name>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="27"/>
+        <source>Splitting Autoloader </source>
+        <translation>Извлечение образов из автолоадера </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="28"/>
+        <source>Combining Autoloader </source>
+        <translation>Создание автолоадера </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="29"/>
+        <source>Extracting Image </source>
+        <translation>Извлечение образа </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="30"/>
+        <source>Extracting Apps </source>
+        <translation>Извлечение приложений </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="31"/>
+        <source>Fetching required files </source>
+        <translation>Получение необходимых файлов </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="32"/>
+        <source>Waiting </source>
+        <translation>Ожидание </translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
         <translation>Проценты не совсем точны для QNX6 файлов .</translation>
@@ -309,13 +339,13 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="66"/>
         <source>Autoloader Tools</source>
-        <translation>Параметы автозагрузчика</translation>
+        <translation>Параметы Автолоадера</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="73"/>
         <location filename="../qml/generic/Extract.qml" line="84"/>
         <source>Extract Signed</source>
-        <translation>Извлечь подпись</translation>
+        <translation>Извлечь </translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="90"/>
@@ -347,7 +377,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation>Split подписал образ из автозагрузчика exe, .bar или .zip</translation>
+        <translation>Извлечение подписанных образов ОС и радиомодуля из autoloader .exe, .bar или .zip</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="121"/>
@@ -367,17 +397,17 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="149"/>
         <source>Create Autoloader .exe from .signed images</source>
-        <translation>Создать Autoloader.exe из подписанного образа</translation>
+        <translation>Создать Autoloader.exe из подписанных образов</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="156"/>
         <source>Extraction Tools</source>
-        <translation>Параметры распаковки</translation>
+        <translation>Инструменты распаковки</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
         <source>Dump Contents</source>
-        <translation>Дамп содержимого</translation>
+        <translation>Извлечь всё</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="173"/>
@@ -392,7 +422,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="187"/>
         <source>Dump all file contents</source>
-        <translation>Дамп всех файлов</translation>
+        <translation>Извлечение всего содержимого</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="197"/>
@@ -412,7 +442,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
         <source>Extracts filesystem image</source>
-        <translation>извлечение образа файловой системы</translation>
+        <translation>Извлечение образа файловой системы</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="223"/>
@@ -924,7 +954,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="83"/>
         <source>Find next available links</source>
-        <translation>Найти следующие доступные ссылки</translation>
+        <translation>Только новые версии</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="87"/>
