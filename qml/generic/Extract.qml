@@ -24,12 +24,12 @@ Item {
                     property int splitting: p.splitting
                     onSplittingChanged: {
                         switch(splitting) {
-                        case 1: splitType = "Splitting Autoloader "; break;
-                        case 2: splitType = "Combining Autoloader "; break;
-                        case 3: splitType = "Extracting Image "; break;
-                        case 4: splitType = "Extracting Apps "; break;
-                        case 5: splitType = "Fetching required files "; break;
-                        default: splitType = "Waiting "; break;
+                        case 1: splitType = qsTr("Splitting Autoloader "); break;
+                        case 2: splitType = qsTr("Combining Autoloader "); break;
+                        case 3: splitType = qsTr("Extracting Image "); break;
+                        case 4: splitType = qsTr("Extracting Apps "); break;
+                        case 5: splitType = qsTr("Fetching required files "); break;
+                        default: splitType = qsTr("Waiting "); break;
                         }
                     }
 
@@ -103,7 +103,7 @@ Item {
                 CheckBox {
                     visible: settings.advanced
                     id: ifsSelect
-                    text:  "IFS"
+                    text: qsTr("IFS")
                 }
                 CheckBox {
                     visible: settings.advanced
@@ -201,16 +201,16 @@ Item {
                     CheckBox {
                         id: rcfsImage
                         checked: true
-                        text:  "RCFS"
+                        text:  qsTr("RCFS")
                     }
                     CheckBox {
                         id: qnxImage
-                        text:  "QNX6"
+                        text:  qsTr("QNX6")
                     }
                     CheckBox {
                         id: bootImage
                         checked: true
-                        text:  "IFS"
+                        text:  qsTr("IFS")
                     }
                 }
                 Label {

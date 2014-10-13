@@ -70,7 +70,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)
-                                  text = qsTr("Server did not respond as expected [" + message + "].")
+                                  text = qsTr("Server did not respond as expected [") + message + "]."
                               else if (message === "Success")
                                   text = qsTr("Success. No updates were available.")
                               else
@@ -338,8 +338,8 @@ Item {
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
-        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
-                                     + ((p.updateAvailableCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
+        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? qsTr("All (") + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + qsTr(" Apps")
+                                     + ((p.updateAvailableCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? qsTr("All (") + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + qsTr(" Apps")) : "") + "        "
         title: !blackberry ? selectedMsg : ""
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
@@ -409,7 +409,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: qsTr(friendlyName + (isAvailable ? "" : qsTr(" (downloaded)")))
+                        text: friendlyName + (isAvailable ? "" : qsTr(" (downloaded)"))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked
@@ -433,7 +433,7 @@ Item {
                         anchors.right: parent.right
                         width: sizeHint.width
                         horizontalAlignment: Text.AlignRight
-                        text: (size / 1024 / 1024).toFixed(1) + " MB"
+                        text: (size / 1024 / 1024).toFixed(1) + qsTr(" MB")
                         font.pointSize: 12;
                     }
                 }

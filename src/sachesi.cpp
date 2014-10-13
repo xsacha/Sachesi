@@ -53,9 +53,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Install translator by locale language string
     QTranslator appTranslator;
-    // zh_HK is considered 'Chinese' language but the characters are entirely different.
-    // They would be more likely able to read English than Mandarin
-    if ((QLocale().name() != "zh_HK") && appTranslator.load(QString(":/translations/%1.qm")
+    if (appTranslator.load(QString(":/translations/%1.qm")
                                   .arg(QLocale::languageToString(QLocale().language())))
             ) {
         app.installTranslator(&appTranslator);
