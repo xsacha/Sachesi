@@ -198,7 +198,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="55"/>
         <source>Detected devices:</source>
-        <translation type="finished">Gefundende Geräte:</translation>
+        <translation type="finished">Gefundene Geräte:</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     <message>
         <location filename="../qml/generic/Downloader.qml" line="45"/>
         <source>#1. Start RTAS (Requires OS10.2)</source>
-        <translation type="finished">#1. RTAS starten (erfodert Version 10.2)</translation>
+        <translation type="finished">#1. RTAS starten (erfordert Version 10.2)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Downloader.qml" line="49"/>
@@ -665,7 +665,7 @@
     <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
-        <translation type="finished">Fortgeschritte Optionen</translation>
+        <translation type="finished">Fortgeschrittene Optionen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="57"/>
