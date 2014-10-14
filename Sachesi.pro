@@ -161,5 +161,6 @@ SOURCES = \
     qml/generic/mcc.js \
     qml/generic/*.qml \
     qml/generic/UI/*.qml \
-    src/backupinfo.cpp
+    src/backupinfo.cpp \
+    src/splitter.cpp
 }

@@ -788,6 +788,41 @@
     </message>
 </context>
 <context>
+    <name>Splitter</name>
+    <message>
+        <location filename="../src/splitter.cpp" line="114"/>
+        <source>Was not a Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="134"/>
+        <source>Unknown Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="243"/>
+        <location filename="../src/splitter.cpp" line="299"/>
+        <source>Could not open </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <source>Was not a Blackberry .signed image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Bad partition table.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Title</name>
     <message>
         <location filename="../qml/generic/Title.qml" line="9"/>

@@ -345,7 +345,7 @@
         <location filename="../qml/generic/Extract.qml" line="73"/>
         <location filename="../qml/generic/Extract.qml" line="84"/>
         <source>Extract Signed</source>
-        <translation>Извлечь </translation>
+        <translation>Выбрать файл </translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="90"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation>Извлечение подписанных образов ОС и радиомодуля из autoloader .exe, .bar или .zip</translation>
+        <translation>Извлечение подписанных образов из autoloader .exe, .bar или .zip</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="121"/>
@@ -801,6 +801,41 @@
         <location filename="../qml/generic/Search.qml" line="436"/>
         <source> MB</source>
         <translation> МБ</translation>
+    </message>
+</context>
+<context>
+    <name>Splitter</name>
+    <message>
+        <location filename="../src/splitter.cpp" line="114"/>
+        <source>Was not a Blackberry Autoloader file.</source>
+        <translation>Это не файл автолоадера Blackberry.</translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="134"/>
+        <source>Unknown Blackberry Autoloader file.</source>
+        <translation>Неизвестный файл автолоадера Blackberry.</translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="243"/>
+        <location filename="../src/splitter.cpp" line="299"/>
+        <source>Could not open </source>
+        <translation>Не удалось открыть </translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <source>Was not a Blackberry .signed image.</source>
+        <translation>Это не подписанный образ Blackberry.</translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Bad partition table.</source>
+        <translation>Таблица разделов повреждена.</translation>
     </message>
 </context>
 <context>
