@@ -62,7 +62,7 @@ Column {
                 spacing: 3
 
                 delegate: Label {
-                    text:  qsTr("Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : "USB (Windows)")));
+                    text:  qsTr("Blackberry ") + (modelData == "1" ? qsTr("Bootloader") : ((modelData == "8013") ? qsTr("USB (Unix)") : qsTr("USB (Windows)")));
                     font.pointSize: 12
                 }
             }

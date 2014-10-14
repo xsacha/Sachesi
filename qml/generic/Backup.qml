@@ -42,7 +42,7 @@ Item {
                 Repeater {
                     model: i.backMethods
                     delegate: CheckBox {
-                        text: i.backNames[index] + " (" + (i.backSizes[index] < 0 ? "Unknown" : i.backSizes[index].toFixed(1)) + " MB)" // index
+                        text: i.backNames[index] + " (" + (i.backSizes[index] < 0 ? " <b> ? </b>" : i.backSizes[index].toFixed(1)) + qsTr(" MB") +" )" // index
                         onCheckedChanged: {
                             if (checked) {
                                 options.value += 1 << index;
@@ -59,7 +59,7 @@ Item {
                 visible: i.backMethods
                 id: totalText
                 property double totalVal: 0.0
-                text:  qsTr("Total: " + (totalVal < 0 ? "Unknown" : totalVal.toFixed(1)) + " MB")
+                text:  qsTr("Total: ") + (totalVal < 0 ? " <b> ? </b>" : totalVal.toFixed(1)) + qsTr(" MB")
                 font.pointSize: 12
             }
         }
@@ -120,7 +120,7 @@ Item {
             anchors {verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: parent.width / 2 - 150 }
             Text {
                 font.pointSize: 12
-                text: (i.backing ? "Creating" : "Restoring") + " Backup (" + i.backProgress + "%)";
+                text: (i.backing ? qsTr("Creating") : qsTr("Restoring")) + qsTr(" Backup (") + i.backProgress + "%)";
             }
             Row {
                 spacing: 10

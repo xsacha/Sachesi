@@ -22,9 +22,9 @@ BackupInfo::BackupInfo() :
     _mode(0), _curMode(0), _numMethods(0)
 {
     _numMethods = 3;
-    categories.append(new BackupCategory("app", "Application Data"));
-    categories.append(new BackupCategory("media", "Media"));
-    categories.append(new BackupCategory("settings", "Device Settings and Local Contacts/Calendar Data"));
+    categories.append(new BackupCategory("app", tr("Application Data")));
+    categories.append(new BackupCategory("media", tr("Media")));
+    categories.append(new BackupCategory("settings", tr("Device Settings and Local Contacts/Calendar Data")));
     _curSize.append(QList<qint64>() << 0 << 0 << 0);
     _curMaxSize.append(QList<qint64>() << 1 << 1 << 1);
 }

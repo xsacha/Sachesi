@@ -15,97 +15,101 @@
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="24"/>
-        <location filename="../qml/generic/AppWorld.qml" line="44"/>
+        <location filename="../qml/generic/AppWorld.qml" line="30"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="28"/>
+        <location filename="../qml/generic/AppWorld.qml" line="34"/>
         <source>Featured</source>
         <translation>Novedades</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="32"/>
+        <location filename="../qml/generic/AppWorld.qml" line="38"/>
         <source>Carrier</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="37"/>
+        <location filename="../qml/generic/AppWorld.qml" line="43"/>
         <source>Cars</source>
         <translation>Autos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="70"/>
+        <location filename="../qml/generic/AppWorld.qml" line="69"/>
         <source>by</source>
         <translation>por</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>File Bundle</source>
         <translation>Lote de Archivos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
         <source> MB</source>
-        <translation>MB</translation>
+        <translation type="vanished">MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="82"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
+        <source>MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/AppWorld.qml" line="81"/>
         <source>View</source>
         <translation>Mirar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="88"/>
+        <location filename="../qml/generic/AppWorld.qml" line="87"/>
         <source>Download</source>
         <translation>Descarga</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="199"/>
+        <location filename="../qml/generic/AppWorld.qml" line="198"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="205"/>
+        <location filename="../qml/generic/AppWorld.qml" line="204"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Production</source>
         <translation>Producción</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Enterprise</source>
         <translation>Empresa</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Eval</source>
         <translation>Eval</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="214"/>
+        <location filename="../qml/generic/AppWorld.qml" line="213"/>
         <source>Model</source>
         <translation>Modelo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="217"/>
+        <location filename="../qml/generic/AppWorld.qml" line="216"/>
         <source>OS</source>
         <translation>SO</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="221"/>
         <source>Latest</source>
         <translation>Últimas</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="221"/>
         <source>All</source>
         <translation>Todos</translation>
     </message>
@@ -118,14 +122,37 @@
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Loading Backup Options</source>
-        <translation>Cargando opciones de copia de seguridad</translation>
+        <translation type="vanished">Cargando opciones de copia de seguridad</translation>
+    </message>
+    <message>
+        <source>Load Backup Options</source>
+        <translation type="vanished">Carga opciones de copia de seguridad</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="33"/>
+        <source>Refreshing Backup Sizes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="62"/>
+        <source>Total: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="obsolete">Desconocido</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="45"/>
+        <location filename="../qml/generic/Backup.qml" line="62"/>
+        <source> MB</source>
+        <translation type="unfinished">MB</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="69"/>
-        <source>Load Backup Options</source>
-        <translation>Carga opciones de copia de seguridad</translation>
+        <source>Refresh Backup Sizes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="77"/>
@@ -151,6 +178,39 @@
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Restore backup</source>
         <translation>Restaurar Copia de Seguridad</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source>Creating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source>Restoring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source> Backup (</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BackupInfo</name>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="25"/>
+        <source>Application Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="26"/>
+        <source>Media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="27"/>
+        <source>Device Settings and Local Contacts/Calendar Data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -201,6 +261,26 @@ Conexión a la sector de inicio</translation>
         <source>Detected devices:</source>
         <translation>Dispositivos Detectados:</translation>
     </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>Blackberry </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>Bootloader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>USB (Unix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>USB (Windows)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -217,6 +297,36 @@ Conexión a la sector de inicio</translation>
 </context>
 <context>
     <name>Extract</name>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="27"/>
+        <source>Splitting Autoloader </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="28"/>
+        <source>Combining Autoloader </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="29"/>
+        <source>Extracting Image </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="30"/>
+        <source>Extracting Apps </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="31"/>
+        <source>Fetching required files </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="32"/>
+        <source>Waiting </source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
@@ -253,6 +363,12 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Extract.qml" line="100"/>
         <source>Radio</source>
         <translation>Radio</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="106"/>
+        <location filename="../qml/generic/Extract.qml" line="213"/>
+        <source>IFS</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
@@ -313,6 +429,16 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Extract.qml" line="197"/>
         <source>Extract Image</source>
         <translation>Imagen Extracto</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="204"/>
+        <source>RCFS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="208"/>
+        <source>QNX6</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
@@ -469,180 +595,257 @@ Conexión a la sector de inicio</translation>
     <name>Search</name>
     <message>
         <location filename="../qml/generic/Search.qml" line="23"/>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Download</source>
         <translation>Descargar</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="38"/>
-        <location filename="../qml/generic/Search.qml" line="137"/>
+        <location filename="../qml/generic/Search.qml" line="135"/>
         <source>Cancel Download</source>
         <translation>Cancelar Descargar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Searching...</source>
         <translation>Búsqueda...</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="65"/>
+        <location filename="../qml/generic/Search.qml" line="60"/>
+        <source>Delta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="63"/>
         <source>Version Lookup</source>
         <translation>Versión de buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="77"/>
+        <location filename="../qml/generic/Search.qml" line="73"/>
+        <source>Server did not respond as expected [</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="75"/>
         <source>Success. No updates were available.</source>
         <translation>Éxito. No hay actualizaciones disponibles.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="86"/>
+        <location filename="../qml/generic/Search.qml" line="84"/>
         <source>Download For</source>
         <translation>Download para</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="90"/>
-        <location filename="../qml/generic/Search.qml" line="181"/>
+        <location filename="../qml/generic/Search.qml" line="88"/>
+        <location filename="../qml/generic/Search.qml" line="179"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="96"/>
+        <location filename="../qml/generic/Search.qml" line="94"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="100"/>
         <source>Connected</source>
         <translation>Conectado</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="100"/>
         <source>As Searched</source>
         <translation>Como Buscado</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="120"/>
+        <location filename="../qml/generic/Search.qml" line="118"/>
         <source>Grab Links</source>
         <translation>Enlaces de Arrebatar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Verifying</source>
         <translation>Verificación</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="151"/>
+        <location filename="../qml/generic/Search.qml" line="130"/>
+        <source>View Download (</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="149"/>
         <source>Country</source>
         <translation>País</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="162"/>
+        <location filename="../qml/generic/Search.qml" line="160"/>
         <source>Carrier</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="176"/>
+        <location filename="../qml/generic/Search.qml" line="174"/>
         <source>Search For</source>
         <translation>Buscar para</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="214"/>
+        <location filename="../qml/generic/Search.qml" line="212"/>
         <source>Any</source>
         <translation>Cualquier</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="230"/>
+        <location filename="../qml/generic/Search.qml" line="228"/>
         <source>Variant</source>
         <translation>Variante</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="246"/>
+        <location filename="../qml/generic/Search.qml" line="244"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Upgrade</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Debrick</source>
         <translation>Restaurar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="253"/>
+        <location filename="../qml/generic/Search.qml" line="251"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Production</source>
         <translation>Producción</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Beta 2</source>
         <translation>Beta 2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Alpha 2</source>
         <translation>Alfa 2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="339"/>
+        <location filename="../qml/generic/Search.qml" line="337"/>
         <source>1700.0 MB</source>
         <translation>1700.0 MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="343"/>
+        <location filename="../qml/generic/Search.qml" line="341"/>
         <source>Selected: </source>
         <translation>Seleccionado:</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="362"/>
+        <location filename="../qml/generic/Search.qml" line="341"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source>All (</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="341"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source> Apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source>. Needed: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="360"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="365"/>
+        <location filename="../qml/generic/Search.qml" line="363"/>
         <source>Check All</source>
         <translation>Seleccionar Todos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="374"/>
+        <location filename="../qml/generic/Search.qml" line="372"/>
         <source>Check All Needed</source>
         <translation>Compruebe Todo lo Necesario</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="383"/>
+        <location filename="../qml/generic/Search.qml" line="381"/>
         <source>Uncheck All</source>
         <translation>Desmarcar Todos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="414"/>
+        <location filename="../qml/generic/Search.qml" line="412"/>
         <source> (downloaded)</source>
         <translation>(descargado)</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="436"/>
+        <source> MB</source>
+        <translation type="unfinished">MB</translation>
+    </message>
+</context>
+<context>
+    <name>Splitter</name>
+    <message>
+        <location filename="../src/splitter.cpp" line="114"/>
+        <source>Was not a Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="134"/>
+        <source>Unknown Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="243"/>
+        <location filename="../src/splitter.cpp" line="299"/>
+        <source>Could not open </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <source>Was not a Blackberry .signed image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Bad partition table.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Title</name>
+    <message>
+        <location filename="../qml/generic/Title.qml" line="9"/>
+        <source>Sachesi</source>
+        <translation type="unfinished">Sachesi</translation>
+    </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
         <source>SACHESI</source>
@@ -707,6 +910,16 @@ Conexión a la sector de inicio</translation>
         <translation>Incorrecta</translation>
     </message>
     <message>
+        <location filename="../qml/generic/USBConnect.qml" line="47"/>
+        <source>Hide password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="47"/>
+        <source>Show password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
         <source>There was an issue connecting.</source>
         <translation>Había un problema de conexión.</translation>
@@ -720,6 +933,31 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/USBConnect.qml" line="68"/>
         <source>Searching for USB device</source>
         <translation>Búsqueda de dispositivo USB</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source>Detected </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source> Blackberry USB device(s) in </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source> mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source>Talking to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source> possible device(s).</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

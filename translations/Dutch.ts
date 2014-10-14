@@ -6,108 +6,108 @@
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="15"/>
         <source>Back</source>
-        <translation type="finished">Ga terug</translation>
+        <translation>Ga terug</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="19"/>
         <source>Home</source>
-        <translation type="finished">Startpagina</translation>
+        <translation>Startpagina</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="24"/>
         <location filename="../qml/generic/AppWorld.qml" line="30"/>
         <source>Search</source>
-        <translation type="finished">Zoek</translation>
+        <translation>Zoek</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="34"/>
         <source>Featured</source>
-        <translation type="finished">Uitgelicht</translation>
+        <translation>Uitgelicht</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="38"/>
         <source>Carrier</source>
-        <translation type="finished">Provider</translation>
+        <translation>Provider</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="43"/>
         <source>Cars</source>
-        <translation type="finished">Auto's</translation>
+        <translation>Auto&apos;s</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="69"/>
         <source>by</source>
-        <translation type="finished">van</translation>
+        <translation>van</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>File Bundle</source>
-        <translation type="finished">Bestandspakket</translation>
+        <translation>Bestandspakket</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>Version</source>
-        <translation type="finished">Versie</translation>
+        <translation>Versie</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>MB</source>
-        <translation type="finished">MB</translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="81"/>
         <source>View</source>
-        <translation type="finished">Bekijk</translation>
+        <translation>Bekijk</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="87"/>
         <source>Download</source>
-        <translation type="finished">Download</translation>
+        <translation>Download</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="200"/>
+        <location filename="../qml/generic/AppWorld.qml" line="198"/>
         <source>Options</source>
-        <translation type="finished">Opties</translation>
+        <translation>Opties</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="206"/>
+        <location filename="../qml/generic/AppWorld.qml" line="204"/>
         <source>Server</source>
-        <translation type="finished">Server</translation>
+        <translation>Server</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="211"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Production</source>
-        <translation type="finished">Productie</translation>
+        <translation>Productie</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="211"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Enterprise</source>
-        <translation type="finished">Bedrijf</translation>
+        <translation>Bedrijf</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="211"/>
+        <location filename="../qml/generic/AppWorld.qml" line="209"/>
         <source>Eval</source>
-        <translation type="finished">Eval</translation>
+        <translation>Eval</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="215"/>
+        <location filename="../qml/generic/AppWorld.qml" line="213"/>
         <source>Model</source>
-        <translation type="finished">Model</translation>
+        <translation>Model</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="218"/>
+        <location filename="../qml/generic/AppWorld.qml" line="216"/>
         <source>OS</source>
-        <translation type="finished">Besturingssysteem</translation>
+        <translation>Besturingssysteem</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="223"/>
+        <location filename="../qml/generic/AppWorld.qml" line="221"/>
         <source>Latest</source>
-        <translation type="finished">Nieuwste</translation>
+        <translation>Nieuwste</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="223"/>
+        <location filename="../qml/generic/AppWorld.qml" line="221"/>
         <source>All</source>
-        <translation type="finished">Alle</translation>
+        <translation>Alle</translation>
     </message>
 </context>
 <context>
@@ -115,42 +115,94 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="24"/>
         <source>Options</source>
-        <translation type="finished">Opties</translation>
+        <translation>Opties</translation>
+    </message>
+    <message>
+        <source>Loading Backup Options</source>
+        <translation type="vanished">Bezig met laden van backup-opties...</translation>
+    </message>
+    <message>
+        <source>Load Backup Options</source>
+        <translation type="vanished">Laad backup-opties</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
-        <source>Loading Backup Options</source>
-        <translation type="finished">Bezig met laden van backup-opties...</translation>
+        <source>Refreshing Backup Sizes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="45"/>
+        <location filename="../qml/generic/Backup.qml" line="62"/>
+        <source> MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="62"/>
+        <source>Total: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="69"/>
-        <source>Load Backup Options</source>
-        <translation type="finished">Laad backup-opties</translation>
+        <source>Refresh Backup Sizes</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="77"/>
         <source>Choose backup filename</source>
-        <translation type="finished">Voer backup-bestandsnaam in</translation>
+        <translation>Voer backup-bestandsnaam in</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="85"/>
         <source>Blackberry Backup (*.bbb)</source>
-        <translation type="finished">BlackBerry-backup-bestand (*.bbb)</translation>
+        <translation>BlackBerry-backup-bestand (*.bbb)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="89"/>
         <source>Select restore file</source>
-        <translation type="finished">Kies herstelbestand</translation>
+        <translation>Kies herstelbestand</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="100"/>
         <source>Create backup</source>
-        <translation type="finished">Maak backup aan</translation>
+        <translation>Maak backup aan</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Restore backup</source>
-        <translation type="finished">Herstel backup</translation>
+        <translation>Herstel backup</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source>Creating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source>Restoring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="123"/>
+        <source> Backup (</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BackupInfo</name>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="25"/>
+        <source>Application Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="26"/>
+        <source>Media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/backupinfo.cpp" line="27"/>
+        <source>Device Settings and Local Contacts/Calendar Data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -158,47 +210,67 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="11"/>
         <source>Boot Communication</source>
-        <translation type="finished">Boot-communicatie</translation>
+        <translation>Boot-communicatie</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="18"/>
         <source>Info</source>
-        <translation type="finished">Info</translation>
+        <translation>Info</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="22"/>
         <source>RimBoot</source>
-        <translation type="finished">RimBoot</translation>
+        <translation>RimBoot</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="26"/>
         <source>Nuke</source>
-        <translation type="finished">Nuke</translation>
+        <translation>Nuke</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="30"/>
         <source>Debug Mode</source>
-        <translation type="finished">Debugmode</translation>
+        <translation>Debugmode</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="36"/>
         <source>Reboot after</source>
-        <translation type="finished">Herstart na het proces</translation>
+        <translation>Herstart na het proces</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="43"/>
         <source>Connecting to bootrom</source>
-        <translation type="finished">Bezig met verbinden met bootrom...</translation>
+        <translation>Bezig met verbinden met bootrom...</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="50"/>
         <source>Cancel</source>
-        <translation type="finished">Annuleer</translation>
+        <translation>Annuleer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="55"/>
         <source>Detected devices:</source>
-        <translation type="finished">Gevonden toestellen:</translation>
+        <translation>Gevonden toestellen:</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>Blackberry </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>Bootloader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>USB (Unix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Boot.qml" line="65"/>
+        <source>USB (Windows)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -206,127 +278,173 @@
     <message>
         <location filename="../qml/generic/Downloader.qml" line="45"/>
         <source>#1. Start RTAS (Requires OS10.2)</source>
-        <translation type="finished">#1. Start RTAS (vereist versie 10.2)</translation>
+        <translation>#1. Start RTAS (vereist versie 10.2)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Downloader.qml" line="49"/>
         <source>Start RTAS</source>
-        <translation type="finished">Start RTAS</translation>
+        <translation>Start RTAS</translation>
     </message>
 </context>
 <context>
     <name>Extract</name>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="27"/>
+        <source>Splitting Autoloader </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="28"/>
+        <source>Combining Autoloader </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="29"/>
+        <source>Extracting Image </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="30"/>
+        <source>Extracting Apps </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="31"/>
+        <source>Fetching required files </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="32"/>
+        <source>Waiting </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
-        <translation type="finished">Percentages zijn voor QNX6-bestanden niet nauwkeurig.</translation>
+        <translation>Percentages zijn voor QNX6-bestanden niet nauwkeurig.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="55"/>
         <source>Cancel</source>
-        <translation type="finished">Annuleer</translation>
+        <translation>Annuleer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="66"/>
         <source>Autoloader Tools</source>
-        <translation type="finished">Autoloader-gereedschappen</translation>
+        <translation>Autoloader-gereedschappen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="73"/>
         <location filename="../qml/generic/Extract.qml" line="84"/>
         <source>Extract Signed</source>
-        <translation type="finished">Extraheer gesigneerde bestanden</translation>
+        <translation>Extraheer gesigneerde bestanden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="90"/>
         <location filename="../qml/generic/Extract.qml" line="178"/>
         <source>User</source>
-        <translation type="finished">Gebruiker</translation>
+        <translation>Gebruiker</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="95"/>
         <source>OS</source>
-        <translation type="finished">Besturingssysteem</translation>
+        <translation>Besturingssysteem</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="100"/>
         <source>Radio</source>
-        <translation type="finished">Radio</translation>
+        <translation>Radio</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="106"/>
+        <location filename="../qml/generic/Extract.qml" line="213"/>
+        <source>IFS</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
         <source>PINList</source>
-        <translation type="finished">PINList</translation>
+        <translation>PINList</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation type="finished">Extraheert gesigneerde bestanden uit autoloader (.exe, .bar of .zip)</translation>
+        <translation>Extraheert gesigneerde bestanden uit autoloader (.exe, .bar of .zip)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="121"/>
         <source>Create Autoloader</source>
-        <translation type="finished">Maak autoloader aan</translation>
+        <translation>Maak autoloader aan</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="131"/>
         <source>Create from Folder</source>
-        <translation type="finished">Maak aan uit map</translation>
+        <translation>Maak aan uit map</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="139"/>
         <source>Create from Files</source>
-        <translation type="finished">Maak aan uit bestanden</translation>
+        <translation>Maak aan uit bestanden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="149"/>
         <source>Create Autoloader .exe from .signed images</source>
-        <translation type="finished">Maak autoloader uit bestanden aan (.exe of .signed)</translation>
+        <translation>Maak autoloader uit bestanden aan (.exe of .signed)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="156"/>
         <source>Extraction Tools</source>
-        <translation type="finished">Extractiegereedschappen</translation>
+        <translation>Extractiegereedschappen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
         <source>Dump Contents</source>
-        <translation type="finished">Extraheer inhouden</translation>
+        <translation>Extraheer inhouden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="173"/>
         <source>Core</source>
-        <translation type="finished">Kern</translation>
+        <translation>Kern</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="183"/>
         <source>Boot</source>
-        <translation type="finished">Boot</translation>
+        <translation>Boot</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="187"/>
         <source>Dump all file contents</source>
-        <translation type="finished">Extraheert alle bestandsinhouden</translation>
+        <translation>Extraheert alle bestandsinhouden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="197"/>
         <source>Extract Image</source>
-        <translation type="finished">Extraheer kopie</translation>
+        <translation>Extraheer kopie</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="204"/>
+        <source>RCFS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="208"/>
+        <source>QNX6</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
         <source>Extracts filesystem image</source>
-        <translation type="finished">Extraheert een kopie van het bestandssysteem</translation>
+        <translation>Extraheert een kopie van het bestandssysteem</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="223"/>
         <source>Extract Apps</source>
-        <translation type="finished">Extraheer apps</translation>
+        <translation>Extraheer apps</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="228"/>
         <source>Extract all bar archives</source>
-        <translation type="finished">Extraheert alle BAR-bestanden</translation>
+        <translation>Extraheert alle BAR-bestanden</translation>
     </message>
 </context>
 <context>
@@ -334,320 +452,382 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="21"/>
         <source>View Install (</source>
-        <translation type="finished">Toon installatie (</translation>
+        <translation>Toon installatie (</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Firmware Update</source>
-        <translation type="finished">Firmware-update</translation>
+        <translation>Firmware-update</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Install</source>
-        <translation type="finished">Installatie</translation>
+        <translation>Installatie</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="41"/>
         <source>Sending </source>
-        <translation type="finished">Verstuurt </translation>
+        <translation>Verstuurt </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="41"/>
         <source>Installing </source>
-        <translation type="finished">Installeert </translation>
+        <translation>Installeert </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="41"/>
         <source>Sent </source>
-        <translation type="finished">Verstuurd: </translation>
+        <translation>Verstuurd: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="58"/>
         <source>To install &lt;b&gt;.bar&lt;/b&gt; files such as applications or firmware, you can just &lt;b&gt;Drag and Drop&lt;/b&gt; to this page. Otherwise, select the options below:</source>
-        <translation type="finished">Om &lt;b&gt;BAR&lt;/b&gt;-bestanden zoals apps of firmware te installeren, kunt u deze bestanden op dit programma &lt;b&gt;slepen en neerzetten&lt;/b&gt;.\nAls alternatief kunt u de volgende opties gebruiken:</translation>
+        <translation>Om &lt;b&gt;BAR&lt;/b&gt;-bestanden zoals apps of firmware te installeren, kunt u deze bestanden op dit programma &lt;b&gt;slepen en neerzetten&lt;/b&gt;.\nAls alternatief kunt u de volgende opties gebruiken:</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="66"/>
         <source>Install applications to device</source>
-        <translation type="finished">Installeer apps op toestel</translation>
+        <translation>Installeer apps op toestel</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="75"/>
         <source>Blackberry Installable (*.bar)</source>
-        <translation type="finished">BlackBerry-installatiebestand (*.bar)</translation>
+        <translation>BlackBerry-installatiebestand (*.bar)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="78"/>
         <source>Install Folder</source>
-        <translation type="finished">Installeer map</translation>
+        <translation>Installeer map</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="81"/>
         <location filename="../qml/generic/Installer.qml" line="95"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation type="finished">Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het proces is voltooid.&lt;br&gt;</translation>
+        <translation>Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het proces is voltooid.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="83"/>
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
-        <translation type="finished">Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het backup-/herstelproces is voltooid.&lt;br&gt;</translation>
+        <translation>Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het backup-/herstelproces is voltooid.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="85"/>
         <source>Select Folder</source>
-        <translation type="finished">Kies map</translation>
+        <translation>Kies map</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="92"/>
         <source>Install Files</source>
-        <translation type="finished">Installeer bestanden</translation>
+        <translation>Installeer bestanden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <source>Select Files</source>
-        <translation type="finished">Kies bestanden</translation>
+        <translation>Kies bestanden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="108"/>
         <source>Advanced Tools</source>
-        <translation type="finished">Geavanceerde gereedschappen</translation>
+        <translation>Geavanceerde gereedschappen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Wipe</source>
-        <translation type="finished">Wis volledig</translation>
+        <translation>Wis volledig</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="118"/>
         <source>Factory Reset</source>
-        <translation type="finished">Herstel fabrieksinstellingen</translation>
+        <translation>Herstel fabrieksinstellingen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="123"/>
         <source>Reboot</source>
-        <translation type="finished">Herstart</translation>
+        <translation>Herstart</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="136"/>
         <source>Refresh</source>
-        <translation type="finished">Vernieuw</translation>
+        <translation>Vernieuw</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
         <source>Your Applications</source>
-        <translation type="finished">Uw apps</translation>
+        <translation>Uw apps</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
         <source>Log</source>
-        <translation type="finished">Protocol</translation>
+        <translation>Protocol</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="177"/>
         <source>Use &apos;Refresh&apos; to update list</source>
-        <translation type="finished">Klik op &apos;Vernieuw&apos; om de lijst te vernieuwen</translation>
+        <translation>Klik op &apos;Vernieuw&apos; om de lijst te vernieuwen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="190"/>
         <source>Options</source>
-        <translation type="finished">Opties</translation>
+        <translation>Opties</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="192"/>
         <source>Uninstall Marked</source>
-        <translation type="finished">Verwijder geselecteerde apps</translation>
+        <translation>Verwijder geselecteerde apps</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="199"/>
         <source>Show Installed Apps</source>
-        <translation type="finished">Toon geïnstalleerde apps</translation>
+        <translation>Toon geïnstalleerde apps</translation>
     </message>
 </context>
 <context>
     <name>Search</name>
     <message>
         <location filename="../qml/generic/Search.qml" line="23"/>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Download</source>
-        <translation type="finished">Download</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="38"/>
-        <location filename="../qml/generic/Search.qml" line="137"/>
+        <location filename="../qml/generic/Search.qml" line="135"/>
         <source>Cancel Download</source>
-        <translation type="finished">Annuleer download</translation>
+        <translation>Annuleer download</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Searching...</source>
-        <translation type="finished">Bezig met zoeken...</translation>
+        <translation>Bezig met zoeken...</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Search</source>
-        <translation type="finished">Zoek</translation>
+        <translation>Zoek</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="65"/>
+        <location filename="../qml/generic/Search.qml" line="60"/>
+        <source>Delta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="63"/>
         <source>Version Lookup</source>
-        <translation type="finished">Versiezoeker...</translation>
+        <translation>Versiezoeker...</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="77"/>
+        <location filename="../qml/generic/Search.qml" line="73"/>
+        <source>Server did not respond as expected [</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="75"/>
         <source>Success. No updates were available.</source>
-        <translation type="finished">Succes. Geen updates beschikbaar.</translation>
+        <translation>Succes. Geen updates beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="86"/>
+        <location filename="../qml/generic/Search.qml" line="84"/>
         <source>Download For</source>
-        <translation type="finished">Download voor:</translation>
+        <translation>Download voor:</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="90"/>
-        <location filename="../qml/generic/Search.qml" line="181"/>
+        <location filename="../qml/generic/Search.qml" line="88"/>
+        <location filename="../qml/generic/Search.qml" line="179"/>
         <source>Device</source>
-        <translation type="finished">Toestel</translation>
+        <translation>Toestel</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="96"/>
+        <location filename="../qml/generic/Search.qml" line="94"/>
         <source>Unknown</source>
-        <translation type="finished">Onbekend</translation>
+        <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="100"/>
         <source>Connected</source>
-        <translation type="finished">Verbonden</translation>
+        <translation>Verbonden</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="100"/>
         <source>As Searched</source>
-        <translation type="finished">Als gezocht</translation>
+        <translation>Als gezocht</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="120"/>
+        <location filename="../qml/generic/Search.qml" line="118"/>
         <source>Grab Links</source>
-        <translation type="finished">Laad links</translation>
+        <translation>Laad links</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Verifying</source>
-        <translation type="finished">Bezig met verificiëren...</translation>
+        <translation>Bezig met verificiëren...</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="132"/>
+        <location filename="../qml/generic/Search.qml" line="130"/>
         <source>View Download (</source>
-        <translation type="finished">Toon download (</translation>
+        <translation>Toon download (</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="151"/>
+        <location filename="../qml/generic/Search.qml" line="149"/>
         <source>Country</source>
-        <translation type="finished">Land</translation>
+        <translation>Land</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="162"/>
+        <location filename="../qml/generic/Search.qml" line="160"/>
         <source>Carrier</source>
-        <translation type="finished">Provider</translation>
+        <translation>Provider</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="176"/>
+        <location filename="../qml/generic/Search.qml" line="174"/>
         <source>Search For</source>
-        <translation type="finished">Zoek voor:</translation>
+        <translation>Zoek voor:</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="214"/>
+        <location filename="../qml/generic/Search.qml" line="212"/>
         <source>Any</source>
-        <translation type="finished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="230"/>
+        <location filename="../qml/generic/Search.qml" line="228"/>
         <source>Variant</source>
-        <translation type="finished">Variant</translation>
+        <translation>Variant</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="246"/>
+        <location filename="../qml/generic/Search.qml" line="244"/>
         <source>Mode</source>
-        <translation type="finished">Mode</translation>
+        <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Upgrade</source>
-        <translation type="finished">Upgrade</translation>
+        <translation>Upgrade</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Debrick</source>
-        <translation type="finished">Debrick</translation>
+        <translation>Debrick</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="253"/>
+        <location filename="../qml/generic/Search.qml" line="251"/>
         <source>Server</source>
-        <translation type="finished">Server</translation>
+        <translation>Server</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Production</source>
-        <translation type="finished">Productie</translation>
+        <translation>Productie</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Beta</source>
-        <translation type="finished">Bèta</translation>
+        <translation>Bèta</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Beta 2</source>
-        <translation type="finished">Bèta 2</translation>
+        <translation>Bèta 2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Alpha</source>
-        <translation type="finished">Alfa</translation>
+        <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Alpha 2</source>
-        <translation type="finished">Alfa 2</translation>
+        <translation>Alfa 2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="339"/>
+        <location filename="../qml/generic/Search.qml" line="337"/>
         <source>1700.0 MB</source>
-        <translation type="finished">1700,0 MB</translation>
+        <translation>1700,0 MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="343"/>
+        <location filename="../qml/generic/Search.qml" line="341"/>
         <source>Selected: </source>
-        <translation type="finished">Geselecteerd: </translation>
+        <translation>Geselecteerd: </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="344"/>
+        <location filename="../qml/generic/Search.qml" line="341"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source>All (</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="341"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
+        <source> Apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="342"/>
         <source>. Needed: </source>
-        <translation type="finished">. Benodigd: </translation>
+        <translation>. Benodigd: </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="362"/>
+        <location filename="../qml/generic/Search.qml" line="360"/>
         <source>Options</source>
-        <translation type="finished">Opties</translation>
+        <translation>Opties</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="365"/>
+        <location filename="../qml/generic/Search.qml" line="363"/>
         <source>Check All</source>
-        <translation type="finished">Selecteer alle</translation>
+        <translation>Selecteer alle</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="374"/>
+        <location filename="../qml/generic/Search.qml" line="372"/>
         <source>Check All Needed</source>
-        <translation type="finished">Selecteer benodigde</translation>
+        <translation>Selecteer benodigde</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="383"/>
+        <location filename="../qml/generic/Search.qml" line="381"/>
         <source>Uncheck All</source>
-        <translation type="finished">Hef selectie op</translation>
+        <translation>Hef selectie op</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="414"/>
+        <location filename="../qml/generic/Search.qml" line="412"/>
         <source> (downloaded)</source>
-        <translation type="finished"> (gedownload)</translation>
+        <translation> (gedownload)</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="436"/>
+        <source> MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Splitter</name>
+    <message>
+        <location filename="../src/splitter.cpp" line="114"/>
+        <source>Was not a Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="134"/>
+        <source>Unknown Blackberry Autoloader file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="243"/>
+        <location filename="../src/splitter.cpp" line="299"/>
+        <source>Could not open </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="321"/>
+        <source>Was not a Blackberry .signed image.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/splitter.cpp" line="337"/>
+        <source>Bad partition table.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -655,52 +835,52 @@
     <message>
         <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Sachesi</source>
-        <translation type="finished">Sachesi</translation>
+        <translation>Sachesi</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
         <source>SACHESI</source>
-        <translation type="finished">SACHESI</translation>
+        <translation>SACHESI</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
-        <translation type="finished">Geavanceerde opties</translation>
+        <translation>Geavanceerde opties</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="57"/>
         <source>AppWorld</source>
-        <translation type="finished">BlackBerry World</translation>
+        <translation>BlackBerry World</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="62"/>
         <source>Extract</source>
-        <translation type="finished">Extractie</translation>
+        <translation>Extractie</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="66"/>
         <source>Search</source>
-        <translation type="finished">Zoeken</translation>
+        <translation>Zoeken</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="69"/>
         <source>Backup</source>
-        <translation type="finished">Backup</translation>
+        <translation>Backup</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="70"/>
         <source>Install</source>
-        <translation type="finished">Installatie</translation>
+        <translation>Installatie</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="76"/>
         <source>Boot</source>
-        <translation type="finished">Boot</translation>
+        <translation>Boot</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="101"/>
         <source>No device connected</source>
-        <translation type="finished">Geen toestel verbonden</translation>
+        <translation>Geen toestel verbonden</translation>
     </message>
 </context>
 <context>
@@ -708,32 +888,67 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="16"/>
         <source>These tools require a USB connection</source>
-        <translation type="finished">Deze gereedschappen vereisen een USB-verbinding.</translation>
+        <translation>Deze gereedschappen vereisen een USB-verbinding.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="22"/>
         <source>Password:</source>
-        <translation type="finished">Wachtwoord:</translation>
+        <translation>Wachtwoord:</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="27"/>
         <source>Incorrect</source>
-        <translation type="finished">Onjuist</translation>
+        <translation>Onjuist</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="47"/>
+        <source>Hide password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="47"/>
+        <source>Show password</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
         <source>There was an issue connecting.</source>
-        <translation type="finished">Bij het verbinden is een fout opgetreden.</translation>
+        <translation>Bij het verbinden is een fout opgetreden.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="59"/>
         <source>Try Again</source>
-        <translation type="finished">Probeer opnieuw</translation>
+        <translation>Probeer opnieuw</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="68"/>
         <source>Searching for USB device</source>
-        <translation type="finished">Bezig met zoeken naar USB-toestel...</translation>
+        <translation>Bezig met zoeken naar USB-toestel...</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source>Detected </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source> Blackberry USB device(s) in </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source> mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source>Talking to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source> possible device(s).</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -741,57 +956,57 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Sachesi</source>
-        <translation type="finished">Sachesi</translation>
+        <translation>Sachesi</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Version Lookup</source>
-        <translation type="finished">Versiezoeker</translation>
+        <translation>Versiezoeker</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="49"/>
         <source>Lookup</source>
-        <translation type="finished">Zoek op</translation>
+        <translation>Zoek op</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="55"/>
         <source>Stop Scan</source>
-        <translation type="finished">Stop met scannen</translation>
+        <translation>Stop met scannen</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="55"/>
         <source>Autoscan</source>
-        <translation type="finished">Scan</translation>
+        <translation>Scan</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="83"/>
         <source>Find next available links</source>
-        <translation type="finished">Vind eerstbeschikbare links</translation>
+        <translation>Vind eerstbeschikbare links</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="87"/>
         <source>Check for SDK</source>
-        <translation type="finished">Zoek naar SDK-versies</translation>
+        <translation>Zoek naar SDK-versies</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="100"/>
         <source>Software Release: </source>
-        <translation type="finished">Software-release: </translation>
+        <translation>Software-release: </translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="111"/>
         <source>Grab Public Links</source>
-        <translation type="finished">Laad openbare links</translation>
+        <translation>Laad openbare links</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="111"/>
         <source>No Links Available</source>
-        <translation type="finished">Geen links beschikbaar</translation>
+        <translation>Geen links beschikbaar</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="118"/>
         <source>Hide</source>
-        <translation type="finished">Verberg</translation>
+        <translation>Verberg</translation>
     </message>
 </context>
 </TS>
