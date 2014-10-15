@@ -208,8 +208,8 @@ public:
                                     xml.readNext();
                                     if (xml.tokenType() == QXmlStreamReader::StartElement) {
                                         if (xml.name() == "image"
-                                                && (xml.attributes().value("imagetype").toInt() == 1)
-                                                || (xml.attributes().value("imagetype").toInt() == 7))
+                                                && (xml.attributes().value("imagetype").toInt() == 1
+                                                || xml.attributes().value("imagetype").toInt() == 7))
                                             app->setImage(xml.attributes().value("src").toString());
                                         else if (xml.name() == "vendor") {
                                             app->setVendorId(xml.attributes().value("id").toString());
