@@ -35,6 +35,7 @@ class Apps : public QObject {
     Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(bool isMarked READ isMarked WRITE setIsMarked NOTIFY isMarkedChanged)
     Q_PROPERTY(bool isAvailable READ isAvailable WRITE setIsAvailable NOTIFY isAvailableChanged)
+    Q_PROPERTY(bool isInstalled READ isInstalled WRITE setIsInstalled NOTIFY isInstalledChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(QString versionId READ versionId WRITE setVersionId NOTIFY versionIdChanged)
@@ -51,6 +52,7 @@ public:
     int size() const;
     bool isMarked() const;
     bool isAvailable() const;
+    bool isInstalled() const;
     QString type() const;
     QString version() const;
     QString versionId() const;
@@ -62,6 +64,7 @@ public:
     void setSize(const int &num);
     void setIsMarked(const bool &marked);
     void setIsAvailable(const bool &available);
+    void setIsInstalled(const bool &installed);
     void setType(const QString &str);
     void setVersion(const QString &str);
     void setVersionId(const QString &str);
@@ -75,6 +78,7 @@ signals:
     void sizeChanged();
     void isMarkedChanged();
     void isAvailableChanged();
+    void isInstalledChanged();
     void typeChanged();
     void versionChanged();
     void versionIdChanged();
@@ -88,6 +92,7 @@ private:
     int _size;
     bool _isMarked;
     bool _isAvailable;
+    bool _isInstalled;
     QString _type;
     QString _version;
     QString _versionId;

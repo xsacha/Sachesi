@@ -95,8 +95,8 @@ class InstallNet : public QObject {
     Q_PROPERTY(bool    firmwareUpdate   MEMBER _firmwareUpdate  WRITE setFirmwareUpdate   NOTIFY firmwareUpdateChanged)
     Q_PROPERTY(QStringList firmwareNames MEMBER _firmwareNames                            NOTIFY firmwareNamesChanged)
     Q_PROPERTY(QStringList firmwarePaths MEMBER _firmwarePaths                            NOTIFY firmwarePathsChanged)
-    Q_PROPERTY(QString knownOS          MEMBER _knownOS         WRITE setKnownOS          NOTIFY knownOSChanged)
-    Q_PROPERTY(QString knownRadio       MEMBER _knownRadio      WRITE setKnownRadio       NOTIFY knownRadioChanged)
+    Q_PROPERTY(QString knownOS          READ    knownOS         WRITE setKnownOS          NOTIFY knownOSChanged)
+    Q_PROPERTY(QString knownRadio       READ    knownRadio      WRITE setKnownRadio       NOTIFY knownRadioChanged)
     Q_PROPERTY(int knownBattery         MEMBER _knownBattery    WRITE setKnownBattery     NOTIFY knownBatteryChanged)
     Q_PROPERTY(QString knownName        MEMBER _knownName       WRITE setKnownName        NOTIFY knownNameChanged)
     Q_PROPERTY(QString knownPIN         MEMBER _knownPIN        WRITE setKnownPIN         NOTIFY knownPINChanged)
@@ -143,7 +143,10 @@ public:
     void AESEncryptSend(QByteArray &plain, int code);
     QString password() const;
     int dgMaxPos() const;
+    QString knownOS() const { return _knownOS; }
+    QString knownRadio() const { return _knownRadio; }
     QQmlListProperty<Apps> appList();
+    QList<Apps*> appQList() { return _appList; }
     int appCount() const { return _appList.count(); }
     BackupInfo* back();
     QString backStatus() const;

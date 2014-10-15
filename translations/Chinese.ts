@@ -52,7 +52,7 @@
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>MB</source>
-        <translation></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="81"/>

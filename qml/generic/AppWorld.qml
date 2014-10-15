@@ -82,17 +82,9 @@ Item {
                         onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/content/" + appworld.contentItem.id)
                     }
 
-                    Button {
-                        visible: blackberry
-                        text:  qsTr("Download")
-                        // EMBARGO: Exploit not available open-source
-                    }
-                    Button {
+                    Label {
                         visible: !blackberry && appworld.contentItem.size != 0
                         text: appworld.contentItem.price
-                        // Edit: Of course, this is wrong ;) They've changed it so I need to login now. We'll do this later
-                        // Example: "http://appworld.blackberry.com/ClientAPI/usfdownload?contentid=" + appworld.contentItem.id
-                        onClicked: Qt.openUrlExternally("http://appworld.blackberry.com/webstore/file/" + appworld.contentItem.fileId)
                     }
                 }
 

@@ -709,13 +709,30 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     newApp->setType("os");
                     newApp->setIsMarked(true);
                     newApp->setIsAvailable(true);
+                    if (_i != nullptr) {
+                        bool isSameOS = newApp->version().compare(_i->knownOS()) == 0;
+                        newApp->setIsInstalled(isSameOS);
+                    }
                 } else if (type == "system:radio") {
                     radio = newApp->name().split('/').at(1);
                     newApp->setType("radio");
                     newApp->setIsMarked(true);
                     newApp->setIsAvailable(true);
+                    if (_i != nullptr) {
+                        bool isSameRadio = newApp->version().compare(_i->knownRadio()) == 0;
+                        newApp->setIsInstalled(isSameRadio);
+                    }
                 } else {
                     newApp->setType("application");
+                    if (_i != nullptr) {
+                        foreach(Apps* app, _i->appQList()) {
+                            bool isSameApp = newApp->checksum().compare(app->checksum()) == 0;
+                            if (isSameApp) {
+                                newApp->setIsInstalled(true);
+                                break;
+                            }
+                        }
+                    }
                 }
                 newApp->setPackageId(currentaddr + "/" + newApp->name());
                 newApp->setName(newApp->name().split("/").last());
@@ -789,9 +806,9 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 // No need to check OS and Radio as they are variable
                 if (app->type() == "application") {
                     bool exists = QFile(QDir::currentPath() + "/" + _versionRelease + "/" + app->name()).size() == app->size();
-                    app->setIsMarked(!exists);
                     app->setIsAvailable(!exists);
                 }
+                app->setIsMarked(app->isAvailable() && !app->isInstalled());
             }
             // Server uses some funny order.
             // Put in order of largest to smallest with OS and Radio first and already downloaded last.
@@ -801,8 +818,8 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     return true;
                 if (j->type() != "application" && i->type() == "application")
                     return false;
-                if (i->isAvailable() != j->isAvailable())
-                    return i->isAvailable();
+                if (i->isMarked() != j->isMarked())
+                    return i->isMarked();
 
                 return (i->size() > j->size());
             }

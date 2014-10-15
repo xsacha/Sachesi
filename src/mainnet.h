@@ -36,8 +36,8 @@ class MainNet : public QObject {
     Q_PROPERTY(QQmlListProperty<Apps> updateAppList READ updateAppList NOTIFY updateMessageChanged)
     Q_PROPERTY(int     updateAppCount READ updateAppCount NOTIFY updateMessageChanged)
     Q_PROPERTY(int     updateCheckedCount READ updateCheckedCount NOTIFY updateCheckedCountChanged)
-    Q_PROPERTY(int     updateAppAvailableCount READ updateAppAvailableCount NOTIFY updateMessageChanged)
-    Q_PROPERTY(int     updateCheckedAvailableCount READ updateCheckedAvailableCount NOTIFY updateCheckedCountChanged)
+    Q_PROPERTY(int     updateAppNeededCount READ updateAppNeededCount NOTIFY updateMessageChanged)
+    Q_PROPERTY(int     updateCheckedNeededCount READ updateCheckedNeededCount NOTIFY updateCheckedCountChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
     Q_PROPERTY(bool    hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
@@ -78,10 +78,10 @@ public:
     }
 
     int updateAppCount() const { return _updateAppList.count(); }
-    int updateAppAvailableCount() const {
+    int updateAppNeededCount() const {
         int count = 0;
         foreach (Apps* app, _updateAppList) {
-            if (app->isAvailable())
+            if (app->isAvailable() && !app->isInstalled())
                 count++;
         }
         return count;
@@ -93,10 +93,10 @@ public:
                 checked++;
         return checked;
     }
-    int updateCheckedAvailableCount() const {
+    int updateCheckedNeededCount() const {
         int checked = 0;
         foreach (Apps* app, _updateAppList)
-            if (app->isMarked() && app->isAvailable())
+            if (app->isMarked() && (app->isAvailable() && !app->isInstalled()))
                 checked++;
         return checked;
     }

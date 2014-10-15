@@ -39,8 +39,6 @@ public:
         connect(_timer, SIGNAL(timeout()), this, SLOT(update()));
         _mcc = "510";
         _mnc = "010";
-        //_country = "Indonesia";
-        //_carrier = "TELKOMSEL";
         _image = 0;
         update();
     }

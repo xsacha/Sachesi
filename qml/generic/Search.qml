@@ -56,7 +56,8 @@ Item {
             RadioButton {
                 id: delta
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: !p.scanning && typeof i !== 'undefined' && i.appCount > 0
+                visible: settings.advanced && !p.scanning && typeof i !== 'undefined' && i.appCount > 0
+                checked: true
                 text:  qsTr("Delta")
             }
             Button {
@@ -119,7 +120,7 @@ Item {
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {
-                enabled: p.updateCheckedAvailableCount > 0 && !download.verifying
+                enabled: p.updateCheckedNeededCount > 0 && !download.verifying
                 visible: !download.running
                 Layout.alignment: Qt.AlignHCenter
                 text: download.verifying ? qsTr("Verifying") : qsTr("Download")
@@ -339,7 +340,7 @@ Item {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
         property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
-                                     + ((p.updateAvailableCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedAvailableCount == p.updateAppAvailableCount) ? "All (" + p.updateAppAvailableCount + ")" : p.updateCheckedAvailableCount + "/" + p.updateAppAvailableCount + " Apps") : "") + "        "
+                                     + ((p.updateNeededCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedNeededCount == p.updateAppNeededCount) ? "All (" + p.updateAppNeededCount + ")" : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount + " Apps") : "") + "        "
         title: !blackberry ? selectedMsg : ""
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
@@ -355,7 +356,7 @@ Item {
                 Menu {
                     id: options_menu
                     signal checkAll()
-                    signal checkAllAvailable()
+                    signal checkAllNeeded()
                     signal uncheckAll()
                     title:  qsTr("Options")
                     MenuItem {
@@ -368,12 +369,12 @@ Item {
                         }
                     }
                     MenuItem {
-                        enabled: p.updateCheckedAvailableCount !== p.updateAppAvailableCount
+                        enabled: p.updateCheckedNeededCount !== p.updateAppNeededCount
                         text:  qsTr("Check All Needed")
                         onTriggered: {
-                            options_menu.checkAllAvailable();
+                            options_menu.checkAllNeeded();
                             for (var i = 0; i < p.updateAppCount; i++)
-                                p.updateAppList[i].isMarked = p.updateAppList[i].isAvailable;
+                                p.updateAppList[i].isMarked = (p.updateAppList[i].isAvailable && !p.updateAppList[i].isInstalled);
                         }
                     }
                     MenuItem {
@@ -409,7 +410,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: qsTr(friendlyName + (isAvailable ? "" : qsTr(" (downloaded)")))
+                        text: friendlyName + (isInstalled ? qsTr(" (installed)") : (isAvailable ? "" : qsTr(" (downloaded)")))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked
@@ -417,7 +418,7 @@ Item {
                         Connections {
                             target: options_menu
                             onCheckAll: delegateBox.checked = true;
-                            onCheckAllAvailable: delegateBox.checked = isAvailable;
+                            onCheckAllNeeded: delegateBox.checked = isAvailable && !isInstalled;
                             onUncheckAll: delegateBox.checked = false;
                         }
                     }
