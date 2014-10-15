@@ -15,97 +15,100 @@
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="24"/>
-        <location filename="../qml/generic/AppWorld.qml" line="44"/>
+        <location filename="../qml/generic/AppWorld.qml" line="30"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="28"/>
+        <location filename="../qml/generic/AppWorld.qml" line="34"/>
         <source>Featured</source>
         <translation>Novedades</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="32"/>
+        <location filename="../qml/generic/AppWorld.qml" line="38"/>
         <source>Carrier</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="37"/>
+        <location filename="../qml/generic/AppWorld.qml" line="43"/>
         <source>Cars</source>
         <translation>Autos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="70"/>
+        <location filename="../qml/generic/AppWorld.qml" line="69"/>
         <source>by</source>
         <translation>por</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>File Bundle</source>
         <translation>Lote de Archivos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="77"/>
-        <source> MB</source>
+        <location filename="../qml/generic/AppWorld.qml" line="76"/>
+        <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="82"/>
+        <source> MB</source>
+        <translation type="vanished">MB</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/AppWorld.qml" line="81"/>
         <source>View</source>
         <translation>Mirar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="88"/>
         <source>Download</source>
-        <translation>Descarga</translation>
+        <translation type="vanished">Descarga</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="199"/>
+        <location filename="../qml/generic/AppWorld.qml" line="190"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="205"/>
+        <location filename="../qml/generic/AppWorld.qml" line="196"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="201"/>
         <source>Production</source>
         <translation>Producción</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="201"/>
         <source>Enterprise</source>
         <translation>Empresa</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="210"/>
+        <location filename="../qml/generic/AppWorld.qml" line="201"/>
         <source>Eval</source>
         <translation>Eval</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="214"/>
+        <location filename="../qml/generic/AppWorld.qml" line="205"/>
         <source>Model</source>
         <translation>Modelo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="217"/>
+        <location filename="../qml/generic/AppWorld.qml" line="208"/>
         <source>OS</source>
         <translation>SO</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="213"/>
         <source>Latest</source>
         <translation>Últimas</translation>
     </message>
     <message>
-        <location filename="../qml/generic/AppWorld.qml" line="222"/>
+        <location filename="../qml/generic/AppWorld.qml" line="213"/>
         <source>All</source>
         <translation>Todos</translation>
     </message>
@@ -118,14 +121,22 @@
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Loading Backup Options</source>
-        <translation>Cargando opciones de copia de seguridad</translation>
+        <translation type="vanished">Cargando opciones de copia de seguridad</translation>
+    </message>
+    <message>
+        <source>Load Backup Options</source>
+        <translation type="vanished">Carga opciones de copia de seguridad</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Backup.qml" line="33"/>
+        <source>Refreshing Backup Sizes</source>
+        <translation>Tamaños de Copia de Seguridad Refrescantes</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="69"/>
-        <source>Load Backup Options</source>
-        <translation>Carga opciones de copia de seguridad</translation>
+        <source>Refresh Backup Sizes</source>
+        <translation>Actualizar Tamaños de Copia de Seguridad</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="77"/>
@@ -469,180 +480,205 @@ Conexión a la sector de inicio</translation>
     <name>Search</name>
     <message>
         <location filename="../qml/generic/Search.qml" line="23"/>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="126"/>
         <source>Download</source>
         <translation>Descargar</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="38"/>
-        <location filename="../qml/generic/Search.qml" line="137"/>
+        <location filename="../qml/generic/Search.qml" line="136"/>
         <source>Cancel Download</source>
         <translation>Cancelar Descargar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Searching...</source>
         <translation>Búsqueda...</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="59"/>
+        <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="65"/>
+        <location filename="../qml/generic/Search.qml" line="61"/>
+        <source>Delta</source>
+        <translation>Delta</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="64"/>
         <source>Version Lookup</source>
         <translation>Versión de buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="77"/>
+        <location filename="../qml/generic/Search.qml" line="76"/>
         <source>Success. No updates were available.</source>
         <translation>Éxito. No hay actualizaciones disponibles.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="86"/>
+        <location filename="../qml/generic/Search.qml" line="85"/>
         <source>Download For</source>
         <translation>Download para</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="90"/>
-        <location filename="../qml/generic/Search.qml" line="181"/>
+        <location filename="../qml/generic/Search.qml" line="89"/>
+        <location filename="../qml/generic/Search.qml" line="180"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="96"/>
+        <location filename="../qml/generic/Search.qml" line="95"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="101"/>
         <source>Connected</source>
         <translation>Conectado</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="102"/>
+        <location filename="../qml/generic/Search.qml" line="101"/>
         <source>As Searched</source>
         <translation>Como Buscado</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="120"/>
+        <location filename="../qml/generic/Search.qml" line="119"/>
         <source>Grab Links</source>
         <translation>Enlaces de Arrebatar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="127"/>
+        <location filename="../qml/generic/Search.qml" line="126"/>
         <source>Verifying</source>
         <translation>Verificación</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="151"/>
+        <location filename="../qml/generic/Search.qml" line="131"/>
+        <source>View Download (</source>
+        <translation>Ver Descargar (</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="150"/>
         <source>Country</source>
         <translation>País</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="162"/>
+        <location filename="../qml/generic/Search.qml" line="161"/>
         <source>Carrier</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="176"/>
+        <location filename="../qml/generic/Search.qml" line="175"/>
         <source>Search For</source>
         <translation>Buscar para</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="214"/>
+        <location filename="../qml/generic/Search.qml" line="213"/>
         <source>Any</source>
         <translation>Cualquier</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="230"/>
+        <location filename="../qml/generic/Search.qml" line="229"/>
         <source>Variant</source>
         <translation>Variante</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="246"/>
+        <location filename="../qml/generic/Search.qml" line="245"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="246"/>
         <source>Upgrade</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="247"/>
+        <location filename="../qml/generic/Search.qml" line="246"/>
         <source>Debrick</source>
         <translation>Restaurar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="253"/>
+        <location filename="../qml/generic/Search.qml" line="252"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Production</source>
         <translation>Producción</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Beta 2</source>
         <translation>Beta 2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Alpha</source>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="254"/>
+        <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Alpha 2</source>
         <translation>Alfa 2</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="339"/>
+        <location filename="../qml/generic/Search.qml" line="338"/>
         <source>1700.0 MB</source>
         <translation>1700.0 MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="343"/>
+        <location filename="../qml/generic/Search.qml" line="342"/>
         <source>Selected: </source>
         <translation>Seleccionado:</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="362"/>
+        <location filename="../qml/generic/Search.qml" line="343"/>
+        <source>. Needed: </source>
+        <translation>. Necesaria: </translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="361"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="365"/>
+        <location filename="../qml/generic/Search.qml" line="364"/>
         <source>Check All</source>
         <translation>Seleccionar Todos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="374"/>
+        <location filename="../qml/generic/Search.qml" line="373"/>
         <source>Check All Needed</source>
         <translation>Compruebe Todo lo Necesario</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="383"/>
+        <location filename="../qml/generic/Search.qml" line="382"/>
         <source>Uncheck All</source>
         <translation>Desmarcar Todos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="414"/>
+        <location filename="../qml/generic/Search.qml" line="413"/>
         <source> (downloaded)</source>
         <translation>(descargado)</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="413"/>
+        <source> (installed)</source>
+        <translation> (instalado)</translation>
     </message>
 </context>
 <context>
     <name>Title</name>
+    <message>
+        <location filename="../qml/generic/Title.qml" line="9"/>
+        <source>Sachesi</source>
+        <translation>Sachesi</translation>
+    </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
         <source>SACHESI</source>

@@ -37,10 +37,9 @@ public:
         _timer = new QTimer();
         _timer->setSingleShot(true);
         connect(_timer, SIGNAL(timeout()), this, SLOT(update()));
-        _mcc = "510";
-        _mnc = "010";
+        _mcc = "";
+        _mnc = "";
         _image = 0;
-        update();
     }
 
     Q_INVOKABLE void mccChange(QString mcc) {

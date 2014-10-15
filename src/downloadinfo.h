@@ -222,13 +222,13 @@ public:
             {
                 downloadNextFile();
             } else {
-                if (size != totalSize)
+                /*if (size != totalSize)
                     QMessageBox::information(NULL, "Warning", QString("Your update completed successfully.\n"
                                              "However, the update size does not match the download size. This is probably just be a bug that you can ignore.\n"
                                              "Downloaded: %1\n"
                                              "Expected: %2")
                                              .arg(size)
-                                             .arg(totalSize));
+                                             .arg(totalSize));*/
 
                 QDesktopServices::openUrl(QUrl(QFileInfo(_updateFile).absolutePath()));
                 reset();
