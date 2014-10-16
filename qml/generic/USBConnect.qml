@@ -79,11 +79,11 @@ Item {
                                                 }
 
                     visible: numDevices
-                    text:  qsTr("Detected ") + numDevices + qsTr(" Blackberry USB device(s) in ") + deviceName + qsTr(" mode.")
+                    text: qsTr("Detected %1 Blackberry USB device(s) in %2 mode.").arg(numDevices).arg(deviceName)
                 }
                 Label {
                     visible: i.possibleDevices
-                    text:  qsTr("Talking to ") + i.possibleDevices + qsTr(" possible device(s).")
+                    text:  qsTr("Talking to %1 possible device(s).").arg(i.possibleDevices)
                 }
             }
             BusyIndicator {

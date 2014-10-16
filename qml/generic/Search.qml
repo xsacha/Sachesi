@@ -70,7 +70,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)
-                                  text = qsTr("Server did not respond as expected [") + message + "]."
+                                  text = qsTr("Server did not respond as expected [%1].").arg(message)
                               else if (message === "Success")
                                   text = qsTr("Success. No updates were available.")
                               else
@@ -127,7 +127,7 @@ Item {
             }
             Button {
                 visible: download.running
-                text:  qsTr("View Download (") + download.progress + "%)"
+                text:  qsTr("View Download (%1%)").arg(download.progress)
                 onClicked: downloadWin.visible = true
             }
             Button {

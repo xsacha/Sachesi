@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
 Window {
-    title: qsTr("Sachesi") + " " + version + " - " + qsTr("Version Lookup")
+    title: qsTr("Sachesi %1 - Version Lookup").arg(version)
     visible: false
     onVisibleChanged: if (visible) {
                           x = window.x + (window.width - width) / 2

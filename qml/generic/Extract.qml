@@ -103,7 +103,7 @@ Item {
                 CheckBox {
                     visible: settings.advanced
                     id: ifsSelect
-                    text: qsTr("IFS")
+                    text: "IFS"
                 }
                 CheckBox {
                     visible: settings.advanced
@@ -201,16 +201,16 @@ Item {
                     CheckBox {
                         id: rcfsImage
                         checked: true
-                        text:  qsTr("RCFS")
+                        text:  "RCFS"
                     }
                     CheckBox {
                         id: qnxImage
-                        text:  qsTr("QNX6")
+                        text:  "QNX6"
                     }
                     CheckBox {
                         id: bootImage
                         checked: true
-                        text:  qsTr("IFS")
+                        text:  "IFS"
                     }
                 }
                 Label {

@@ -360,12 +360,6 @@
         <translation>Radio</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="106"/>
-        <location filename="../qml/generic/Extract.qml" line="213"/>
-        <source>IFS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
         <source>PINList</source>
         <translation>PINListe</translation>
@@ -424,16 +418,6 @@
         <location filename="../qml/generic/Extract.qml" line="197"/>
         <source>Extract Image</source>
         <translation>Extraire des Image</translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="204"/>
-        <source>RCFS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="208"/>
-        <source>QNX6</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
@@ -621,11 +605,6 @@
         <translation>Version Recherche</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="73"/>
-        <source>Server did not respond as expected [</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="75"/>
         <source>Success. No updates were available.</source>
         <translation>Succès. Aucune mise à jour sont disponibles.</translation>
@@ -667,8 +646,13 @@
         <translation>Vérification</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Search.qml" line="73"/>
+        <source>Server did not respond as expected [%1].</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Search.qml" line="130"/>
-        <source>View Download (</source>
+        <source>View Download (%1%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -837,9 +821,13 @@
 <context>
     <name>Title</name>
     <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Sachesi</source>
-        <translation type="unfinished">Sachesi</translation>
+        <translation type="obsolete">Sachesi</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Title.qml" line="9"/>
+        <source>Sachesi %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
@@ -931,41 +919,29 @@
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="82"/>
-        <source>Detected </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/USBConnect.qml" line="82"/>
-        <source> Blackberry USB device(s) in </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/USBConnect.qml" line="82"/>
-        <source> mode.</source>
+        <source>Detected %1 Blackberry USB device(s) in %2 mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="86"/>
-        <source>Talking to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/USBConnect.qml" line="86"/>
-        <source> possible device(s).</source>
+        <source>Talking to %1 possible device(s).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VersionLookup</name>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Sachesi</source>
-        <translation>Sachesi</translation>
+        <translation type="vanished">Sachesi</translation>
+    </message>
+    <message>
+        <source>Version Lookup</source>
+        <translation type="vanished">Version Recherche</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
-        <source>Version Lookup</source>
-        <translation>Version Recherche</translation>
+        <source>Sachesi %1 - Version Lookup</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="49"/>

@@ -364,10 +364,8 @@
         <translation>Radio</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="106"/>
-        <location filename="../qml/generic/Extract.qml" line="213"/>
         <source>IFS</source>
-        <translation>IFS</translation>
+        <translation type="vanished">IFS</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="111"/>
@@ -430,14 +428,12 @@
         <translation>Извлечь образ</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="204"/>
         <source>RCFS</source>
-        <translation>RCFS</translation>
+        <translation type="vanished">RCFS</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="208"/>
         <source>QNX6</source>
-        <translation>QNX6</translation>
+        <translation type="vanished">QNX6</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="217"/>
@@ -625,9 +621,8 @@
         <translation>Поиск версии</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="73"/>
         <source>Server did not respond as expected [</source>
-        <translation>Нет ответа сервера [</translation>
+        <translation type="vanished">Нет ответа сервера [</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="75"/>
@@ -671,9 +666,18 @@
         <translation>Проверка</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="130"/>
         <source>View Download (</source>
-        <translation>Посмотреть загрузку (</translation>
+        <translation type="vanished">Посмотреть загрузку (</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="73"/>
+        <source>Server did not respond as expected [%1].</source>
+        <translation>Нет ответа сервера [%1].</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="130"/>
+        <source>View Download (%1%)</source>
+        <translation>Посмотреть загрузку (%1 %)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="149"/>
@@ -841,9 +845,13 @@
 <context>
     <name>Title</name>
     <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Sachesi</source>
-        <translation>Sachesi</translation>
+        <translation type="vanished">Sachesi</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Title.qml" line="9"/>
+        <source>Sachesi %1</source>
+        <translation>Sachesi %1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="30"/>
@@ -935,41 +943,49 @@
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="82"/>
+        <source>Detected %1 Blackberry USB device(s) in %2 mode.</source>
+        <translation>Обнаружено %1 USB устройство(а) Blackberry в %2 режиме.</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="86"/>
+        <source>Talking to %1 possible device(s).</source>
+        <translation>Запрос к %1 доступному устройству.</translation>
+    </message>
+    <message>
         <source>Detected </source>
-        <translation>Обнаружено </translation>
+        <translation type="vanished">Обнаружено </translation>
     </message>
     <message>
-        <location filename="../qml/generic/USBConnect.qml" line="82"/>
         <source> Blackberry USB device(s) in </source>
-        <translation> USB устройство(а) Blackberry в </translation>
+        <translation type="vanished"> USB устройство(а) Blackberry в </translation>
     </message>
     <message>
-        <location filename="../qml/generic/USBConnect.qml" line="82"/>
         <source> mode.</source>
-        <translation> режиме.</translation>
+        <translation type="vanished"> режиме.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/USBConnect.qml" line="86"/>
         <source>Talking to </source>
-        <translation>Запрос к </translation>
+        <translation type="vanished">Запрос к </translation>
     </message>
     <message>
-        <location filename="../qml/generic/USBConnect.qml" line="86"/>
         <source> possible device(s).</source>
-        <translation> доступным устройствам.</translation>
+        <translation type="vanished"> доступным устройствам.</translation>
     </message>
 </context>
 <context>
     <name>VersionLookup</name>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Sachesi</source>
-        <translation>Sachesi</translation>
+        <translation type="vanished">Sachesi</translation>
+    </message>
+    <message>
+        <source>Version Lookup</source>
+        <translation type="vanished">Поиск версии</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
-        <source>Version Lookup</source>
-        <translation>Поиск версии</translation>
+        <source>Sachesi %1 - Version Lookup</source>
+        <translation>Sachesi %1 - Поиск версии</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="49"/>
