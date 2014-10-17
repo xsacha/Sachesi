@@ -76,22 +76,22 @@
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="201"/>
         <source>Production</source>
-        <translation>生产力</translation>
+        <translation>正式版</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="201"/>
         <source>Enterprise</source>
-        <translation>企业</translation>
+        <translation>企业版</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="201"/>
         <source>Eval</source>
-        <translation>评价</translation>
+        <translation>评价版</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="205"/>
         <source>Model</source>
-        <translation>模型</translation>
+        <translation>机型</translation>
     </message>
     <message>
         <location filename="../qml/generic/AppWorld.qml" line="208"/>
@@ -226,7 +226,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
-        <translation>百分比是不完全准确的QNX6文件。</translation>
+        <translation>Percentages不是完全准确的QNX6文件。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="55"/>
@@ -534,7 +534,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="101"/>
         <source>As Searched</source>
-        <translation>作为搜索</translation>
+        <translation>上次搜索</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="119"/>
@@ -564,7 +564,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="175"/>
         <source>Search For</source>
-        <translation>搜索目标</translation>
+        <translation>搜索</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="213"/>
@@ -574,7 +574,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="229"/>
         <source>Variant</source>
-        <translation>变量</translation>
+        <translation>版本</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="245"/>
@@ -599,27 +599,27 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Production</source>
-        <translation>生产力</translation>
+        <translation>正式版</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Beta</source>
-        <translation>测试</translation>
+        <translation>Beta版</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Beta 2</source>
-        <translation>测试 2</translation>
+        <translation>Beta2版</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Alpha</source>
-        <translation>最初版</translation>
+        <translation>Alpha版</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="253"/>
         <source>Alpha 2</source>
-        <translation>最初版 2</translation>
+        <translation>Alpha2版</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="338"/>
@@ -634,7 +634,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="343"/>
         <source>. Needed: </source>
-        <translation>。需要：</translation>
+        <translation>。已需要：</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="361"/>
@@ -725,7 +725,7 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="16"/>
         <source>These tools require a USB connection</source>
-        <translation>该工具要求一个USB连接</translation>
+        <translation>该工具需要USB连接</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="22"/>
