@@ -40,7 +40,7 @@ class MainNet : public QObject {
     Q_PROPERTY(int     updateCheckedNeededCount READ updateCheckedNeededCount NOTIFY updateCheckedCountChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
-    Q_PROPERTY(bool    hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
+    Q_PROPERTY(int     hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
     Q_PROPERTY(bool    multiscan MEMBER _multiscan WRITE setMultiscan NOTIFY multiscanChanged)
     Q_PROPERTY(int     scanning MEMBER _scanning WRITE setScanning NOTIFY scanningChanged)
@@ -143,7 +143,7 @@ private:
     QString _error;
     QString _multiscanVersion;
     bool _multiscan;
-    bool _hasPotentialLinks;
+    int _hasPotentialLinks;
     int _scanning;
     QFile _currentFile;
     int _maxId, _dlBytes, _dlTotal;

@@ -222,7 +222,7 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
     auto appendNewHeader = [&potentialText] (QString name, QString devices) {
         potentialText.append("\n" + name + ": " + devices + " (Debrick + Core OS)\n");
     };
-    auto appendNewLink = [&potentialText, &hashval] (QString linkType, int type, bool OMAP, QString hwType, QString version) {
+    auto appendNewLink = [this, &potentialText, &hashval] (QString linkType, int type, bool OMAP, QString hwType, QString version) {
         QString typeString;
         if (type == 2) {
             potentialText.append(linkType + " IFS\n");
@@ -234,7 +234,10 @@ void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, boo
             typeString = "qcfm.radio.";
         }
 
-        potentialText.append("http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + hashval + "/com.qnx." + typeString);
+        potentialText.append(QString("http://cdn.fs.sl.blackberry.com/fs/qnx/%1/%2/com.qnx.%3")
+                             .arg(_hasPotentialLinks == 1 ? "production" : "betazone")
+                             .arg(hashval)
+                             .arg(typeString));
 
         if (OMAP) // Old Playbook style
             potentialText.append("factory" + hwType + "/" + version + "/winchester.factory_sfi" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
@@ -536,30 +539,31 @@ void MainNet::reverseLookupReply() {
     if (!swRelease.isEmpty() && swRelease.at(0).isDigit()) {
         QCryptographicHash hash(QCryptographicHash::Sha1);
         hash.addData(swRelease.toLocal8Bit());
-        QString server = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/";
-        /*if (reply->url().host().startsWith("beta")) {
-            server = "http://cdn.fs.sl.blackberry.com/fs/qnx/beta/";
-        }*/
-        QString url = server + QString(hash.result().toHex());
-        QNetworkRequest request;
-        request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
-        request.setUrl(QUrl(url));
-        QNetworkReply* replyTmp = manager->head(request);
-        connect(replyTmp, &QNetworkReply::finished, [=]() {
-            // Seems to give 301 redirect if it's real
-            uint status = replyTmp->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
-            // New SW release found
-            _softwareRelease = swRelease;
-            if (status == 200 || (status > 300 && status <= 308)) {
-                _hasPotentialLinks = true; emit hasPotentialLinksChanged();
-            } else if (skip) {
-                // Instead of using version, report 'not in system' so that it is skipped
-                _softwareRelease = "SR not in system";
-            }
-            emit softwareReleaseChanged();
-            setScanning(0);
-            replyTmp->deleteLater();
-        });
+        foreach(QString server, QStringList() << "production" << "betazone") {
+            QString url = "http://cdn.fs.sl.blackberry.com/fs/qnx/" + server + "/" + QString(hash.result().toHex());
+            QNetworkRequest request;
+            request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
+            request.setUrl(QUrl(url));
+            QNetworkReply* replyTmp = manager->head(request);
+            connect(replyTmp, &QNetworkReply::finished, [=]() {
+                if (!_softwareRelease.startsWith("10") || !_hasPotentialLinks)
+                {
+                    // Seems to give 301 redirect if it's real
+                    uint status = replyTmp->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
+                    // New SW release found
+                    _softwareRelease = swRelease;
+                    if (status == 200 || (status > 300 && status <= 308)) {
+                        _hasPotentialLinks = (server == "production") ? 1 : 2; emit hasPotentialLinksChanged();
+                    } else if (skip) {
+                        // Instead of using version, report 'not in system' so that it is skipped
+                        _softwareRelease = "SR not in system";
+                    }
+                    emit softwareReleaseChanged();
+                    setScanning(0);
+                }
+                replyTmp->deleteLater();
+            });
+        }
     } else {
         _softwareRelease = swRelease; emit softwareReleaseChanged();
         setScanning(0);
