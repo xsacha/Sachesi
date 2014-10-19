@@ -92,6 +92,11 @@ public:
     AutoloaderWriter(QList<QFileInfo> selectedInfo)
         : _infos(selectedInfo)
     {
+        qSort(selectedInfo.begin(), selectedInfo.end(), compareSizes);
+    }
+    static bool compareSizes(QFileInfo i, QFileInfo j)
+    {
+        return i.size() > j.size();
     }
     void create(QString name) {
         // Find potential file

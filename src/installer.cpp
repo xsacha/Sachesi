@@ -26,7 +26,7 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
     manager(nullptr), reply(nullptr), cookieJar(nullptr),
     _knownOS(""), _knownRadio("N/A"), _knownBattery(-1), _knownHWFamily(0), _knownPIN(""), _wrongPass(false), _loginBlock(false),
     _state(0), _dlBytes(0), _dlTotal(0), _dgProgress(-1), _curDGProgress(-1),
-    _completed(false), _installing(false), _restoring(false), _backing(false),
+    _completed(false), _extractInstallZip(false), _installing(false), _restoring(false), _backing(false),
     _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr)
 {
 #ifdef _MSC_VER
@@ -101,7 +101,7 @@ void InstallNet::scanProps()
     }
 }
 
-BarInfo InstallNet::checkInstallableInfo(QString name)
+BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
 {
     BarInfo barInfo = {name, "", NotInstallableType};
     // Check if it's a 'hidden' file as we use these for temporary file downloads.
@@ -138,27 +138,37 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     if (barInfo.type == OSType) {
         QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
         if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
-            int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Ignore Warning [Stupid]", "Skip OS", "Cancel Install", 2);
-            if (choice == 1) {
+            if (blitz) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
-            }
-            if (choice == 2) {
-                barInfo.name = "EXIT";
-                return barInfo;
+            } else {
+                int choice = QMessageBox::critical(nullptr, "WARNING", "The OS file you have selected to install is for a different device!\nOS Type: " + installableOS + "\nYour Device: " + _knownConnectedOSType, "Ignore Warning [Stupid]", "Skip OS", "Cancel Install", 2);
+                if (choice == 1) {
+                    barInfo.type = NotInstallableType;
+                    return barInfo;
+                }
+                if (choice == 2) {
+                    barInfo.name = "EXIT";
+                    return barInfo;
+                }
             }
         }
     } else if (barInfo.type == RadioType) {
         QString installableRadio = appName.split("radio.").last().remove(".omadm");
         if (_knownConnectedRadioType != "" && installableRadio != _knownConnectedRadioType) {
-            int choice = QMessageBox::critical(nullptr, "WARNING", "The Radio file you have selected to install is for a different device!\nRadio Type: " + installableRadio + "\nYour Device: " + _knownConnectedRadioType, "Ignore Warning [Stupid]", "Skip Radio", "Cancel Install", 2);
-            if (choice == 1) {
+            if (blitz) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
-            }
-            if (choice == 2) {
-                barInfo.name = "EXIT";
-                return barInfo;
+            } else {
+                int choice = QMessageBox::critical(nullptr, "WARNING", "The Radio file you have selected to install is for a different device!\nRadio Type: " + installableRadio + "\nYour Device: " + _knownConnectedRadioType, "Ignore Warning [Stupid]", "Skip Radio", "Cancel Install", 2);
+                if (choice == 1) {
+                    barInfo.type = NotInstallableType;
+                    return barInfo;
+                }
+                if (choice == 2) {
+                    barInfo.name = "EXIT";
+                    return barInfo;
+                }
             }
         }
     }
@@ -175,36 +185,158 @@ BarInfo InstallNet::checkInstallableInfo(QString name)
     return barInfo;
 }
 
+BarInfo InstallNet::blitzCheck(QString name)
+{
+    BarInfo barInfo = {name, "", NotInstallableType};
+    // Check if it's a 'hidden' file as we use these for temporary file downloads.
+    if (QFileInfo(name).fileName().startsWith('.'))
+        return barInfo;
+
+    QuaZipFile manifest(name, "META-INF/MANIFEST.MF", QuaZip::csSensitive);
+    if (!manifest.open(QIODevice::ReadOnly))
+        return barInfo;
+    QString appName, type;
+    while (!manifest.atEnd()) {
+        QByteArray newLine = manifest.readLine();
+        if (newLine.startsWith("Package-Name:")) {
+            appName = newLine.split(':').last().simplified();
+        }
+        else if (newLine.startsWith("Package-Type:")) {
+            type = newLine.split(':').last().simplified();
+            if (type == "system" && barInfo.type == NotInstallableType)
+                barInfo.type = OSType;
+            else
+                break;
+        }
+        else if (newLine.startsWith("System-Type:")) {
+            if (newLine.split(':').last().simplified() == "radio")
+                barInfo.type = RadioType;
+            break;
+        }
+    }
+    if (barInfo.type != OSType && barInfo.type != RadioType)
+        return barInfo;
+
+    barInfo.name = "GOOD";
+    if (barInfo.type == OSType) {
+        QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
+        if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
+            barInfo.name = "BAD";
+        }
+    } else if (barInfo.type == RadioType) {
+        QString installableRadio = appName.split("radio.").last().remove(".omadm");
+        if (_knownConnectedRadioType != "" && installableRadio != _knownConnectedRadioType) {
+            barInfo.name = "BAD";
+        }
+    }
+}
+
 void InstallNet::install(QList<QUrl> files)
 {
     _installInfo.clear();
     setFirmwareUpdate(false);
-    foreach(QUrl url, files)
-    {
-        if (!url.isLocalFile())
-            continue;
-        QString name = url.toLocalFile();
+    QList<QString> filenames;
 
-        if (QFileInfo(name).isDir())
-        {
-            QStringList barFiles = QDir(name).entryList(QStringList("*.bar"));
-            foreach (QString barFile, barFiles)
-            {
-                BarInfo info = checkInstallableInfo(name + "/" + barFile);
-                if (info.name == "EXIT")
-                    return setNewLine("Install aborted.");
+    // Zip install
+    if (files.count() == 1 && files.first().toLocalFile().endsWith(".zip")) {
+        // A collection of bars
+        _extractInstallZip = true; emit extractInstallZipChanged();
+        QuaZip zip(files.first().toLocalFile());
+        zip.open(QuaZip::mdUnzip);
 
-                if (info.type != NotInstallableType)
-                    _installInfo.append(info);
+        QuaZipFile file(&zip);
+
+        QString baseName = zip.getZipName().split('.').first();
+        if (!QDir(baseName).mkpath("."))
+            QMessageBox::information(nullptr, "Error", "Was unable to extract the zip container.");
+
+        for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
+            QString thisFile = baseName + "/" + zip.getCurrentFileName().split('/').last();
+            if (QFile::exists(thisFile)) {
+                QuaZipFileInfo info;
+                zip.getCurrentFileInfo(&info);
+                if (QFile(thisFile).size() == info.uncompressedSize) {
+                    filenames.append(thisFile);
+                    continue;
+                }
             }
-        } else {
-            BarInfo info = checkInstallableInfo(name);
-            if (info.name == "EXIT")
-                return setNewLine("Install aborted.");
-
-            if (info.type != NotInstallableType)
-                _installInfo.append(info);
+            if (!file.open(QIODevice::ReadOnly))
+                continue;
+            // Check we have a zip
+            if (file.read(2).toHex() == "504b") {
+                QFile writeFile(thisFile);
+                if (!writeFile.open(QIODevice::WriteOnly)) {
+                    file.close();
+                    continue;
+                }
+                writeFile.write(QByteArray::fromHex("504b"));
+                while (!file.atEnd()) {
+                    qApp->processEvents();
+                    writeFile.write(file.read(4096));
+                }
+                filenames.append(thisFile);
+            }
+            file.close();
         }
+        _extractInstallZip = false; emit extractInstallZipChanged();
+    } else {
+
+        // Grab file names (first pass)
+        foreach(QUrl url, files)
+        {
+            if (!url.isLocalFile())
+                continue;
+            QString name = url.toLocalFile();
+            if (QFileInfo(name).isDir())
+            {
+                QStringList barFiles = QDir(name).entryList(QStringList("*.bar"));
+                foreach (QString barFile, barFiles) {
+                    filenames.append(name + "/" + barFile);
+                }
+            } else {
+                filenames.append(name);
+            }
+        }
+    }
+
+    // Detect Blitz files (second pass)
+    bool blitzOSIsSafe = false;
+    bool blitzRadioIsSafe = false;
+    int radioCount = 0, osCount = 0;
+    foreach(QString barFile, filenames)
+    {
+        BarInfo info = blitzCheck(barFile);
+        if (info.type == OSType) {
+            osCount++;
+            if (info.name == "GOOD")
+                blitzOSIsSafe = true;
+        } else if (info.type == RadioType) {
+            radioCount++;
+            if (info.name == "GOOD")
+                blitzRadioIsSafe = true;
+        }
+    }
+    if (osCount > 1 || radioCount > 1) {
+        setNewLine(QString("%1Blitz detected. %2 OSes and %3 Radios")
+                   .arg((blitzOSIsSafe && blitzRadioIsSafe) ? "Safe " : "")
+                   .arg(osCount)
+                   .arg(radioCount));
+        if (_knownConnectedRadioType == "" && radioCount > 1) {
+            QMessageBox::critical(nullptr, "Error", "Your device is reporting no known Radio. The blitz install is unable to detect the correct Radio for your system and cannot continue.");
+        } else if (_knownConnectedOSType == "" && osCount > 1) {
+            QMessageBox::critical(nullptr, "Error", "Your device is reporting no known OS. The blitz install is unable to detect the correct OS for your system and cannot continue.");
+        }
+    }
+
+    // Detect everything (third pass)
+    foreach(QString barFile, filenames)
+    {
+        BarInfo info = checkInstallableInfo(barFile, osCount > 1 || radioCount > 1);
+        if (info.name == "EXIT")
+            return setNewLine("Install aborted.");
+
+        if (info.type != NotInstallableType)
+            _installInfo.append(info);
     }
     if (_installInfo.isEmpty()) {
         setNewLine("None of the selected files were installable.");
@@ -482,11 +614,11 @@ void InstallNet::login()
     int flags = QNetworkInterface::IsUp | QNetworkInterface::IsRunning | QNetworkInterface::CanBroadcast | QNetworkInterface::CanMulticast;
     foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
     {
-        if ((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
+        if (true)//((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
         {
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
             {
-                if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol)
+                if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol && !addr.ip().toString().startsWith("127."))
                 {
                     QList<quint8> addrParts;
                     foreach(QString addrString, addr.ip().toString().split('.'))
@@ -1211,7 +1343,7 @@ void InstallNet::restoreReply()
     }
     else if (xml.name() == "RestoreSend")
     {
-        qIoSafeFree(_zipFile)
+        qIoSafeFree(_zipFile);
         _back.setCurMode(1);
         if (_back.curMode() == "complete") {
             postData.addQueryItem("status", "success");
@@ -1277,6 +1409,8 @@ void InstallNet::restoreError(QNetworkReply::NetworkError error)
 
     if (_state && this_ip == _ip) {
         resetVars();
+    } else if (_state) {
+        return;
     }
     QString errString = QString("Communication Error: %1 (%2) from %3")
             .arg(error)

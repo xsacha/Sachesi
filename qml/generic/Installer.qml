@@ -21,19 +21,41 @@ Item {
         text:  qsTr("View Install (") + i.dgProgress + ")"
         onClicked: installWin.visible = true
     }
+    Window {
+        visible: i.extractInstallZip
+        color: "lightgray"
+        width: patientText.width + 20
+        height: patientText.height + 20
+        onVisibleChanged: if (visible) {
+                              x = window.x + (window.width - width) / 2
+                              y = window.y + (window.height - height) / 2
+                          }
+        Label {
+            id: patientText
+            text: qsTr("Please be patient while the installation zip is extracted.")
+        }
+    }
 
     Window {
         id: installWin
         visible: i.dgProgress >= 0
-        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
+        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20 + warningLabel.height * 2 * warningLabel.visible);
         onVisibleChanged: if (visible) {
                               x = window.x + (window.width - width) / 2
                               y = window.y + (window.height - height) / 2
                           }
         color: "lightgray"
         title: i.firmwareUpdate ? qsTr("Firmware Update") : qsTr("Install")
+        Label {
+            id: warningLabel
+            visible: i.knownOS.indexOf("10.3") == 0
+            text: "Your device may show 0% progress.\nThis is normal on your OS."
+        }
+
         CircleProgress {
-            anchors.fill: parent
+            width: parent.width
+            height: parent.height
+            anchors.bottom: parent.bottom
             currentValue: i.curDGProgress
             overallValue: i.dgProgress
             curId: i.dgPos + 1

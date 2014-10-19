@@ -93,6 +93,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(bool    restoring        MEMBER _restoring       WRITE setRestoring        NOTIFY restoringChanged)
     Q_PROPERTY(bool    backing          MEMBER _backing         WRITE setBacking          NOTIFY backingChanged)
     Q_PROPERTY(bool    firmwareUpdate   MEMBER _firmwareUpdate  WRITE setFirmwareUpdate   NOTIFY firmwareUpdateChanged)
+    Q_PROPERTY(bool    extractInstallZip MEMBER _extractInstallZip                  NOTIFY extractInstallZipChanged)
     Q_PROPERTY(QStringList firmwareNames MEMBER _firmwareNames                            NOTIFY firmwareNamesChanged)
     Q_PROPERTY(QStringList firmwarePaths MEMBER _firmwarePaths                            NOTIFY firmwarePathsChanged)
     Q_PROPERTY(QString knownOS          READ    knownOS         WRITE setKnownOS          NOTIFY knownOSChanged)
@@ -203,6 +204,7 @@ signals:
     void firmwareUpdateChanged();
     void firmwareNamesChanged();
     void firmwarePathsChanged();
+    void extractInstallZipChanged();
     void knownOSChanged();
     void knownRadioChanged();
     void knownBatteryChanged();
@@ -232,7 +234,8 @@ private:
     QNetworkRequest setData(QString page, QString contentType);
     QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
     QNetworkReply* getQuery(QString page, QString contentType);
-    BarInfo checkInstallableInfo(QString name);
+    BarInfo checkInstallableInfo(QString name, bool blitz);
+    BarInfo blitzCheck(QString name);
     void install();
     void restore();
     void backup();
@@ -290,6 +293,7 @@ private:
     BackupInfo _back;
     bool _completed;
     bool _firmwareUpdate;
+    bool _extractInstallZip;
     QList<BarInfo> _installInfo;
     QString _backupFileName;
     QStringList _currentApps;

@@ -4,7 +4,7 @@ TARGET="Sachesi"
 win32: RC_ICONS += assets/sachesi-114.ico
 else:mac: ICON = assets/sachesi-114.icns
 else: ICON = assets/sachesi-114.png
-VERSION = 1.9.6
+VERSION = 1.9.9
 
 # Global specific
 CONFIG += c++11

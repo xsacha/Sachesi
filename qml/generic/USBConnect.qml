@@ -75,6 +75,7 @@ Item {
                                                 case 1: return "Bootloader"
                                                 case 8012: return "Windows"
                                                 case 8013: return "Unix"
+                                                case 8017: return "Autodetect"
                                                 default: return ""
                                                 }
 
