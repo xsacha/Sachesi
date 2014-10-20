@@ -246,7 +246,7 @@ void InstallNet::install(QList<QUrl> files)
 
         QuaZipFile file(&zip);
 
-        QString baseName = zip.getZipName().split('.').first();
+        QString baseName = QFileInfo(zip.getZipName()).completeBaseName();
         if (!QDir(baseName).mkpath("."))
             QMessageBox::information(nullptr, "Error", "Was unable to extract the zip container.");
 
@@ -323,8 +323,14 @@ void InstallNet::install(QList<QUrl> files)
                    .arg(radioCount));
         if (_knownConnectedRadioType == "" && radioCount > 1) {
             QMessageBox::critical(nullptr, "Error", "Your device is reporting no known Radio. The blitz install is unable to detect the correct Radio for your system and cannot continue.");
+            return;
         } else if (_knownConnectedOSType == "" && osCount > 1) {
             QMessageBox::critical(nullptr, "Error", "Your device is reporting no known OS. The blitz install is unable to detect the correct OS for your system and cannot continue.");
+            return;
+        }
+        if (!blitzOSIsSafe || !blitzRadioIsSafe) {
+            QMessageBox::critical(nullptr, "Error", QString("The blitz file does not contain compatible firmware.") + (!blitzOSIsSafe ? "\nNo compatible OS" : "") + (!blitzRadioIsSafe ? "\nNo compatible Radio" : ""));
+            return;
         }
     }
 
