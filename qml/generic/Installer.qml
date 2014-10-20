@@ -39,18 +39,13 @@ Item {
     Window {
         id: installWin
         visible: i.dgProgress >= 0
-        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20 + warningLabel.height * 2 * warningLabel.visible);
+        width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
         onVisibleChanged: if (visible) {
                               x = window.x + (window.width - width) / 2
                               y = window.y + (window.height - height) / 2
                           }
         color: "lightgray"
         title: i.firmwareUpdate ? qsTr("Firmware Update") : qsTr("Install")
-        Label {
-            id: warningLabel
-            visible: i.knownOS.indexOf("10.3") == 0
-            text: "Your device may show 0% progress.\nThis is normal on your OS."
-        }
 
         CircleProgress {
             width: parent.width

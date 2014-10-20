@@ -114,14 +114,20 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
     QString appName, type;
     while (!manifest.atEnd()) {
         QByteArray newLine = manifest.readLine();
-        if (newLine.startsWith("Package-Name:")) {
+        if (newLine.startsWith("Package-Name:") || newLine.startsWith("Patch-Package-Name:")) {
             appName = newLine.split(':').last().simplified();
+            if (newLine.startsWith("Patch") && type == "system") {
+                if (appName.contains("radio"))
+                    barInfo.type = RadioType;
+                else
+                    barInfo.type = OSType;
+            }
         }
-        else if (newLine.startsWith("Package-Type:")) {
+        else if (newLine.startsWith("Package-Type:") || newLine.startsWith("Patch-Package-Type:")) {
             type = newLine.split(':').last().simplified();
             if (type == "system" && barInfo.type == NotInstallableType)
                 barInfo.type = OSType;
-            else
+            else if (type != "patch")
                 break;
         }
         else if (newLine.startsWith("Package-Version:")) {
@@ -198,14 +204,20 @@ BarInfo InstallNet::blitzCheck(QString name)
     QString appName, type;
     while (!manifest.atEnd()) {
         QByteArray newLine = manifest.readLine();
-        if (newLine.startsWith("Package-Name:")) {
+        if (newLine.startsWith("Package-Name:")  || newLine.startsWith("Patch-Package-Name:")) {
             appName = newLine.split(':').last().simplified();
+            if (newLine.startsWith("Patch") && type == "system") {
+                if (appName.contains("radio"))
+                    barInfo.type = RadioType;
+                else
+                    barInfo.type = OSType;
+            }
         }
-        else if (newLine.startsWith("Package-Type:")) {
+        else if (newLine.startsWith("Package-Type:")  || newLine.startsWith("Patch-Package-Type:")) {
             type = newLine.split(':').last().simplified();
             if (type == "system" && barInfo.type == NotInstallableType)
                 barInfo.type = OSType;
-            else
+            else if (type != "patch")
                 break;
         }
         else if (newLine.startsWith("System-Type:")) {
@@ -373,6 +385,7 @@ void InstallNet::install()
         postData.addQueryItem("mode", _firmwareUpdate ? "os" : "bar");
         postData.addQueryItem("size", QString::number(_dlOverallTotal));
         postQuery("update.cgi", "x-www-form-urlencoded", postData);
+        setNewLine("Your device may show 0% progress. This is normal on your OS. Please follow the progress shown here.");
     }
 }
 
