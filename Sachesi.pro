@@ -71,7 +71,8 @@ else:android {
 
 SOURCES += \
     src/sachesi.cpp \
-    src/mainnet.cpp \
+    src/search/mainnet.cpp \
+    src/search/scanner.cpp \
     src/splitter.cpp \
     src/ports.cpp \
     src/apps.cpp \
@@ -81,7 +82,8 @@ SOURCES += \
     src/fs/qnx6.cpp
 
 HEADERS += \
-    src/mainnet.h \
+    src/search/mainnet.h \
+    src/search/scanner.h \
     src/splitter.h \
     src/ports.h \
     src/downloadinfo.h \

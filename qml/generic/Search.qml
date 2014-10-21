@@ -340,7 +340,7 @@ Item {
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
         property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
                                      + ((p.updateNeededCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedNeededCount == p.updateAppNeededCount) ? "All (" + p.updateAppNeededCount + ")" : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount + " Apps") : "") + "        "
-        title: !blackberry ? selectedMsg : ""
+        title: selectedMsg
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
         Layout.fillHeight: true

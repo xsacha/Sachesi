@@ -46,11 +46,9 @@ ApplicationWindow {
     }
     TabView {
         id: titleRow
-        currentIndex: 1
+        currentIndex: 3
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
-        // Workaround for index moving on startup for Windows
-        onCountChanged: { titleRow.currentIndex = 0; if (count >= 1) titleRow.currentIndex = 1; }
 
         Tab {
             title: qsTr("Extract");
