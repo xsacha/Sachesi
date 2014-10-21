@@ -98,12 +98,12 @@ Item {
 
             Button {
                 text:  qsTr("Create backup")
-                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
+                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.bbid != ""
                 onClicked: backup_files.open();
             }
             Button {
                 text:  qsTr("Restore backup")
-                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0
+                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.bbid != ""
                 onClicked: restore_files.open();
             }
         }

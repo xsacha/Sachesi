@@ -46,11 +46,11 @@ ApplicationWindow {
     }
     TabView {
         id: titleRow
-        currentIndex: 1 + p.hasBootAccess
+        currentIndex: 1
         width: parent.width
         anchors {top: title.bottom; bottom: parent.bottom }
         // Workaround for index moving on startup for Windows
-        onCountChanged: { titleRow.currentIndex = 0; if (count >= 1 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
+        onCountChanged: { titleRow.currentIndex = 0; if (count >= 1) titleRow.currentIndex = 1; }
 
         Tab {
             title: qsTr("Extract");
@@ -67,11 +67,6 @@ ApplicationWindow {
         Tab {
             title: qsTr("Install")
             Installer { anchors.fill: parent }
-        }
-
-        Component.onCompleted: {
-            if (p.hasBootAccess)
-                titleRow.addTab(qsTr("Boot"), Qt.createComponent("Boot.qml") )
         }
 
         USBConnect { anchors.fill: parent }
