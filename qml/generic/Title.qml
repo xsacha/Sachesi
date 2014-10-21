@@ -59,13 +59,17 @@ ApplicationWindow {
         }
         Tab {
             title: qsTr("Search")
-            Search { anchors.fill: parent
-                Component.onCompleted: if (!blackberry) {
-                    titleRow.addTab(qsTr("Backup"), Qt.createComponent("Backup.qml") )
-                    titleRow.addTab(qsTr("Install"), Qt.createComponent("Installer.qml") )
-                }
-            }
+            Search { anchors.fill: parent }
         }
+        Tab {
+            title: qsTr("Backup")
+            Backup { anchors.fill: parent }
+        }
+        Tab {
+            title: qsTr("Install")
+            Installer { anchors.fill: parent }
+        }
+
         Component.onCompleted: {
             if (p.hasBootAccess)
                 titleRow.addTab(qsTr("Boot"), Qt.createComponent("Boot.qml") )
@@ -73,22 +77,7 @@ ApplicationWindow {
 
         USBConnect { anchors.fill: parent }
     }
-    /*Rectangle {
-        visible: !hasDonated
-        width: parent.width; height: 30
-        anchors.bottom: parent.bottom
-        Label {
-            anchors.centerIn: parent
-            text:  qsTr("If you enjoy using this tool. Please consider donating.")
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    hasDonated = true
-                    Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=xsacha@gmail.com&lc=AU&item_name=Time+and+effort&item_number=xsacha&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted")
-                }
-            }
-        }
-    }*/
+
     statusBar: StatusBar {
         visible: !mobile
         Label {
