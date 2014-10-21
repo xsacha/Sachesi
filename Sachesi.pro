@@ -40,7 +40,7 @@ win32 {
 }
 else:blackberry {
     DEFINES += BLACKBERRY
-    LIBS += -lz #-lcrypto
+    LIBS += -lz -lcrypto
 }
 else:mac {
     INCLUDEPATH += /opt/local/include

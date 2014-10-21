@@ -20,11 +20,11 @@ ApplicationWindow {
         property alias height: window.height
         property url installFolder
         property url backupFolder
-        property bool advanced: blackberry
+        property bool advanced: false
     }
 
     Label {
-        visible: !blackberry
+        visible: !mobile
         id: title
         font.pointSize: 22
         text:  qsTr("SACHESI")
@@ -36,7 +36,6 @@ ApplicationWindow {
     }
 
     Button {
-        visible: !blackberry
         anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 1 }
         height: title.height + 7; width: height
         checkable: true
@@ -49,7 +48,7 @@ ApplicationWindow {
         id: titleRow
         currentIndex: 1 + p.hasBootAccess
         width: parent.width
-        anchors {top: blackberry ? parent.top : title.bottom; bottom: parent.bottom }
+        anchors {top: title.bottom; bottom: parent.bottom }
         // Workaround for index moving on startup for Windows
         onCountChanged: { titleRow.currentIndex = 0; if (count >= 1 + p.hasBootAccess) titleRow.currentIndex = 1 + p.hasBootAccess; }
 

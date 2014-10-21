@@ -78,14 +78,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("version", QVariant::fromValue(QApplication::applicationVersion()));
     // Check if we have at least Qt 5.3 available. If not, do some workarounds for bugs.
     context->setContextProperty("qt_new", QVariant::fromValue(QT_VERSION > QT_VERSION_CHECK(5, 3, 0)));
-    // Check if this is a Blackberry device. There are some restrictions such as no InstallNet
-    context->setContextProperty("blackberry", QVariant::fromValue(
-                                #ifdef BLACKBERRY
-                                    1
-                                #else
-                                    0
-                                #endif
-                                    ));
     // Check if this is a mobile device as they often do not have enough space.
     context->setContextProperty("mobile", QVariant::fromValue(
                                 #if defined(BLACKBERRY) || defined(ANDROID)

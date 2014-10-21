@@ -14,8 +14,8 @@ Item {
     property string helpLink
     signal clicked();
     // Evil: hardcoded width/height
-    height: (16.5) * 1.5 + blackberry * 4.5
-    width: (16.5) * 15 + blackberry * 45
+    height: (16.5) * 1.5
+    width: (16.5) * 15
     ColumnLayout {
         RowLayout {
             id: topRow
