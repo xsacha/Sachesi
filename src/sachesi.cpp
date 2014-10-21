@@ -28,7 +28,6 @@
 #include "backupinfo.h"
 #endif
 #include "carrierinfo.h"
-#include "appworld.h"
 #ifdef BOOTLOADER_ACCESS
 #include "boot.h"
 #endif
@@ -114,21 +113,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     b.start();
     context->setContextProperty("b", &b); // Boot
 #endif
-    AppWorld world;
     CarrierInfo info;
 
     // Set contexts for the classes
     context->setContextProperty("p", &p); // MainNet
     context->setContextProperty("download", p.currentDownload);
     context->setContextProperty("carrierinfo",  &info);
-    context->setContextProperty("appworld",  &world);
 
     // *** Register types for the QML language to understand types used by C++, when passed
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
 #endif
     qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
-    qmlRegisterType<AppWorldApps>("AppWorldLibrary", 1, 0, "AppWorldApps");
 
 #if defined(_WIN32) && defined(STATIC)
     engine.addImportPath("qrc:/qml/");
