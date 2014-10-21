@@ -48,7 +48,7 @@ Window {
                 id: relookup
                 text:  qsTr("Lookup")
                 enabled: !p.scanning
-                onClicked: p.reverseLookup(device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value, skip_badlinks.checked, check_sdk.checked);
+                onClicked: p.reverseLookup(device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value, skip_badlinks.checked);
             }
             Button {
                 property bool looking: false
@@ -79,17 +79,7 @@ Window {
         RowLayout {
             CheckBox {
                 id: skip_badlinks
-                enabled: !check_sdk.checked
                 text:  qsTr("Find next available links")
-            }
-            CheckBox {
-                id: check_sdk
-                text:  qsTr("Check for SDK")
-                onCheckedChanged: {
-                    if (checked) build.value--
-                    else build.value++
-                    relookup.clicked();
-                }
             }
         }
 
@@ -109,7 +99,7 @@ Window {
                     id: grabPotential
                     enabled: p.hasPotentialLinks // Exists?
                     text: enabled ? qsTr("Grab Public Links") : qsTr("No Links Available")
-                    onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion, check_sdk.checked)
+                    onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion)
                 }
             }
         }

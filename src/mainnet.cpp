@@ -194,11 +194,7 @@ void MainNet::grabLinks(int downloadDevice)
     writeDisplayFile("updates.txt", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
 }
 
-void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion, bool sdk) {
-    if (sdk) {
-        writeDisplayFile("versionLookup.txt", QString("http://developer.blackberry.com/native/downloads/fetch/Autoload-SQN100-3-%1.exe").arg(softwareRelease).toLocal8Bit());
-        return;
-    }
+void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
     QCryptographicHash hash(QCryptographicHash::Sha1);
     hash.addData(softwareRelease.toLocal8Bit());
     QString hashval = QString(hash.result().toHex());
@@ -440,7 +436,7 @@ unsigned int MainNet::variantCount(unsigned int device) {
     return dev[device*2].count();
 }
 
-void MainNet::reverseLookup(int device, int variant, int server, QString OSver, bool skip, bool sdk)
+void MainNet::reverseLookup(int device, int variant, int server, QString OSver, bool skip)
 {
     if (_scanning)
         return;
@@ -450,30 +446,6 @@ void MainNet::reverseLookup(int device, int variant, int server, QString OSver, 
     setScanning(1);
     QString id = hwidFromVariant(device, variant);
     QString requestUrl;
-    if (sdk) {
-        QNetworkReply* replyTmp = manager->head(QNetworkRequest("http://downloads.blackberry.com/upr/developers/downloads/Autoload-SQN100-3-" + OSver + ".exe"));
-        connect(replyTmp, &QNetworkReply::finished, [=] () {
-            uint status = replyTmp->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
-            if (status == 200 || (status > 300 && status <= 308)) {
-                _softwareRelease = OSver;
-                _hasPotentialLinks = true; emit hasPotentialLinksChanged();
-            } else {
-                _softwareRelease = "SR not in system";
-            }
-            emit softwareReleaseChanged();
-            replyTmp->deleteLater();
-            setScanning(0);
-        });
-        QObject::connect(replyTmp, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
-            _softwareRelease = "SR not in system";
-            emit softwareReleaseChanged();
-            replyTmp->deleteLater();
-            setScanning(0);
-        });
-
-        return;
-    }
-
     switch (server)
     {
     case 4:

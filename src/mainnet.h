@@ -57,9 +57,9 @@ public:
     Q_INVOKABLE void combineAutoloader(QList<QUrl> selectedFiles);
     Q_INVOKABLE void extractImage(int type, int options);
     Q_INVOKABLE void grabLinks(int downloadDevice);
-    Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion, bool sdk);
+    Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion);
     Q_INVOKABLE void abortSplit();
-    Q_INVOKABLE void reverseLookup(int device, int variant, int server, QString OSver, bool skip, bool sdk);
+    Q_INVOKABLE void reverseLookup(int device, int variant, int server, QString OSver, bool skip);
 
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
