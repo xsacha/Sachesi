@@ -56,7 +56,7 @@ Item {
             RadioButton {
                 id: delta
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: settings.advanced && !p.scanning && typeof i !== 'undefined' && i.appCount > 0
+                visible: false && settings.advanced && !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 checked: true
                 text:  qsTr("Delta")
             }
@@ -90,7 +90,7 @@ Item {
 
                 //property int familyType: (selectedItem == 0) ? i.device.hwFamily : selectedItem
                 property string hwid: i.device === null ? "" : i.device.hw
-                property int hwfam: typeof i.device === null ? "" : i.device.hwFamily
+                property int hwfam: i.device === null ? 0 : i.device.hwFamily
                 property string familyName: (hwfam == 0 || hwfam > listModel.count) ? qsTr("Unknown") : listModel.get(hwfam).text
                 subtext: hwid != "" ? hwid + " (" + familyName + ")" : ""
                 onSubtextChanged: generateModel()

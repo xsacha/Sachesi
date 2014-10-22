@@ -134,7 +134,7 @@ Item {
                 font.bold: true
             }
             Label {
-                text: (i.device === null || i.device.battery < 0) ? qsTr("Unknown") : qsTr("USB")
+                text: (i.device === null || i.device.battery < 0) ? qsTr("None") : qsTr("USB")
             }
 
             Label {

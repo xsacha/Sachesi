@@ -796,7 +796,7 @@ void InstallNet::backupFileFinish()
 QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
     QPair<QString,QString> ret = {"", ""};
     if (downloadDevice == 0) {
-        if (device->hw != "" && device->hw != "Unknown") {
+        if (device != nullptr && device->hw != "" && device->hw != "Unknown") {
             ret = qMakePair(_knownConnectedOSType, _knownConnectedRadioType);
         }
     } else {
@@ -1417,8 +1417,11 @@ void InstallNet::resetVars()
     setBacking(false);
     qIoSafeFree(_zipFile);
     ioSafeFree(currentBackupZip);
-    device->deleteLater();
-    device = nullptr;
+    if (device != nullptr) {
+        device->deleteLater();
+        device = nullptr;
+        emit deviceChanged();
+    }
     setState(0);
     _dgProgress = -1;
     setCurDGProgress(-1);

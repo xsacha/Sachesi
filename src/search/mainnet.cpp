@@ -195,52 +195,20 @@ void MainNet::grabLinks(int downloadDevice)
 
 QString MainNet::fixVariantName(QString name, QString replace, int type) {
     if (type == 0) { // OS
-        QString osSignature = "com.qnx.coreos.qcfm.os.";
-        QStringList components = name.split(osSignature);
-        // Replace first type
-        QString newPath = components[0] + osSignature;
-        if (replace.startsWith("winchester")) // Old style
-            newPath.append("factory");
+        QStringList urlSplit = name.split('/');
+        QStringList nameSplit = urlSplit.last().split('-');
+        if (nameSplit.first().endsWith(".desktop"))
+            nameSplit.first() = replace + ".desktop";
         else
-            newPath.append(replace);
-
-        // Fetch version
-        components = components[1].split("/");
-        if (components.count() < 2) {
-            QMessageBox::information(nullptr, "Error", "Was unable to convert the OS to your selected device! Falling back to original search results.");
-            return name;
-        }
-        if (components[0].endsWith(".desktop"))
-            newPath.append(".desktop");
-        newPath.append(QString("/") + components[1] + "/" + replace);
-
-        // Replace last type
-        components = components[2].split("-");
-        if (components[0].endsWith(".desktop"))
-            newPath.append(".desktop");
-        for (int i = 1; i < components.count(); i++)
-            newPath.append(QString("-") + components[i]);
-
-        return newPath;
+            nameSplit.first() = replace;
+        urlSplit.last() = nameSplit.join('-');
+        return urlSplit.join('/');
     } else if (type == 1) { // Radio
-        QString radioSignature = "com.qnx.qcfm.radio.";
-        QStringList components = name.split(radioSignature);
-        QString newPath = components[0] + radioSignature + replace + "/";
-
-        // Fetch version
-        components = components[1].split("/");
-        if (components.count() < 2) {
-            QMessageBox::information(nullptr, "Error", "Was unable to convert the Radio to your selected device! Falling back to original search results.");
-            return name;
-        }
-        newPath.append(components[1] + "/" + replace);
-
-        // Replace last type
-        components = components[2].split("-");
-        for (int i = 1; i < components.count(); i++)
-            newPath.append(QString("-") + components[i]);
-
-        return newPath;
+        QStringList urlSplit = name.split('/');
+        QStringList nameSplit = urlSplit.last().split('-');
+        nameSplit.first() = replace;
+        urlSplit.last() = nameSplit.join('-');
+        return urlSplit.join('/');
     }
     return name;
 }
@@ -497,34 +465,34 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                 // Remember: this name *can* change
                 newApp->setFriendlyName(xml.attributes().value("name").toString());
                 // Remember: this name *can* change
-                newApp->setName(xml.attributes().value("path").toString());
+                newApp->setName(xml.attributes().value("path").toString().split('/').last());
                 // Remember: this size *can* change
                 newApp->setSize(xml.attributes().value("downloadSize").toString().toInt());
                 newApp->setVersion(xml.attributes().value("version").toString());
-                newApp->setVersionId(xml.attributes().value("id").toString());
+                newApp->setPackageId(xml.attributes().value("id").toString());
                 newApp->setChecksum(xml.attributes().value("checksum").toString());
                 QString type = xml.attributes().value("type").toString();
                 if (type == "system:os" || type == "system:desktop") {
-                    os = newApp->name().split('/').at(1);
+                    os = newApp->version();
                     newApp->setType("os");
                     newApp->setIsMarked(true);
                     newApp->setIsAvailable(true);
-                    if (_i != nullptr) {
+                    if (_i != nullptr && _i->device != nullptr) {
                         newApp->setIsInstalled(isVersionNewer(_i->device->os, newApp->version(), true));
                     }
                 } else if (type == "system:radio") {
-                    radio = newApp->name().split('/').at(1);
+                    radio = newApp->version();
                     newApp->setType("radio");
                     newApp->setIsMarked(true);
                     newApp->setIsAvailable(true);
-                    if (_i != nullptr) {
+                    if (_i != nullptr && _i->device != nullptr) {
                         newApp->setIsInstalled(isVersionNewer(_i->device->radio, newApp->version(), true));
                     }
                 } else {
                     newApp->setType("application");
                     if (_i != nullptr) {
                         foreach(Apps* app, _i->appQList()) {
-                            bool isSameApp = newApp->name().compare(app->name()) == 0;
+                            bool isSameApp = newApp->packageId().compare(app->packageId()) == 0;
                             if (isSameApp) {
                                 newApp->setIsInstalled(isVersionNewer(app->version(), newApp->version(), true));
                                 break;
@@ -532,6 +500,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                         }
                     }
                 }
+                // For lack of a better name, the url
                 newApp->setPackageId(currentaddr + "/" + newApp->name());
                 newApp->setName(newApp->name().split("/").last());
 
