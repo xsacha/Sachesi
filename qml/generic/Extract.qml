@@ -101,9 +101,9 @@ Item {
                     checked: true
                 }
                 CheckBox {
-                    visible: settings.advanced
                     id: ifsSelect
                     text:  "IFS"
+                    checked: true
                 }
                 CheckBox {
                     visible: settings.advanced

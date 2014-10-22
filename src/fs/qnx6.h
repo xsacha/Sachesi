@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QPair>
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
 #include "fs.h"
@@ -41,7 +42,11 @@ public:
     // TODO: These need to have a better method of passing from Splitter
     bool extractApps;
 
+signals:
+    void currentNameChanged(QString name);
+
 private:
+    QPair<int, QString> nodeInfo(QNXStream* stream, qint64 offset);
     quint16 sectorSize;
     quint16 sectorOffset;
     QList<int> lfn;

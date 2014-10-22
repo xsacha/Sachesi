@@ -63,6 +63,7 @@ void Splitter::processExtractWrapper() {
         // TODO: This should be cleaner
         if (info.type == FS_QNX6) {
             qobject_cast<FS::QNX6*>(fs)->extractApps = extractApps;
+            //QObject::connect(fs, SIGNAL(currentNameChanged(QString)), this, SLOT()));
         }
         if (extractImage)
             fs->extractImage();
@@ -111,7 +112,7 @@ void Splitter::processExtractAutoloader() {
     }
 
     if (!findHeader) {
-        return die("Was not a Blackberry Autoloader file.");
+        return die(tr("Was not a Blackberry Autoloader file."));
     }
 
     qint64 files;
@@ -131,7 +132,7 @@ void Splitter::processExtractAutoloader() {
     }
 
     if (files < 1 || files > 20) {
-        return die("Unknown Blackberry Autoloader file.");
+        return die(tr("Unknown Blackberry Autoloader file."));
     }
 
     // Collect offsets
@@ -182,15 +183,15 @@ void Splitter::processExtractAutoloader() {
 
         // Append strings
         if (type & PACKED_FILE_USER)
-            filename += "%User";
+            filename += "@User";
         if (type & PACKED_FILE_OS)
-            filename += "%OS";
+            filename += "@OS";
         if (type & PACKED_FILE_RADIO)
-            filename += "%Radio";
+            filename += "@Radio";
         if (type & PACKED_FILE_IFS)
-            filename += "%IFS";
+            filename += "@IFS";
         if (type & PACKED_FILE_PINLIST)
-            filename += "%PINList";
+            filename += "@PINList";
 
         if (splitting) {
             if (option & type)

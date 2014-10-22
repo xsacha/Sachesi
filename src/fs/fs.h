@@ -42,6 +42,21 @@ public:
         setByteOrder(QDataStream::LittleEndian);
         resetStatus();
     }
+    int grabInt() {
+        int tmp;
+        this->operator >>(tmp);
+        return tmp;
+    }
+    unsigned short grabUShort() {
+        unsigned short tmp;
+        this->operator >>(tmp);
+        return tmp;
+    }
+    unsigned char grabUChar() {
+        unsigned char tmp;
+        this->operator >>(tmp);
+        return tmp;
+    }
 };
 
 class QFileSystem : public QObject

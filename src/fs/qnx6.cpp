@@ -53,41 +53,116 @@ qinode QNX6::createNode(int node) {
     return ind;
 }
 
+QPair<int, QString> QNX6::nodeInfo(QNXStream* stream, qint64 offset) {
+    _file->seek(offset);
+    QPair<int, QString> ret = {0, ""};
+    ret.first = stream->grabInt();
+    if (ret.first == 0)
+        return ret;
+    int count = stream->grabUChar();
+    if (count == 0xFF)
+    {
+        _file->seek(offset + 0x8);
+        int item = stream->grabInt();
+        if (item > lfn.count())
+            item = 1;
+        _file->seek(findSector(lfn.at(item)));
+        count = stream->grabUShort();
+    }
+    ret.second = _file->read(count);
+    return ret;
+}
+
+// Specialised function which takes a directory and finds META-INF/MANIFEST.MF and grabs its data
 void QNX6::extractManifest(int nodenum) {
     QNXStream stream(_file);
-    int count;
-    qinode ind = createNode(nodenum);
-    foreach(int num, ind.sectors)
+    foreach(int num, createNode(nodenum).sectors)
     {
         for (int i = 0; i < 0x1000; i += 0x20)
         {
-            // TODO: A good place ot check if we should exit
+            QPair<int, QString> info = nodeInfo(&stream, findSector(num) + i);
+            if (info.second == "META-INF") {
+                foreach(int num, createNode(info.first).sectors)
+                {
+                    for (int i = 0; i < 0x1000; i += 0x20) {
+                        info = nodeInfo(&stream, findSector(num) + i);
+                        if (info.second == "MANIFEST.MF") {
+                            qinode ind = createNode(info.first);
+                            QList<int> sections;
+                            if (ind.tiers == 0 && (ind.sectors[0] > 0)) {
+                                foreach(int sector, ind.sectors) {
+                                    if (sector != -1)
+                                        sections.append(sector);
+                                }
+                            } else if (ind.tiers > 0 ) {
+                                foreach (int sector, ind.sectors) {
+                                    if (sector == -1) break;
+                                    _file->seek(findSector(sector));
+                                    for (int j = 0; j < 0x400; j++)
+                                    {
+                                        stream >> sector;
+                                        if (sector > 0)
+                                            sections.append(sector);
+                                    }
+                                }
+                                if (ind.tiers == 2) {
+                                    QList<int> nodes = sections;
+                                    sections.clear();
+                                    foreach (int fn, nodes) {
+                                        if (fn == -1) break;
+                                        _file->seek(findSector(fn));
+                                        for (int tmpx = 0; tmpx < 1024; tmpx++) {
+                                            stream >> fn;
+                                            if (fn > 0) sections.append(fn);
+                                        }
+                                    }
+                                }
+                            }
+                            QByteArray manifestDump;
+                            if (ind.size != 0) {
+                                foreach(int section, sections)
+                                {
+                                    _file->seek(findSector(section));
+                                    int len = sectorSize;
+                                    if (section == sections.last() && (ind.size % sectorSize))
+                                        len = ind.size % sectorSize;
+                                    manifestDump.append(_file->read(len));
+                                }
+                            }
 
-            // What a hack! This is really bad!
-            //increaseCurSize(14);
-            _file->seek(findSector(num) + i);
-            READ_TMP(int, inodenum);
-            if (inodenum == 0)
-                break;
-
-            READ_TMP(unsigned char, c_byte);
-            count = c_byte;
-            if (count == 0xFF)
-            {
-                _file->seek(findSector(num) + i + 0x8);
-                READ_TMP(int, item);
-                if (item > lfn.count())
-                    item = 1;
-                _file->seek(findSector(lfn.at(item)));
-                READ_TMP(unsigned short, c_sint);
-                count = c_sint;
-            }
-            QString dir = QString(_file->read(count));
-            if (dir == "." || dir == "..")
-                continue;
-            qinode ind2 = createNode(inodenum);
-            if (ind2.perms & QCFM_IS_DIRECTORY && dir == "META-INF") {
-                extractDir(inodenum, dir, 3);
+                            QString name = "";
+                            QString version = "";
+                            QString arch = "";
+                            QString strSigned = "";
+                            foreach(QByteArray manifestString, manifestDump.split('\n')) {
+                                QString tmp = QString(manifestString).simplified();
+                                if (tmp.startsWith("Package-Name:")) {
+                                    name = tmp.split(": ").last().split('.').last();
+                                }
+                                else if (tmp.startsWith("Package-Version:")) {
+                                    version = tmp.split(": ").last();
+                                }
+                                else if (tmp.startsWith("Package-Architecture:")) {
+                                    arch = tmp.split(": ").last();
+                                }
+                                else if (tmp.startsWith("Package-Author-Certificate-Hash:")) {
+                                    strSigned = "+signed";
+                                }
+                                else if (tmp.startsWith("Archive-Asset-Name:")) {
+                                    manifestApps.append(tmp.split(": ").last());
+                                }
+                            }
+                            if (currentZip == nullptr && name != "") {
+                                currentZip = new QuaZip(QString("%1/%2-%3-nto+%4%5.bar").arg(_path).arg(name).arg(version).arg(arch).arg(strSigned));
+                                emit currentNameChanged(QString("%1-%2").arg(name).arg(version));
+                                currentZip->open(QuaZip::mdCreate);
+                            }
+                            // Leave now
+                            return;
+                        }
+                    }
+                }
+                return;
             }
         }
     }
@@ -100,69 +175,49 @@ void QNX6::extractDir(int nodenum, QString basedir, int tier)
         mainDir.mkdir(basedir);
 
     QNXStream stream(_file);
-    int count;
     qinode ind = createNode(nodenum);
     foreach(int num, ind.sectors)
     {
         for (int i = 0; i < 0x80; i++)
         {
             // TODO: Nice place to check if we want to quit
-            _file->seek(findSector(num) + (i * 0x20));
-            READ_TMP(int, inodenum);
-            if (inodenum == 0)
-                break;
-
-            READ_TMP(unsigned char, c_byte);
-            count = c_byte;
-            if (count == 0xFF)
-            {
-                _file->seek(findSector(num) + (i * 0x20) + 0x8);
-                READ_TMP(int, item);
-                if (item > lfn.count())
-                    item = 1;
-                _file->seek(findSector(lfn.at(item)));
-                READ_TMP(unsigned short, c_sint);
-                count = c_sint;
-            }
-            QString dir = QString(_file->read(count));
-            if (dir == "." || dir == "..")
+            QPair<int, QString> info = nodeInfo(&stream, findSector(num) + (i * 0x20));
+            if (info.second == "." || info.second == "..")
                 continue;
 
-            qinode ind2 = createNode(inodenum);
+            qinode ind2 = createNode(info.first);
 
             if (ind2.perms & QCFM_IS_DIRECTORY)
             {
                 if (extractApps) {
-                    if (dir == "apps" && tier == 0) {
+                    if (info.second == "apps" && tier == 0) {
                         mainDir.mkdir(basedir);
-                        extractDir(inodenum, basedir, 1);
+                        extractDir(info.first, basedir, 1);
                         continue;
                     }
                     else if (tier == 1) {
-                        if (!dir.contains(".gY"))
-                            continue;
-                        dir = dir.split(".gY").first();
-                        currentZip = new QuaZip(basedir + "/" + dir+"-.bar");
-                        currentZip->open(QuaZip::mdCreate);
-                        extractManifest(inodenum);
-                        extractDir(inodenum, "", 2);
-                        currentZip->close();
-                        manifestApps.clear();
-                        delete currentZip;
+                        currentZip = nullptr;
+                        extractManifest(info.first);
+                        if (currentZip != nullptr) {
+                            extractDir(info.first, "", 2);
+                            currentZip->close();
+                            manifestApps.clear();
+                            delete currentZip;
+                        }
                         continue;
-                    } else if (tier == 2 && dir != "META-INF") {
-                        extractDir(inodenum, dir, 3);
+                    } else if (tier == 2) {
+                        extractDir(info.first, info.second, 3);
                         continue;
                     }
                 }
-                extractDir(inodenum, basedir + "/" + dir, tier ? tier + 1 : 0);
+                extractDir(info.first, basedir + "/" + info.second, tier ? tier + 1 : 0);
                 continue;
             }
             if (extractApps) {
-                if (!tier)
+                if (tier <= 1)
                     continue;
-                QString thisFile = (tier == 2) ? dir : (basedir + "/" + dir);
-                if (!manifestApps.isEmpty() && basedir != "META-INF" && !manifestApps.contains(thisFile))
+                QString thisFile = (tier == 2) ? info.second : (basedir + "/" + info.second);
+                if (!manifestApps.isEmpty() && !(tier == 3 && basedir == "META-INF") && !manifestApps.contains(thisFile))
                     continue;
             }
             QList<int> sections;
@@ -190,7 +245,8 @@ void QNX6::extractDir(int nodenum, QString basedir, int tier)
                         _file->seek(findSector(fn));
                         for (int tmpx = 0; tmpx < 1024; tmpx++) {
                             stream >> fn;
-                            if (fn > 0) sections.append(fn);
+                            if (fn > 0)
+                                sections.append(fn);
                         }
                     }
                 }
@@ -198,14 +254,16 @@ void QNX6::extractDir(int nodenum, QString basedir, int tier)
 
             QuaZipFile* zipFile = 0;
             QFile* newFile = 0;
-            bool isManifest = (tier == 3) && (dir == "MANIFEST.MF");
-            QByteArray manifestDump;
             if (extractApps)
             {
+                Q_ASSERT(currentZip != nullptr);
                 zipFile = new QuaZipFile(currentZip);
-                zipFile->open(QIODevice::WriteOnly, tier == 2 ? QuaZipNewInfo(dir) : QuaZipNewInfo(basedir + "/" + dir), nullptr, 0, 8);
+                QuaZipNewInfo newInfo((tier == 2) ? info.second : (basedir + "/" + info.second));
+                newInfo.setPermissions(QFileDevice::Permission(0x7774));
+                newInfo.dateTime.setTime_t(ind.time);
+                zipFile->open(QIODevice::WriteOnly, newInfo);
             } else {
-                newFile = new QFile(basedir + "/" + dir);
+                newFile = new QFile(basedir + "/" + info.second);
                 newFile->open(QIODevice::WriteOnly);
             }
             if (ind2.size != 0) {
@@ -218,27 +276,15 @@ void QNX6::extractDir(int nodenum, QString basedir, int tier)
                     QByteArray tmp = _file->read(len);
                     increaseCurSize(tmp.size());
                     if (extractApps)
-                    {
                         zipFile->write(tmp);
-                        if (isManifest)
-                            manifestDump.append(tmp);
-                    }
                     else
                         newFile->write(tmp);
                 }
             }
-            if (extractApps)
-            {
+            if (extractApps) {
+                Q_ASSERT(zipFile->isOpen());
                 zipFile->close();
                 delete zipFile;
-                if (isManifest) {
-                    foreach(QByteArray manifestString, manifestDump.split('\n')) {
-                        QString tmp = QString(manifestString).simplified();
-                        if (tmp.startsWith("Archive-Asset-Name:")) {
-                            manifestApps.append(tmp.split(": ").last());
-                        }
-                    }
-                }
             }
             else {
                 newFile->close();
@@ -298,6 +344,7 @@ bool QNX6::createContents() {
         }
     }
     extractDir(1, _path, 0);
+    emit currentNameChanged("");
     QDesktopServices::openUrl(QUrl(_path));
     return true;
 }
