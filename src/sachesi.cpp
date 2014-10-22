@@ -22,7 +22,8 @@
 #include <QQuickWindow>
 #include <QQmlApplicationEngine>
 
-#include "mainnet.h"
+#include "search/mainnet.h"
+#include "search/scanner.h"
 #ifndef BLACKBERRY
 #include "installer.h"
 #include "backupinfo.h"
@@ -88,13 +89,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // *** C++ Classes that are passed to the QML pages.
     // Heavy lifting to be done by the compiled and feature-packed language.
-#ifdef BLACKBERRY
-    MainNet p;
-#else
     InstallNet i;
     context->setContextProperty("i", &i);
     MainNet p(&i);
-#endif
+    Scanner scanner;
 #ifdef BOOTLOADER_ACCESS
     Boot b;
 
@@ -108,6 +106,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Set contexts for the classes
     context->setContextProperty("p", &p); // MainNet
+    context->setContextProperty("scanner", &scanner);
     context->setContextProperty("download", p.currentDownload);
     context->setContextProperty("carrierinfo",  &info);
 
@@ -115,7 +114,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifndef BLACKBERRY
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
 #endif
-    qmlRegisterType<Apps>("AppLibrary", 1, 0, "Apps");
+    qmlRegisterType<Apps>();
+    qmlRegisterType<DiscoveredRelease>();
 
 #if defined(_WIN32) && defined(STATIC)
     engine.addImportPath("qrc:/qml/");

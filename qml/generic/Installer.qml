@@ -3,7 +3,6 @@ import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
-import AppLibrary 1.0
 import "UI" 1.0
 
 Item {

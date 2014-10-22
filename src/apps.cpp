@@ -48,25 +48,6 @@ Apps::Apps(const Apps* app, QObject *parent)
     , _checksum(app->checksum())
 { }
 
-void appendApps(QQmlListProperty<Apps> * property, Apps * app)
-{
-    Q_UNUSED(property);
-    Q_UNUSED(app);
-    //Do nothing. Can't add to Apps using this method
-}
-int appsSize(QQmlListProperty<Apps> * property)
-{
-    return static_cast< QList<Apps *> *>(property->data)->size();
-}
-Apps* appsAt(QQmlListProperty<Apps> * property, int index)
-{
-    return static_cast< QList<Apps *> *>(property->data)->at(index);
-}
-void clearApps(QQmlListProperty<Apps> *property)
-{
-    return static_cast< QList<Apps *> *>(property->data)->clear();
-}
-
 SET_QML2(QString, name, setName)
 SET_QML2(QString, friendlyName, setFriendlyName)
 SET_QML2(QString, packageId, setPackageId)

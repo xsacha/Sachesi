@@ -58,7 +58,7 @@ WRITE_QML(QString, bbid, setBbid)
 
 QQmlListProperty<Apps> InstallNet::appList()
 {
-    return QQmlListProperty<Apps>(this, &_appList, &appendApps, &appsSize, &appsAt, &clearApps);
+    return QQmlListProperty<Apps>(this, _appList);
 }
 
 void InstallNet::setIp(const QString &ip)

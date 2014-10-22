@@ -10,61 +10,45 @@ Window {
                           x = window.x + (window.width - width) / 2
                           y = window.y + (window.height - height) / 2
                       }
-    height: 140
-    width: 430
+    height: 290
+    width: 490
     ColumnLayout {
         height: parent.height
         width: parent.width
         anchors { left: parent.left; leftMargin: 10 }
         RowLayout {
-            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-            Row {
-                spacing: 1
-                SpinBox {
-                    id: major
-                    prefix: "10."
-                    width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 3
-                    maximumValue: 255
-                    onEditingFinished: relookup.clicked()
+        GroupBox {
+            title: qsTr("Stop on:")
+            Column {
+                ExclusiveGroup {
+                    id: group
+                    onCurrentChanged: scanner.findExisting = current.item
                 }
-                SpinBox {
-                    id: minor
-                    width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 1
-                    maximumValue: 255
-                    onEditingFinished: relookup.clicked()
+                RadioButton {
+                    property int item: 0
+                    text: qsTr("Next Found")
+                    exclusiveGroup: group
+                    checked: true
                 }
-                SpinBox {
-                    id: build
-                    width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 821
-                    maximumValue: 9999
-                    stepSize: 3
-                    onEditingFinished: relookup.clicked()
+                RadioButton {
+                    property int item: 1
+                    text: qsTr("Next Available Links")
+                    exclusiveGroup: group
                 }
-            }
-            Button {
-                id: relookup
-                text:  qsTr("Lookup")
-                enabled: !p.scanning
-                onClicked: p.reverseLookup(device.selectedItem, variant.selectedItem, server.selectedItem, "10." + major.value + "." + minor.value + "." + build.value, skip_badlinks.checked);
-            }
-            Button {
-                property bool looking: false
-                text: looking ? qsTr("Stop Scan") : qsTr("Autoscan")
-                enabled: !p.scanning || looking
-                onClicked: { looking = !looking; if (looking) { build.value += 3; relookup.clicked(); } }
-                Timer {
-                    id: autoLookup
-                    interval: 10;
-                    running: parent.looking && !p.scanning
-                    onTriggered: {
-                        if (p.scanning > 0)
-                            return;
-                        if (grabPotential.visible) {
-                            parent.looking = false;
-                        } else if (p.softwareRelease == "SR not in system") {
+                RadioButton {
+                    property int item: 2
+                    text: qsTr("Never")
+                    exclusiveGroup: group
+                }
+                Button {
+                    text: scanner.isAuto ? qsTr("Stop Scan") : qsTr("Autoscan")
+                    onClicked: {
+                        scanner.isAuto = !scanner.isAuto;
+                        if (scanner.isAuto) { build.value += 3; relookup.clicked(); }
+                    }
+                    property bool finished: scanner.finishedScan
+                    onFinishedChanged: {
+                        if (finished && !scanner.isActive && scanner.isAuto) {
                             if (build.value >= 9998) {
                                 minor.value++;
                                 build.value = (build.value+3) % 10000;
@@ -76,31 +60,74 @@ Window {
                 }
             }
         }
-        RowLayout {
-            CheckBox {
-                id: skip_badlinks
-                text:  qsTr("Find next available links")
-            }
-        }
-
-        RowLayout {
+        ColumnLayout {
             Layout.alignment: Qt.AlignVCenter
+            visible: scanner.curRelease !== null && scanner.curRelease.srVersion !== ""
             Text {
-                Layout.alignment: Qt.AlignLeft
-                text:  qsTr("Software Release: ") + p.softwareRelease
+                Layout.alignment: Qt.AlignHCenter
+                text:  qsTr("SR: ") + (scanner.curRelease !== null ? scanner.curRelease.srVersion : "") + " | " + qsTr("OS: ") + (scanner.curRelease !== null ? scanner.curRelease.osVersion : "")
                 font.pointSize: 12
             }
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: {
+                    var ret = ""
+                    if (scanner.curRelease !== null) {
+                        if (scanner.curRelease.activeServers & 1)
+                            ret += qsTr("Production") + " "
+                        if (scanner.curRelease.activeServers & 2)
+                            ret += qsTr("Beta") + " "
+                        if (scanner.curRelease.activeServers & 4)
+                            ret += qsTr("Alpha") + " "
+                        if (ret.length > 0)
+                            ret = qsTr("Servers: ") + ret
+                    }
+                    return ret;
+                }
+            }
             RowLayout {
-                Layout.alignment: Qt.AlignRight
+                Layout.alignment: Qt.AlignHCenter
                 property string osVersion: ""
-                visible: p.softwareRelease.charAt(0) == "1" || p.softwareRelease.charAt(0) == "2"
-                onVisibleChanged: if (visible) osVersion = "10." + major.value + "." + minor.value + "." + build.value
+                visible: scanner.curRelease !== null && scanner.curRelease.srVersion != ""
                 Button {
                     id: grabPotential
-                    enabled: p.hasPotentialLinks // Exists?
+                    enabled: scanner.curRelease !== null && scanner.curRelease.baseUrl !== ""
                     text: enabled ? qsTr("Grab Public Links") : qsTr("No Links Available")
-                    onClicked: p.grabPotentialLinks(p.softwareRelease, parent.osVersion)
+                    onClicked: scanner.generatePotentialLinks()
                 }
+            }
+        }
+        }
+        RowLayout {
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            Row {
+                spacing: 1
+                SpinBox {
+                    id: major
+                    prefix: "10."
+                    width: qt_new ? implicitWidth : implicitWidth + 25
+                    value: 3
+                    maximumValue: 255
+                }
+                SpinBox {
+                    id: minor
+                    width: qt_new ? implicitWidth : implicitWidth + 25
+                    value: 1
+                    maximumValue: 255
+                }
+                SpinBox {
+                    id: build
+                    width: qt_new ? implicitWidth : implicitWidth + 25
+                    value: 938
+                    maximumValue: 9999
+                    stepSize: 3
+                }
+            }
+            Button {
+                id: relookup
+                text:  qsTr("Lookup")
+                enabled: !scanner.isActive && !scanner.isAuto
+                onClicked: scanner.reverseLookup("10." + major.value + "." + minor.value + "." + build.value);
             }
         }
         Button {

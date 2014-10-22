@@ -24,7 +24,6 @@
 MainNet::MainNet(InstallNet *installer, QObject* parent)
     : QObject(parent)
     , _i(installer)
-    , _hasPotentialLinks(false)
     , _scanning(0)
     , _splitting(0)
     , _splitProgress(0)
@@ -191,76 +190,7 @@ void MainNet::abortSplit()
 
 void MainNet::grabLinks(int downloadDevice)
 {
-    writeDisplayFile("updates.txt", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
-}
-
-void MainNet::grabPotentialLinks(QString softwareRelease, QString osVersion) {
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    hash.addData(softwareRelease.toLocal8Bit());
-    QString hashval = QString(hash.result().toHex());
-
-    QStringList parts = osVersion.split('.');
-    // Just a guess that the Radio is +1. In some carrier builds this isn't true.
-    int build = parts.last().toInt() + 1;
-    QString radioVersion = "";
-    for (int i = 0; i < 3; i++)
-        radioVersion += parts.at(i) + ".";
-    radioVersion += QString::number(build);
-
-    QString potentialText = QString("Potential OS and Radio links for SR" + softwareRelease + " (OS:" + osVersion + " + Radio:" + radioVersion + ")\n\n"
-                                    "* Operating Systems *\n");
-
-    // Lambda function to append link for signed bars
-    // Arch hardcoded to armv7
-    auto appendNewHeader = [&potentialText] (QString name, QString devices) {
-        potentialText.append("\n" + name + ": " + devices + " (Debrick + Core OS)\n");
-    };
-    auto appendNewLink = [this, &potentialText, &hashval] (QString linkType, int type, bool OMAP, QString hwType, QString version) {
-        QString typeString;
-        if (type == 2) {
-            potentialText.append(linkType + " IFS\n");
-            typeString = "qcfm.ifs.";
-        } else if (type == 1) {
-            typeString = "coreos.qcfm.os.";
-        } else if (type == 0) {
-            potentialText.append(linkType + " Radio\n");
-            typeString = "qcfm.radio.";
-        }
-
-        potentialText.append(QString("http://cdn.fs.sl.blackberry.com/fs/qnx/%1/%2/com.qnx.%3")
-                             .arg(_hasPotentialLinks == 1 ? "production" : "betazone")
-                             .arg(hashval)
-                             .arg(typeString));
-
-        if (OMAP) // Old Playbook style
-            potentialText.append("factory" + hwType + "/" + version + "/winchester.factory_sfi" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
-        else
-            potentialText.append(hwType + "/" + version + "/" + hwType + "-" + version + "-nto+armle-v7+signed.bar\n");
-    };
-    appendNewHeader("QC8974", "Blackberry Passport");
-    appendNewLink("Debrick", 1, false, "qc8974.factory_sfi.desktop", osVersion);
-    appendNewLink("Core",    1, false, "qc8974.factory_sfi", osVersion);
-
-    appendNewHeader("QC8960", "Blackberry Z3/Z10/Z30/Q5/Q10");
-    appendNewLink("Debrick", 1, false, "qc8960.factory_sfi.desktop", osVersion);
-    appendNewLink("Core",    1, false, "qc8960.factory_sfi", osVersion);
-
-    appendNewHeader("OMAP", "Blackberry Z10 STL 100-1");
-    appendNewLink("Debrick", 1, true, ".desktop", osVersion);
-    appendNewLink("Core",    1, true, "", osVersion);
-
-    potentialText.append("\n\n* Radios *\n");
-    // Touch
-    appendNewLink("Z30 + Classic", 0, false, "qc8960.wtr5", radioVersion);
-    appendNewLink("Z10 (STL 100-1)",   0, false, "m5730", radioVersion);
-    appendNewLink("Z10 (STL 100-2/3/4) and Porsche P9982", 0, false, "qc8960", radioVersion);
-    appendNewLink("Z3 (Jakarta) + Cafe", 0, false, "qc8930.wtr5", radioVersion);
-    // QWERTY
-    appendNewLink("Passport + Ontario", 0, false, "qc8974.wtr2", radioVersion);
-    appendNewLink("Q5 + Q10 + Khan", 0, false, "qc8960.wtr", radioVersion);
-
-
-    writeDisplayFile("versionLookup.txt", potentialText.toLocal8Bit());
+    writeDisplayFile("Updates", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
 }
 
 QString MainNet::fixVariantName(QString name, QString replace, int type) {
@@ -434,109 +364,6 @@ QString MainNet::hwidFromVariant(unsigned int device, unsigned int variant) {
 }
 unsigned int MainNet::variantCount(unsigned int device) {
     return dev[device*2].count();
-}
-
-void MainNet::reverseLookup(int device, int variant, int server, QString OSver, bool skip)
-{
-    if (_scanning)
-        return;
-
-    _softwareRelease = "Asking server..."; emit softwareReleaseChanged();
-    _hasPotentialLinks = false; emit hasPotentialLinksChanged();
-    setScanning(1);
-    QString id = hwidFromVariant(device, variant);
-    QString requestUrl;
-    switch (server)
-    {
-    case 4:
-        requestUrl = "https://alpha2.sl.eval.blackberry.com/slscse/srVersionLookup/";
-        break;
-    case 3:
-        requestUrl = "https://alpha.sl.eval.blackberry.com/slscse/srVersionLookup/";
-        break;
-    case 2:
-        requestUrl = "https://beta2.sl.eval.blackberry.com/slscse/srVersionLookup/";
-        break;
-    case 1:
-        requestUrl = "https://beta.sl.eval.blackberry.com/slscse/srVersionLookup/";
-        break;
-    case 0:
-    default:
-        requestUrl = "https://cs.sl.blackberry.com/cse/srVersionLookup/";
-        break;
-    }
-    requestUrl += "2.0/";
-    //
-    //0x8d00240a
-    QString query = QString("<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"%1\">"
-                            "<clientProperties>"
-                            "<hardware><pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><id>0x%2</id></hardware>"
-                            "<software><osVersion>%3</osVersion></software>"
-                            "</clientProperties>"
-                            "</srVersionLookupRequest>")
-            .arg(QDateTime::currentMSecsSinceEpoch())
-            .arg(id)
-            .arg(OSver);
-    QNetworkRequest request;
-    request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
-    request.setUrl(QUrl(requestUrl));
-    request.setAttribute(QNetworkRequest::CustomVerbAttribute, skip);
-    QNetworkReply* reply = manager->post(request, query.toUtf8());
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(serverError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(finished()), this, SLOT(reverseLookupReply()));
-}
-
-void MainNet::reverseLookupReply() {
-    QNetworkReply* reply = (QNetworkReply*)sender();
-    bool skip = reply->request().attribute(QNetworkRequest::CustomVerbAttribute).toBool();
-    QString swRelease;
-    QByteArray data = reply->readAll();
-    //for (int i = 0; i < data.size(); i += 3000) qDebug() << data.mid(i, 3000);
-    QXmlStreamReader xml(data);
-    while(!xml.atEnd() && !xml.hasError()) {
-        if(xml.tokenType() == QXmlStreamReader::StartElement) {
-            if (xml.name() == "softwareReleaseVersion") {
-                swRelease = xml.readElementText();
-            }
-        }
-        xml.readNext();
-    }
-    sender()->deleteLater();
-
-    // Now verify the link
-    if (!swRelease.isEmpty() && swRelease.at(0).isDigit()) {
-        QCryptographicHash hash(QCryptographicHash::Sha1);
-        hash.addData(swRelease.toLocal8Bit());
-        foreach(QString server, QStringList() << "production" << "betazone") {
-            QString url = "http://cdn.fs.sl.blackberry.com/fs/qnx/" + server + "/" + QString(hash.result().toHex());
-            QNetworkRequest request;
-            request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
-            request.setUrl(QUrl(url));
-            QNetworkReply* replyTmp = manager->head(request);
-            connect(replyTmp, &QNetworkReply::finished, [=]() {
-                if (!_softwareRelease.startsWith("10") || !_hasPotentialLinks)
-                {
-                    // Seems to give 301 redirect if it's real
-                    uint status = replyTmp->attribute(QNetworkRequest::HttpStatusCodeAttribute).toUInt();
-                    // New SW release found
-                    _softwareRelease = swRelease;
-                    if (status == 200 || (status > 300 && status <= 308)) {
-                        _hasPotentialLinks = (server == "production") ? 1 : 2; emit hasPotentialLinksChanged();
-                    } else if (skip) {
-                        // Instead of using version, report 'not in system' so that it is skipped
-                        _softwareRelease = "SR not in system";
-                    }
-                    emit softwareReleaseChanged();
-                    setScanning(0);
-                }
-                replyTmp->deleteLater();
-            });
-        }
-    } else {
-        _softwareRelease = swRelease; emit softwareReleaseChanged();
-        setScanning(0);
-    }
 }
 
 void MainNet::updateDetailRequest(QString delta, QString carrier, QString country, int device, int variant, int mode, int server)

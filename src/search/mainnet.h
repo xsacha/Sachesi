@@ -40,7 +40,6 @@ class MainNet : public QObject {
     Q_PROPERTY(int     updateCheckedNeededCount READ updateCheckedNeededCount NOTIFY updateCheckedCountChanged)
     Q_PROPERTY(QString error MEMBER _error NOTIFY errorChanged)
     Q_PROPERTY(QString multiscanVersion MEMBER _multiscanVersion NOTIFY updateMessageChanged)
-    Q_PROPERTY(int     hasPotentialLinks MEMBER _hasPotentialLinks NOTIFY hasPotentialLinksChanged)
     Q_PROPERTY(bool    hasBootAccess READ hasBootAccess CONSTANT)
     Q_PROPERTY(bool    multiscan MEMBER _multiscan WRITE setMultiscan NOTIFY multiscanChanged)
     Q_PROPERTY(int     scanning MEMBER _scanning WRITE setScanning NOTIFY scanningChanged)
@@ -57,9 +56,7 @@ public:
     Q_INVOKABLE void combineAutoloader(QList<QUrl> selectedFiles);
     Q_INVOKABLE void extractImage(int type, int options);
     Q_INVOKABLE void grabLinks(int downloadDevice);
-    Q_INVOKABLE void grabPotentialLinks(QString softwareRelease, QString osVersion);
     Q_INVOKABLE void abortSplit();
-    Q_INVOKABLE void reverseLookup(int device, int variant, int server, QString OSver, bool skip);
 
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
@@ -74,7 +71,7 @@ public:
     void    setMultiscan(const bool &multiscan);
     void    setScanning(const int &scanning);
     QQmlListProperty<Apps> updateAppList() {
-        return QQmlListProperty<Apps>(this, &_updateAppList, &appendApps, &appsSize, &appsAt, &clearApps);
+        return QQmlListProperty<Apps>(this, _updateAppList);
     }
 
     int updateAppCount() const { return _updateAppList.count(); }
@@ -110,14 +107,12 @@ signals:
     void errorChanged();
     void multiscanChanged();
     void scanningChanged();
-    void hasPotentialLinksChanged();
     void hasBootAccessChanged();
     void maxIdChanged();
     void splittingChanged();
     void splitProgressChanged();
     void killSplit();
 private slots:
-    void reverseLookupReply();
     void serverReply();
     void showFirmwareData(QByteArray data, QString variant);
     void serverError(QNetworkReply::NetworkError error);
@@ -143,7 +138,6 @@ private:
     QString _error;
     QString _multiscanVersion;
     bool _multiscan;
-    int _hasPotentialLinks;
     int _scanning;
     QFile _currentFile;
     int _maxId, _dlBytes, _dlTotal;

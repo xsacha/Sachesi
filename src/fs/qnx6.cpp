@@ -142,7 +142,7 @@ void QNX6::extractDir(int nodenum, QString basedir, int tier)
                         if (!dir.contains(".gY"))
                             continue;
                         dir = dir.split(".gY").first();
-                        currentZip = new QuaZip(basedir + "/" + dir+".bar");
+                        currentZip = new QuaZip(basedir + "/" + dir+"-.bar");
                         currentZip->open(QuaZip::mdCreate);
                         extractManifest(inodenum);
                         extractDir(inodenum, "", 2);

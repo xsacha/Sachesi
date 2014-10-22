@@ -115,31 +115,17 @@ bool checkCurPath()
 }
 
 void openFile(QString name) {
-    // This could get more complicated
-#ifndef BLACKBERRY
     QDesktopServices::openUrl(QUrl::fromLocalFile(name));
-#endif
 }
 
-void writeDisplayFile(QString name, QByteArray data) {
-    QFile displayFile(getSaveDir() + "/" + name);
+void writeDisplayFile(QString type, QString writeText) {
+    QDir(getSaveDir()).mkpath(".");
+    QFile displayFile(getSaveDir() + "/" + type + ".txt");
 
     if (!displayFile.open(QIODevice::WriteOnly | QIODevice::Text))
         return;
-    displayFile.write(data);
+    displayFile.write(writeText.toUtf8());
     openFile(displayFile.fileName());
     displayFile.close();
-
-#ifdef BLACKBERRY
-    // Cascades code is not working
-/*#if defined(BLACKBERRY)
-    QVariantMap data;
-    data["title"] = "Links";
-    bb::cascades::Invocation* invocation = bb::cascades::Invocation::create(
-                bb::cascades::InvokeQuery::create().invokeActionId("bb.action.SHARE").metadata(data).uri("file:///accounts/1000/shared/misc/updates.txt").invokeTargetId(
-                                "sys.pim.remember.composer"));
-    connect(invocation, SIGNAL(finished()), invocation, SLOT(deleteLater()));
-*/
-    #endif
 }
 

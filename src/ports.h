@@ -43,7 +43,7 @@ QFileDialog* selectFiles(QString title, QString dir, QString nameString, QString
 QString getSaveDir();
 bool checkCurPath();
 void openFile(QString name);
-void writeDisplayFile(QString name, QByteArray data);
+void writeDisplayFile(QString type, QString writeText);
 
 // These may not be entirely necessary but there have been issues in the past
 #define qSafeFree(x) \
