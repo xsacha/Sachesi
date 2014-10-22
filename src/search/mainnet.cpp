@@ -150,7 +150,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
         QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
     }
-    _splitting = (_type == 2) ? ExtractingImage : ExtractingApps; emit splittingChanged();
+    _splitting = (_type == 2) ? ExtractingApps : ExtractingImage; emit splittingChanged();
     splitThread = new QThread;
     Splitter* splitter = new Splitter(selectedFiles.first());
     switch (_type) {
@@ -510,8 +510,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     newApp->setIsMarked(true);
                     newApp->setIsAvailable(true);
                     if (_i != nullptr) {
-                        bool isSameOS = newApp->version().compare(_i->knownOS()) == 0;
-                        newApp->setIsInstalled(isSameOS);
+                        newApp->setIsInstalled(isVersionNewer(_i->device->os, newApp->version(), true));
                     }
                 } else if (type == "system:radio") {
                     radio = newApp->name().split('/').at(1);
@@ -519,16 +518,15 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     newApp->setIsMarked(true);
                     newApp->setIsAvailable(true);
                     if (_i != nullptr) {
-                        bool isSameRadio = newApp->version().compare(_i->knownRadio()) == 0;
-                        newApp->setIsInstalled(isSameRadio);
+                        newApp->setIsInstalled(isVersionNewer(_i->device->radio, newApp->version(), true));
                     }
                 } else {
                     newApp->setType("application");
                     if (_i != nullptr) {
                         foreach(Apps* app, _i->appQList()) {
-                            bool isSameApp = newApp->checksum().compare(app->checksum()) == 0;
+                            bool isSameApp = newApp->name().compare(app->name()) == 0;
                             if (isSameApp) {
-                                newApp->setIsInstalled(true);
+                                newApp->setIsInstalled(isVersionNewer(app->version(), newApp->version(), true));
                                 break;
                             }
                         }
@@ -567,19 +565,10 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
         }
         xml.readNext();
     }
-    // Check if the version string is newer. Not sure if QString compare would work
-    bool isNewer = !_multiscan || _multiscanVersion == "";
+    // Check if the version string is newer.
+    bool isNewer = (!_multiscan || _multiscanVersion == "");
     if (!isNewer && ver != "") {
-        QStringList newVer = ver.split('.');
-        QStringList oldVer = _multiscanVersion.split('.');
-        for (int i = 0; i < 4; i++) {
-            int newBuild = newVer.at(i).toInt();
-            int oldBuild = oldVer.at(i).toInt();
-            if (newBuild > oldBuild)
-                isNewer = true;
-            if (newBuild != oldBuild)
-                break;
-        }
+        isNewer = isVersionNewer(ver, _multiscanVersion, false);
     }
     if (isNewer) {
         // Update software release versions

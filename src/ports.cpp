@@ -43,6 +43,22 @@ QString capPath(bool temp) {
 #endif
 }
 
+bool isVersionNewer(QString first, QString second, bool orSame) {
+    QStringList firstVer = first.split('.');
+    QStringList secondVer = second.split('.');
+    if (firstVer.count() < 4)
+        return false;
+    for (int i = 0; i < 4; i++) {
+        int newBuild = firstVer.at(i).toInt();
+        int oldBuild = secondVer.at(i).toInt();
+        if (newBuild > oldBuild)
+            return true;
+        if (newBuild < oldBuild)
+            return false;
+    }
+    return orSame;
+}
+
 #ifndef BLACKBERRY
 QFileDialog* selectFiles(QString title, QString dir, QString nameString, QString nameExt) {
     QFileDialog* finder = new QFileDialog();

@@ -10,7 +10,7 @@ ApplicationWindow {
     width: 820
     height: 680
     minimumHeight: 540
-    minimumWidth: 620
+    minimumWidth: 640
 
     Settings {
         id: settings
@@ -46,10 +46,15 @@ ApplicationWindow {
     }
     TabView {
         id: titleRow
-        currentIndex: 3
         width: parent.width
+        // Qt5.2 bug
+        onCountChanged: if (count > 3) currentIndex = 4
         anchors {top: title.bottom; bottom: parent.bottom }
 
+        Tab {
+            title: qsTr("Device")
+            Device { anchors.fill: parent; }
+        }
         Tab {
             title: qsTr("Extract");
             Extract { anchors.fill: parent }
@@ -68,23 +73,5 @@ ApplicationWindow {
         }
 
         USBConnect { anchors.fill: parent }
-    }
-
-    statusBar: StatusBar {
-        visible: !mobile
-        Label {
-            visible: i.knownBattery < 0
-            text:  qsTr("No device connected")
-        }
-        Label {
-            visible: i.knownBattery > -1
-            property bool hasSpace: window.width > 700
-            text:  "<b>[</b>USB" + " ("+i.knownBattery+"%)<b>]</b>  " + "  <b>[</b>OS:" + i.knownOS + " Radio:" + i.knownRadio + "<b>]</b>" + (hasSpace ? (" <b>[</b>" + i.knownName + "<b>]</b>") : "");
-        }
-        Label {
-            visible: i.knownBattery > -1
-            anchors.right: parent.right
-            text:  "<b>[</b>"+i.knownHW+"<b>]</b>"
-        }
     }
 }

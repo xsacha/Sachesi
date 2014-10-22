@@ -97,15 +97,8 @@ class InstallNet : public QObject {
     Q_PROPERTY(bool    extractInstallZip MEMBER _extractInstallZip                  NOTIFY extractInstallZipChanged)
     Q_PROPERTY(QStringList firmwareNames MEMBER _firmwareNames                            NOTIFY firmwareNamesChanged)
     Q_PROPERTY(QStringList firmwarePaths MEMBER _firmwarePaths                            NOTIFY firmwarePathsChanged)
-    Q_PROPERTY(QString knownOS          READ    knownOS         WRITE setKnownOS          NOTIFY knownOSChanged)
-    Q_PROPERTY(QString knownRadio       READ    knownRadio      WRITE setKnownRadio       NOTIFY knownRadioChanged)
-    Q_PROPERTY(int knownBattery         MEMBER _knownBattery    WRITE setKnownBattery     NOTIFY knownBatteryChanged)
-    Q_PROPERTY(QString knownName        MEMBER _knownName       WRITE setKnownName        NOTIFY knownNameChanged)
-    Q_PROPERTY(QString knownPIN         MEMBER _knownPIN        WRITE setKnownPIN         NOTIFY knownPINChanged)
-    Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
     Q_PROPERTY(int     knownHWFamily    MEMBER _knownHWFamily                             NOTIFY appListChanged)
-    Q_PROPERTY(QString bbid             MEMBER _bbid            WRITE setBbid             NOTIFY bbidChanged)
-    Q_PROPERTY(DeviceInfo* device       MEMBER _device                                    NOTIFY deviceChanged)
+    Q_PROPERTY(DeviceInfo* device       MEMBER device                                     NOTIFY deviceChanged)
     Q_PROPERTY(QQmlListProperty<Apps> appList READ appList                                NOTIFY appListChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 
@@ -133,6 +126,7 @@ public:
     Q_INVOKABLE void factorywipe();
     Q_INVOKABLE void reboot();
     Q_INVOKABLE void getPIN();
+    Q_INVOKABLE void setActionProperty(QString name, QString value);
     Q_INVOKABLE void backupQuery();
     Q_INVOKABLE void exportInstalled();
     Q_INVOKABLE QString appDeltaMsg();
@@ -146,8 +140,6 @@ public:
     void AESEncryptSend(QByteArray &plain, int code);
     QString password() const;
     int dgMaxPos() const;
-    QString knownOS() const { return _knownOS; }
-    QString knownRadio() const { return _knownRadio; }
     QQmlListProperty<Apps> appList();
     QList<Apps*> appQList() { return _appList; }
     int appCount() const { return _appList.count(); }
@@ -159,6 +151,7 @@ public:
     QStringList backNames() const;
     QList<double> backSizes() const;
     QPair<QString,QString> getConnected(int downloadDevice);
+    DeviceInfo* device;
 
     void setIp(const QString &ip);
     void setPassword(const QString &password);
@@ -174,13 +167,6 @@ public:
     void setRestoring(const bool &restoring);
     void setBacking(const bool &backing);
     void setFirmwareUpdate(const bool &firmwareUpdate);
-    void setKnownOS(const QString &OS);
-    void setKnownRadio(const QString &Radio);
-    void setKnownBattery(const int &battery);
-    void setKnownName(const QString &Name);
-    void setKnownHW(const QString &HW);
-    void setKnownPIN(const QString &PIN);
-    void setBbid(const QString &Bbid);
 signals:
     void passwordChanged();
     void newPassword(QString newPass);
@@ -207,13 +193,6 @@ signals:
     void firmwareNamesChanged();
     void firmwarePathsChanged();
     void extractInstallZipChanged();
-    void knownOSChanged();
-    void knownRadioChanged();
-    void knownBatteryChanged();
-    void knownNameChanged();
-    void knownHWChanged();
-    void knownPINChanged();
-    void bbidChanged();
     void appListChanged();
     void deviceChanged();
 private slots:
@@ -232,7 +211,6 @@ private slots:
     void restoreProgress(qint64 pwrite, qint64 psize);
     void backupFileFinish();
     void dumpLogs();
-    void setActionProperty(QString name, QString value);
 private:
     QNetworkRequest setData(QString page, QString contentType);
     QNetworkReply* postQuery(QString page, QString contentType, const QUrlQuery& query);
@@ -260,17 +238,9 @@ private:
     QFile* compressedFile;
     QStringList _firmwareNames;
     QStringList _firmwarePaths;
-    QString _knownOS;
-    QString _knownRadio;
-    int _knownBattery;
-    QString _knownName;
-    QString _knownHW;
     int _knownHWFamily;
     QString _knownConnectedOSType;
     QString _knownConnectedRadioType;
-    QString _knownPIN;
-    int _knownProtocol;
-    QString _bbid;
 
     QStringList _firmwareInfo;
     QStringList _downgradeInfo;
@@ -308,6 +278,4 @@ private:
     QuaZipFile* _zipFile;
     QList<Apps*> _appList;
     QList<Apps*> _appRemList;
-
-    DeviceInfo* _device;
 };

@@ -11,7 +11,7 @@ Item {
     property string details: ""
     property string lasterror: "\n"
     onNewLineChanged: details += i.newLine
-    visible: i.knownBattery > -1
+    visible: i.device !== null
     anchors.fill: parent
 
     Button {
@@ -120,27 +120,6 @@ Item {
                 }
             }
         }
-        GroupBox {
-            title:  qsTr("Advanced Tools")
-            visible: settings.advanced
-            RowLayout {
-                Button {
-                    id: wipe
-                    text:  qsTr("Wipe")
-                    onClicked: i.wipe();
-                }
-                Button {
-                    id: factorywipe
-                    text:  qsTr("Factory Reset")
-                    onClicked: i.factorywipe();
-                }
-                Button {
-                    id: reboot
-                    text:  qsTr("Reboot")
-                    onClicked: i.reboot();
-                }
-            }
-        }
         TabView {
             id: tabs
             Layout.alignment: Qt.AlignBottom
@@ -149,6 +128,7 @@ Item {
             Button {
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
                 id: list_files
+                enabled: i.device !== null && i.device.setupComplete
                 text:  qsTr("Refresh")
                 onClicked: i.scanProps();
             }
@@ -190,7 +170,7 @@ Item {
                 visible: appView.count == 0
                 anchors.centerIn: parent
                 font.pointSize: 14
-                text:  qsTr("Use 'Refresh' to update list")
+                text: i.device.setupComplete ? qsTr("Use 'Refresh' to update list") : qsTr("Your device has not completed setup")
             }
             ScrollView {
                 anchors.fill: parent

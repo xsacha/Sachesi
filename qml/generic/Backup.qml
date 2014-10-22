@@ -9,7 +9,7 @@ import "UI" 1.0
 
 Item {
     id: main
-    visible: i.knownBattery > -1
+    visible: i.device !== null
     anchors { fill: parent; leftMargin: 20; topMargin: 20 }
 
     Timer {
@@ -70,6 +70,10 @@ Item {
             onClicked: { totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
         }
 
+        Label {
+            visible: !settings.advanced
+            text: qsTr("Loading backup sizes can sometimes fail. In this situation, you can backup 'Blind'.")
+        }
         RowLayout {
             visible: i.backMethods
             FileDialog {
@@ -97,15 +101,23 @@ Item {
             }
 
             Button {
-                text:  qsTr("Create backup")
-                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.bbid != ""
+                text:  qsTr("Create backup") + (totalText.totalVal < 0 ? (" " + qsTr("Blind")) : "")
+                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.device !== null && i.device.bbid !== ""
                 onClicked: backup_files.open();
             }
             Button {
                 text:  qsTr("Restore backup")
-                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.bbid != ""
+                enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.device !== null && i.device.bbid !== ""
                 onClicked: restore_files.open();
             }
+        }
+        Label {
+            visible: i.device !== null && i.device.bbid === ""
+            text: qsTr("Your device needs a Blackberry ID to perform backups or restores!")
+        }
+        Label {
+            visible: !settings.advanced
+            text: qsTr("Please note that backups can take a long time, depending on your device data.")
         }
     }
     Rectangle {

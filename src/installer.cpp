@@ -24,10 +24,10 @@
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
     manager(nullptr), reply(nullptr), cookieJar(nullptr),
-    _knownRadio("N/A"), _knownBattery(-1), _knownHWFamily(0), _wrongPass(false), _loginBlock(false),
+    _wrongPass(false), _loginBlock(false),
     _state(0), _dlBytes(0), _dlTotal(0), _dgProgress(-1), _curDGProgress(-1),
     _completed(false), _extractInstallZip(false), _installing(false), _restoring(false), _backing(false),
-    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr), _device(nullptr)
+    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr), device(nullptr)
 {
 #ifdef _MSC_VER
     WSAStartup(MAKEWORD(2,0), &wsadata);
@@ -460,7 +460,7 @@ void InstallNet::backup()
         manifest->open(QIODevice::WriteOnly, QuaZipNewInfo("Manifest.xml"), nullptr, 0, 8);
         QString manifestXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 "<BlackBerry_Backup><Version>3.0</Version><Client platform=\"SachESI\" osversion=\"Microsoft Windows NT 6.1.7601 Service Pack 1\" dtmversion=\"2.0.0.0\"/>"
-                "<SourceDevice pin=\"" + _knownPIN + "\"><Platform type=\"QNX\" version=\"10.0.0.0\"/></SourceDevice>"
+                "<SourceDevice pin=\"" + device->pin + "\"><Platform type=\"QNX\" version=\"10.0.0.0\"/></SourceDevice>"
                 "<QnxOSDevice><Archives>";
         foreach(BackupCategory* cat, _back.categories) {
             if (_back.modeString().contains(cat->id))
@@ -696,42 +696,50 @@ void InstallNet::discoveryReply() {
         // Valid device
         setIp(ip_addr);
         setState(1);
-        if (_device != nullptr)
-            _device->deleteLater();
-        _device = new DeviceInfo();
+        if (device != nullptr)
+            device->deleteLater();
+        device = new DeviceInfo(); emit deviceChanged();
         while (!xml.atEnd())
         {
             xml.readNext();
             if (xml.isStartElement())
             {
                 if (xml.name() == "BbPin") {
-                    setKnownPIN(QString::number(xml.readElementText().toInt(),16).toUpper());
+                    device->setPin(QString::number(xml.readElementText().toInt(),16).toUpper());
                 } else if (xml.name() == "SystemMachine") {
-                    setKnownName(xml.readElementText());
-                    setNewLine(QString("Connected to %1 at %2.").arg(_knownName).arg(_ip));
+                    device->setName(xml.readElementText().replace("_", " "));
+                    setNewLine(QString("Connected to %1 at %2.").arg(device->name).arg(_ip));
                 } else if (xml.name() == "OsType") {
                     if (xml.readElementText() == "BlackBerry PlayBook OS") {
-                        setKnownName("Playbook_QNX6.6.0");
+                        device->setName("Playbook QNX6.6.0");
                         setNewLine(QString("Connected to Playbook at %1.").arg(_ip));
                     }
                 } else if (xml.name() == "PlatformVersion") {
-                    setKnownOS(xml.readElementText());
-                    /*} else if (xml.name() == "Power") {
-                    setKnownBattery(xml.readElementText().toInt());*/
+                    device->setOs(xml.readElementText());
                 } else if (xml.name() == "ModelName") {
-                    setKnownHW(xml.readElementText());
+                    device->setHw(xml.readElementText());
                 } else if (xml.name() == "MinSupportedProtocolVersion") {
                     // Min comes before max
                     if (xml.readElementText().toInt() == 1)
-                        _knownProtocol = 1;
+                        device->setProtocol(1);
                 } else if (xml.name() == "MaxSupportedProtocolVersion") {
                     if (xml.readElementText().toInt() >= 3)
-                        _knownProtocol = 3;
+                        device->setProtocol(3);
+                } else if (xml.name() == "DeveloperModeEnabled") {
+                    device->setDevMode(xml.readElementText().toUInt());
+                } else if (xml.name() == "OobeCompleted") {
+                    device->setSetupComplete(xml.readElementText().toUInt());
+                    if (!device->setupComplete) {
+                        QMessageBox::information(nullptr, tr("Warning"), tr("You have not completed setup on your device. Due to this issue, it will not allow communication."));
+                    }
                 }
             }
         }
+        emit deviceChanged();
         setCompleted(false);
-        checkLogin();
+        // Don't even attempt because it will kick us
+        if (!device->setupComplete)
+            checkLogin();
     }
     sender()->deleteLater();
 }
@@ -741,7 +749,7 @@ bool InstallNet::checkLogin() {
         return false;
 
     if (!_completed) {
-        getQuery(QString("login.cgi?request_version=%1").arg(QString::number(_knownProtocol)), "x-www-form-urlencoded");
+        getQuery(QString("login.cgi?request_version=%1").arg(QString::number(device->protocol)), "x-www-form-urlencoded");
         return false;
     }
     return true;
@@ -788,7 +796,7 @@ void InstallNet::backupFileFinish()
 QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
     QPair<QString,QString> ret = {"", ""};
     if (downloadDevice == 0) {
-        if (_knownHW != "" && _knownHW != "Unknown") {
+        if (device->hw != "" && device->hw != "Unknown") {
             ret = qMakePair(_knownConnectedOSType, _knownConnectedRadioType);
         }
     } else {
@@ -820,19 +828,19 @@ void InstallNet::determineDeviceFamily()
 {
     QString radio = _knownConnectedRadioType;
     if (radio == "qc8960.wtr5") {
-        _knownHWFamily = Z30Family;
+        device->setHwFamily(Z30Family);
     } else if (radio == "m5730") {
-        _knownHWFamily = OMAPFamily;
+        device->setHwFamily(OMAPFamily);
     } else if (radio == "qc8960") {
-        _knownHWFamily = Z10Family;
+        device->setHwFamily(Z10Family);
     } else if (radio == "qc8930.wtr5") {
-        _knownHWFamily = Z3Family;
+        device->setHwFamily(Z3Family);
     } else if (radio == "qc8960.wtr") {
-        _knownHWFamily = Q10Family;
+        device->setHwFamily(Q10Family);
     } else if (radio == "qc8974.wtr2") {
-        _knownHWFamily = Q30Family;
+        device->setHwFamily(Q30Family);
     } else {
-        _knownHWFamily = UnknownFamily;
+        device->setHwFamily(UnknownFamily);
     }
 }
 
@@ -879,7 +887,7 @@ void InstallNet::restoreReply()
         QByteArray result = HashPass(challenger, QByteArray::fromHex(saltHex), iCount);
 
         QNetworkRequest request = reply->request();
-        request.setUrl(QUrl("https://"+ _ip +":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=" + QString::number(_knownProtocol)));
+        request.setUrl(QUrl("https://"+ _ip +":443/cgi-bin/login.cgi?challenge_data=" + result.toHex().toUpper() + "&request_version=" + QString::number(device->protocol)));
 
         reply = manager->get(request);
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
@@ -926,14 +934,11 @@ void InstallNet::restoreReply()
             restore();
         else /*if (_hadPassword)*/
             scanProps();
-        // This can take up to 15 seconds to respond and all communication on device is Blocking!
+        // This can take up to 25 seconds to respond and all communication on device is Blocking!
         // backupQuery();
-        // For example: if Link is talking to the device at the same time, comms will fail and vice-versa
     }
     else if (xml.name() == "DynamicProperties")
     {
-        _appList.clear();
-        _appRemList.clear();
         for (xml.readNext(); !xml.atEnd(); xml.readNext()) {
             if (xml.isStartElement())
             {
@@ -942,6 +947,10 @@ void InstallNet::restoreReply()
                 if (name == "ErrorDescription")
                 {
                     QMessageBox::information(nullptr, "Error", xml.readElementText(), QMessageBox::Ok);
+                } else if (name == "DeviceSoftware") {
+                    // About to get the apps
+                    _appList.clear();
+                    _appRemList.clear();
                 } else if (name == "Application") {
                     Apps* newApp = new Apps();
                     while(!xml.atEnd())
@@ -984,10 +993,10 @@ void InstallNet::restoreReply()
                         _appRemList.append(newApp);
                     if (newApp->type() == "os") {
                         _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop").replace("verizon", "factory");
-                        setKnownOS(newApp->version());
+                        device->setOs(newApp->version());
                     } else if (newApp->type() == "radio") {
                         _knownConnectedRadioType = newApp->name().split("radio.").last().remove(".omadm");
-                        setKnownRadio(newApp->version());
+                        device->setRadio(newApp->version());
                     }
                 }
                 // These give the wrong result some times. Installed apps are a better indication.
@@ -995,37 +1004,36 @@ void InstallNet::restoreReply()
                 // else if (name == "PlatformVersion")
                 // else if (name == "RadioVersion")
                 else if (name == "BatteryLevel")
-                    setKnownBattery(xml.readElementText().toInt());
+                    device->setBattery(xml.readElementText().toInt());
                 else if (name == "HardwareID") {
                     // If the firmware reports the device as unknown (eg. Dev Alpha on 10.3), show the Hardware ID
-                    if (_knownHW == "Unknown") {
+                    if (device->hw == "Unknown") {
                         QString hwid = xml.readElementText().remove(0, 2);
                         // If we already know the name, make it nicer
                         if (hwid == "8d00270a")
                             hwid = "Alpha C";
                         else if (hwid == "4002607")
                             hwid = "Alpha B";
-                        setKnownHW(hwid);
+                        device->setHw(hwid);
                     }
                 } else if (name == "Bbid") {
-                    setBbid(xml.readElementText());
+                    device->setBbid(xml.readElementText());
                 }
-                /* // DEPRECATED by discovery.cgi
                 else if (name == "DeviceName")
                 {
                     // name that the user calls their phone
-                }*/
+                    device->setFriendlyName(xml.readElementText());
+                }
+                else if (name == "PolicyRestrictions") {
+                    device->setRestrictions(xml.readElementText().simplified());
+                }
+                else if (xml.name() == "RefurbDate") {
+                    device->setRefurbDate(xml.readElementText());
+                }
             }
         }
-        // No need to show this list anymore, I think
-        /*
-        QString appInfoList = "<b>Currently Installed Applications:</b><br>";
-        foreach (Apps* apps, _appList)
-        {
-            appInfoList.append("  " + apps->friendlyName() + "<br>");
-        }
-        setNewLine(appInfoList);*/
         determineDeviceFamily();
+        emit deviceChanged();
         emit appListChanged();
     }
     else if (xml.name() == "RTASChallenge") {
@@ -1061,8 +1069,10 @@ void InstallNet::restoreReply()
             xml.readNext();
             if (xml.isStartElement())
             {
-                if (xml.name() == "PIN")
-                    _knownPIN = xml.readElementText().split('X').last();
+                if (xml.name() == "PIN") {
+                    device->setPin(xml.readElementText().split('X').last());
+                    emit deviceChanged();
+                }
             }
         }
     }
@@ -1231,7 +1241,7 @@ void InstallNet::restoreReply()
                 qint64 curBytes = ((qint64)_curDGProgress * _dlTotal);
                 _dgProgress = (curBytes + _dlDoneBytes) / _dlOverallTotal;
                 bool resend = false;
-                if (_knownOS.startsWith("2.")) // Playbook OS support
+                if (device->os.startsWith("2.")) // Playbook OS support
                     resend = !data.contains("100");
                 else
                     resend = inProgress;
@@ -1407,10 +1417,8 @@ void InstallNet::resetVars()
     setBacking(false);
     qIoSafeFree(_zipFile);
     ioSafeFree(currentBackupZip);
-    setKnownPIN("");
-    setKnownOS("");
-    setKnownRadio("N/A");
-    setKnownBattery(-1);
+    device->deleteLater();
+    device = nullptr;
     setState(0);
     _dgProgress = -1;
     setCurDGProgress(-1);

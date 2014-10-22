@@ -19,6 +19,7 @@
 
 // For portability between platforms and Qt versions.
 // Clears up the code in the more important files.
+// Also a make-shift utility file
 
 #ifndef BLACKBERRY
 #include <QFileDialog>
@@ -44,6 +45,7 @@ QString getSaveDir();
 bool checkCurPath();
 void openFile(QString name);
 void writeDisplayFile(QString type, QString writeText);
+bool isVersionNewer(QString first, QString second, bool orSame);
 
 // These may not be entirely necessary but there have been issues in the past
 #define qSafeFree(x) \

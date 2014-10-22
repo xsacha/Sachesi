@@ -48,13 +48,6 @@ WRITE_QML(int,  curDGProgress, setCurDGProgress)
 WRITE_QML(QString, curInstallName, setCurInstallName)
 WRITE_QML(bool, installing, setInstalling)
 WRITE_QML(bool, firmwareUpdate, setFirmwareUpdate)
-WRITE_QML(QString, knownOS, setKnownOS)
-WRITE_QML(QString, knownRadio, setKnownRadio)
-WRITE_QML(int,  knownBattery, setKnownBattery)
-WRITE_QML(QString, knownName, setKnownName)
-WRITE_QML(QString, knownPIN, setKnownPIN)
-WRITE_QML(QString, knownHW, setKnownHW)
-WRITE_QML(QString, bbid, setBbid)
 
 QQmlListProperty<Apps> InstallNet::appList()
 {
@@ -157,8 +150,6 @@ void InstallNet::setRestoring(const bool &restoring) {
 void InstallNet::setPassword(const QString &password) {
     _password = password;
     emit newPassword(password);
-    /*if (_wrongPass)
-        setWrongPass(false);*/
     QByteArray tmp = password.toLatin1();
     for (int i = 0; i < password.length(); i++) {
         tmp[i] = tmp[i] ^ ((0x40 + 5 * i - password.length()) % 127);

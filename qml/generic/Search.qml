@@ -71,7 +71,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)
-                                  text = qsTr("Server did not respond as expected [" + message + "].")
+                                  text = qsTr("Server did not respond as expected") +" [" + message + "]."
                               else if (message === "Success")
                                   text = qsTr("Success. No updates were available.")
                               else
@@ -88,9 +88,9 @@ Item {
                 type: qsTr("Device")
                 selectedItem: 0
 
-                //property int familyType: (selectedItem == 0) ? i.knownHWFamily : selectedItem
-                property string hwid: typeof i == 'undefined' ? "" : i.knownHW
-                property int hwfam: typeof i == 'undefined' ? "" : i.knownHWFamily
+                //property int familyType: (selectedItem == 0) ? i.device.hwFamily : selectedItem
+                property string hwid: i.device === null ? "" : i.device.hw
+                property int hwfam: typeof i.device === null ? "" : i.device.hwFamily
                 property string familyName: (hwfam == 0 || hwfam > listModel.count) ? qsTr("Unknown") : listModel.get(hwfam).text
                 subtext: hwid != "" ? hwid + " (" + familyName + ")" : ""
                 onSubtextChanged: generateModel()
@@ -409,7 +409,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: friendlyName + (isInstalled ? qsTr(" (installed)") : (isAvailable ? "" : qsTr(" (downloaded)")))
+                        text: friendlyName + (isInstalled ? qsTr(" (older)") : (isAvailable ? "" : qsTr(" (downloaded)")))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked
