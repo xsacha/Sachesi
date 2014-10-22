@@ -20,6 +20,8 @@
 #include <QList>
 #include <QFile>
 #include <QFileInfo>
+#include "fs/fs.h" // QNXStream
+#include "ports.h"
 
 class AutoloaderWriter: public QFile {
     Q_OBJECT

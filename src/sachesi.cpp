@@ -122,6 +122,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<BackupInfo>("BackupTools", 1, 0, "BackupInfo");
 #endif
     qmlRegisterType<Apps>();
+    qmlRegisterType<DeviceInfo>();
     qmlRegisterType<DiscoveredRelease>();
 
 #if defined(_WIN32) && defined(STATIC)

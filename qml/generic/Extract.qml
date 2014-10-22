@@ -64,37 +64,6 @@ Item {
             font.pointSize: 14
             font.bold: true
         }
-        // Dump Contents
-        ColumnLayout {
-            visible: settings.advanced
-            RowLayout {
-                property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
-                Button {
-                    text:  qsTr("Dump Contents")
-                    enabled: !p.splitting && parent.partValue
-                    onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
-                }
-                CheckBox {
-                    id: corePart
-                    checked: true
-                    text:  qsTr("Core")
-                }
-                CheckBox {
-                    id: userPart
-                    checked: true
-                    text:  qsTr("User")
-                }
-                CheckBox {
-                    id: bootPart
-                    checked: false
-                    text:  qsTr("Boot")
-                }
-            }
-            Label {
-                text:  qsTr("Dump all file contents")
-                font.bold: true;
-            }
-        }
         // Extract Signed
         ColumnLayout {
             RowLayout {
@@ -220,6 +189,37 @@ Item {
             }
             Label {
                 text:  qsTr("Create Autoloader .exe from .signed images")
+                font.bold: true;
+            }
+        }
+        // Dump Contents
+        ColumnLayout {
+            visible: settings.advanced
+            RowLayout {
+                property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
+                Button {
+                    text:  qsTr("Dump Contents")
+                    enabled: !p.splitting && parent.partValue
+                    onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
+                }
+                CheckBox {
+                    id: corePart
+                    checked: true
+                    text:  qsTr("Core")
+                }
+                CheckBox {
+                    id: userPart
+                    checked: true
+                    text:  qsTr("User")
+                }
+                CheckBox {
+                    id: bootPart
+                    checked: false
+                    text:  qsTr("Boot")
+                }
+            }
+            Label {
+                text:  qsTr("Dump all file contents")
                 font.bold: true;
             }
         }

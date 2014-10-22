@@ -27,7 +27,7 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
     _knownRadio("N/A"), _knownBattery(-1), _knownHWFamily(0), _wrongPass(false), _loginBlock(false),
     _state(0), _dlBytes(0), _dlTotal(0), _dgProgress(-1), _curDGProgress(-1),
     _completed(false), _extractInstallZip(false), _installing(false), _restoring(false), _backing(false),
-    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr)
+    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr), _device(nullptr)
 {
 #ifdef _MSC_VER
     WSAStartup(MAKEWORD(2,0), &wsadata);
@@ -633,11 +633,11 @@ void InstallNet::login()
     int flags = QNetworkInterface::IsUp | QNetworkInterface::IsRunning | QNetworkInterface::CanBroadcast | QNetworkInterface::CanMulticast;
     foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
     {
-        if (true)//((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
+        if ((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
         {
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
             {
-                if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol && !addr.ip().toString().startsWith("127."))
+                if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol)
                 {
                     QList<quint8> addrParts;
                     foreach(QString addrString, addr.ip().toString().split('.'))
@@ -696,6 +696,9 @@ void InstallNet::discoveryReply() {
         // Valid device
         setIp(ip_addr);
         setState(1);
+        if (_device != nullptr)
+            _device->deleteLater();
+        _device = new DeviceInfo();
         while (!xml.atEnd())
         {
             xml.readNext();

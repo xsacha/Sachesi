@@ -39,6 +39,7 @@
 #include <quazip/quazipfile.h>
 #include "apps.h"
 #include "backupinfo.h"
+#include "deviceinfo.h"
 
 // TODO: Maybe name families by radio
 enum DeviceFamily {
@@ -104,6 +105,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(QString knownHW          MEMBER _knownHW         WRITE setKnownHW          NOTIFY knownHWChanged)
     Q_PROPERTY(int     knownHWFamily    MEMBER _knownHWFamily                             NOTIFY appListChanged)
     Q_PROPERTY(QString bbid             MEMBER _bbid            WRITE setBbid             NOTIFY bbidChanged)
+    Q_PROPERTY(DeviceInfo* device       MEMBER _device                                    NOTIFY deviceChanged)
     Q_PROPERTY(QQmlListProperty<Apps> appList READ appList                                NOTIFY appListChanged)
     Q_PROPERTY(int appCount READ appCount NOTIFY appListChanged)
 
@@ -213,6 +215,7 @@ signals:
     void knownPINChanged();
     void bbidChanged();
     void appListChanged();
+    void deviceChanged();
 private slots:
     bool checkLogin();
     void login();
@@ -305,4 +308,6 @@ private:
     QuaZipFile* _zipFile;
     QList<Apps*> _appList;
     QList<Apps*> _appRemList;
+
+    DeviceInfo* _device;
 };
