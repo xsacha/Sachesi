@@ -379,13 +379,13 @@ void InstallNet::install()
         emit dgPosChanged();
         emit dgMaxPosChanged();
         _dlDoneBytes = 0;
+        _dlOverallTotal = 0;
         for(QString filename : _downgradeInfo)
             _dlOverallTotal += QFile(filename).size();
 
         postData.addQueryItem("mode", _firmwareUpdate ? "os" : "bar");
         postData.addQueryItem("size", QString::number(_dlOverallTotal));
         postQuery("update.cgi", "x-www-form-urlencoded", postData);
-        setNewLine("Your device may show 0% progress. This is normal on your OS. Please follow the progress shown here.");
     }
 }
 
