@@ -93,7 +93,9 @@ HEADERS += \
     src/fs/rcfs.h \
     src/fs/qnx6.h \
     src/carrierinfo.h \
-    src/search/discoveredrelease.h
+    src/search/discoveredrelease.h \
+    src/autoloaderwriter.h \
+    src/deviceinfo.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {

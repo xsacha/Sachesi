@@ -29,6 +29,15 @@ class InstallNet;
 #include "installer.h"
 #endif
 
+enum SplitType {
+    SplittingIdle = 0,
+    SplittingAuto = 1,
+    CreatingAuto = 2,
+    ExtractingImage = 3,
+    ExtractingApps = 4,
+    FetchingCap = 5,
+};
+
 class MainNet : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString softwareRelease MEMBER _softwareRelease NOTIFY softwareReleaseChanged) // from reverse lookup

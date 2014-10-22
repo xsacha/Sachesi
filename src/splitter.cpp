@@ -63,6 +63,7 @@ void Splitter::processExtractWrapper() {
         // TODO: This should be cleaner
         if (info.type == FS_QNX6) {
             qobject_cast<FS::QNX6*>(fs)->extractApps = extractApps;
+            // We need to make Splitter a QML-exposed class, then it's nicer to push these signals
             //QObject::connect(fs, SIGNAL(currentNameChanged(QString)), this, SLOT()));
         }
         if (extractImage)
@@ -263,7 +264,7 @@ void Splitter::processExtractBar() {
                 if (size > 1024 * 1024 * 120)
                     type = PACKED_FILE_OS;
                 else if (size > 1024 * 1024 * 5)
-                    type = PACKED_FILE_RADIO;
+                    type = PACKED_FILE_RADIO | PACKED_FILE_IFS; // Could be either
                 else
                     type = PACKED_FILE_PINLIST;
                 if (option & type) {

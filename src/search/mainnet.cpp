@@ -43,7 +43,7 @@ void MainNet::splitAutoloader(QUrl url, int options) {
     _options = options;
 
     QFileInfo fileInfo(fileName);
-    _splitting = 1; emit splittingChanged();
+    _splitting = SplittingAuto; emit splittingChanged();
     splitThread = new QThread();
     Splitter* splitter = new Splitter(fileName, _options);
     splitter->moveToThread(splitThread);
@@ -76,7 +76,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
     if (splitFiles.isEmpty())
         return;
     splitThread = new QThread;
-    _splitting = 2; emit splittingChanged();
+    _splitting = CreatingAuto; emit splittingChanged();
     Splitter* splitter = new Splitter(splitFiles);
     splitter->moveToThread(splitThread);
     connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
@@ -90,7 +90,7 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
     if (!QFileInfo(capPath()).exists())
     {
         QString capUrl = "http://ppsspp.mvdan.cc/cap3.11.0.11.exe";
-        _splitting = 5; emit splittingChanged();
+        _splitting = FetchingCap; emit splittingChanged();
         QNetworkReply* reply = manager->get(QNetworkRequest(capUrl));
         QObject::connect(reply, &QNetworkReply::readyRead, [=]() {
             // Download to a temporary file first
@@ -102,14 +102,14 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         QObject::connect(reply, &QNetworkReply::finished, [=]() {
             // If the download was successful, copy it to the path we check. Some users quit before this happens!
             QFile::rename(capPath(true), capPath());
-            _splitting = 2; emit splittingChanged();
+            _splitting = CreatingAuto; emit splittingChanged();
             splitThread->start();
             reply->deleteLater();
         });
         QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
             // Some users may experience difficult downloading it at all, or the link may be outdated.
             QMessageBox::information(NULL, "Error", "Was unable to download CAP, which is a component of Autoloaders.\nAs a workaround, you can provide your own CAP to " + capPath());
-            _splitting = 0; emit splittingChanged();
+            _splitting = SplittingIdle; emit splittingChanged();
             splitThread->deleteLater();
             splitter->deleteLater();
             reply->deleteLater();
@@ -150,7 +150,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
         QMessageBox::information(nullptr, "Warning", errorMsg, QMessageBox::Ok);
         return;
     }
-    _splitting = 3 + (_type == 2); emit splittingChanged();
+    _splitting = (_type == 2) ? ExtractingImage : ExtractingApps; emit splittingChanged();
     splitThread = new QThread;
     Splitter* splitter = new Splitter(selectedFiles.first());
     switch (_type) {
@@ -178,7 +178,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
 
 void MainNet::cancelSplit()
 {
-    _splitting = 0;
+    _splitting = SplittingIdle;
     emit splittingChanged();
 }
 

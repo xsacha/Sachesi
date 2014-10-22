@@ -20,8 +20,6 @@
 #include <QObject>
 #include <QBuffer>
 #include <QStringList>
-#include <QFile>
-#include <QFileInfo>
 #include <QDir>
 #include <QDataStream>
 #include <QDebug>
@@ -33,6 +31,7 @@
 #include "fs/qnx6.h"
 #include "fs/rcfs.h"
 #include "fs/ifs.h"
+#include "autoloaderwriter.h"
 
 enum QFileSystemType {
     FS_UNKNOWN = 0,
@@ -65,7 +64,8 @@ struct PartitionInfo {
 
     void detectType(QIODevice* device) {
         // Check what sort of image we are dealing with
-        device->seek(offset);
+        if (!device->isSequential())
+            device->seek(offset);
         QByteArray header = device->read(4);
 
         if (header == QByteArray("rimh", 4))
@@ -85,72 +85,6 @@ struct PartitionInfo {
 #define PACKED_FILE_RADIO   (1 << 2)
 #define PACKED_FILE_IFS     (1 << 3)
 #define PACKED_FILE_PINLIST (1 << 4)
-
-class AutoloaderWriter: public QFile {
-    Q_OBJECT
-public:
-    AutoloaderWriter(QList<QFileInfo> selectedInfo)
-        : _infos(selectedInfo)
-    {
-        qSort(selectedInfo.begin(), selectedInfo.end(), compareSizes);
-    }
-    static bool compareSizes(QFileInfo i, QFileInfo j)
-    {
-        return i.size() > j.size();
-    }
-    void create(QString name) {
-        // Find potential file
-        QString append = ".exe";
-        for (int f = 2; QFile::exists(name + append); f++) {
-            append = QString("-%1.exe").arg(QString::number(f));
-        }
-        // Start the autoloader as a cap file
-        QFile::copy(capPath(), name + append);
-        setFileName(name + append);
-        open(QIODevice::WriteOnly | QIODevice::Append);
-        // This code is used as a separator
-        write(QByteArray::fromBase64("at9dFE5LT0dJSE5JTk1TDRAMBRceERhTLUY8T0crSzk5OVNOT1FNT09RTU9RSEhwnNXFl5zVxZec1cWX").constData(), 60);
-        // This is a placeholder for a password
-        write(QByteArray(80, 0), 80);
-
-        QByteArray dataHeader;
-        QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
-        dataStream << (quint64)_infos.count();
-        quint64 counter = pos() + 64;
-        foreach (QFileInfo info, _infos)
-        {
-            dataStream << counter;
-            counter += info.size();
-        }
-        for (int i = _infos.count() - 1; i < 6; i++)
-            dataStream << (qint64)0;
-        write(dataHeader);
-        _read = 100 * pos();
-        _maxSize = counter;
-        foreach (QFileInfo file, _infos)
-            appendFile(file.filePath());
-        close();
-    }
-
-    void appendFile(QString fileName) {
-        QFile file(fileName);
-        file.open(QIODevice::ReadOnly);
-        while (!file.atEnd())
-        {
-            QByteArray tmp = file.read(BUFFER_LEN);
-            if (tmp.size() < 0)
-                break;
-            _read += 100 * write(tmp);
-            emit newProgress((int)(_read / _maxSize));
-        }
-        file.close();
-    }
-signals:
-    void newProgress(int percent);
-private:
-    qint64 _read, _maxSize;
-    QList<QFileInfo> _infos;
-};
 
 class Splitter: public QObject {
     Q_OBJECT
@@ -178,17 +112,21 @@ public slots:
         kill = true;
         die();
     }
+    void cleanDevHandle() {
+        foreach (QIODevice* dev, devHandle) {
+            // QIODevice's are automatically closed.
+            if (dev != nullptr) {
+                dev->deleteLater();
+                dev = nullptr;
+            }
+        }
+        devHandle.clear();
+    }
+
     void die(QString message = "") {
         qDebug() << "Tool terminated early due to unforseen circumstances.";
         if (extracting) {
-            foreach (QIODevice* dev, devHandle) {
-                // QIODevice's are automatically closed.
-                if (dev != nullptr) {
-                    dev->deleteLater();
-                    dev = nullptr;
-                }
-            }
-            devHandle.clear();
+            cleanDevHandle();
         }
         if (splitting)
         {
@@ -218,13 +156,7 @@ public slots:
         // Splitting is just extracting .signed, so lets integrate those after
         splitting = true;
         processExtractBar();
-        foreach(QIODevice* dev, devHandle) {
-            // QIODevice's are automatically closed.
-            if (dev != nullptr) {
-                delete dev;
-                dev = nullptr;
-            }
-        }
+        cleanDevHandle();
 
         emit finished();
     }
@@ -241,6 +173,10 @@ public slots:
     void processExtractAutoloader();
 
     void processCombine() {
+        if (selectedInfo.count() > 6) {
+            QMessageBox::information(nullptr, "Error", "Autoloaders can only have a maximum of 6 signed files.");
+            return;
+        }
         combining = true;
         QFileInfo largestInfo;
         qint64 largestSize = 0;

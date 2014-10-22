@@ -56,17 +56,47 @@ Item {
             onClicked: p.abortSplit();
         }
     }
-
     ColumnLayout {
         anchors { fill: parent; margins: 15 }
         Layout.fillHeight: true
+        Text {
+            text:  qsTr("Extraction Tools")
+            font.pointSize: 14
+            font.bold: true
+        }
+        // Dump Contents
         ColumnLayout {
-            Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-            Text {
-                text:  qsTr("Autoloader Tools")
-                font.pointSize: 14
-                font.bold: true
+            visible: settings.advanced
+            RowLayout {
+                property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
+                Button {
+                    text:  qsTr("Dump Contents")
+                    enabled: !p.splitting && parent.partValue
+                    onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
+                }
+                CheckBox {
+                    id: corePart
+                    checked: true
+                    text:  qsTr("Core")
+                }
+                CheckBox {
+                    id: userPart
+                    checked: true
+                    text:  qsTr("User")
+                }
+                CheckBox {
+                    id: bootPart
+                    checked: false
+                    text:  qsTr("Boot")
+                }
             }
+            Label {
+                text:  qsTr("Dump all file contents")
+                font.bold: true;
+            }
+        }
+        // Extract Signed
+        ColumnLayout {
             RowLayout {
                 FileDialog {
                     id: split_files
@@ -115,6 +145,49 @@ Item {
                 text:  qsTr("Split signed images from autoloader .exe, .bar or .zip")
                 font.bold: true;
             }
+        }
+        // Extract Image
+        ColumnLayout {
+            visible: settings.advanced
+            RowLayout {
+                property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + bootImage.checked * 4
+                Button {
+                    text:  qsTr("Extract Image")
+                    enabled: !p.splitting && parent.imageValue
+                    onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
+                }
+                CheckBox {
+                    id: rcfsImage
+                    checked: true
+                    text:  "RCFS"
+                }
+                CheckBox {
+                    id: qnxImage
+                    text:  "QNX6"
+                }
+                CheckBox {
+                    id: bootImage
+                    checked: true
+                    text:  "IFS"
+                }
+            }
+            Label {
+                text:  qsTr("Extracts filesystem image")
+                font.bold: true;
+            }
+        }
+        ColumnLayout {
+            Button {
+                text:  qsTr("Extract Apps")
+                enabled: !p.splitting
+                onClicked: if (!p.splitting) p.extractImage(2, 2);
+            }
+            Label {
+                text:  qsTr("Extracts all bar archives from a debrick/repair image")
+                font.bold: true;
+            }
+        }
+        ColumnLayout {
             RowLayout {
                 FileDialog {
                     id: combine_files
@@ -148,86 +221,6 @@ Item {
             Label {
                 text:  qsTr("Create Autoloader .exe from .signed images")
                 font.bold: true;
-            }
-        }
-        // Implicit spacing by breaking layout
-        ColumnLayout {
-            Text {
-                text:  qsTr("Extraction Tools")
-                font.pointSize: 14
-                font.bold: true
-            }
-            // Dump Contents
-            ColumnLayout {
-                visible: settings.advanced
-                RowLayout {
-                    property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
-                    Button {
-                        text:  qsTr("Dump Contents")
-                        enabled: !p.splitting && parent.partValue
-                        onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
-                    }
-                    CheckBox {
-                        id: corePart
-                        checked: true
-                        text:  qsTr("Core")
-                    }
-                    CheckBox {
-                        id: userPart
-                        checked: true
-                        text:  qsTr("User")
-                    }
-                    CheckBox {
-                        id: bootPart
-                        checked: false
-                        text:  qsTr("Boot")
-                    }
-                }
-                Label {
-                    text:  qsTr("Dump all file contents")
-                    font.bold: true;
-                }
-            }
-            // Extract Image
-            ColumnLayout {
-                visible: settings.advanced
-                RowLayout {
-                    property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + bootImage.checked * 4
-                    Button {
-                        text:  qsTr("Extract Image")
-                        enabled: !p.splitting && parent.imageValue
-                        onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
-                    }
-                    CheckBox {
-                        id: rcfsImage
-                        checked: true
-                        text:  "RCFS"
-                    }
-                    CheckBox {
-                        id: qnxImage
-                        text:  "QNX6"
-                    }
-                    CheckBox {
-                        id: bootImage
-                        checked: true
-                        text:  "IFS"
-                    }
-                }
-                Label {
-                    text:  qsTr("Extracts filesystem image")
-                    font.bold: true;
-                }
-            }
-            ColumnLayout {
-                Button {
-                    text:  qsTr("Extract Apps")
-                    enabled: !p.splitting
-                    onClicked: if (!p.splitting) p.extractImage(2, 2);
-                }
-                Label {
-                    text:  qsTr("Extract all bar archives")
-                    font.bold: true;
-                }
             }
         }
     }
