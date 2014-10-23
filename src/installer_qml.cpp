@@ -48,6 +48,7 @@ WRITE_QML(int,  curDGProgress, setCurDGProgress)
 WRITE_QML(QString, curInstallName, setCurInstallName)
 WRITE_QML(bool, installing, setInstalling)
 WRITE_QML(bool, firmwareUpdate, setFirmwareUpdate)
+WRITE_QML(bool, allowDowngrades, setAllowDowngrades)
 
 QQmlListProperty<Apps> InstallNet::appList()
 {

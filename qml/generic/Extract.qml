@@ -64,6 +64,42 @@ Item {
             font.pointSize: 14
             font.bold: true
         }
+        ColumnLayout {
+            RowLayout {
+                FileDialog {
+                    id: combine_files
+                    title:  qsTr("Create Autoloader")
+                    folder: settings.installFolder
+                    onAccepted: {
+                        p.combineAutoloader(fileUrls);
+                        settings.installFolder = folder;
+                    }
+
+                    nameFilters: [ "Signed Images (*.signed)" ]
+                }
+                Button {
+                    text:  qsTr("Create from Folder")
+                    enabled: !p.splitting
+                    onClicked: {
+                        combine_files.selectFolder = true
+                        combine_files.open()
+                    }
+                }
+                Button {
+                    text:  qsTr("Create from Files");
+                    enabled: !p.splitting
+                    onClicked: {
+                        combine_files.selectFolder = false
+                        combine_files.selectMultiple = true
+                        combine_files.open()
+                    }
+                }
+            }
+            Label {
+                text:  qsTr("Create Autoloader .exe from .signed images")
+                font.bold: true;
+            }
+        }
         // Extract Signed
         ColumnLayout {
             RowLayout {
@@ -153,42 +189,6 @@ Item {
             }
             Label {
                 text:  qsTr("Extracts all bar archives from a debrick/repair image")
-                font.bold: true;
-            }
-        }
-        ColumnLayout {
-            RowLayout {
-                FileDialog {
-                    id: combine_files
-                    title:  qsTr("Create Autoloader")
-                    folder: settings.installFolder
-                    onAccepted: {
-                        p.combineAutoloader(fileUrls);
-                        settings.installFolder = folder;
-                    }
-
-                    nameFilters: [ "Signed Images (*.signed)" ]
-                }
-                Button {
-                    text:  qsTr("Create from Folder")
-                    enabled: !p.splitting
-                    onClicked: {
-                        combine_files.selectFolder = true
-                        combine_files.open()
-                    }
-                }
-                Button {
-                    text:  qsTr("Create from Files");
-                    enabled: !p.splitting
-                    onClicked: {
-                        combine_files.selectFolder = false
-                        combine_files.selectMultiple = true
-                        combine_files.open()
-                    }
-                }
-            }
-            Label {
-                text:  qsTr("Create Autoloader .exe from .signed images")
                 font.bold: true;
             }
         }

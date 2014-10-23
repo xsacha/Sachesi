@@ -125,12 +125,20 @@ Item {
             Layout.alignment: Qt.AlignBottom
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Button {
+            RowLayout {
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
+                CheckBox {
+                    checked: i.allowDowngrades
+                    onCheckedChanged: i.allowDowngrades = checked
+                    text: qsTr("Allow downgrades")
+                }
+
+                Button {
                 id: list_files
                 enabled: i.device !== null && i.device.setupComplete
                 text:  qsTr("Refresh")
                 onClicked: i.scanProps();
+                }
             }
             Component.onCompleted: { addTab(qsTr("Your Applications"), app_tab); addTab(qsTr("Log"), log_tab); }
         }

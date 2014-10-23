@@ -23,11 +23,11 @@
 #include <QNetworkInterface>
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
-    manager(nullptr), reply(nullptr), cookieJar(nullptr),
+    manager(nullptr), reply(nullptr), cookieJar(nullptr), device(nullptr),
     _wrongPass(false), _loginBlock(false),
     _state(0), _dlBytes(0), _dlTotal(0), _dgProgress(-1), _curDGProgress(-1),
-    _completed(false), _extractInstallZip(false), _installing(false), _restoring(false), _backing(false),
-    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr), device(nullptr)
+    _completed(false), _extractInstallZip(false), _allowDowngrades(false), _installing(false), _restoring(false), _backing(false),
+    _hadPassword(true), currentBackupZip(nullptr), _zipFile(nullptr)
 {
 #ifdef _MSC_VER
     WSAStartup(MAKEWORD(2,0), &wsadata);
@@ -103,7 +103,7 @@ void InstallNet::scanProps()
 
 BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
 {
-    BarInfo barInfo = {name, "", NotInstallableType};
+    BarInfo barInfo = {name, "", "", NotInstallableType};
     // Check if it's a 'hidden' file as we use these for temporary file downloads.
     if (QFileInfo(name).fileName().startsWith('.'))
         return barInfo;
@@ -127,11 +127,14 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
             type = newLine.split(':').last().simplified();
             if (type == "system" && barInfo.type == NotInstallableType)
                 barInfo.type = OSType;
-            else if (type != "patch")
-                break;
         }
         else if (newLine.startsWith("Package-Version:")) {
             barInfo.version = newLine.split(':').last().simplified();
+        }
+        else if (newLine.startsWith("Package-Id:")) {
+            barInfo.packageid = newLine.split(':').last().simplified();
+            if (type != "patch")
+                break;
         }
         else if (newLine.startsWith("System-Type:")) {
             if (newLine.split(':').last().simplified() == "radio")
@@ -193,7 +196,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
 
 BarInfo InstallNet::blitzCheck(QString name)
 {
-    BarInfo barInfo = {name, "", NotInstallableType};
+    BarInfo barInfo = {name, "", "", NotInstallableType};
     // Check if it's a 'hidden' file as we use these for temporary file downloads.
     if (QFileInfo(name).fileName().startsWith('.'))
         return barInfo;
@@ -251,6 +254,14 @@ void InstallNet::install(QList<QUrl> files)
 
     // Zip install
     if (files.count() == 1 && files.first().toLocalFile().endsWith(".zip")) {
+        // First, ensure it is a real zip
+        QFile testZip(files.first().toLocalFile());
+        testZip.open(QIODevice::ReadOnly);
+        if (testZip.read(2).toHex() != "504b") {
+            QMessageBox::information(nullptr, "Error", "The selected .zip file is, in fact, not a zip file.");
+            return;
+        }
+        testZip.close();
         // A collection of bars
         _extractInstallZip = true; emit extractInstallZipChanged();
         QuaZip zip(files.first().toLocalFile());
@@ -284,7 +295,7 @@ void InstallNet::install(QList<QUrl> files)
                 writeFile.write(QByteArray::fromHex("504b"));
                 while (!file.atEnd()) {
                     qApp->processEvents();
-                    writeFile.write(file.read(4096));
+                    writeFile.write(file.read(409600));
                 }
                 filenames.append(thisFile);
             }
@@ -329,15 +340,15 @@ void InstallNet::install(QList<QUrl> files)
         }
     }
     if (osCount > 1 || radioCount > 1) {
-        setNewLine(QString("%1Blitz detected. %2 OSes and %3 Radios")
-                   .arg((blitzOSIsSafe && blitzRadioIsSafe) ? "Safe " : "")
+        setNewLine(QString("%1 Blitz detected. %2 OSes and %3 Radios")
+                   .arg((blitzOSIsSafe && blitzRadioIsSafe) ? "Safe " : "Unsafe")
                    .arg(osCount)
                    .arg(radioCount));
         if (_knownConnectedRadioType == "" && radioCount > 1) {
-            QMessageBox::critical(nullptr, "Error", "Your device is reporting no known Radio. The blitz install is unable to detect the correct Radio for your system and cannot continue.");
+            QMessageBox::critical(nullptr, "Error", "Your device is reporting no Radio. The blitz install is unable to detect the correct Radio for your system and cannot continue.");
             return;
         } else if (_knownConnectedOSType == "" && osCount > 1) {
-            QMessageBox::critical(nullptr, "Error", "Your device is reporting no known OS. The blitz install is unable to detect the correct OS for your system and cannot continue.");
+            QMessageBox::critical(nullptr, "Error", "Your device is reporting no OS. The blitz install is unable to detect the correct OS for your system and cannot continue.");
             return;
         }
         if (!blitzOSIsSafe || !blitzRadioIsSafe) {
@@ -346,6 +357,7 @@ void InstallNet::install(QList<QUrl> files)
         }
     }
 
+    int skipCount = 0;
     // Detect everything (third pass)
     foreach(QString barFile, filenames)
     {
@@ -353,15 +365,31 @@ void InstallNet::install(QList<QUrl> files)
         if (info.name == "EXIT")
             return setNewLine("Install aborted.");
 
+        if (info.type == AppType) {
+            foreach(Apps* app, _appList) {
+                if (info.packageid == app->packageId() && !_allowDowngrades) {
+                    if (isVersionNewer(app->version(), info.version, true)) {
+                        setNewLine(QString("%1 was skipped. Newer version already installed (%2)").arg(info.name).arg(app->version()));
+                        info.type = NotInstallableType;
+                    }
+
+                    break;
+                }
+            }
+        }
         if (info.type != NotInstallableType)
             _installInfo.append(info);
+        else
+            skipCount++;
     }
     if (_installInfo.isEmpty()) {
-        setNewLine("None of the selected files were installable.");
+        setNewLine(QString("None of the selected files were installable. %2 were skipped")
+                   .arg(skipCount));
         return;
     }
-    setNewLine(QString("Installing <b>%1</b> .bar(s).")
-               .arg(_installInfo.count()));
+    setNewLine(QString("Installing <b>%1</b> .bar(s) %2 were skipped.")
+               .arg(_installInfo.count())
+               .arg(skipCount));
     install();
 }
 

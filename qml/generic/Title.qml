@@ -6,7 +6,7 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    title: qsTr("Sachesi") + " " + version
+    title: qsTr("Sachesi") + " " + version + " Alpha"
     width: 820
     height: 680
     minimumHeight: 540
@@ -48,7 +48,7 @@ ApplicationWindow {
         id: titleRow
         width: parent.width
         // Qt5.2 bug
-        onCountChanged: if (count > 3) currentIndex = 4
+        currentIndex: 4
         anchors {top: title.bottom; bottom: parent.bottom }
 
         Tab {

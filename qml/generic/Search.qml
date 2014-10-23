@@ -240,6 +240,7 @@ Item {
         }
 
         TextCoupleSelect {
+            visible: settings.advanced
             id: mode
             type: qsTr("Mode")
             listModel: [ qsTr("Upgrade"), qsTr("Debrick") ]

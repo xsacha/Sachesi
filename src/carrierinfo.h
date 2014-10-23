@@ -61,6 +61,8 @@ public slots:
         // Make sure the search is still relevant when the results come in
         QString mcc = _mcc;
         QString mnc = _mnc;
+        if (mcc == "" || mnc == "")
+            return;
 
         QNetworkRequest request(QString("http://appworld.blackberry.com/ClientAPI/checkcarrier?homemcc=%1&homemnc=%2&devicevendorid=-1&pin=0")
                                 .arg(_mcc)

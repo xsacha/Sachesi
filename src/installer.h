@@ -62,6 +62,7 @@ enum BarType {
 struct BarInfo {
     QString name;
     QString version;
+    QString packageid;
     BarType type;
 };
 
@@ -94,7 +95,8 @@ class InstallNet : public QObject {
     Q_PROPERTY(bool    restoring        MEMBER _restoring       WRITE setRestoring        NOTIFY restoringChanged)
     Q_PROPERTY(bool    backing          MEMBER _backing         WRITE setBacking          NOTIFY backingChanged)
     Q_PROPERTY(bool    firmwareUpdate   MEMBER _firmwareUpdate  WRITE setFirmwareUpdate   NOTIFY firmwareUpdateChanged)
-    Q_PROPERTY(bool    extractInstallZip MEMBER _extractInstallZip                  NOTIFY extractInstallZipChanged)
+    Q_PROPERTY(bool    extractInstallZip MEMBER _extractInstallZip                        NOTIFY extractInstallZipChanged)
+    Q_PROPERTY(bool    allowDowngrades  MEMBER _allowDowngrades WRITE setAllowDowngrades  NOTIFY allowDowngradesChanged)
     Q_PROPERTY(QStringList firmwareNames MEMBER _firmwareNames                            NOTIFY firmwareNamesChanged)
     Q_PROPERTY(QStringList firmwarePaths MEMBER _firmwarePaths                            NOTIFY firmwarePathsChanged)
     Q_PROPERTY(int     knownHWFamily    MEMBER _knownHWFamily                             NOTIFY appListChanged)
@@ -167,6 +169,7 @@ public:
     void setRestoring(const bool &restoring);
     void setBacking(const bool &backing);
     void setFirmwareUpdate(const bool &firmwareUpdate);
+    void setAllowDowngrades(const bool &allowDowngrades);
 signals:
     void passwordChanged();
     void newPassword(QString newPass);
@@ -193,6 +196,7 @@ signals:
     void firmwareNamesChanged();
     void firmwarePathsChanged();
     void extractInstallZipChanged();
+    void allowDowngradesChanged();
     void appListChanged();
     void deviceChanged();
 private slots:
@@ -267,6 +271,7 @@ private:
     bool _completed;
     bool _firmwareUpdate;
     bool _extractInstallZip;
+    bool _allowDowngrades;
     QList<BarInfo> _installInfo;
     QString _backupFileName;
     QStringList _currentApps;
