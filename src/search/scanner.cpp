@@ -34,13 +34,13 @@ void Scanner::reverseLookup(QString OSver) {
     _curRelease->setOsVersion(OSver);
     emit curReleaseChanged();
     QString query = QString("<srVersionLookupRequest version=\"2.0.0\" authEchoTS=\"%1\">"
-            "<clientProperties>"
-            "<hardware><pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><id>0x85002c0a</id></hardware>"
-            "<software><osVersion>%2</osVersion></software>"
-            "</clientProperties>"
-            "</srVersionLookupRequest>")
-                                                .arg(QDateTime::currentMSecsSinceEpoch())
-                                                .arg(OSver);
+                            "<clientProperties>"
+                            "<hardware><pin>0x2FFFFFB3</pin><bsn>1140011878</bsn><id>0x85002c0a</id></hardware>"
+                            "<software><osVersion>%2</osVersion></software>"
+                            "</clientProperties>"
+                            "</srVersionLookupRequest>")
+            .arg(QDateTime::currentMSecsSinceEpoch())
+            .arg(OSver);
     QNetworkRequest request;
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     QStringList serverList = QStringList("cs.sl");
@@ -91,17 +91,12 @@ void Scanner::newSRVersion() {
             } else {
                 QCryptographicHash hash(QCryptographicHash::Sha1);
                 hash.addData(swRelease.toLatin1());
-                QString hashResult = hash.result().toHex();
-                // Two servers! Two scans!
-                _scansActive = _scansActive + 1;
-                foreach(QString server, QStringList() << "production" << "betazone") {
-                    QString url = "http://cdn.fs.sl.blackberry.com/fs/qnx/" + server + "/" + QString(hash.result().toHex());
-                    QNetworkRequest request;
-                    request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
-                    request.setUrl(QUrl(url));
-                    QNetworkReply* replyTmp = _manager->head(request);
-                    connect(replyTmp, SIGNAL(finished()), this, SLOT(validateDownload()));
-                }
+                QString url = "http://cdn.fs.sl.blackberry.com/fs/qnx/production/" + QString(hash.result().toHex());
+                QNetworkRequest request;
+                request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
+                request.setUrl(QUrl(url));
+                QNetworkReply* replyTmp = _manager->head(request);
+                connect(replyTmp, SIGNAL(finished()), this, SLOT(validateDownload()));
             }
             reply->deleteLater();
             return;
@@ -147,7 +142,7 @@ void Scanner::generatePotentialLinks() {
     radioVersion += QString::number(build);
 
     QString potentialText = QString("Potential OS and Radio links for SR" + _curRelease->srVersion() + " (OS:" + _curRelease->osVersion() + " + Radio:" + radioVersion + ")\n\n"
-            "* Operating Systems *\n");
+                                    "* Operating Systems *\n");
     appendNewHeader(&potentialText, "QC8974", "Blackberry Passport");
     appendNewLink(&potentialText, "Debrick", "qc8974.factory_sfi.desktop", _curRelease->osVersion());
     appendNewLink(&potentialText, "Core",    "qc8974.factory_sfi", _curRelease->osVersion());
