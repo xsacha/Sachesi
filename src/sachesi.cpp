@@ -33,6 +33,9 @@
 #include "boot.h"
 #endif
 
+// Known bugs
+// Crash: If you are looking at a different tab when backup size results return
+
 // Feature and function TODO
 // TODO: Allow combining and installing directly from zip
 // TODO: Make extraction handle decent % tracking for QNX FS

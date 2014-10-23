@@ -26,9 +26,9 @@ ApplicationWindow {
     Label {
         visible: !mobile
         id: title
-        font.pointSize: 22
+        font.pointSize: 18
         text:  qsTr("SACHESI")
-        font.letterSpacing: (parent.width - 280) / text.length
+        font.letterSpacing: (parent.width / 2) / text.length
         font.weight: Font.DemiBold
         smooth: true
         anchors.horizontalCenter: parent.horizontalCenter
