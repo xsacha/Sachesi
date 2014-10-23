@@ -44,11 +44,21 @@ void InstallNet::setState(const int &state) {
 int InstallNet::dgMaxPos() const {
     return _downgradeInfo.count();
 }
-WRITE_QML(int,  curDGProgress, setCurDGProgress)
 WRITE_QML(QString, curInstallName, setCurInstallName)
 WRITE_QML(bool, installing, setInstalling)
 WRITE_QML(bool, firmwareUpdate, setFirmwareUpdate)
 WRITE_QML(bool, allowDowngrades, setAllowDowngrades)
+
+void InstallNet::setCurDGProgress(const int &curDGProgress) {
+    _curDGProgress = curDGProgress;
+    if (curDGProgress == -1) {
+        _dgProgress = -1;
+    } else {
+        qint64 curBytes = ((qint64)_curDGProgress * _dlTotal);
+        _dgProgress = (curBytes + _dlDoneBytes) / _dlOverallTotal;
+    }
+    emit curDGProgressChanged();
+}
 
 QQmlListProperty<Apps> InstallNet::appList()
 {

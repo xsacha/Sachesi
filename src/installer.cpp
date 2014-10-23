@@ -379,7 +379,7 @@ void InstallNet::install(QList<QUrl> files)
             foreach(Apps* app, _appList) {
                 if (!_allowDowngrades && info.packageid == app->packageId()) {
                     if (isVersionNewer(app->version(), info.version, true)) {
-                        setNewLine(QString("%1 was skipped. Newer version already installed (%2)").arg(info.name).arg(app->version()));
+                        setNewLine(QString("%1 was skipped. Newer version already installed (%2)").arg(QFileInfo(info.name).completeBaseName()).arg(app->version()));
                         info.type = NotInstallableType;
                     }
 
@@ -393,11 +393,11 @@ void InstallNet::install(QList<QUrl> files)
             skipCount++;
     }
     if (_installInfo.isEmpty()) {
-        setNewLine(QString("None of the selected files were installable. %2 were skipped")
+        setNewLine(QString("None of the selected files were installable. Skipped %2.")
                    .arg(skipCount));
         return;
     }
-    setNewLine(QString("Installing <b>%1</b> .bar(s) %2 were skipped.")
+    setNewLine(QString("Installing <b>%1</b> .bar(s). Skipped %2.")
                .arg(_installInfo.count())
                .arg(skipCount));
     install();
@@ -799,8 +799,6 @@ void InstallNet::installProgress(qint64 pread, qint64)
         return;
     _dlBytes = 50*pread;
     setCurDGProgress(qMin((int)50, (int)(_dlBytes / _dlTotal)));
-    qint64 curBytes = ((qint64)_curDGProgress * _dlTotal);
-    _dgProgress = (curBytes + _dlDoneBytes) / _dlOverallTotal;
 }
 
 void InstallNet::backupProgress(qint64 pread, qint64)
@@ -1162,14 +1160,12 @@ void InstallNet::restoreReply()
 
             BarInfo info = _installInfo.at(_downgradePos);
             if (info.type == OSType)
-                setCurInstallName("Sending " + info.version + " Core OS");
+                setCurInstallName(info.version + " Core OS");
             else if (info.type == RadioType)
-                setCurInstallName("Sending " + info.version + " Radio");
+                setCurInstallName(info.version + " Radio");
             else {
                 // TODO: Extract naming from bar too, if possible
-                QString literal_name = compressedFile->fileName().split('/').last();
-                QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-                setCurInstallName("Sending " + fileParts.at(0));
+                setCurInstallName(QFileInfo(info.name).completeBaseName());
             }
 
             if (info.type == RadioType)
@@ -1241,9 +1237,7 @@ void InstallNet::restoreReply()
                         else if (info.type == RadioType)
                             setCurInstallName(info.version + " Radio");
                         else {
-                            QString literal_name = compressedFile->fileName().split('/').last();
-                            QStringList fileParts = literal_name.split('-',QString::SkipEmptyParts);
-                            setCurInstallName(fileParts.at(0));
+                            setCurInstallName(QFileInfo(info.name).completeBaseName());
                         }
 
                         QNetworkRequest request;
@@ -1265,7 +1259,6 @@ void InstallNet::restoreReply()
                     setNewLine("<br>While sending: " + _downgradeInfo.at(_downgradePos).split("/").last());
                     setNewLine("&nbsp;&nbsp;Error: " + errorText);
                     setInstalling(false);
-                    _dgProgress = -1;
                     setCurDGProgress(-1);
                 }
             }
@@ -1276,8 +1269,6 @@ void InstallNet::restoreReply()
                 else
                     setCurDGProgress(inProgress ? (50 + element.toInt()/2) : 0);
 
-                qint64 curBytes = ((qint64)_curDGProgress * _dlTotal);
-                _dgProgress = (curBytes + _dlDoneBytes) / _dlOverallTotal;
                 bool resend = false;
                 if (device->os.startsWith("2.")) // Playbook OS support
                     resend = !data.contains("100");
@@ -1319,7 +1310,6 @@ void InstallNet::restoreReply()
     else if (xml.name() == "UpdateEnd") {
         setInstalling(false);
         setNewLine("Completed Update.");
-        _dgProgress = -1;
         setCurDGProgress(-1);
     }
     else if (xml.name() == "BackupCheck")
@@ -1461,7 +1451,6 @@ void InstallNet::resetVars()
         emit deviceChanged();
     }
     setState(0);
-    _dgProgress = -1;
     setCurDGProgress(-1);
     _dlBytes = 0;
     _dlTotal = 0;

@@ -121,21 +121,25 @@ Item {
                     onClicked: split_files.open()
                 }
                 CheckBox {
+                    visible: settings.advanced
                     id: userSelect
                     text:  qsTr("User")
                     checked: true
                 }
                 CheckBox {
+                    visible: settings.advanced
                     id: osSelect
                     text:  qsTr("OS")
                     checked: true
                 }
                 CheckBox {
+                    visible: settings.advanced
                     id: radioSelect
                     text:  qsTr("Radio")
                     checked: true
                 }
                 CheckBox {
+                    visible: settings.advanced
                     id: ifsSelect
                     text:  "IFS"
                     checked: true
@@ -147,8 +151,23 @@ Item {
                 }
             }
             Label {
-                text:  qsTr("Split signed images from autoloader .exe, .bar or .zip")
+                text:  qsTr("Split .signed from autoloader .exe, .bar or .zip")
                 font.bold: true;
+            }
+        }
+        // Extract Apps
+        ColumnLayout {
+            Button {
+                text:  qsTr("Extract Apps")
+                enabled: !p.splitting
+                onClicked: if (!p.splitting) p.extractImage(2, 2);
+            }
+            Label {
+                text:  qsTr("Extracts all bar archives from a debrick/repair .signed")
+                font.bold: true;
+            }
+            Label {
+                text: qsTr("Note: To extract apps from a .bar, please extract it first (above)")
             }
         }
         // Extract Image
@@ -178,17 +197,6 @@ Item {
             }
             Label {
                 text:  qsTr("Extracts filesystem image")
-                font.bold: true;
-            }
-        }
-        ColumnLayout {
-            Button {
-                text:  qsTr("Extract Apps")
-                enabled: !p.splitting
-                onClicked: if (!p.splitting) p.extractImage(2, 2);
-            }
-            Label {
-                text:  qsTr("Extracts all bar archives from a debrick/repair image")
                 font.bold: true;
             }
         }
