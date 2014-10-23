@@ -144,6 +144,11 @@ Item {
         anchors.leftMargin: 10
         Layout.fillHeight: true
         height: (parent.height * 4) / 6
+        Label {
+            font.pointSize: 14
+            text: "Whitelist Settings"
+        }
+
         TextCouple {
             id: country
             type: qsTr("Country")

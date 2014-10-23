@@ -145,6 +145,12 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
 
     // Check if we are about to make a huge mistake!
     if (barInfo.type == OSType) {
+        if (!_allowDowngrades && isVersionNewer(device->os, barInfo.version, true)) {
+            setNewLine(QString("OS %1 skipped. Newer version is installed(%2)").arg(barInfo.version).arg(device->os));
+            barInfo.type = NotInstallableType;
+            return barInfo;
+        }
+
         QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
         if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
             if (blitz) {
@@ -163,6 +169,11 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
             }
         }
     } else if (barInfo.type == RadioType) {
+        if (!_allowDowngrades && isVersionNewer(device->radio, barInfo.version, true)) {
+            setNewLine(QString("Radio %1 skipped. Newer version is installed(%2)").arg(barInfo.version).arg(device->radio));
+            barInfo.type = NotInstallableType;
+            return barInfo;
+        }
         QString installableRadio = appName.split("radio.").last().remove(".omadm");
         if (_knownConnectedRadioType != "" && installableRadio != _knownConnectedRadioType) {
             if (blitz) {
@@ -364,10 +375,9 @@ void InstallNet::install(QList<QUrl> files)
         BarInfo info = checkInstallableInfo(barFile, osCount > 1 || radioCount > 1);
         if (info.name == "EXIT")
             return setNewLine("Install aborted.");
-
-        if (info.type == AppType) {
+        else if (info.type == AppType) {
             foreach(Apps* app, _appList) {
-                if (info.packageid == app->packageId() && !_allowDowngrades) {
+                if (!_allowDowngrades && info.packageid == app->packageId()) {
                     if (isVersionNewer(app->version(), info.version, true)) {
                         setNewLine(QString("%1 was skipped. Newer version already installed (%2)").arg(info.name).arg(app->version()));
                         info.type = NotInstallableType;
@@ -661,7 +671,7 @@ void InstallNet::login()
     int flags = QNetworkInterface::IsUp | QNetworkInterface::IsRunning | QNetworkInterface::CanBroadcast | QNetworkInterface::CanMulticast;
     foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
     {
-        if ((inter.flags() & flags) == flags && !inter.flags().testFlag(QNetworkInterface::IsLoopBack))
+        if ((inter.flags() & (flags | QNetworkInterface::IsLoopBack)) == flags)
         {
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
             {
