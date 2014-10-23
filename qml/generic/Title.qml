@@ -50,7 +50,6 @@ ApplicationWindow {
         // Qt5.2 bug requires timer to redraw layout correctly
         Timer {
             interval: 10 // Any number works
-            repeat: false;
             running: true
             onTriggered: titleRow.currentIndex = 4
         }

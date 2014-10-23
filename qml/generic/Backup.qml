@@ -28,7 +28,7 @@ Item {
             id: options
             property int value: 0
             RowLayout {
-                visible: /*!i.backMethods &&*/ attemptLookup.running
+                visible: attemptLookup.running
                 Text {
                     text:  qsTr("Refreshing Backup Sizes")
                     font.pointSize: 12
@@ -66,6 +66,7 @@ Item {
 
         Button {
             visible: /*!i.backMethods &&*/ !attemptLookup.running
+            enabled: !i.installing && !i.backing && !i.restoring && i.device !== null && i.device.bbid !== ""
             text:  qsTr("Refresh Backup Sizes")
             onClicked: { totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
         }

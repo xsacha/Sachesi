@@ -147,11 +147,18 @@ Item {
                     text: (i.device === null) ? qsTr("Unknown") : (i.device.refurbDate === "" ? qsTr("Never") : i.device.refurbDate)
                 }
                 Button {
-                    visible: refurbText.text !== qsTr("Unknown") && refurbText.text !== qsTr("Never")
-                    text: qsTr("Clear")
+                    property bool isSet: refurbText.text !== qsTr("Never")
+                    visible: refurbText.text !== qsTr("Unknown")
+                    text: isSet ? qsTr("Clear") : qsTr("Set")
                     onClicked: {
-                        i.setActionProperty("RefurbDate", "0")
-                        i.device.refurbDate = "";
+                        var date = Math.floor(new Date().getTime() / 1000)
+                        i.setActionProperty("RefurbDate", isSet ? "0" : date.toString())
+                        updateProps.start()
+                    }
+                    Timer {
+                        id: updateProps
+                        interval: 100
+                        onTriggered: i.scanProps()
                     }
                 }
             }
