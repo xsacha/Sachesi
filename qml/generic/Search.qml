@@ -51,7 +51,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 enabled: !p.scanning
                 text: p.scanning ? qsTr("Searching...") : qsTr("Search")
-                onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem, server.selectedItem  /*, version.selectedItem*/) }
+                onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem /*, server.selectedItem , version.selectedItem*/) }
             }
             RadioButton {
                 id: delta
@@ -146,7 +146,12 @@ Item {
         height: (parent.height * 4) / 6
         Label {
             font.pointSize: 14
-            text: "Whitelist Settings"
+            text: qsTr("Whitelist Settings")
+            font.bold: true
+        }
+        Label {
+            visible: !settings.advanced
+            text: qsTr("Finds updates approved by other carriers")
         }
 
         TextCouple {
@@ -251,12 +256,12 @@ Item {
             listModel: [ qsTr("Upgrade"), qsTr("Debrick") ]
         }
 
-        TextCoupleSelect {
+        /*TextCoupleSelect {
             visible: settings.advanced
             id: server
             type: qsTr("Server")
             listModel: [ qsTr("Production"), qsTr("Beta"), qsTr("Beta 2"), qsTr("Alpha"), qsTr("Alpha 2") ]
-        }
+        }*/
 
         /*TextCoupleSelect {
             id: version

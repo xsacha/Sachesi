@@ -167,7 +167,7 @@ Item {
                 font.bold: true;
             }
             Label {
-                text: qsTr("Note: To extract apps from a .bar, please extract it first (above)")
+                text: qsTr("Note: To extract apps from a .bar, please split it first (above)")
             }
         }
         // Extract Image
