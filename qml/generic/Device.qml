@@ -8,8 +8,6 @@ Item {
     id: main
     ColumnLayout {
         anchors { fill: parent; margins: 15 }
-        Layout.fillHeight: true
-        Layout.fillWidth: true
         Label {
             text: qsTr("Device Information")
             font.pointSize: 14
@@ -161,6 +159,14 @@ Item {
                         onTriggered: i.scanProps()
                     }
                 }
+            }
+
+            Label {
+                text: qsTr("Disk Space Free")
+                font.bold: true
+            }
+            Label {
+                text: (i.device === null || i.device.freeSpace === 0) ? qsTr("Unknown") : ((i.device.freeSpace / 1024 / 1024 / 1024).toFixed(3) + qsTr(" GB"))
             }
         }
     }

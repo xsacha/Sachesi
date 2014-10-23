@@ -421,6 +421,15 @@ void InstallNet::install()
         _dlOverallTotal = 0;
         for(QString filename : _downgradeInfo)
             _dlOverallTotal += QFile(filename).size();
+        if (_dlOverallTotal * 1.5 > device->freeSpace) {
+            QMessageBox::critical(nullptr, "Free Space", QString("Sachesi has determined you may not have enough free space on your device to continue this update.\n"
+                                                                 "It is estimated that you would need %1 GB but you only have %2 GB. Please free up some space.")
+                                  .arg(QString::number((_dlOverallTotal * 1.5) / 1024 / 1024 / 1024, 'g', 3))
+                                  .arg(QString::number((device->freeSpace * 1.0) / 1024 / 1024 / 1024, 'g', 3)));
+            setNewLine("Install aborted. No free space.");
+            setInstalling(false);
+            return;
+        }
 
         postData.addQueryItem("mode", _firmwareUpdate ? "os" : "bar");
         postData.addQueryItem("size", QString::number(_dlOverallTotal));
@@ -1066,6 +1075,8 @@ void InstallNet::restoreReply()
                 }
                 else if (xml.name() == "RefurbDate") {
                     device->setRefurbDate(xml.readElementText());
+                } else if (xml.name() == "FreeApplicationSpace") {
+                    device->setFreeSpace(xml.readElementText().toLongLong());
                 }
             }
         }

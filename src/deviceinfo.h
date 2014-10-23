@@ -12,13 +12,14 @@ class DeviceInfo : public QObject {
     Q_PROPERTY(QString name           MEMBER name          WRITE setName          NOTIFY nameChanged)
     Q_PROPERTY(QString pin            MEMBER pin           WRITE setPin           NOTIFY pinChanged)
     Q_PROPERTY(QString hw             MEMBER hw            WRITE setHw            NOTIFY hwChanged)
-    Q_PROPERTY(int     hwFamily       MEMBER hwFamily      WRITE setHwFamily      NOTIFY hwFamilyChanged())
+    Q_PROPERTY(int     hwFamily       MEMBER hwFamily      WRITE setHwFamily      NOTIFY hwFamilyChanged)
     Q_PROPERTY(QString bbid           MEMBER bbid          WRITE setBbid          NOTIFY bbidChanged)
-    Q_PROPERTY(int     protocol       MEMBER protocol      WRITE setProtocol      NOTIFY protocolChanged())
-    Q_PROPERTY(bool    devMode        MEMBER devMode       WRITE setDevMode       NOTIFY devModeChanged())
+    Q_PROPERTY(int     protocol       MEMBER protocol      WRITE setProtocol      NOTIFY protocolChanged)
+    Q_PROPERTY(bool    devMode        MEMBER devMode       WRITE setDevMode       NOTIFY devModeChanged)
     Q_PROPERTY(bool    setupComplete  MEMBER setupComplete WRITE setSetupComplete NOTIFY setupCompleteChanged())
     Q_PROPERTY(QString restrictions   MEMBER restrictions  WRITE setRestrictions  NOTIFY restrictionsChanged)
     Q_PROPERTY(QString refurbDate     MEMBER refurbDate    WRITE setRefurbDate    NOTIFY refurbDateChanged)
+    Q_PROPERTY(quint64 freeSpace      MEMBER freeSpace     WRITE setFreeSpace     NOTIFY freeSpaceChanged)
 public:
     DeviceInfo()
         : QObject()
@@ -27,6 +28,7 @@ public:
         , hwFamily(0)
         , protocol(1)
         , devMode(false)
+        , freeSpace(0)
     {
     }
     QString friendlyName;
@@ -43,6 +45,7 @@ public:
     bool setupComplete;
     QString restrictions;
     QString refurbDate;
+    quint64 freeSpace;
     void setFriendlyName(const QString &input) { friendlyName = input; emit friendlyNameChanged(); }
     void setOs(const QString &input) { os = input; emit osChanged(); }
     void setRadio(const QString &input) { radio = input; emit radioChanged(); }
@@ -63,6 +66,7 @@ public:
             refurbDate = QDateTime::fromTime_t(input.toInt()).toString();
         emit refurbDateChanged();
     }
+    void setFreeSpace(const quint64 &input) { freeSpace = input; emit freeSpaceChanged(); }
 
 signals:
     void friendlyNameChanged();
@@ -79,6 +83,7 @@ signals:
     void setupCompleteChanged();
     void restrictionsChanged();
     void refurbDateChanged();
+    void freeSpaceChanged();
 
 };
 Q_DECLARE_METATYPE(DeviceInfo* );
