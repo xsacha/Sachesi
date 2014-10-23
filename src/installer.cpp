@@ -133,12 +133,12 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
         }
         else if (newLine.startsWith("Package-Id:")) {
             barInfo.packageid = newLine.split(':').last().simplified();
-            if (type != "patch")
-                break;
         }
         else if (newLine.startsWith("System-Type:")) {
             if (newLine.split(':').last().simplified() == "radio")
                 barInfo.type = RadioType;
+        } else if (newLine.startsWith("Archive-Asset-Name:")) {
+            // A sign we need to get out of here when it is listing assets
             break;
         }
     }
@@ -280,7 +280,8 @@ void InstallNet::install(QList<QUrl> files)
 
         QuaZipFile file(&zip);
 
-        QString baseName = QFileInfo(zip.getZipName()).completeBaseName();
+        QString baseName = QFileInfo(zip.getZipName()).absoluteFilePath();
+        baseName.chop(4);
         if (!QDir(baseName).mkpath("."))
             QMessageBox::information(nullptr, "Error", "Was unable to extract the zip container.");
 
@@ -306,7 +307,7 @@ void InstallNet::install(QList<QUrl> files)
                 writeFile.write(QByteArray::fromHex("504b"));
                 while (!file.atEnd()) {
                     qApp->processEvents();
-                    writeFile.write(file.read(409600));
+                    writeFile.write(file.read(4096000));
                 }
                 filenames.append(thisFile);
             }
