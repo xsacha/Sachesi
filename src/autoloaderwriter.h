@@ -74,7 +74,7 @@ public:
         file.open(QIODevice::ReadOnly);
         while (!file.atEnd())
         {
-            QByteArray tmp = file.read(BUFFER_LEN);
+            QByteArray tmp = file.read(FAST_BUFFER_LEN);
             if (tmp.size() < 0)
                 break;
             _read += 100 * write(tmp);

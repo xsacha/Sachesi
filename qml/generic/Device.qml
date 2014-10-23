@@ -14,6 +14,7 @@ Item {
             font.bold: true
         }
         GroupBox {
+            visible: i.device !== null
             title:  qsTr("Tools")
             RowLayout {
                 Button {
