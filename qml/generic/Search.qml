@@ -107,7 +107,7 @@ Item {
                 }
 
                 listModel: ListModel {
-                    ListElement { text:  qsTr("As Searched") }
+                    ListElement { text:  "As Searched" }
                 }
             }
         }
