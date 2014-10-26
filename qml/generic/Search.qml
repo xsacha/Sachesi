@@ -107,7 +107,7 @@ Item {
                 }
 
                 listModel: ListModel {
-                    ListElement { text:  "As Searched" }
+                    ListElement { text:  qsTr("As Searched") }
                 }
             }
         }
@@ -349,8 +349,8 @@ Item {
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
-        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? "All (" + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + " Apps"
-                                     + ((p.updateNeededCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedNeededCount == p.updateAppNeededCount) ? "All (" + p.updateAppNeededCount + ")" : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount + " Apps") : "") + "        "
+        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? qsTr("All (") + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + qsTr(" Apps")
+                                     + ((p.updateNeededCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedNeededCount == p.updateAppNeededCount) ? qsTr("All (") + p.updateAppNeededCount + ")" : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount + qsTr(" Apps")) : "") + "        "
         title: selectedMsg
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
@@ -444,7 +444,7 @@ Item {
                         anchors.right: parent.right
                         width: sizeHint.width
                         horizontalAlignment: Text.AlignRight
-                        text: (size / 1024 / 1024).toFixed(1) + " MB"
+                        text: (size / 1024 / 1024).toFixed(1) + qsTr(" MB")
                         font.pointSize: 12;
                     }
                 }
