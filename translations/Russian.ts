@@ -142,7 +142,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="82"/>
         <source>Choose backup filename</source>
-        <translation>Выберите имя файла резервной копии</translation>
+        <translation>Введите имя файла резервной копии</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
@@ -192,7 +192,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source> Backup (</source>
-        <translation> Резервное копирование (</translation>
+        <translation> резервной копии (</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="18"/>
         <source>Tools</source>
-        <translation>Настройки</translation>
+        <translation>Инструменты   </translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="22"/>
@@ -273,7 +273,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="44"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation>Имя устройства</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="49"/>
@@ -608,7 +608,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sent </source>
-        <translation>Отправить </translation>
+        <translation>Отправка </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
