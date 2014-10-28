@@ -178,7 +178,7 @@ Item {
                 visible: appView.count == 0
                 anchors.centerIn: parent
                 font.pointSize: 14
-                text: i.device.setupComplete ? qsTr("Use 'Refresh' to update list") : qsTr("Your device has not completed setup")
+                text: (i.device === null) ? qsTr("Device disconnected") : (i.device.setupComplete ? qsTr("Use 'Refresh' to update list") : qsTr("Your device has not completed setup"))
             }
             ScrollView {
                 anchors.fill: parent

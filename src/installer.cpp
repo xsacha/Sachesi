@@ -506,7 +506,9 @@ void InstallNet::backup()
 
         QuaZipFile* manifest;
         manifest = new QuaZipFile(currentBackupZip);
-        manifest->open(QIODevice::WriteOnly, QuaZipNewInfo("Manifest.xml"), nullptr, 0, 8);
+        QuaZipNewInfo newInfo("Manifest.xml");
+        newInfo.setPermissions(QFileDevice::Permission(0x7774));
+        manifest->open(QIODevice::WriteOnly, newInfo);
         QString manifestXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 "<BlackBerry_Backup><Version>3.0</Version><Client platform=\"SachESI\" osversion=\"Microsoft Windows NT 6.1.7601 Service Pack 1\" dtmversion=\"2.0.0.0\"/>"
                 "<SourceDevice pin=\"" + device->pin + "\"><Platform type=\"QNX\" version=\"10.0.0.0\"/></SourceDevice>"
@@ -1332,7 +1334,9 @@ void InstallNet::restoreReply()
             postData.addQueryItem("type", _back.curMode());
             reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
             _zipFile = new QuaZipFile(currentBackupZip);
-            _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), nullptr, 0, 8);
+            QuaZipNewInfo newInfo("Archive/" + _back.curMode() + ".tar");
+            newInfo.setPermissions(QFileDevice::Permission(0x7774));
+            _zipFile->open(QIODevice::WriteOnly, newInfo);
             connect(reply, SIGNAL(downloadProgress(qint64,qint64)),this, SLOT(backupProgress(qint64, qint64)));
             connect(reply, &QNetworkReply::readyRead, [=]() {
                 _zipFile->write(reply->readAll());
@@ -1387,7 +1391,9 @@ void InstallNet::restoreReply()
                 {
                     _back.setMaxSize(xml.readElementText().toLongLong());
                     _zipFile = new QuaZipFile(currentBackupZip);
-                    _zipFile->open(QIODevice::WriteOnly, QuaZipNewInfo("Archive/" + _back.curMode() + ".tar"), nullptr, 0, 8);
+                    QuaZipNewInfo newInfo("Archive/" + _back.curMode() + ".tar");
+                    newInfo.setPermissions(QFileDevice::Permission(0x7774));
+                    _zipFile->open(QIODevice::WriteOnly, newInfo);
                     connect(reply, &QNetworkReply::readyRead, [=]() {
                         _zipFile->write(reply->readAll());
                     });
