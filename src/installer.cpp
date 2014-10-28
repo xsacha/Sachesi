@@ -255,6 +255,7 @@ BarInfo InstallNet::blitzCheck(QString name)
             barInfo.name = "BAD";
         }
     }
+    return barInfo;
 }
 
 void InstallNet::install(QList<QUrl> files)
