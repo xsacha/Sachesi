@@ -11,7 +11,7 @@ Item {
     property string details: ""
     property string lasterror: "\n"
     onNewLineChanged: details += i.newLine
-    visible: i.device !== null
+    visible: i.device !== null && !i.loginBlock && !i.wrongPass
     anchors.fill: parent
 
     Button {
