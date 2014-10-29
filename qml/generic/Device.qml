@@ -167,7 +167,7 @@ Item {
                 font.bold: true
             }
             Label {
-                text: (i.device === null || i.device.freeSpace === 0) ? qsTr("Unknown") : ((i.device.freeSpace / 1024 / 1024 / 1024).toFixed(3) + qsTr(" GB"))
+                text: (i.device === null || i.device.freeSpace === 0) ? qsTr("Unknown") : qsTr("%1 GB").arg((i.device.freeSpace / 1024 / 1024 / 1024).toFixed(3))
             }
         }
     }

@@ -44,7 +44,7 @@ Item {
                 echoMode: showing ? TextInput.Normal : TextInput.Password
             }
             Button {
-                tooltip: passText.showing ? qsTr("Hide password") : qsTr("Show password")
+                tooltip: passText.showing ? qsTr("Hide Password") : qsTr("Show Password")
                 anchors { left: passText.right; leftMargin: 10; verticalCenter: passText.verticalCenter }
                 iconSource: "showpass.png"
                 onClicked: passText.showing = !passText.showing
@@ -80,11 +80,11 @@ Item {
                                                 }
 
                     visible: numDevices
-                    text:  qsTr("Detected ") + numDevices + qsTr(" Blackberry USB device(s) in ") + deviceName + qsTr(" mode.")
+                    text: qsTr("Detected %1 Blackberry USB device(s) in %2 mode.").arg(numDevices).arg(deviceName)
                 }
                 Label {
                     visible: i.possibleDevices
-                    text:  qsTr("Talking to " )+ i.possibleDevices + qsTr(" possible device(s).")
+                    text: qsTr("Talking to %1 possible device(s).").arg(i.possibleDevices)
                 }
             }
             BusyIndicator {

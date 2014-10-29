@@ -71,7 +71,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             font.bold: true
             onMessageChanged: if (message.length && message.length < 5)
-                                  text = qsTr("Server did not respond as expected") +" [" + message + "]."
+                                  text = qsTr("Server did not respond as expected [%1].").arg(message)
                               else if (message === "Success")
                                   text = qsTr("Success. No updates were available.")
                               else
@@ -127,7 +127,7 @@ Item {
             }
             Button {
                 visible: download.running
-                text:  qsTr("View Download (") + download.progress + "%)"
+                text:  qsTr("View Download (%1%)").arg(download.progress)
                 onClicked: downloadWin.visible = true
             }
             Button {
@@ -303,7 +303,7 @@ Item {
             title:  qsTr("Options")
             MenuItem {
                 enabled: p.updateCheckedCount != p.updateAppCount
-                text: "Check All"
+                text: qsTr("Check All")
                 onTriggered: {
                     options_menu.checkAll();
                     for (var i = 0; i < p.updateAppCount; i++)
@@ -312,7 +312,7 @@ Item {
             }
             MenuItem {
                 enabled: p.updateCheckedCount > 0
-                text: "Uncheck All"
+                text: qsTr("Uncheck All")
                 onTriggered: {
                     options_menu.uncheckAll()
                     for (var i = 0; i < p.updateAppCount; i++)
@@ -320,7 +320,7 @@ Item {
                 }
             }
         }
-        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title:  qsTr("Name" )}
+        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title:  qsTr("Name"); }
         TableViewColumn { id: verCol;  role: "version"; title:  qsTr("Version"; resizable: false); }
         TableViewColumn { id: sizeCol;  role: "size"; title:  qsTr("Size"); resizable: false; }
         //onModelChanged: { verCol.resizeToContents(); sizeCol.resizeToContents(); }
@@ -337,7 +337,7 @@ Item {
 
         itemDelegate: Text {
             property variant value: styleData.value
-            text: (styleData.role === "size") ? (value / 1024 / 1024).toFixed(1) + " MB" : value
+            text: styleData.role === "size" ? qsTr("%1 MB").arg((value / 1024 / 1024).toFixed(1)) : value
             horizontalAlignment: (styleData.role === "size") ? Qt.AlignRight : Qt.AlignLeft
             clip: true
         }
@@ -349,8 +349,9 @@ Item {
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
-        property string selectedMsg: qsTr("Selected: ") + ((p.updateCheckedCount == p.updateAppCount) ? qsTr("All (") + p.updateAppCount + ")" : p.updateCheckedCount + "/" + p.updateAppCount) + qsTr(" Apps")
-                                     + ((p.updateNeededCount !== p.updateAppCount) ? qsTr(". Needed: ") + ((p.updateCheckedNeededCount == p.updateAppNeededCount) ? qsTr("All (") + p.updateAppNeededCount + ")" : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount + qsTr(" Apps")) : "") + "        "
+        property string selectedMsg: qsTr("Selected: %1 Apps").arg(p.updateCheckedCount == p.updateAppCount ? qsTr("All (%1)").arg(p.updateAppCount) : (p.updateCheckedCount + "/" + p.updateAppCount))
+                                     + (p.updateNeededCount !== p.updateAppCount ? (" | " + qsTr("Needed: %1 Apps").arg(p.updateCheckedNeededCount == p.updateAppNeededCount ? qsTr("All (%1)").arg(p.updateAppNeededCount) : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount)) : "")
+                                     + "        "
         title: selectedMsg
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }
@@ -444,7 +445,7 @@ Item {
                         anchors.right: parent.right
                         width: sizeHint.width
                         horizontalAlignment: Text.AlignRight
-                        text: (size / 1024 / 1024).toFixed(1) + qsTr(" MB")
+                        text: qsTr("%1 MB").arg((size / 1024 / 1024).toFixed(1))
                         font.pointSize: 12;
                     }
                 }

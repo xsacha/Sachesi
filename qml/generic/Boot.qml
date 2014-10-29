@@ -62,7 +62,16 @@ Column {
                 spacing: 3
 
                 delegate: Label {
-                    text: "Blackberry " + (modelData == "1" ? "Bootloader" : ((modelData == "8013") ? "USB (Unix)" : (modelData == "8017" ? "USB (Autodetect)" : "USB (Windows)")));
+                    text: switch (modelData) {
+                        case "1":
+                            return "BlackBerry Bootloader";
+                        case "8013":
+                            return "BlackBerry USB (Unix)";
+                        case "8017":
+                            return "BlackBerry USB (Autodetect)";
+                        default:
+                            return "BlackBerry USB (Windows)";
+                    }
                     font.pointSize: 12
                 }
             }
