@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
 Window {
-    title: qsTr("Sachesi") + " " + version + " - " + qsTr("Version Lookup")
+    title: "Sachesi " + version + " – " + qsTr("Version Lookup")
     visible: false
     onVisibleChanged: if (visible) {
                           x = window.x + (window.width - width) / 2
@@ -65,7 +65,7 @@ Window {
             visible: scanner.curRelease !== null && scanner.curRelease.srVersion !== ""
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text:  qsTr("SR: ") + (scanner.curRelease !== null ? scanner.curRelease.srVersion : "") + " | " + qsTr("OS: ") + (scanner.curRelease !== null ? scanner.curRelease.osVersion : "")
+                text: qsTr("SR: %1").arg(scanner.curRelease !== null ? scanner.curRelease.srVersion : "") + " | " + qsTr("OS: %1").arg(scanner.curRelease !== null ? scanner.curRelease.osVersion : "")
                 font.pointSize: 12
             }
             Label {
@@ -80,7 +80,7 @@ Window {
                         if (scanner.curRelease.activeServers & 4)
                             ret += qsTr("Alpha") + " "
                         if (ret.length > 0)
-                            ret = qsTr("Servers: ") + ret
+                            ret = qsTr("Servers:") + " " + ret
                     }
                     return ret;
                 }

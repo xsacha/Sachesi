@@ -17,7 +17,7 @@ Item {
     Button {
         visible: i.dgProgress >= 0 && !installWin.visible
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        text:  qsTr("View Install (") + i.dgProgress + ")"
+        text:  qsTr("View Install (%1)").arg(i.dgProgress)
         onClicked: installWin.visible = true
     }
     Window {
@@ -54,7 +54,7 @@ Item {
             overallValue: i.dgProgress
             curId: i.dgPos + 1
             maxId: i.dgMaxPos
-            text: ((i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending ") : qsTr("Installing ")) : qsTr("Sent ")) + i.curInstallName
+            text: ((i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending %1").arg(i.curInstallName) : qsTr("Installing %1").arg(i.curInstallName)) : qsTr("Sent %1").arg(i.curInstallName))
         }
     }
 
@@ -94,7 +94,7 @@ Item {
                 text:  qsTr("Install Folder")
                 onClicked: {
                     if (i.installing)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
                     else if (i.backing || i.restoring)
                         details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
                     else {
@@ -108,7 +108,7 @@ Item {
                 text:  qsTr("Install Files")
                 onClicked: {
                     if (i.installing)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>;")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
                     else if (i.backing || i.restoring)
                         details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
                     else {

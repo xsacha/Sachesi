@@ -24,14 +24,14 @@ TabView {
             }
             Text {
                 x: 10
-                text:  qsTr("<b>Current PIN</b> " + i.knownPIN)
+                text: qsTr("<b>Current PIN</b> %1").arg(i.knownPIN)
                 font.pointSize: 10
             }
             Row {
                 spacing: 20
                 TextCouple {
                     id: repin
-                    type: "New PIN"
+                    type: qsTr("New PIN")
                     value: "2CCC0000"
                 }
                     Button {

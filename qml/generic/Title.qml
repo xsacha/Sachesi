@@ -6,7 +6,7 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    title: qsTr("Sachesi") + " " + version + " Alpha"
+    title: "Sachesi " + version + " " + qsTr("Alpha")
     width: 820
     height: 680
     minimumHeight: 540
@@ -27,7 +27,7 @@ ApplicationWindow {
         visible: !mobile
         id: title
         font.pointSize: 18
-        text:  qsTr("SACHESI")
+        text: "SACHESI"
         font.letterSpacing: (parent.width / 2) / text.length
         font.weight: Font.DemiBold
         smooth: true

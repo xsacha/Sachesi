@@ -24,16 +24,16 @@ Item {
                     property int splitting: p.splitting
                     onSplittingChanged: {
                         switch(splitting) {
-                        case 1: splitType = qsTr("Splitting Autoloader "); break;
-                        case 2: splitType = qsTr("Combining Autoloader "); break;
-                        case 3: splitType = qsTr("Extracting Image "); break;
-                        case 4: splitType = qsTr("Extracting Apps "); break;
-                        case 5: splitType = qsTr("Fetching required files "); break;
-                        default: splitType = qsTr("Waiting "); break;
+                        case 1: splitType = qsTr("Splitting Autoloader"); break;
+                        case 2: splitType = qsTr("Combining Autoloader"); break;
+                        case 3: splitType = qsTr("Extracting Image"); break;
+                        case 4: splitType = qsTr("Extracting Apps"); break;
+                        case 5: splitType = qsTr("Fetching required files"); break;
+                        default: splitType = qsTr("Waiting"); break;
                         }
                     }
 
-                    text: splitType + ((p.splitting == 5) ? "" : "(" + p.splitProgress + "%)");
+                    text: splitType + ((p.splitting == 5) ? "" : " (" + p.splitProgress + "%)");
                     font.pointSize: 14
                 }
                 BusyIndicator {
