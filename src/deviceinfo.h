@@ -20,6 +20,7 @@ class DeviceInfo : public QObject {
     Q_PROPERTY(QString restrictions   MEMBER restrictions  WRITE setRestrictions  NOTIFY restrictionsChanged)
     Q_PROPERTY(QString refurbDate     MEMBER refurbDate    WRITE setRefurbDate    NOTIFY refurbDateChanged)
     Q_PROPERTY(quint64 freeSpace      MEMBER freeSpace     WRITE setFreeSpace     NOTIFY freeSpaceChanged)
+    Q_PROPERTY(QString bsn            MEMBER bsn           WRITE setBsn           NOTIFY bsnChanged)
 public:
     DeviceInfo()
         : QObject()
@@ -46,6 +47,7 @@ public:
     QString restrictions;
     QString refurbDate;
     quint64 freeSpace;
+    QString bsn;
     void setFriendlyName(const QString &input) { friendlyName = input; emit friendlyNameChanged(); }
     void setOs(const QString &input) { os = input; emit osChanged(); }
     void setRadio(const QString &input) { radio = input; emit radioChanged(); }
@@ -67,6 +69,7 @@ public:
         emit refurbDateChanged();
     }
     void setFreeSpace(const quint64 &input) { freeSpace = input; emit freeSpaceChanged(); }
+    void setBsn(const QString &input) { bsn = input; emit bsnChanged(); }
 
 signals:
     void friendlyNameChanged();
@@ -84,6 +87,7 @@ signals:
     void restrictionsChanged();
     void refurbDateChanged();
     void freeSpaceChanged();
+    void bsnChanged();
 
 };
 Q_DECLARE_METATYPE(DeviceInfo* );

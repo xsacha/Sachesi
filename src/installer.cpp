@@ -438,8 +438,9 @@ void InstallNet::install()
     }
 }
 
-void InstallNet::uninstall(QStringList packageids)
+void InstallNet::uninstall(QStringList packageids, bool firmwareUpdate)
 {
+    // Tested with OS and it removed the old OS. Not entirely what I wanted.
     if (packageids.isEmpty())
         return;
     setInstalling(true);
@@ -461,16 +462,19 @@ void InstallNet::uninstall(QStringList packageids)
 bool InstallNet::uninstallMarked()
 {
     QStringList marked;
+    bool firmwareUpdate = false;
     for(Apps* app : _appList) {
         if (app->isMarked()) {
             marked.append(app->packageId());
             app->setIsMarked(false);
+            if (app->type() != "application")
+                firmwareUpdate = true;
             app->setType("");
         }
     }
     if (marked.isEmpty())
         return false;
-    uninstall(marked);
+    uninstall(marked, firmwareUpdate);
     return true;
 }
 
@@ -515,7 +519,7 @@ void InstallNet::backup()
                 "<QnxOSDevice><Archives>";
         foreach(BackupCategory* cat, _back.categories) {
             if (_back.modeString().contains(cat->id))
-                manifestXML.append("<Archive id=\"" + cat->id + "\" name=\"" + cat->name + "\" count=\"" + cat->count + "\" bytesize=\"" + cat->bytesize + "\" perimetertype=" + cat->perimetertype + "\"/>");
+                manifestXML.append("<Archive id=\"" + cat->id + "\" name=\"" + cat->name + "\" count=\"" + cat->count + "\" bytesize=\"" + cat->bytesize + "\" keyid=" + device->bbid + "\" perimetertype=" + cat->perimetertype + "\"/>");
         }
         manifestXML.append("</Archives></QnxOSDevice></BlackBerry_Backup>");
         manifest->write(manifestXML.toStdString().c_str());
@@ -1080,6 +1084,8 @@ void InstallNet::restoreReply()
                     device->setRefurbDate(xml.readElementText());
                 } else if (xml.name() == "FreeApplicationSpace") {
                     device->setFreeSpace(xml.readElementText().toLongLong());
+                } else if (xml.name() == "BoardSerialNumber") {
+                    device->setBsn(xml.readElementText());
                 }
             }
         }

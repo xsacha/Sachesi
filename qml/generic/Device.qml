@@ -73,6 +73,20 @@ Item {
             }
 
             Label {
+                text: qsTr("BSN")
+                font.bold: true
+            }
+            Label {
+                text: i.device === null ? qsTr("Unknown") : i.device.bsn
+            }
+            Label {
+                font.bold: true
+            }
+            Label {
+
+            }
+
+            Label {
                 text: qsTr("OS")
                 font.bold: true
             }

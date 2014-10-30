@@ -117,7 +117,7 @@ public:
     Q_INVOKABLE void keepAlive();
     Q_INVOKABLE void scanProps();
     Q_INVOKABLE void install(QList<QUrl> files);
-    Q_INVOKABLE void uninstall(QStringList packageids);
+    Q_INVOKABLE void uninstall(QStringList packageids, bool firmwareUpdate);
     Q_INVOKABLE bool uninstallMarked();
     Q_INVOKABLE void restore(QUrl url, int options);
     Q_INVOKABLE void backup(QUrl url, int options);
