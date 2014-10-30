@@ -201,6 +201,7 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
             nameSplit.first() = replace + ".desktop";
         else
             nameSplit.first() = replace;
+
         urlSplit.last() = nameSplit.join('-');
         return urlSplit.join('/');
     } else if (type == 1) { // Radio

@@ -152,7 +152,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
         }
 
         QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
-        if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
+        if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType && !(installableOS.contains("8974") && _knownConnectedOSType.contains("8974"))) {
             if (blitz) {
                 barInfo.type = NotInstallableType;
                 return barInfo;
@@ -246,7 +246,7 @@ BarInfo InstallNet::blitzCheck(QString name)
     barInfo.name = "GOOD";
     if (barInfo.type == OSType) {
         QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
-        if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType) {
+        if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType && !(installableOS.contains("8974") && _knownConnectedOSType.contains("8974"))) {
             barInfo.name = "BAD";
         }
     } else if (barInfo.type == RadioType) {
@@ -1045,7 +1045,7 @@ void InstallNet::restoreReply()
                     else
                         _appRemList.append(newApp);
                     if (newApp->type() == "os") {
-                        _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop").replace("verizon", "factory");
+                        _knownConnectedOSType = newApp->name().split("os.").last().remove(".desktop").replace("verizon", "factory").replace("qc8974.factory_sfi","qc8960.factory_sfi_hybrid_qc8974");
                         device->setOs(newApp->version());
                     } else if (newApp->type() == "radio") {
                         _knownConnectedRadioType = newApp->name().split("radio.").last().remove(".omadm");
