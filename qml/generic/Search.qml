@@ -421,7 +421,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: friendlyName + (isInstalled ? qsTr(" (older)") : (isAvailable ? "" : qsTr(" (downloaded)")))
+                        text: friendlyName + (isInstalled ? " " + qsTr("(older)") : (isAvailable ? "" : " " + qsTr("(downloaded)")))
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked

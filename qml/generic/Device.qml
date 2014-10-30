@@ -177,7 +177,7 @@ Item {
             }
 
             Label {
-                text: qsTr("Disk Space Free")
+                text: qsTr("Free Disk Space")
                 font.bold: true
             }
             Label {
