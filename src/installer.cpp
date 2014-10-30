@@ -867,7 +867,7 @@ QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
             ret = {"qc8960.factory_sfi", "qc8930.wtr5"};
             break;
         case Q30Family:
-            ret = {"qc8974.factory_sfi", "qc8974.wtr2"};
+            ret = {"qc8960.factory_sfi_hybrid_qc8974", "qc8974.wtr2"};
             break;
         case Q10Family:
             ret = {"qc8960.factory_sfi", "qc8960.wtr"};

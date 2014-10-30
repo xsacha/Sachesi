@@ -144,8 +144,8 @@ void Scanner::generatePotentialLinks() {
     QString potentialText = QString("Potential OS and Radio links for SR" + _curRelease->srVersion() + " (OS:" + _curRelease->osVersion() + " + Radio:" + radioVersion + ")\n\n"
                                     "* Operating Systems *\n");
     appendNewHeader(&potentialText, "QC8974", "Blackberry Passport");
-    appendNewLink(&potentialText, "Debrick", "qc8974.factory_sfi.desktop", _curRelease->osVersion());
-    appendNewLink(&potentialText, "Core",    "qc8974.factory_sfi", _curRelease->osVersion());
+    appendNewLink(&potentialText, "Debrick", "qc8960.factory_sfi_hybrid_qc8974.desktop", _curRelease->osVersion());
+    appendNewLink(&potentialText, "Core",    "qc8960.factory_sfi_hybrid_qc8974", _curRelease->osVersion());
 
     appendNewHeader(&potentialText, "QC8960", "Blackberry Z3/Z10/Z30/Q5/Q10");
     appendNewLink(&potentialText, "Debrick", "qc8960.factory_sfi.desktop", _curRelease->osVersion());
