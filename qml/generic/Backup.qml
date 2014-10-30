@@ -30,7 +30,7 @@ Item {
             RowLayout {
                 visible: attemptLookup.running
                 Text {
-                    text:  qsTr("Refreshing Backup Sizes")
+                    text:  qsTr("Refreshing backup sizes")
                     font.pointSize: 12
                 }
                 BusyIndicator {
@@ -73,13 +73,13 @@ Item {
 
         Label {
             visible: !settings.advanced
-            text: qsTr("Loading backup sizes can sometimes fail. In this situation, you can backup 'Blind'.")
+            text: qsTr("Loading backup sizes can sometimes fail. In this situation, you can backup 'blind'.")
         }
         RowLayout {
             visible: i.backMethods
             FileDialog {
                 id: backup_files
-                title:  qsTr("Choose backup filename")
+                title:  qsTr("Choose Backup Filename")
                 folder: settings.backupFolder
                 onAccepted: {
                     i.backup(fileUrl, options.value)
@@ -91,7 +91,7 @@ Item {
             }
             FileDialog {
                 id: restore_files
-                title:  qsTr("Select restore file")
+                title:  qsTr("Select Restore File")
                 folder: settings.backupFolder
                 onAccepted: {
                     i.restore(fileUrl, options.value)
@@ -102,12 +102,12 @@ Item {
             }
 
             Button {
-                text:  qsTr("Create backup") + (totalText.totalVal < 0 ? (" " + qsTr("Blind")) : "")
+                text: totalText.totalVal < 0 ? qsTr("Create Backup Blind") : qsTr("Create Backup")
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.device !== null && i.device.bbid !== ""
                 onClicked: backup_files.open();
             }
             Button {
-                text:  qsTr("Restore backup")
+                text:  qsTr("Restore Backup")
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.device !== null && i.device.bbid !== ""
                 onClicked: restore_files.open();
             }
