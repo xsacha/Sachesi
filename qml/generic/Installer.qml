@@ -128,9 +128,9 @@ Item {
             RowLayout {
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
                 CheckBox {
-                    checked: i.allowDowngrades
-                    onCheckedChanged: i.allowDowngrades = checked
-                    text: qsTr("Allow downgrades")
+                    checked: !i.allowDowngrades
+                    onCheckedChanged: i.allowDowngrades = !checked
+                    text: qsTr("Only install newer apps")
                 }
 
                 Button {
