@@ -1,11 +1,3 @@
-<!--
-Italian Translation by: Samuele Pilleri (sammypillo96@gmail.com)
-
-Based on Dutch Translation
-
-Date: November 1st, 2014
--->
-
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="it_IT">
