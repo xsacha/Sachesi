@@ -557,7 +557,7 @@
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="133"/>
-        <source>Allow downgrades</source>
+        <source>Only install newer apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -808,11 +808,6 @@
 </context>
 <context>
     <name>Title</name>
-    <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
-        <source>Alpha</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="45"/>
         <source>Advanced</source>

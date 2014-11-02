@@ -141,7 +141,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>Il calcolo delle dimensioni del file di backup pu&ograve; fallire a volte. In tal caso, &egrave; possibile procedere al backup &apos;alla cieca&apos;.</translation>
+        <translation>Il calcolo delle dimensioni del file di backup può fallire a volte. In tal caso, è possibile procedere al backup &apos;alla cieca&apos;.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
@@ -235,7 +235,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="30"/>
         <source>Debug Mode</source>
-        <translation>Modalit&agrave; Debug</translation>
+        <translation>Modalità Debug</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="36"/>
@@ -281,7 +281,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="22"/>
         <source>Wipe</source>
-        <translation>Pulisci unit&agrave; (wipe)</translation>
+        <translation>Pulisci unità (wipe)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="27"/>
@@ -383,7 +383,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="130"/>
         <source>Developer Mode</source>
-        <translation>Modalit&agrave; di Sviluppo</translation>
+        <translation>Modalità di Sviluppo</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="138"/>
@@ -657,13 +657,13 @@
     </message>
     <message>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation type="vanished">Errore: il tuo device pu&ograve; eseguire una sola azione alla volta. Attendi il completamento dell&apos;installazione precedente.&lt;br&gt;</translation>
+        <translation type="vanished">Errore: il tuo device può eseguire una sola azione alla volta. Attendi il completamento dell&apos;installazione precedente.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
-        <translation>Errore: il tuo device pu&ograve; eseguire una sola azione alla volta. Attendi il completamento del backup/restore precedente.&lt;br&gt;</translation>
+        <translation>Errore: il tuo device può eseguire una sola azione alla volta. Attendi il completamento del backup/restore precedente.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="101"/>
@@ -681,9 +681,8 @@
         <translation>Seleziona Files</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
         <source>Allow downgrades</source>
-        <translation>Consenti downgrade</translation>
+        <translation type="vanished">Consenti downgrade</translation>
     </message>
     <message>
         <source>Advanced Tools</source>
@@ -725,7 +724,12 @@
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
-        <translation>Errore: il tuo device pu&ograve; eseguire una sola azione alla volta. Attendi il completamento della precedente installazione.&lt;br&gt;</translation>
+        <translation>Errore: il tuo device può eseguire una sola azione alla volta. Attendi il completamento della precedente installazione.&lt;br&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <source>Only install newer apps</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
@@ -939,7 +943,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="424"/>
         <source>(older)</source>
-        <translation>(pi&ugrave; vecchie)</translation>
+        <translation>(più vecchie)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="424"/>
@@ -1037,9 +1041,8 @@
         <translation type="vanished">BlackBerry World</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Alpha</source>
-        <translation>Alfa</translation>
+        <translation type="vanished">Alfa</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="60"/>

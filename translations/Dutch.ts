@@ -682,9 +682,8 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Kies bestanden</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
         <source>Allow downgrades</source>
-        <translation>Sta downgrades toe</translation>
+        <translation type="vanished">Sta downgrades toe</translation>
     </message>
     <message>
         <source>Advanced Tools</source>
@@ -727,6 +726,11 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
         <translation>Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het installatieproces is voltooid.&lt;br&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <source>Only install newer apps</source>
+        <translation>Installeer alleen nieuwere apps</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
@@ -1038,9 +1042,8 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation type="vanished">BlackBerry World</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Alpha</source>
-        <translation>Alfa</translation>
+        <translation type="vanished">Alfa</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="60"/>
