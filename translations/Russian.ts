@@ -741,9 +741,8 @@
         <translation>Выбрать файлы</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
         <source>Allow downgrades</source>
-        <translation>Разрешить откат версии</translation>
+        <translation type="vanished">Разрешить откат версии</translation>
     </message>
     <message>
         <source>Advanced Tools</source>
@@ -786,6 +785,11 @@
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
         <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз .&lt;br&gt;;</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <source>Only install newer apps</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>

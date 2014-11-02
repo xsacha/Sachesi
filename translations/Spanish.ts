@@ -690,11 +690,6 @@ Conexión a la sector de inicio</translation>
         <translation>Seleccionar Archivos</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
-        <source>Allow downgrades</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Advanced Tools</source>
         <translation type="vanished">Herramientas Avanzadas</translation>
     </message>
@@ -734,6 +729,11 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <source>Only install newer apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1050,9 +1050,8 @@ Conexión a la sector de inicio</translation>
         <translation type="vanished">AppMundo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Alpha</source>
-        <translation type="unfinished">Alfa</translation>
+        <translation type="obsolete">Alfa</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="60"/>

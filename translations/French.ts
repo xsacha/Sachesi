@@ -681,11 +681,6 @@
         <translation>Sélectionnez Fichiers</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
-        <source>Allow downgrades</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Advanced Tools</source>
         <translation type="vanished">Outils Avancés</translation>
     </message>
@@ -725,6 +720,11 @@
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <source>Only install newer apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1037,9 +1037,8 @@
         <translation type="vanished">AppMonde</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="9"/>
         <source>Alpha</source>
-        <translation type="unfinished">Alpha</translation>
+        <translation type="obsolete">Alpha</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="60"/>
