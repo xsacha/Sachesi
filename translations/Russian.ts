@@ -126,7 +126,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Refreshing backup sizes</source>
-        <translation>Обновление размера резервной копии</translation>
+        <translation>Определение размера резервной копии</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
@@ -148,12 +148,12 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="70"/>
         <source>Refresh Backup Sizes</source>
-        <translation>Обновить размер резервной копии</translation>
+        <translation>Определить размер резервной копии</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>Загрузка размера резервной копии иногда завершается ошибкой,вы можете сделать копию &quot;вслепую&quot;.</translation>
+        <translation>Определение размера резервной копии иногда завершается ошибкой,вы можете сделать копию &quot;вслепую&quot;.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
@@ -173,12 +173,12 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Create Backup</source>
-        <translation>Создание резервной копии</translation>
+        <translation>Создать резервную копию</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="110"/>
         <source>Restore Backup</source>
-        <translation>Восстановить резервную копию</translation>
+        <translation>Восстановить из резервной копии</translation>
     </message>
     <message>
         <source>Choose backup filename</source>
@@ -208,12 +208,12 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
         <source>Your device needs a Blackberry ID to perform backups or restores!</source>
-        <translation>Устройство нуждается в Blackberry ID для выполнения резервного копирования и восстановления!</translation>
+        <translation>Устройство нуждается в верификации Blackberry ID для выполнения резервного копирования и восстановления!</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="121"/>
         <source>Please note that backups can take a long time, depending on your device data.</source>
-        <translation>Пожалуйста, обратите внимание, что резервное копирование может занять много времени в зависимости от размера данных вашего устройства.</translation>
+        <translation>Пожалуйста, обратите внимание, что резервное копирование может занять много времени в зависимости от объёма данных вашего устройства.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
