@@ -202,7 +202,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
         <source>HW Name</source>
-        <translation>Name HW</translation>
+        <translation>Hardwarename</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="61"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="76"/>
         <source>BSN</source>
-        <translation>BSN</translation>
+        <translation>Platine-Seriennummer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="90"/>
@@ -464,12 +464,12 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Signierte Dateien</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>Signierte Archive</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
