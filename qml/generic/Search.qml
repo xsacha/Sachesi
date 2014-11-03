@@ -259,8 +259,8 @@ Item {
         /*TextCoupleSelect {
             visible: settings.advanced
             id: server
-            type: qsTr("Server")
-            listModel: [ qsTr("Production"), qsTr("Beta"), qsTr("Beta 2"), qsTr("Alpha"), qsTr("Alpha 2") ]
+            type: qsTr("Server") + translator.lang
+            listModel: [ qsTr("Production") + translator.lang, qsTr("Beta") + translator.lang, qsTr("Beta 2") + translator.lang, qsTr("Alpha") + translator.lang, qsTr("Alpha 2") + translator.lang ]
         }*/
 
         /*TextCoupleSelect {
@@ -300,10 +300,10 @@ Item {
             id: options_menu
             signal checkAll()
             signal uncheckAll()
-            title:  qsTr("Options")
+            title: qsTr("Options") + translator.lang
             MenuItem {
                 enabled: p.updateCheckedCount != p.updateAppCount
-                text: qsTr("Check All")
+                text: qsTr("Check All") + translator.lang
                 onTriggered: {
                     options_menu.checkAll();
                     for (var i = 0; i < p.updateAppCount; i++)
@@ -312,7 +312,7 @@ Item {
             }
             MenuItem {
                 enabled: p.updateCheckedCount > 0
-                text: qsTr("Uncheck All")
+                text: qsTr("Uncheck All") + translator.lang
                 onTriggered: {
                     options_menu.uncheckAll()
                     for (var i = 0; i < p.updateAppCount; i++)
@@ -320,9 +320,9 @@ Item {
                 }
             }
         }
-        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title:  qsTr("Name"); }
-        TableViewColumn { id: verCol;  role: "version"; title:  qsTr("Version"; resizable: false); }
-        TableViewColumn { id: sizeCol;  role: "size"; title:  qsTr("Size"); resizable: false; }
+        TableViewColumn { width: parent.width - verCol.width - sizeCol.width; id: nameCol; role: "friendlyName"; title: qsTr("Name") + translator.lang; }
+        TableViewColumn { id: verCol; role: "version"; title: qsTr("Version") + translator.lang; resizable: false; }
+        TableViewColumn { id: sizeCol; role: "size"; title: qsTr("Size") + translator.lang; resizable: false; }
         //onModelChanged: { verCol.resizeToContents(); sizeCol.resizeToContents(); }
         rowDelegate: Rectangle {
             opacity: 0.2
@@ -337,7 +337,7 @@ Item {
 
         itemDelegate: Text {
             property variant value: styleData.value
-            text: styleData.role === "size" ? qsTr("%1 MB").arg((value / 1024 / 1024).toFixed(1)) : value
+            text: styleData.role === "size" ? qsTr("%1 MB").arg((value / 1024 / 1024).toFixed(1)) + translator.lang : value
             horizontalAlignment: (styleData.role === "size") ? Qt.AlignRight : Qt.AlignLeft
             clip: true
         }
@@ -345,13 +345,13 @@ Item {
 
     // Cheat to get system widths of text here. Should use a TableView (above) later to replace it.
     // A Label with 6 characters and ' MB', like the maximum filesize of an app
-    Label { visible: false; id: sizeHint; font.pointSize: 12; text:  qsTr("1700.0 MB"); }
+    Label { visible: false; id: sizeHint; font.pointSize: 12; text:  qsTr("1700.0 MB") + translator.lang; }
     GroupBox {
         id: updateAppMessage
         // Qt 5.2 width bug: Add an extra 8 spaces to message to compensate
         property string selectedMsg: qsTr("Selected: %1 Apps").arg(p.updateCheckedCount == p.updateAppCount ? qsTr("All (%1)").arg(p.updateAppCount) : (p.updateCheckedCount + "/" + p.updateAppCount))
                                      + (p.updateNeededCount !== p.updateAppCount ? (" | " + qsTr("Needed: %1 Apps").arg(p.updateCheckedNeededCount == p.updateAppNeededCount ? qsTr("All (%1)").arg(p.updateAppNeededCount) : p.updateCheckedNeededCount + "/" + p.updateAppNeededCount)) : "")
-                                     + "        "
+                                     + "        " + translator.lang
         title: selectedMsg
 
         anchors {top: updateMessage.bottom; bottom: urlLinks.top; left: variables.right; right: parent.right; margins: 15; }

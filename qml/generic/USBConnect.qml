@@ -13,18 +13,18 @@ Item {
         height: parent.height / 2
         Label {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-            text:  qsTr("These tools require a USB connection")
+            text: qsTr("These tools require a USB connection") + translator.lang
         }
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
             ColumnLayout {
                 Label {
-                    text:  qsTr("Password:")
+                    text: qsTr("Password:") + translator.lang
                 }
                 Label {
                     id: subtextValue
                     visible: i.wrongPass
-                    text:  qsTr("Incorrect")
+                    text: qsTr("Incorrect") + translator.lang
                     color: "red"
                 }
             }
@@ -44,7 +44,7 @@ Item {
                 echoMode: showing ? TextInput.Normal : TextInput.Password
             }
             Button {
-                tooltip: passText.showing ? qsTr("Hide Password") : qsTr("Show Password")
+                tooltip: passText.showing ? qsTr("Hide Password") : qsTr("Show Password") + translator.lang
                 anchors { left: passText.right; leftMargin: 10; verticalCenter: passText.verticalCenter }
                 iconSource: "showpass.png"
                 onClicked: passText.showing = !passText.showing
@@ -53,10 +53,10 @@ Item {
         ColumnLayout {
             visible: i.loginBlock
             Label {
-                text:  qsTr("There was an issue connecting.")
+                text: qsTr("There was an issue connecting.") + translator.lang
             }
             Button {
-                text:  qsTr("Try Again")
+                text: qsTr("Try Again") + translator.lang
                 onClicked: i.loginBlock = false
             }
         }
@@ -65,7 +65,7 @@ Item {
             ColumnLayout {
                 Label {
                     visible: !i.loginBlock && !detected.visible
-                    text:  qsTr("Searching for USB device")
+                    text: qsTr("Searching for USB device") + translator.lang
                 }
                 Label {
                     id: detected
@@ -80,11 +80,11 @@ Item {
                                                 }
 
                     visible: numDevices
-                    text: qsTr("Detected %1 Blackberry USB device(s) in %2 mode.").arg(numDevices).arg(deviceName)
+                    text: qsTr("Detected %1 Blackberry USB device(s) in %2 mode.").arg(numDevices).arg(deviceName) + translator.lang
                 }
                 Label {
                     visible: i.possibleDevices
-                    text: qsTr("Talking to %1 possible device(s).").arg(i.possibleDevices)
+                    text: qsTr("Talking to %1 possible device(s).").arg(i.possibleDevices) + translator.lang
                 }
             }
             BusyIndicator {

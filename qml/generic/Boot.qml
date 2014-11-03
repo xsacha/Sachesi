@@ -8,51 +8,51 @@ Column {
     width: parent.width - 40;
     spacing: 15
     Text {
-        text:  qsTr("Boot Communication")
+        text: qsTr("Boot Communication") + translator.lang
         font.pointSize: 14
         font.bold: true
     }
     Row {
         spacing: 20
         Button {
-            text:  qsTr("Info")
+            text: qsTr("Info") + translator.lang
             onClicked: b.setCommandMode(1, postReboot.checked);
         }
         Button {
-            text:  qsTr("RimBoot")
+            text: qsTr("RimBoot") + translator.lang
             onClicked: b.setCommandMode(2, postReboot.checked);
         }
         Button {
-            text:  qsTr("Nuke")
+            text: qsTr("Nuke") + translator.lang
             onClicked: b.setCommandMode(3, postReboot.checked);
         }
         Button {
-            text:  qsTr("Debug Mode")
+            text: qsTr("Debug Mode") + translator.lang
             onClicked: b.setCommandMode(4, postReboot.checked);
         }
     }
     CheckBox {
         id: postReboot
-        text:  qsTr("Reboot after")
+        text: qsTr("Reboot after") + translator.lang
     }
 
     Row {
         visible: b.connecting
         spacing: 15
         Text {
-            text:  qsTr("Connecting to bootrom")
+            text: qsTr("Connecting to bootrom") + translator.lang
         }
         BusyIndicator {
             height: parent.implicitHeight
             width: height
         }
         Button {
-            text:  qsTr("Cancel")
+            text: qsTr("Cancel") + translator.lang
             onClicked: b.disconnect();
         }
     }
     GroupBox {
-        title:  qsTr("Detected devices:")
+        title: qsTr("Detected devices:") + translator.lang
         ScrollView {
             frameVisible: true
             ListView {

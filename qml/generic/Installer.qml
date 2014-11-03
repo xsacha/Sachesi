@@ -88,17 +88,17 @@ Item {
                 }
 
                 selectMultiple: true
-                nameFilters: [ qsTr("Blackberry Installable (*.bar)") ]
+                nameFilters: [ qsTr("Blackberry Installable (*.bar)") + translator.lang ]
             }
             Button {
                 text:  qsTr("Install Folder") + translator.lang
                 onClicked: {
                     if (i.installing)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>") + translator.lang
                     else if (i.backing || i.restoring)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>") + translator.lang
                     else {
-                        install_files.title = qsTr("Select Folder")
+                        install_files.title = qsTr("Select Folder") + translator.lang
                         install_files.selectFolder = true;
                         install_files.open();
                     }
@@ -108,11 +108,11 @@ Item {
                 text: qsTr("Install Files") + translator.lang
                 onClicked: {
                     if (i.installing)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>") + translator.lang
                     else if (i.backing || i.restoring)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>") + translator.lang
                     else {
-                        install_files.title = qsTr("Select Files")
+                        install_files.title = qsTr("Select Files") + translator.lang
                         install_files.selectFolder = false;
                         install_files.selectMultiple = true;
                         install_files.open();

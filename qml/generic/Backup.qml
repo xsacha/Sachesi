@@ -87,7 +87,7 @@ Item {
                 }
                 selectExisting: false
 
-                nameFilters: [ qsTr("Blackberry Backup (*.bbb)") ]
+                nameFilters: [ qsTr("Blackberry Backup (*.bbb)") + translator.lang ]
             }
             FileDialog {
                 id: restore_files
@@ -98,7 +98,7 @@ Item {
                     settings.backupFolder = folder;
                 }
 
-                nameFilters: [ qsTr("Blackberry Backup (*.bbb)") ]
+                nameFilters: [ qsTr("Blackberry Backup (*.bbb)") + translator.lang ]
             }
 
             Button {
