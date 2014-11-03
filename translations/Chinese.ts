@@ -174,6 +174,7 @@
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
+        <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>黑莓备份（*.bbb）</translation>
     </message>
@@ -518,6 +519,16 @@
         <translation>提取工具</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images (*.signed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers (*.exe *.bar *.zip)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
         <translation type="unfinished"></translation>
@@ -733,42 +744,42 @@
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="143"/>
+        <location filename="../qml/generic/Installer.qml" line="145"/>
         <source>Your Applications</source>
         <translation>您的应用程序</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="143"/>
+        <location filename="../qml/generic/Installer.qml" line="233"/>
         <source>Log</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Use &apos;Refresh&apos; to update list</source>
         <translation>使用“刷新”以更新列表</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Your device has not completed setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Device disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="194"/>
+        <location filename="../qml/generic/Installer.qml" line="177"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="196"/>
+        <location filename="../qml/generic/Installer.qml" line="179"/>
         <source>Uninstall Marked</source>
         <translation>卸载标记</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="203"/>
+        <location filename="../qml/generic/Installer.qml" line="186"/>
         <source>Show Installed Apps</source>
         <translation>显示已安装程序</translation>
     </message>
@@ -1024,32 +1035,32 @@
         <translation type="obsolete">Alpha版</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="45"/>
+        <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
         <translation>高级</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="60"/>
+        <location filename="../qml/generic/Title.qml" line="71"/>
         <source>Device</source>
         <translation type="unfinished">设备</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="64"/>
+        <location filename="../qml/generic/Title.qml" line="75"/>
         <source>Extract</source>
         <translation>提取</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="68"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="72"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Backup</source>
         <translation>备份</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="76"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>

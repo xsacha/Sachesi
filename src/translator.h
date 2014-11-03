@@ -33,7 +33,7 @@ public:
         // Install translator by locale language string
         // zh_HK is considered 'Chinese' language but the characters are entirely different.
         if ((QLocale().name() != "zh_HK") && _appTranslator.load(QString(":/translations/%1.qm")
-                                                                .arg("Spanish"/*QLocale::languageToString(QLocale().language())*/))
+                                                                .arg(QLocale::languageToString(QLocale().language())))
                 ) {
             _exists = true;
         }

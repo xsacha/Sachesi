@@ -98,7 +98,7 @@ Item {
                     settings.backupFolder = folder;
                 }
 
-                nameFilters: [ "Blackberry Backup (*.bbb)" ]
+                nameFilters: [ qsTr("Blackberry Backup (*.bbb)") ]
             }
 
             Button {

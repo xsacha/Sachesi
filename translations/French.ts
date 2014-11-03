@@ -174,6 +174,7 @@
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
+        <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>Blackberry Sauvegarde (*.bbb)</translation>
     </message>
@@ -518,6 +519,16 @@
         <translation>Outils d&apos;Extraction</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images (*.signed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers (*.exe *.bar *.zip)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
         <translation type="unfinished"></translation>
@@ -733,42 +744,42 @@
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="143"/>
+        <location filename="../qml/generic/Installer.qml" line="145"/>
         <source>Your Applications</source>
         <translation>Vos Applications</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="143"/>
+        <location filename="../qml/generic/Installer.qml" line="233"/>
         <source>Log</source>
         <translation>Livre de Bord</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Use &apos;Refresh&apos; to update list</source>
         <translation>Utilisez &apos;Rafraîchissement&apos; à la liste mise à jour</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Your device has not completed setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Device disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="194"/>
+        <location filename="../qml/generic/Installer.qml" line="177"/>
         <source>Options</source>
         <translation>Choix</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="196"/>
+        <location filename="../qml/generic/Installer.qml" line="179"/>
         <source>Uninstall Marked</source>
         <translation>Désinstaller Marqué</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="203"/>
+        <location filename="../qml/generic/Installer.qml" line="186"/>
         <source>Show Installed Apps</source>
         <translation>Voir les Apps Installées</translation>
     </message>
@@ -1028,7 +1039,7 @@
         <translation type="vanished">SACHESI</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="45"/>
+        <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
@@ -1041,27 +1052,27 @@
         <translation type="obsolete">Alpha</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="60"/>
+        <location filename="../qml/generic/Title.qml" line="71"/>
         <source>Device</source>
         <translation type="unfinished">Appareil</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="64"/>
+        <location filename="../qml/generic/Title.qml" line="75"/>
         <source>Extract</source>
         <translation>Extrait</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="68"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Search</source>
         <translation>Chercher</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="72"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Backup</source>
         <translation>Sauvegarde</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="76"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>

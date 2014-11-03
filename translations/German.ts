@@ -182,6 +182,7 @@
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
+        <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>BlackBerry-Backup-Datei (*.bbb)</translation>
     </message>
@@ -526,6 +527,16 @@
         <translation>Extraktionswerkzeuge</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images (*.signed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers (*.exe *.bar *.zip)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
         <translation>Extrahiert signierte Dateien aus Autoloader (.exe, .bar oder .zip)</translation>
@@ -746,42 +757,42 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="143"/>
+        <location filename="../qml/generic/Installer.qml" line="145"/>
         <source>Your Applications</source>
         <translation>Ihre Apps</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="143"/>
+        <location filename="../qml/generic/Installer.qml" line="233"/>
         <source>Log</source>
         <translation>Protokoll</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Use &apos;Refresh&apos; to update list</source>
         <translation>Klicken Sie auf &apos;Aktualisieren&apos; um die Liste zu aktualisieren</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Your device has not completed setup</source>
         <translation>Ihr Gerät hat den Vorgang nicht abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="181"/>
+        <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Device disconnected</source>
         <translation>Gerät ist nicht mehr verbunden</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="194"/>
+        <location filename="../qml/generic/Installer.qml" line="177"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="196"/>
+        <location filename="../qml/generic/Installer.qml" line="179"/>
         <source>Uninstall Marked</source>
         <translation>Ausgewählte Apps deinstallieren</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="203"/>
+        <location filename="../qml/generic/Installer.qml" line="186"/>
         <source>Show Installed Apps</source>
         <translation>Installierte Apps zeigen</translation>
     </message>
@@ -1041,7 +1052,7 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation type="vanished">SACHESI</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="45"/>
+        <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
         <translation>Fortgeschrittene Optionen</translation>
     </message>
@@ -1054,27 +1065,27 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation type="vanished">Alpha</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="60"/>
+        <location filename="../qml/generic/Title.qml" line="71"/>
         <source>Device</source>
         <translation>Gerät</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="64"/>
+        <location filename="../qml/generic/Title.qml" line="75"/>
         <source>Extract</source>
         <translation>Extraktion</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="68"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Search</source>
         <translation>Suche</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="72"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Backup</source>
         <translation>Backup</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="76"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>Installation</translation>
     </message>
