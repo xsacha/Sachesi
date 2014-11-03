@@ -741,9 +741,8 @@
         <translation>Выбрать файлы</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
         <source>Allow downgrades</source>
-        <translation>Разрешить откат версии</translation>
+        <translation type="vanished">Разрешить откат версии</translation>
     </message>
     <message>
         <source>Advanced Tools</source>
@@ -786,6 +785,11 @@
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
         <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз .&lt;br&gt;;</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <source>Only install newer apps</source>
+        <translation>Устанавливать только новые версии приложений</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
@@ -1121,27 +1125,27 @@
         <translation type="obsolete">Альфа</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="60"/>
+        <location filename="../qml/generic/Title.qml" line="66"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="64"/>
+        <location filename="../qml/generic/Title.qml" line="70"/>
         <source>Extract</source>
         <translation>Извлечение   </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="68"/>
+        <location filename="../qml/generic/Title.qml" line="74"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="72"/>
+        <location filename="../qml/generic/Title.qml" line="78"/>
         <source>Backup</source>
         <translation>Резервное копирование</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="76"/>
+        <location filename="../qml/generic/Title.qml" line="82"/>
         <source>Install</source>
         <translation>Установка</translation>
     </message>
