@@ -95,7 +95,8 @@ HEADERS += \
     src/carrierinfo.h \
     src/search/discoveredrelease.h \
     src/autoloaderwriter.h \
-    src/deviceinfo.h
+    src/deviceinfo.h \
+    src/translator.h
 
 # Welcome to the only OS that won't give network access to USB device
 !blackberry {

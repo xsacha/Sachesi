@@ -17,7 +17,7 @@ Item {
     Button {
         visible: i.dgProgress >= 0 && !installWin.visible
         anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter }
-        text:  qsTr("View Install (%1)").arg(i.dgProgress)
+        text: qsTr("View Install (%1)").arg(i.dgProgress) + translator.lang
         onClicked: installWin.visible = true
     }
     Window {
@@ -31,7 +31,7 @@ Item {
                           }
         Label {
             id: patientText
-            text: qsTr("Please be patient while the installation zip is extracted.")
+            text: qsTr("Please be patient while the installation zip is extracted.") + translator.lang
         }
     }
 
@@ -44,7 +44,7 @@ Item {
                               y = window.y + (window.height - height) / 2
                           }
         color: "lightgray"
-        title: i.firmwareUpdate ? qsTr("Firmware Update") : qsTr("Install")
+        title: (i.firmwareUpdate ? qsTr("Firmware Update") : qsTr("Install")) + translator.lang
 
         CircleProgress {
             width: parent.width
@@ -54,7 +54,7 @@ Item {
             overallValue: i.dgProgress
             curId: i.dgPos + 1
             maxId: i.dgMaxPos
-            text: ((i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending %1").arg(i.curInstallName) : qsTr("Installing %1").arg(i.curInstallName)) : qsTr("Sent %1").arg(i.curInstallName))
+            text: (((i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending %1").arg(i.curInstallName) : qsTr("Installing %1").arg(i.curInstallName)) : qsTr("Sent %1").arg(i.curInstallName))) + translator.lang
         }
     }
 
@@ -71,7 +71,7 @@ Item {
         anchors {fill: parent; margins: 15 }
         Label {
             Layout.fillWidth: true
-            text:  qsTr("To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b> to this page. Otherwise, select the options below:")
+            text:  qsTr("To install <b>.bar</b> files such as applications or firmware, you can just <b>Drag and Drop</b> to this page. Otherwise, select the options below:") + translator.lang
             wrapMode: Text.Wrap
             font.pointSize: 12
         }
@@ -79,7 +79,7 @@ Item {
             spacing: 15
             FileDialog {
                 id: install_files
-                title: qsTr("Install applications to device")
+                title: qsTr("Install applications to device") + translator.lang
                 folder: settings.installFolder
                 onAccepted: {
                     i.install(fileUrls)
@@ -91,7 +91,7 @@ Item {
                 nameFilters: [ qsTr("Blackberry Installable (*.bar)") ]
             }
             Button {
-                text:  qsTr("Install Folder")
+                text:  qsTr("Install Folder") + translator.lang
                 onClicked: {
                     if (i.installing)
                         details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
@@ -105,7 +105,7 @@ Item {
                 }
             }
             Button {
-                text:  qsTr("Install Files")
+                text: qsTr("Install Files") + translator.lang
                 onClicked: {
                     if (i.installing)
                         details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
@@ -130,116 +130,117 @@ Item {
                 CheckBox {
                     checked: !i.allowDowngrades
                     onCheckedChanged: i.allowDowngrades = !checked
-                    text: qsTr("Only install newer apps")
+                    text: qsTr("Only install newer apps") + translator.lang
                 }
 
                 Button {
-                id: list_files
-                enabled: i.device !== null && i.device.setupComplete
-                text:  qsTr("Refresh")
-                onClicked: i.scanProps();
+                    id: list_files
+                    enabled: i.device !== null && i.device.setupComplete
+                    text:  qsTr("Refresh") + translator.lang
+                    onClicked: i.scanProps();
                 }
             }
-            Component.onCompleted: { addTab(qsTr("Your Applications"), app_tab); addTab(qsTr("Log"), log_tab); }
-        }
-    }
-
-    // Log
-    Component {
-        id: log_tab
-        TextArea {
-            id: updateMessage
-            width: tabs.width; height: tabs.height
-            textFormat: TextEdit.RichText
-            selectByKeyboard: true
-            wrapMode: TextEdit.WrapAnywhere
-            readOnly: true
-            text: details
-        }
-    }
-
-    // Applications
-    Component {
-        id: app_tab
-        Item {
-            Image {
-                id: uninstall_notifier
-                visible: uninstalling
-                property bool uninstalling: false
-                anchors {centerIn: parent; verticalCenterOffset: -parent.height / 4}
-                source: "trash.png"
-                width: 75; height: 75
-                opacity: 0.8
-                BusyIndicator {
-                    anchors.fill: parent
-                }
-            }
-            Text {
-                visible: appView.count == 0
-                anchors.centerIn: parent
-                font.pointSize: 14
-                text: (i.device === null) ? qsTr("Device disconnected") : (i.device.setupComplete ? qsTr("Use 'Refresh' to update list") : qsTr("Your device has not completed setup"))
-            }
-            ScrollView {
-                anchors.fill: parent
-                ListView {
-                    id: appView
-                    anchors.fill: parent
-                    spacing: 3
-                    clip: true
-                    model: i.appList
-                    Menu {
-                        id: apps_menu
-                        visible: appView.count > 0
-                        title:  qsTr("Options")
-                        MenuItem {
-                            text:  qsTr("Uninstall Marked")
-                            iconSource: "trash.png"
-                            enabled: !i.installing
-                            onEnabledChanged: if (enabled && uninstall_notifier.uninstalling) { uninstall_notifier.uninstalling = false; }
-                            onTriggered: { if (i.uninstallMarked()) uninstall_notifier.uninstalling = true; }
-                        }
-                        MenuItem {
-                            text:  qsTr("Show Installed Apps")
-                            iconSource: "text.png"
-                            onTriggered: i.exportInstalled();
-                        }
-                    }
-
-                    MouseArea {
-                        enabled: appView.count > 0
-                        acceptedButtons: Qt.RightButton
-                        onClicked: apps_menu.popup()
-                        anchors.fill: parent
-                    }
-                    delegate: Item {
-                        visible: type !== "";
-                        width: parent.width - 3
-                        height: type === "" ? 0 : 26
-                        Rectangle {
+            // Applications
+            Tab {
+                title: qsTr("Your Applications") + translator.lang
+                id: app_tab
+                Item {
+                    Image {
+                        id: uninstall_notifier
+                        visible: uninstalling
+                        property bool uninstalling: false
+                        anchors {centerIn: parent; verticalCenterOffset: -parent.height / 4}
+                        source: "trash.png"
+                        width: 75; height: 75
+                        opacity: 0.8
+                        BusyIndicator {
                             anchors.fill: parent
-                            color: { switch(type) {
-                                case "os": return "red";
-                                case "radio": return "purple";
-                                case "application": if (friendlyName.indexOf("sys.data") === 0) return "lightblue"; else  return "steelblue";
-                                default: return "transparent";
+                        }
+                    }
+                    Text {
+                        visible: appView.count == 0
+                        anchors.centerIn: parent
+                        font.pointSize: 14
+                        text: ((i.device === null) ? qsTr("Device disconnected") : (i.device.setupComplete ? qsTr("Use 'Refresh' to update list") : qsTr("Your device has not completed setup"))) + translator.lang
+                    }
+                    ScrollView {
+                        anchors.fill: parent
+                        ListView {
+                            id: appView
+                            anchors.fill: parent
+                            spacing: 3
+                            clip: true
+                            model: i.appList
+                            Menu {
+                                id: apps_menu
+                                visible: appView.count > 0
+                                title: qsTr("Options") + translator.lang
+                                MenuItem {
+                                    text: qsTr("Uninstall Marked") + translator.lang
+                                    iconSource: "trash.png"
+                                    enabled: !i.installing
+                                    onEnabledChanged: if (enabled && uninstall_notifier.uninstalling) { uninstall_notifier.uninstalling = false; }
+                                    onTriggered: { if (i.uninstallMarked()) uninstall_notifier.uninstalling = true; }
+                                }
+                                MenuItem {
+                                    text: qsTr("Show Installed Apps") + translator.lang
+                                    iconSource: "text.png"
+                                    onTriggered: i.exportInstalled();
                                 }
                             }
-                            opacity: 0.2
+
+                            MouseArea {
+                                enabled: appView.count > 0
+                                acceptedButtons: Qt.RightButton
+                                onClicked: apps_menu.popup()
+                                anchors.fill: parent
+                            }
+                            delegate: Item {
+                                visible: type !== "";
+                                width: parent.width - 3
+                                height: type === "" ? 0 : 26
+                                Rectangle {
+                                    anchors.fill: parent
+                                    color: { switch(type) {
+                                        case "os": return "red";
+                                        case "radio": return "purple";
+                                        case "application": if (friendlyName.indexOf("sys.data") === 0) return "lightblue"; else  return "steelblue";
+                                        default: return "transparent";
+                                        }
+                                    }
+                                    opacity: 0.2
+                                }
+                                CheckBox {
+                                    text: friendlyName
+                                    width: Math.min(implicitWidth, parent.width - versionText.width)
+                                    clip: true
+                                    checked: isMarked
+                                    onCheckedChanged: isMarked = checked;
+                                }
+                                Label {
+                                    id: versionText
+                                    anchors.right: parent.right
+                                    text: version
+                                    font.pointSize: 12;
+                                }
+                            }
                         }
-                        CheckBox {
-                            text: friendlyName
-                            width: Math.min(implicitWidth, parent.width - versionText.width)
-                            clip: true
-                            checked: isMarked
-                            onCheckedChanged: isMarked = checked;
-                        }
-                        Label {
-                            id: versionText
-                            anchors.right: parent.right
-                            text: version
-                            font.pointSize: 12;
-                        }
+                    }
+                }
+            }
+            // Log
+            Tab {
+                title: qsTr("Log") + translator.lang
+                Item {
+                    id: log_tab
+                    TextArea {
+                        id: updateMessage
+                        width: tabs.width; height: tabs.height
+                        textFormat: TextEdit.RichText
+                        selectByKeyboard: true
+                        wrapMode: TextEdit.WrapAnywhere
+                        readOnly: true
+                        text: details
                     }
                 }
             }

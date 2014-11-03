@@ -21,6 +21,7 @@ ApplicationWindow {
         property url installFolder
         property url backupFolder
         property bool advanced: false
+        property bool nativelang: true
     }
 
     Label {
@@ -42,8 +43,18 @@ ApplicationWindow {
         checked: settings.advanced
         onClicked: settings.advanced = !settings.advanced
         text: checked ? "+H+" : "H"
-        tooltip: qsTr("Advanced")
+        tooltip: qsTr("Advanced") + translator.lang
     }
+    Button {
+        //visible: translator.exists
+        anchors { right: parent.right; top: parent.top; topMargin: 1 }
+        checkable: true
+        checked: settings.nativelang
+        text: checked ? "English" : Qt.locale().nativeLanguageName
+        onClicked: settings.nativelang = !settings.nativelang
+        onCheckedChanged: checked ? translator.load() : translator.remove()
+    }
+
     TabView {
         id: titleRow
         width: parent.width
@@ -57,23 +68,23 @@ ApplicationWindow {
         anchors {top: title.bottom; bottom: parent.bottom }
 
         Tab {
-            title: qsTr("Device")
+            title: qsTr("Device") + translator.lang
             Device { anchors.fill: parent; }
         }
         Tab {
-            title: qsTr("Extract");
+            title: qsTr("Extract") + translator.lang
             Extract { anchors.fill: parent }
         }
         Tab {
-            title: qsTr("Search")
+            title: qsTr("Search") + translator.lang
             Search { anchors.fill: parent }
         }
         Tab {
-            title: qsTr("Backup")
+            title: qsTr("Backup") + translator.lang
             Backup { anchors.fill: parent }
         }
         Tab {
-            title: qsTr("Install")
+            title: qsTr("Install") + translator.lang
             Installer { anchors.fill: parent }
         }
 

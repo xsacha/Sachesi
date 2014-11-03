@@ -9,27 +9,27 @@ Item {
     ColumnLayout {
         anchors { fill: parent; margins: 15 }
         Label {
-            text: qsTr("Device Information")
+            text: qsTr("Device Information") + translator.lang
             font.pointSize: 14
             font.bold: true
         }
         GroupBox {
             visible: i.device !== null
-            title:  qsTr("Tools")
+            title:  qsTr("Tools") + translator.lang
             RowLayout {
                 Button {
                     id: wipe
-                    text:  qsTr("Wipe")
+                    text:  qsTr("Wipe") + translator.lang
                     onClicked: i.wipe();
                 }
                 Button {
                     id: factorywipe
-                    text:  qsTr("Factory Reset")
+                    text:  qsTr("Factory Reset") + translator.lang
                     onClicked: i.factorywipe();
                 }
                 Button {
                     id: reboot
-                    text:  qsTr("Reboot")
+                    text:  qsTr("Reboot") + translator.lang
                     onClicked: i.reboot();
                 }
             }
@@ -41,43 +41,43 @@ Item {
             columnSpacing: 20
 
             Label {
-                text: qsTr("Name")
+                text: qsTr("Name") + translator.lang
                 font.bold: true
             }
             Label {
                 id: deviceNameText
-                text: i.device === null ? qsTr("Unknown") : i.device.friendlyName
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.friendlyName
             }
             Label {
-                text: qsTr("HW Name")
+                text: qsTr("HW Name") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.name
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.name
                 font.pointSize: i.device === null ? -1 : 10
             }
 
             Label {
-                text: qsTr("BBID")
+                text: qsTr("BBID") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.bbid
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.bbid
             }
             Label {
-                text: qsTr("PIN")
+                text: qsTr("PIN") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.pin
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.pin
             }
 
             Label {
-                text: qsTr("BSN")
+                text: qsTr("BSN") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.bsn
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.bsn
             }
             Label {
                 font.bold: true
@@ -87,82 +87,82 @@ Item {
             }
 
             Label {
-                text: qsTr("OS")
+                text: qsTr("OS") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.os
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.os
             }
 
             Label {
-                text: qsTr("Radio")
+                text: qsTr("Radio") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.radio
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.radio
             }
 
             Label {
-                text: qsTr("HW")
+                text: qsTr("HW") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : i.device.hw
+                text: i.device === null ? (qsTr("Unknown") + translator.lang) : i.device.hw
             }
 
             Label {
-                text: qsTr("Restrictions")
+                text: qsTr("Restrictions") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : (i.device.restrictions === "" ? qsTr("None") : i.device.restrictions)
+                text: (i.device === null ? qsTr("Unknown") : (i.device.restrictions === "" ? qsTr("None") : i.device.restrictions)) + translator.lang
             }
 
             Label {
-                text: qsTr("Setup Complete")
+                text: qsTr("Setup Complete") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : (i.device.setupComplete ? qsTr("True") : qsTr("False"))
+                text: (i.device === null ? qsTr("Unknown") : (i.device.setupComplete ? qsTr("True") : qsTr("False"))) + translator.lang
             }
 
             Label {
-                text: qsTr("Developer Mode")
+                text: qsTr("Developer Mode") + translator.lang
                 font.bold: true
             }
             Label {
-                text: i.device === null ? qsTr("Unknown") : (i.device.devMode ? qsTr("True") : qsTr("False"))
+                text: (i.device === null ? qsTr("Unknown") : (i.device.devMode ? qsTr("True") : qsTr("False"))) + translator.lang
             }
 
             Label {
-                text: qsTr("Battery")
+                text: qsTr("Battery") + translator.lang
                 font.bold: true
             }
             Label {
-                text: (i.device === null || i.device.battery < 0) ? qsTr("Unknown") : i.device.battery + "%"
+                text: (i.device === null || i.device.battery < 0) ? (qsTr("Unknown") + translator.lang) : i.device.battery + "%"
             }
 
             Label {
-                text: qsTr("Connection")
+                text: qsTr("Connection") + translator.lang
                 font.bold: true
             }
             Label {
-                text: (i.device === null || i.device.battery < 0) ? qsTr("None") : qsTr("USB")
+                text: ((i.device === null || i.device.battery < 0) ? qsTr("None") : qsTr("USB")) + translator.lang
             }
 
             Label {
-                text: qsTr("Refurbished Date")
+                text: qsTr("Refurbished Date") + translator.lang
                 font.bold: true
             }
             RowLayout {
                 Label {
                     id: refurbText
-                    text: (i.device === null) ? qsTr("Unknown") : (i.device.refurbDate === "" ? qsTr("Never") : i.device.refurbDate)
+                    text: ((i.device === null) ? qsTr("Unknown") : (i.device.refurbDate === "" ? qsTr("Never") : i.device.refurbDate)) + translator.lang
                 }
                 Button {
-                    property bool isSet: refurbText.text !== qsTr("Never")
-                    visible: refurbText.text !== qsTr("Unknown")
-                    text: isSet ? qsTr("Clear") : qsTr("Set")
+                    property bool isSet: refurbText.text !== (qsTr("Never") + translator.lang)
+                    visible: refurbText.text !== (qsTr("Unknown") + translator.lang)
+                    text: (isSet ? qsTr("Clear") : qsTr("Set")) + translator.lang
                     onClicked: {
                         var date = Math.floor(new Date().getTime() / 1000)
                         i.setActionProperty("RefurbDate", isSet ? "0" : date.toString())
@@ -177,11 +177,11 @@ Item {
             }
 
             Label {
-                text: qsTr("Free Disk Space")
+                text: qsTr("Free Disk Space") + translator.lang
                 font.bold: true
             }
             Label {
-                text: (i.device === null || i.device.freeSpace === 0) ? qsTr("Unknown") : qsTr("%1 GB").arg((i.device.freeSpace / 1024 / 1024 / 1024).toFixed(3))
+                text: ((i.device === null || i.device.freeSpace === 0) ? qsTr("Unknown") : qsTr("%1 GB").arg((i.device.freeSpace / 1024 / 1024 / 1024).toFixed(3))) + translator.lang
             }
         }
     }

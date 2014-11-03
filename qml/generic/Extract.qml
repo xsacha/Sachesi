@@ -21,7 +21,7 @@ Item {
                 Text {
                     id: splitText
                     property string splitType: "";
-                    property int splitting: p.splitting
+                    property int splitting: p.splitting + translator.lang
                     onSplittingChanged: {
                         switch(splitting) {
                         case 1: splitType = qsTr("Splitting Autoloader"); break;
@@ -43,7 +43,7 @@ Item {
             }
             Text {
                 visible: p.splitProgress > 100
-                text:  qsTr("Percentages are not entirely accurate for QNX6 files.")
+                text: qsTr("Percentages are not entirely accurate for QNX6 files.") + translator.lang
                 font.pointSize: 10
             }
         }
@@ -52,7 +52,7 @@ Item {
             z: 6;
             visible: p.splitting == 2
             anchors {bottom: parent.bottom; bottomMargin: 10; horizontalCenter: parent.horizontalCenter}
-            text:  qsTr("Cancel");
+            text: qsTr("Cancel") + translator.lang
             onClicked: p.abortSplit();
         }
     }
@@ -60,7 +60,7 @@ Item {
         anchors { fill: parent; margins: 15 }
         Layout.fillHeight: true
         Text {
-            text:  qsTr("Extraction Tools")
+            text: qsTr("Extraction Tools") + translator.lang
             font.pointSize: 14
             font.bold: true
         }
@@ -68,17 +68,17 @@ Item {
             RowLayout {
                 FileDialog {
                     id: combine_files
-                    title:  qsTr("Create Autoloader")
+                    title:  qsTr("Create Autoloader") + translator.lang
                     folder: settings.installFolder
                     onAccepted: {
                         p.combineAutoloader(fileUrls);
                         settings.installFolder = folder;
                     }
 
-                    nameFilters: [ "Signed Images (*.signed)" ]
+                    nameFilters: [ qsTr("Signed Images (*.signed)") ]
                 }
                 Button {
-                    text:  qsTr("Create from Folder")
+                    text:  qsTr("Create from Folder") + translator.lang
                     enabled: !p.splitting
                     onClicked: {
                         combine_files.selectFolder = true
@@ -86,7 +86,7 @@ Item {
                     }
                 }
                 Button {
-                    text:  qsTr("Create from Files");
+                    text:  qsTr("Create from Files") + translator.lang
                     enabled: !p.splitting
                     onClicked: {
                         combine_files.selectFolder = false
@@ -96,7 +96,7 @@ Item {
                 }
             }
             Label {
-                text:  qsTr("Create Autoloader .exe from .signed images")
+                text:  qsTr("Create Autoloader .exe from .signed images") + translator.lang
                 font.bold: true;
             }
         }
@@ -105,37 +105,37 @@ Item {
             RowLayout {
                 FileDialog {
                     id: split_files
-                    title:  qsTr("Extract Signed")
+                    title:  qsTr("Extract Signed") + translator.lang
                     folder: settings.installFolder
                     onAccepted: {
                         p.splitAutoloader(fileUrl, userSelect.checked * 1 + osSelect.checked * 2 + radioSelect.checked * 4 + ifsSelect.checked * 8 + pinSelect.checked * 16);
                         settings.installFolder = folder;
                     }
 
-                    nameFilters: [ "Signed Containers (*.exe *.bar *.zip)" ]
+                    nameFilters: [ qsTr("Signed Containers (*.exe *.bar *.zip)") ]
                 }
 
                 Button {
-                    text:  qsTr("Extract Signed");
+                    text:  qsTr("Extract Signed") + translator.lang
                     enabled: !p.splitting
                     onClicked: split_files.open()
                 }
                 CheckBox {
                     visible: settings.advanced
                     id: userSelect
-                    text:  qsTr("User")
+                    text:  qsTr("User") + translator.lang
                     checked: true
                 }
                 CheckBox {
                     visible: settings.advanced
                     id: osSelect
-                    text:  qsTr("OS")
+                    text:  qsTr("OS") + translator.lang
                     checked: true
                 }
                 CheckBox {
                     visible: settings.advanced
                     id: radioSelect
-                    text:  qsTr("Radio")
+                    text:  qsTr("Radio") + translator.lang
                     checked: true
                 }
                 CheckBox {
@@ -147,27 +147,27 @@ Item {
                 CheckBox {
                     visible: settings.advanced
                     id: pinSelect
-                    text:  qsTr("PINList")
+                    text:  qsTr("PINList") + translator.lang
                 }
             }
             Label {
-                text:  qsTr("Split .signed from autoloader .exe, .bar or .zip")
+                text:  qsTr("Split .signed from autoloader .exe, .bar or .zip") + translator.lang
                 font.bold: true;
             }
         }
         // Extract Apps
         ColumnLayout {
             Button {
-                text:  qsTr("Extract Apps")
+                text:  qsTr("Extract Apps") + translator.lang
                 enabled: !p.splitting
                 onClicked: if (!p.splitting) p.extractImage(2, 2);
             }
             Label {
-                text:  qsTr("Extracts all bar archives from a debrick/repair .signed")
+                text:  qsTr("Extracts all bar archives from a debrick/repair .signed") + translator.lang
                 font.bold: true;
             }
             Label {
-                text: qsTr("Note: To extract apps from a .bar, please split it first (above)")
+                text: qsTr("Note: To extract apps from a .bar, please split it first (above)") + translator.lang
             }
         }
         // Extract Image
@@ -176,7 +176,7 @@ Item {
             RowLayout {
                 property int imageValue: rcfsImage.checked * 1 + qnxImage.checked * 2 + bootImage.checked * 4
                 Button {
-                    text:  qsTr("Extract Image")
+                    text:  qsTr("Extract Image") + translator.lang
                     enabled: !p.splitting && parent.imageValue
                     onClicked: if (!p.splitting) p.extractImage(1, parent.imageValue);
                 }
@@ -196,7 +196,7 @@ Item {
                 }
             }
             Label {
-                text:  qsTr("Extracts filesystem image")
+                text:  qsTr("Extracts filesystem image") + translator.lang
                 font.bold: true;
             }
         }
@@ -206,28 +206,28 @@ Item {
             RowLayout {
                 property int partValue: corePart.checked * 1 + userPart.checked * 2 + bootPart.checked * 4
                 Button {
-                    text:  qsTr("Dump Contents")
+                    text:  qsTr("Dump Contents") + translator.lang
                     enabled: !p.splitting && parent.partValue
                     onClicked: if (!p.splitting) p.extractImage(0, parent.partValue);
                 }
                 CheckBox {
                     id: corePart
                     checked: true
-                    text:  qsTr("Core")
+                    text:  qsTr("Core") + translator.lang
                 }
                 CheckBox {
                     id: userPart
                     checked: true
-                    text:  qsTr("User")
+                    text:  qsTr("User") + translator.lang
                 }
                 CheckBox {
                     id: bootPart
                     checked: false
-                    text:  qsTr("Boot")
+                    text:  qsTr("Boot") + translator.lang
                 }
             }
             Label {
-                text:  qsTr("Dump all file contents")
+                text:  qsTr("Dump all file contents") + translator.lang
                 font.bold: true;
             }
         }

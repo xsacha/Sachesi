@@ -29,6 +29,7 @@
 #include "backupinfo.h"
 #endif
 #include "carrierinfo.h"
+#include "translator.h"
 #ifdef BOOTLOADER_ACCESS
 #include "boot.h"
 #endif
@@ -61,14 +62,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setApplicationName("Sachesi");
     app.setApplicationVersion("2.0.0");
 
-    // Install translator by locale language string
-    QTranslator appTranslator;
-    // zh_HK is considered 'Chinese' language but the characters are entirely different.
-    if ((QLocale().name() != "zh_HK") && appTranslator.load(QString(":/translations/%1.qm")
-                                  .arg(QLocale::languageToString(QLocale().language())))
-            ) {
-        app.installTranslator(&appTranslator);
-    }
     // Use system proxy except where not possible
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
@@ -103,6 +96,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("i", &i);
     MainNet p(&i);
     Scanner scanner;
+    Translator translator;
 #ifdef BOOTLOADER_ACCESS
     Boot b;
 
@@ -119,6 +113,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     context->setContextProperty("scanner", &scanner);
     context->setContextProperty("download", p.currentDownload);
     context->setContextProperty("carrierinfo",  &info);
+    context->setContextProperty("translator",  &translator);
 
     // *** Register types for the QML language to understand types used by C++, when passed
 #ifndef BLACKBERRY

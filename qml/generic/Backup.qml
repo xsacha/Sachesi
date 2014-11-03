@@ -21,7 +21,7 @@ Item {
     ColumnLayout {
         ColumnLayout {
             Text {
-                text:  qsTr("Options")
+                text: qsTr("Options") + translator.lang
                 font.pointSize: 14
                 font.bold: true
             }
@@ -30,7 +30,7 @@ Item {
             RowLayout {
                 visible: attemptLookup.running
                 Text {
-                    text:  qsTr("Refreshing backup sizes")
+                    text: qsTr("Refreshing backup sizes") + translator.lang
                     font.pointSize: 12
                 }
                 BusyIndicator {
@@ -42,7 +42,7 @@ Item {
                 Repeater {
                     model: i.backMethods
                     delegate: CheckBox {
-                        text: i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(i.backSizes[index].toFixed(1))) + ")" // index
+                        text: (i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(i.backSizes[index].toFixed(1))) + ")") + translator.lang // index
                         onCheckedChanged: {
                             if (checked) {
                                 options.value += 1 << index;
@@ -59,7 +59,7 @@ Item {
                 visible: i.backMethods
                 id: totalText
                 property double totalVal: 0.0
-                text: qsTr("Total:") + " " + (totalVal < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(totalVal.toFixed(1)))
+                text: (qsTr("Total:") + " " + (totalVal < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(totalVal.toFixed(1)))) + translator.lang
                 font.pointSize: 12
             }
         }
@@ -67,19 +67,19 @@ Item {
         Button {
             visible: /*!i.backMethods &&*/ !attemptLookup.running
             enabled: !i.installing && !i.backing && !i.restoring && i.device !== null && i.device.bbid !== ""
-            text:  qsTr("Refresh Backup Sizes")
+            text:  qsTr("Refresh Backup Sizes") + translator.lang
             onClicked: { totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
         }
 
         Label {
             visible: !settings.advanced
-            text: qsTr("Loading backup sizes can sometimes fail. In this situation, you can backup 'blind'.")
+            text: qsTr("Loading backup sizes can sometimes fail. In this situation, you can backup 'blind'.") + translator.lang
         }
         RowLayout {
             visible: i.backMethods
             FileDialog {
                 id: backup_files
-                title:  qsTr("Choose Backup Filename")
+                title:  qsTr("Choose Backup Filename") + translator.lang
                 folder: settings.backupFolder
                 onAccepted: {
                     i.backup(fileUrl, options.value)
@@ -91,7 +91,7 @@ Item {
             }
             FileDialog {
                 id: restore_files
-                title:  qsTr("Select Restore File")
+                title:  qsTr("Select Restore File") + translator.lang
                 folder: settings.backupFolder
                 onAccepted: {
                     i.restore(fileUrl, options.value)
@@ -102,23 +102,23 @@ Item {
             }
 
             Button {
-                text: totalText.totalVal < 0 ? qsTr("Create Backup Blind") : qsTr("Create Backup")
+                text: (totalText.totalVal < 0 ? qsTr("Create Backup Blind") : qsTr("Create Backup")) + translator.lang
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.device !== null && i.device.bbid !== ""
                 onClicked: backup_files.open();
             }
             Button {
-                text:  qsTr("Restore Backup")
+                text:  qsTr("Restore Backup") + translator.lang
                 enabled: !i.installing && !i.backing && !i.restoring && options.value != 0 && i.device !== null && i.device.bbid !== ""
                 onClicked: restore_files.open();
             }
         }
         Label {
             visible: i.device !== null && i.device.bbid === ""
-            text: qsTr("Your device needs a Blackberry ID to perform backups or restores!")
+            text: qsTr("Your device needs a Blackberry ID to perform backups or restores!") + translator.lang
         }
         Label {
             visible: !settings.advanced
-            text: qsTr("Please note that backups can take a long time, depending on your device data.")
+            text: qsTr("Please note that backups can take a long time, depending on your device data.") + translator.lang
         }
     }
     Rectangle {
@@ -133,7 +133,7 @@ Item {
             anchors {verticalCenter: parent.verticalCenter; left: parent.left; leftMargin: parent.width / 2 - 150 }
             Text {
                 font.pointSize: 12
-                text: i.backing ? qsTr("Creating Backup (%1%)").arg(i.backProgress) : qsTr("Restoring Backup (%1%)").arg(i.backProgress)
+                text: (i.backing ? qsTr("Creating Backup (%1%)").arg(i.backProgress) : qsTr("Restoring Backup (%1%)").arg(i.backProgress)) + translator.lang
             }
             Row {
                 spacing: 10

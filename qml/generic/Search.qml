@@ -20,7 +20,7 @@ Item {
                           }
         width: parent.width / 3; height: Math.min(parent.height / 2, width + 20);
         color: "lightgray"
-        title: qsTr("Download")
+        title: qsTr("Download") + translator.lang
 
         ColumnLayout {
             anchors.fill: parent
@@ -35,7 +35,7 @@ Item {
             }
             Button {
                 id: cancelButton
-                text:  qsTr("Cancel Download")
+                text:  qsTr("Cancel Download") + translator.lang
                 onClicked: download.reset();
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -50,7 +50,7 @@ Item {
                 id: searchButton
                 anchors.horizontalCenter: parent.horizontalCenter
                 enabled: !p.scanning
-                text: p.scanning ? qsTr("Searching...") : qsTr("Search")
+                text: (p.scanning ? qsTr("Searching...") : qsTr("Search")) + translator.lang
                 onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem /*, server.selectedItem , version.selectedItem*/) }
             }
             RadioButton {
@@ -58,10 +58,10 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: false && settings.advanced && !p.scanning && typeof i !== 'undefined' && i.appCount > 0
                 checked: true
-                text:  qsTr("Delta")
+                text: qsTr("Delta") + translator.lang
             }
             Button {
-                text:  qsTr("Version Lookup")
+                text: qsTr("Version Lookup") + translator.lang
                 onClicked: versionLookup.visible = !versionLookup.visible
             }
         }
@@ -82,10 +82,10 @@ Item {
         id: urlLinks
         anchors { left: variables.right; right: parent.right; bottom: parent.bottom; margins: 15 }
         GroupBox {
-            title: qsTr("Download For")
+            title: qsTr("Download For") + translator.lang
             TextCoupleSelect {
                 id: downloadDevice
-                type: qsTr("Device")
+                type: qsTr("Device") + translator.lang
                 selectedItem: 0
 
                 //property int familyType: (selectedItem == 0) ? i.device.hwFamily : selectedItem
@@ -115,24 +115,24 @@ Item {
             Button {
                 enabled: p.updateCheckedCount > 0
                 Layout.alignment: Qt.AlignHCenter
-                text:  qsTr("Grab Links")
+                text: qsTr("Grab Links") + translator.lang
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {
                 enabled: p.updateCheckedNeededCount > 0 && !download.verifying
                 visible: !download.running
                 Layout.alignment: Qt.AlignHCenter
-                text: download.verifying ? qsTr("Verifying") : qsTr("Download")
+                text: (download.verifying ? qsTr("Verifying") : qsTr("Download")) + translator.lang
                 onClicked: { download.start(); p.downloadLinks(downloadDevice.selectedItem) }
             }
             Button {
                 visible: download.running
-                text:  qsTr("View Download (%1%)").arg(download.progress)
+                text: qsTr("View Download (%1%)").arg(download.progress) + translator.lang
                 onClicked: downloadWin.visible = true
             }
             Button {
                 visible: download.running
-                text:  qsTr("Cancel Download")
+                text: qsTr("Cancel Download") + translator.lang
                 onClicked: download.reset();
             }
         }
@@ -146,17 +146,17 @@ Item {
         height: (parent.height * 4) / 6
         Label {
             font.pointSize: 14
-            text: qsTr("Whitelist Settings")
+            text: qsTr("Whitelist Settings") + translator.lang
             font.bold: true
         }
         Label {
             visible: !settings.advanced
-            text: qsTr("Finds updates approved by other carriers")
+            text: qsTr("Finds updates approved by other carriers") + translator.lang
         }
 
         TextCouple {
             id: country
-            type: qsTr("Country")
+            type: qsTr("Country") + translator.lang
             value: "310"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
@@ -167,7 +167,7 @@ Item {
         }
         TextCouple {
             id: carrier
-            type: qsTr("Carrier")
+            type: qsTr("Carrier") + translator.lang
             value: "410"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
@@ -181,12 +181,12 @@ Item {
         }
 
         GroupBox {
-            title: qsTr("Search For")
+            title: qsTr("Search For") + translator.lang
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
                     selectedItem: 4
-                    type: qsTr("Device")
+                    type: qsTr("Device") + translator.lang
 
                     // List everything we know except abandoned models
                     ListModel {
@@ -235,7 +235,7 @@ Item {
                 TextCoupleSelect {
                     visible: settings.advanced
                     id: variant
-                    type: qsTr("Variant")
+                    type: qsTr("Variant") + translator.lang
                     selectedItem: 0
                     // This is going to be hell to maintain. Maybe an identifier in dev[] for carrier-specific and its associated code?
                     /*onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
@@ -252,8 +252,8 @@ Item {
         TextCoupleSelect {
             visible: settings.advanced
             id: mode
-            type: qsTr("Mode")
-            listModel: [ qsTr("Upgrade"), qsTr("Debrick") ]
+            type: qsTr("Mode") + translator.lang
+            listModel: [ qsTr("Upgrade")  + translator.lang, qsTr("Debrick") + translator.lang ]
         }
 
         /*TextCoupleSelect {
@@ -369,10 +369,10 @@ Item {
                     signal checkAll()
                     signal checkAllNeeded()
                     signal uncheckAll()
-                    title:  qsTr("Options")
+                    title:  qsTr("Options") + translator.lang
                     MenuItem {
                         enabled: p.updateCheckedCount !== p.updateAppCount
-                        text:  qsTr("Check All")
+                        text:  qsTr("Check All") + translator.lang
                         onTriggered: {
                             options_menu.checkAll();
                             for (var i = 0; i < p.updateAppCount; i++)
@@ -381,7 +381,7 @@ Item {
                     }
                     MenuItem {
                         enabled: p.updateCheckedNeededCount !== p.updateAppNeededCount
-                        text:  qsTr("Check All Needed")
+                        text:  qsTr("Check All Needed") + translator.lang
                         onTriggered: {
                             options_menu.checkAllNeeded();
                             for (var i = 0; i < p.updateAppCount; i++)
@@ -390,7 +390,7 @@ Item {
                     }
                     MenuItem {
                         enabled: p.updateCheckedCount > 0
-                        text:  qsTr("Uncheck All")
+                        text:  qsTr("Uncheck All") + translator.lang
                         onTriggered: {
                             options_menu.uncheckAll()
                             for (var i = 0; i < p.updateAppCount; i++)
@@ -421,7 +421,7 @@ Item {
                     }
                     CheckBox {
                         id: delegateBox
-                        text: friendlyName + (isInstalled ? " " + qsTr("(older)") : (isAvailable ? "" : " " + qsTr("(downloaded)")))
+                        text: friendlyName + (isInstalled ? " " + qsTr("(older)") : (isAvailable ? "" : " " + qsTr("(downloaded)"))) + translator.lang
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked
@@ -445,7 +445,7 @@ Item {
                         anchors.right: parent.right
                         width: sizeHint.width
                         horizontalAlignment: Text.AlignRight
-                        text: qsTr("%1 MB").arg((size / 1024 / 1024).toFixed(1))
+                        text: qsTr("%1 MB").arg((size / 1024 / 1024).toFixed(1)) + translator.lang
                         font.pointSize: 12;
                     }
                 }
