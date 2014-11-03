@@ -6,7 +6,7 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    title: "Sachesi " + version + " " + "Beta"
+    title: "Sachesi " + version + " Beta"
     width: 820
     height: 680
     minimumHeight: 540
@@ -45,14 +45,22 @@ ApplicationWindow {
         text: checked ? "+H+" : "H"
         tooltip: qsTr("Advanced") + translator.lang
     }
-    Button {
-        //visible: translator.exists
+
+    ComboBox {
+        model: [ Qt.locale().nativeLanguageName, "English" ]
         anchors { right: parent.right; top: parent.top; topMargin: 1 }
-        checkable: true
-        checked: settings.nativelang
-        text: checked ? "English" : Qt.locale().nativeLanguageName
-        onClicked: settings.nativelang = !settings.nativelang
-        onCheckedChanged: checked ? translator.load() : translator.remove()
+        //visible: translator.exists
+        currentIndex: settings.nativelang ? 0 : 1
+
+        onCurrentIndexChanged: {
+            if (currentIndex === 0) {
+                translator.load();
+                settings.nativelang = true;
+            } else {
+                translator.remove();
+                settings.nativelang = false;
+            }
+        }
     }
 
     TabView {
