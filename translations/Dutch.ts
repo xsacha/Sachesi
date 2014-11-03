@@ -2,114 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="nl_NL">
 <context>
-    <name>AppWorld</name>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Ga terug</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="vanished">Startpagina</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Zoek</translation>
-    </message>
-    <message>
-        <source>Featured</source>
-        <translation type="vanished">Uitgelicht</translation>
-    </message>
-    <message>
-        <source>Carrier</source>
-        <translation type="vanished">Provider</translation>
-    </message>
-    <message>
-        <source>Cars</source>
-        <translation type="vanished">Auto&apos;s</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="vanished">van</translation>
-    </message>
-    <message>
-        <source>File Bundle</source>
-        <translation type="vanished">Bestandspakket</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Versie</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">MB</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="vanished">Bekijk</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Download</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="vanished">Opties</translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="vanished">Server</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">Productie</translation>
-    </message>
-    <message>
-        <source>Enterprise</source>
-        <translation type="vanished">Bedrijf</translation>
-    </message>
-    <message>
-        <source>Eval</source>
-        <translation type="vanished">Eval</translation>
-    </message>
-    <message>
-        <source>Model</source>
-        <translation type="vanished">Model</translation>
-    </message>
-    <message>
-        <source>OS</source>
-        <translation type="vanished">Besturingssysteem</translation>
-    </message>
-    <message>
-        <source>Latest</source>
-        <translation type="vanished">Nieuwste</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="vanished">Alle</translation>
-    </message>
-</context>
-<context>
     <name>Backup</name>
     <message>
         <location filename="../qml/generic/Backup.qml" line="24"/>
         <source>Options</source>
         <translation>Opties</translation>
-    </message>
-    <message>
-        <source>Loading Backup Options</source>
-        <translation type="vanished">Bezig met laden van backup-opties...</translation>
-    </message>
-    <message>
-        <source>Load Backup Options</source>
-        <translation type="vanished">Laad backup-opties</translation>
-    </message>
-    <message>
-        <source>Refreshing Backup Sizes</source>
-        <translation type="vanished">Backup-groottes vernieuwen</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="obsolete">Onbekend</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
@@ -169,26 +66,10 @@
         <translation>Herstel backup</translation>
     </message>
     <message>
-        <source>Choose backup filename</source>
-        <translation type="vanished">Voer backup-bestandsnaam in</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
         <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>BlackBerry-backup-bestand (*.bbb)</translation>
-    </message>
-    <message>
-        <source>Select restore file</source>
-        <translation type="vanished">Kies herstelbestand</translation>
-    </message>
-    <message>
-        <source>Create backup</source>
-        <translation type="vanished">Maak backup aan</translation>
-    </message>
-    <message>
-        <source>Restore backup</source>
-        <translation type="vanished">Herstel backup</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
@@ -459,10 +340,6 @@
         <translation>Annuleer</translation>
     </message>
     <message>
-        <source>Autoloader Tools</source>
-        <translation type="vanished">Autoloader-gereedschappen</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
@@ -490,10 +367,6 @@
         <translation>PINList</translation>
     </message>
     <message>
-        <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation type="vanished">Extraheert gesigneerde bestanden uit autoloader (.exe, .bar of .zip)</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="71"/>
         <source>Create Autoloader</source>
         <translation>Maak autoloader aan</translation>
@@ -517,16 +390,6 @@
         <location filename="../qml/generic/Extract.qml" line="63"/>
         <source>Extraction Tools</source>
         <translation>Extractiegereedschappen</translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="78"/>
-        <source>Signed Images (*.signed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="115"/>
-        <source>Signed Containers (*.exe *.bar *.zip)</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
@@ -599,6 +462,16 @@
         <translation>Wacht</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
         <source>Extracts filesystem image</source>
         <translation>Extraheert een kopie van het bestandssysteem</translation>
@@ -608,17 +481,9 @@
         <source>Extract Apps</source>
         <translation>Extraheer apps</translation>
     </message>
-    <message>
-        <source>Extract all bar archives</source>
-        <translation type="vanished">Extraheert alle BAR-bestanden</translation>
-    </message>
 </context>
 <context>
     <name>Installer</name>
-    <message>
-        <source>View Install (</source>
-        <translation type="vanished">Toon installatie (</translation>
-    </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
@@ -633,18 +498,6 @@
         <location filename="../qml/generic/Installer.qml" line="47"/>
         <source>Install</source>
         <translation>Installatie</translation>
-    </message>
-    <message>
-        <source>Sending </source>
-        <translation type="vanished">Verstuurt </translation>
-    </message>
-    <message>
-        <source>Installing </source>
-        <translation type="vanished">Installeert </translation>
-    </message>
-    <message>
-        <source>Sent </source>
-        <translation type="vanished">Verstuurd: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
@@ -668,10 +521,6 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Installeer map</translation>
     </message>
     <message>
-        <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation type="vanished">Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het proces is voltooid.&lt;br&gt;</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
@@ -691,26 +540,6 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <location filename="../qml/generic/Installer.qml" line="115"/>
         <source>Select Files</source>
         <translation>Kies bestanden</translation>
-    </message>
-    <message>
-        <source>Allow downgrades</source>
-        <translation type="vanished">Sta downgrades toe</translation>
-    </message>
-    <message>
-        <source>Advanced Tools</source>
-        <translation type="vanished">Geavanceerde gereedschappen</translation>
-    </message>
-    <message>
-        <source>Wipe</source>
-        <translation type="vanished">Wis volledig</translation>
-    </message>
-    <message>
-        <source>Factory Reset</source>
-        <translation type="vanished">Herstel fabrieksinstellingen</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Herstart</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
@@ -873,10 +702,6 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Bezig met verificiëren</translation>
     </message>
     <message>
-        <source>View Download (</source>
-        <translation type="vanished">Toon download (</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
         <source>Server did not respond as expected [%1].</source>
         <translation>Server reageerde niet zoals verwacht [%1].</translation>
@@ -968,41 +793,9 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <source>Server</source>
-        <translation type="vanished">Server</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">Productie</translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="vanished">Bèta</translation>
-    </message>
-    <message>
-        <source>Beta 2</source>
-        <translation type="vanished">Bèta 2</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="vanished">Alfa</translation>
-    </message>
-    <message>
-        <source>Alpha 2</source>
-        <translation type="vanished">Alfa 2</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="348"/>
         <source>1700.0 MB</source>
         <translation>1700,0 MB</translation>
-    </message>
-    <message>
-        <source>Selected: </source>
-        <translation type="vanished">Geselecteerd: </translation>
-    </message>
-    <message>
-        <source>. Needed: </source>
-        <translation type="vanished">. Benodigd: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="372"/>
@@ -1024,37 +817,13 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <source>Uncheck All</source>
         <translation>Hef selectie op</translation>
     </message>
-    <message>
-        <source> (downloaded)</source>
-        <translation type="vanished"> (gedownload)</translation>
-    </message>
-    <message>
-        <source> (installed)</source>
-        <translation type="vanished"> (geïnstalleerd)</translation>
-    </message>
 </context>
 <context>
     <name>Title</name>
     <message>
-        <source>Sachesi</source>
-        <translation type="vanished">Sachesi</translation>
-    </message>
-    <message>
-        <source>SACHESI</source>
-        <translation type="vanished">SACHESI</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
         <translation>Geavanceerde opties</translation>
-    </message>
-    <message>
-        <source>AppWorld</source>
-        <translation type="vanished">BlackBerry World</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="vanished">Alfa</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="71"/>
@@ -1080,14 +849,6 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>Installatie</translation>
-    </message>
-    <message>
-        <source>Boot</source>
-        <translation type="vanished">Boot</translation>
-    </message>
-    <message>
-        <source>No device connected</source>
-        <translation type="vanished">Geen toestel verbonden</translation>
     </message>
 </context>
 <context>
@@ -1145,10 +906,6 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
 </context>
 <context>
     <name>VersionLookup</name>
-    <message>
-        <source>Sachesi</source>
-        <translation type="vanished">Sachesi</translation>
-    </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Version Lookup</source>
@@ -1218,18 +975,6 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
         <source>Autoscan</source>
         <translation>Scan</translation>
-    </message>
-    <message>
-        <source>Find next available links</source>
-        <translation type="vanished">Vind eerstbeschikbare links</translation>
-    </message>
-    <message>
-        <source>Check for SDK</source>
-        <translation type="vanished">Zoek naar SDK-versies</translation>
-    </message>
-    <message>
-        <source>Software Release: </source>
-        <translation type="vanished">Software-release: </translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>

@@ -340,9 +340,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -402,11 +412,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="78"/>
-        <source>Signed Images (*.signed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="81"/>
         <source>Create from Folder</source>
         <translation type="unfinished"></translation>
@@ -424,11 +429,6 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="63"/>
         <source>Extraction Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="115"/>
-        <source>Signed Containers (*.exe *.bar *.zip)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -2,126 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
-    <name>AppWorld</name>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Назад</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="vanished">Домой</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Найти</translation>
-    </message>
-    <message>
-        <source>Featured</source>
-        <translation type="vanished">Рекомендации</translation>
-    </message>
-    <message>
-        <source>Carrier</source>
-        <translation type="vanished">Оператор</translation>
-    </message>
-    <message>
-        <source>Cars</source>
-        <translation type="vanished">Автомобили</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="vanished">от</translation>
-    </message>
-    <message>
-        <source>File Bundle</source>
-        <translation type="vanished">Имя пакета</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Версия</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">МБ</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="vanished">Обзор</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Загрузить</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="vanished">Параметры</translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="vanished">Сервер</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">Производство</translation>
-    </message>
-    <message>
-        <source>Enterprise</source>
-        <translation type="vanished">Предприятие</translation>
-    </message>
-    <message>
-        <source>Eval</source>
-        <translation type="vanished">Оценки</translation>
-    </message>
-    <message>
-        <source>Model</source>
-        <translation type="vanished">Модель</translation>
-    </message>
-    <message>
-        <source>OS</source>
-        <translation type="vanished">ОС</translation>
-    </message>
-    <message>
-        <source>Latest</source>
-        <translation type="vanished">Последние</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="vanished">Все</translation>
-    </message>
-</context>
-<context>
     <name>Backup</name>
     <message>
         <location filename="../qml/generic/Backup.qml" line="24"/>
         <source>Options</source>
         <translation>Параметры</translation>
-    </message>
-    <message>
-        <source>Loading Backup Options</source>
-        <translation type="vanished">Загрузка вариантов резервного копирования</translation>
-    </message>
-    <message>
-        <source>Load Backup Options</source>
-        <translation type="vanished">Загрузить варианты резервного копирования</translation>
-    </message>
-    <message>
-        <source>Refreshing Backup Sizes</source>
-        <translation type="vanished">Обновление размера резервной копии</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="vanished"> ? </translation>
-    </message>
-    <message>
-        <source> MB)</source>
-        <translation type="vanished"> МБ)</translation>
-    </message>
-    <message>
-        <source>Total: </source>
-        <translation type="vanished">Всего: </translation>
-    </message>
-    <message>
-        <source> MB</source>
-        <translation type="vanished"> МБ</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
@@ -181,30 +66,10 @@
         <translation>Восстановить из резервной копии</translation>
     </message>
     <message>
-        <source>Choose backup filename</source>
-        <translation type="vanished">Введите имя файла резервной копии</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
         <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>Blackberry Backup (*.bbb)</translation>
-    </message>
-    <message>
-        <source>Select restore file</source>
-        <translation type="vanished">Выберите файл восстановления</translation>
-    </message>
-    <message>
-        <source>Create backup</source>
-        <translation type="vanished">Создание резервной копии</translation>
-    </message>
-    <message>
-        <source>Blind</source>
-        <translation type="vanished">Вслепую</translation>
-    </message>
-    <message>
-        <source>Restore backup</source>
-        <translation type="vanished">Восстановить резервную копию</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
@@ -225,18 +90,6 @@
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Restoring Backup (%1%)</source>
         <translation>Восстановление (%1%)</translation>
-    </message>
-    <message>
-        <source>Creating</source>
-        <translation type="vanished">Создание</translation>
-    </message>
-    <message>
-        <source>Restoring</source>
-        <translation type="vanished">Восстановление</translation>
-    </message>
-    <message>
-        <source> Backup (</source>
-        <translation type="vanished"> резервной копии (</translation>
     </message>
 </context>
 <context>
@@ -456,17 +309,9 @@
         <translation>Свободное дисковое пространство</translation>
     </message>
     <message>
-        <source>Disk Space Free</source>
-        <translation type="vanished">Свободное дисковое пространство</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Device.qml" line="184"/>
         <source>%1 GB</source>
         <translation>%1 ГБ</translation>
-    </message>
-    <message>
-        <source> GB</source>
-        <translation type="vanished">ГБ</translation>
     </message>
 </context>
 <context>
@@ -495,14 +340,15 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <source>Autoloader Tools</source>
-        <translation type="vanished">Параметы автозагрузчика</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
         <translation>Распаковать</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="126"/>
@@ -526,13 +372,14 @@
         <translation>PIN-лист</translation>
     </message>
     <message>
-        <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation type="vanished">Split подписал образ из автозагрузчика exe, .bar или .zip</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="71"/>
         <source>Create Autoloader</source>
         <translation>Создать автолоадер</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="81"/>
@@ -553,30 +400,6 @@
         <location filename="../qml/generic/Extract.qml" line="63"/>
         <source>Extraction Tools</source>
         <translation>Инструменты для работы с автолоадером</translation>
-    </message>
-    <message>
-        <source>Splitting Autoloader </source>
-        <translation type="vanished">Разборка автолоадера </translation>
-    </message>
-    <message>
-        <source>Combining Autoloader </source>
-        <translation type="vanished">Сборка автолоадера </translation>
-    </message>
-    <message>
-        <source>Extracting Image </source>
-        <translation type="vanished">Извлечение образа </translation>
-    </message>
-    <message>
-        <source>Extracting Apps </source>
-        <translation type="vanished">Извлечение приложений </translation>
-    </message>
-    <message>
-        <source>Fetching required files </source>
-        <translation type="vanished">Получение необходимых файлов </translation>
-    </message>
-    <message>
-        <source>Waiting </source>
-        <translation type="vanished">Ожидание </translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
@@ -649,16 +472,6 @@
         <translation>Ожидание</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Extract.qml" line="78"/>
-        <source>Signed Images (*.signed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="115"/>
-        <source>Signed Containers (*.exe *.bar *.zip)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
         <source>Extracts filesystem image</source>
         <translation>Извлечение образов файловых систем</translation>
@@ -668,17 +481,9 @@
         <source>Extract Apps</source>
         <translation>Извлечь приложения</translation>
     </message>
-    <message>
-        <source>Extract all bar archives</source>
-        <translation type="vanished">Извлечь все bar-файлы</translation>
-    </message>
 </context>
 <context>
     <name>Installer</name>
-    <message>
-        <source>View Install (</source>
-        <translation type="vanished">Показать установленные (</translation>
-    </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
@@ -693,18 +498,6 @@
         <location filename="../qml/generic/Installer.qml" line="47"/>
         <source>Install</source>
         <translation>Установка</translation>
-    </message>
-    <message>
-        <source>Sending </source>
-        <translation type="vanished">Отправка </translation>
-    </message>
-    <message>
-        <source>Installing </source>
-        <translation type="vanished">Установка </translation>
-    </message>
-    <message>
-        <source>Sent </source>
-        <translation type="vanished">Отправка </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
@@ -727,10 +520,6 @@
         <translation>Установить из папки</translation>
     </message>
     <message>
-        <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation type="vanished">Ошибка: Устройство может обрабатывать только одну задачу за один раз .&lt;br&gt;;</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
@@ -750,26 +539,6 @@
         <location filename="../qml/generic/Installer.qml" line="115"/>
         <source>Select Files</source>
         <translation>Выбрать файлы</translation>
-    </message>
-    <message>
-        <source>Allow downgrades</source>
-        <translation type="vanished">Разрешить откат версии</translation>
-    </message>
-    <message>
-        <source>Advanced Tools</source>
-        <translation type="vanished">Расширенные параметры   </translation>
-    </message>
-    <message>
-        <source>Wipe</source>
-        <translation type="vanished">Очитстка</translation>
-    </message>
-    <message>
-        <source>Factory Reset</source>
-        <translation type="vanished">Сброс настроек</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Перезагрузка</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
@@ -891,10 +660,6 @@
         <translation>Поиск версии</translation>
     </message>
     <message>
-        <source>Server did not respond as expected</source>
-        <translation type="vanished">Удалённый сервер не отвечает</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="76"/>
         <source>Success. No updates were available.</source>
         <translation>Готово. Нет доступных обновлений.</translation>
@@ -934,10 +699,6 @@
         <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Verifying</source>
         <translation>Проверка</translation>
-    </message>
-    <message>
-        <source>View Download (</source>
-        <translation type="vanished">Посмотреть загрузку (</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
@@ -1031,57 +792,9 @@
         <translation>%1 МБ</translation>
     </message>
     <message>
-        <source> (older)</source>
-        <translation type="vanished">.(старая версия)</translation>
-    </message>
-    <message>
-        <source> MB</source>
-        <translation type="vanished">МБ</translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="vanished">Сервер</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">Релиз</translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="vanished">Бета</translation>
-    </message>
-    <message>
-        <source>Beta 2</source>
-        <translation type="vanished">Бета2</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="vanished">Альфа</translation>
-    </message>
-    <message>
-        <source>Alpha 2</source>
-        <translation type="vanished">Альфа2</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="348"/>
         <source>1700.0 MB</source>
         <translation>1700.0 МБ</translation>
-    </message>
-    <message>
-        <source>Selected: </source>
-        <translation type="vanished">Выбрано: </translation>
-    </message>
-    <message>
-        <source>All (</source>
-        <translation type="vanished">Все (</translation>
-    </message>
-    <message>
-        <source> Apps</source>
-        <translation type="vanished">Программы</translation>
-    </message>
-    <message>
-        <source>. Needed: </source>
-        <translation type="vanished">. Нужно: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="372"/>
@@ -1103,37 +816,13 @@
         <source>Uncheck All</source>
         <translation>Снять все отметки</translation>
     </message>
-    <message>
-        <source> (downloaded)</source>
-        <translation type="vanished"> (загружено)</translation>
-    </message>
-    <message>
-        <source> (installed)</source>
-        <translation type="vanished"> (установлен)</translation>
-    </message>
 </context>
 <context>
     <name>Title</name>
     <message>
-        <source>Sachesi</source>
-        <translation type="vanished">Sachesi</translation>
-    </message>
-    <message>
-        <source>SACHESI</source>
-        <translation type="vanished">SACHESI</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
         <translation>Расширенный режим</translation>
-    </message>
-    <message>
-        <source>AppWorld</source>
-        <translation type="vanished">AppWorld</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="obsolete">Альфа</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="71"/>
@@ -1159,14 +848,6 @@
         <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>Установка</translation>
-    </message>
-    <message>
-        <source>Boot</source>
-        <translation type="vanished">Загрузчик</translation>
-    </message>
-    <message>
-        <source>No device connected</source>
-        <translation type="vanished">Нет подключенных устройств</translation>
     </message>
 </context>
 <context>
@@ -1207,14 +888,6 @@
         <translation>Запрос к %1 возможному устройству.</translation>
     </message>
     <message>
-        <source>Hide password</source>
-        <translation type="vanished">Скрыть пароль</translation>
-    </message>
-    <message>
-        <source>Show password</source>
-        <translation type="vanished">Показать пароль</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
         <source>There was an issue connecting.</source>
         <translation>Возникли проблемы с подключением</translation>
@@ -1229,33 +902,9 @@
         <source>Searching for USB device</source>
         <translation>Поиск USB устройств</translation>
     </message>
-    <message>
-        <source>Detected </source>
-        <translation type="vanished">Обнаружен </translation>
-    </message>
-    <message>
-        <source> Blackberry USB device(s) in </source>
-        <translation type="vanished"> USB устройство Blackberry в </translation>
-    </message>
-    <message>
-        <source> mode.</source>
-        <translation type="vanished"> режиме.</translation>
-    </message>
-    <message>
-        <source>Talking to </source>
-        <translation type="vanished">Подключение к </translation>
-    </message>
-    <message>
-        <source> possible device(s).</source>
-        <translation type="vanished">обнаруженному устройству(ам).</translation>
-    </message>
 </context>
 <context>
     <name>VersionLookup</name>
-    <message>
-        <source>Sachesi</source>
-        <translation type="vanished">Sachesi</translation>
-    </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Version Lookup</source>
@@ -1297,14 +946,6 @@
         <translation>Серверы:</translation>
     </message>
     <message>
-        <source>SR: </source>
-        <translation type="vanished">ПО: </translation>
-    </message>
-    <message>
-        <source>OS: </source>
-        <translation type="vanished">ОС: </translation>
-    </message>
-    <message>
         <location filename="../qml/generic/VersionLookup.qml" line="77"/>
         <source>Production</source>
         <translation>Производство</translation>
@@ -1320,10 +961,6 @@
         <translation>Альфа</translation>
     </message>
     <message>
-        <source>Servers: </source>
-        <translation type="vanished">Серверы: </translation>
-    </message>
-    <message>
         <location filename="../qml/generic/VersionLookup.qml" line="128"/>
         <source>Lookup</source>
         <translation>Поиск</translation>
@@ -1337,18 +974,6 @@
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
         <source>Autoscan</source>
         <translation>Автопоиск</translation>
-    </message>
-    <message>
-        <source>Find next available links</source>
-        <translation type="vanished">Найти следующие доступные ссылки</translation>
-    </message>
-    <message>
-        <source>Check for SDK</source>
-        <translation type="vanished">Проверка SDK</translation>
-    </message>
-    <message>
-        <source>Software Release: </source>
-        <translation type="vanished">Версия ПО: </translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>

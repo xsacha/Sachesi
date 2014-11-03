@@ -2,114 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>AppWorld</name>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">返回</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="vanished">主页</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">搜索</translation>
-    </message>
-    <message>
-        <source>Featured</source>
-        <translation type="vanished">特色</translation>
-    </message>
-    <message>
-        <source>Carrier</source>
-        <translation type="vanished">运营商</translation>
-    </message>
-    <message>
-        <source>Cars</source>
-        <translation type="vanished">汽车</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="vanished">出自</translation>
-    </message>
-    <message>
-        <source>File Bundle</source>
-        <translation type="vanished">文件包</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">版本</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">MB</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="vanished">查看</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">下载</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="vanished">选项</translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="vanished">服务器</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">正式版</translation>
-    </message>
-    <message>
-        <source>Enterprise</source>
-        <translation type="vanished">企业版</translation>
-    </message>
-    <message>
-        <source>Eval</source>
-        <translation type="vanished">评价版</translation>
-    </message>
-    <message>
-        <source>Model</source>
-        <translation type="vanished">机型</translation>
-    </message>
-    <message>
-        <source>OS</source>
-        <translation type="vanished">操作系统</translation>
-    </message>
-    <message>
-        <source>Latest</source>
-        <translation type="vanished">最新</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="vanished">全部</translation>
-    </message>
-</context>
-<context>
     <name>Backup</name>
     <message>
         <location filename="../qml/generic/Backup.qml" line="24"/>
         <source>Options</source>
         <translation>选项</translation>
-    </message>
-    <message>
-        <source>Loading Backup Options</source>
-        <translation type="vanished">正在加载备份选项</translation>
-    </message>
-    <message>
-        <source>Load Backup Options</source>
-        <translation type="vanished">加载备份选项</translation>
-    </message>
-    <message>
-        <source>Refreshing Backup Sizes</source>
-        <translation type="vanished">清爽的备份大小</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="obsolete">未知</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
@@ -169,26 +66,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choose backup filename</source>
-        <translation type="vanished">选择备份文件名</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
         <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>黑莓备份（*.bbb）</translation>
-    </message>
-    <message>
-        <source>Select restore file</source>
-        <translation type="vanished">选择还原文件</translation>
-    </message>
-    <message>
-        <source>Create backup</source>
-        <translation type="vanished">创建备份</translation>
-    </message>
-    <message>
-        <source>Restore backup</source>
-        <translation type="vanished">还原备份</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
@@ -459,10 +340,6 @@
         <translation>取消</translation>
     </message>
     <message>
-        <source>Autoloader Tools</source>
-        <translation type="vanished">Autoloader工具</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
@@ -490,10 +367,6 @@
         <translation>PIN列表</translation>
     </message>
     <message>
-        <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation type="vanished">分离签名图片自autoloader .exe, .bar 或 .zip</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="71"/>
         <source>Create Autoloader</source>
         <translation>创建Autoloader</translation>
@@ -517,16 +390,6 @@
         <location filename="../qml/generic/Extract.qml" line="63"/>
         <source>Extraction Tools</source>
         <translation>提取工具</translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="78"/>
-        <source>Signed Images (*.signed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="115"/>
-        <source>Signed Containers (*.exe *.bar *.zip)</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
@@ -599,6 +462,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
         <source>Extracts filesystem image</source>
         <translation>提取文件系统图片</translation>
@@ -608,17 +481,9 @@
         <source>Extract Apps</source>
         <translation>提取程序</translation>
     </message>
-    <message>
-        <source>Extract all bar archives</source>
-        <translation type="vanished">提取所有bar档案</translation>
-    </message>
 </context>
 <context>
     <name>Installer</name>
-    <message>
-        <source>View Install (</source>
-        <translation type="vanished">查看安装（</translation>
-    </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
@@ -633,18 +498,6 @@
         <location filename="../qml/generic/Installer.qml" line="47"/>
         <source>Install</source>
         <translation>安装</translation>
-    </message>
-    <message>
-        <source>Sending </source>
-        <translation type="vanished">发送中</translation>
-    </message>
-    <message>
-        <source>Installing </source>
-        <translation type="vanished">安装中</translation>
-    </message>
-    <message>
-        <source>Sent </source>
-        <translation type="vanished">已发送</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
@@ -667,10 +520,6 @@
         <translation>安装文件夹</translation>
     </message>
     <message>
-        <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation type="vanished">错误：您的设备一次只能处理一个任务。请等待上一个安装完成。&lt;br&gt;；</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
@@ -690,22 +539,6 @@
         <location filename="../qml/generic/Installer.qml" line="115"/>
         <source>Select Files</source>
         <translation>选择文件</translation>
-    </message>
-    <message>
-        <source>Advanced Tools</source>
-        <translation type="vanished">高级工具</translation>
-    </message>
-    <message>
-        <source>Wipe</source>
-        <translation type="vanished">擦除</translation>
-    </message>
-    <message>
-        <source>Factory Reset</source>
-        <translation type="vanished">恢复出厂设置</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">重启</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
@@ -868,10 +701,6 @@
         <translation>验证中</translation>
     </message>
     <message>
-        <source>View Download (</source>
-        <translation type="vanished">查看下载（</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
         <source>Server did not respond as expected [%1].</source>
         <translation type="unfinished"></translation>
@@ -963,41 +792,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Server</source>
-        <translation type="vanished">服务器</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">正式版</translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="vanished">Beta版</translation>
-    </message>
-    <message>
-        <source>Beta 2</source>
-        <translation type="vanished">Beta2版</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="vanished">Alpha版</translation>
-    </message>
-    <message>
-        <source>Alpha 2</source>
-        <translation type="vanished">Alpha2版</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="348"/>
         <source>1700.0 MB</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Selected: </source>
-        <translation type="vanished">已选定：</translation>
-    </message>
-    <message>
-        <source>. Needed: </source>
-        <translation type="vanished">。已需要：</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="372"/>
@@ -1019,21 +816,9 @@
         <source>Uncheck All</source>
         <translation>取消检查全部</translation>
     </message>
-    <message>
-        <source> (downloaded)</source>
-        <translation type="vanished">（已下载）</translation>
-    </message>
-    <message>
-        <source> (installed)</source>
-        <translation type="vanished"> (安装)</translation>
-    </message>
 </context>
 <context>
     <name>Title</name>
-    <message>
-        <source>Alpha</source>
-        <translation type="obsolete">Alpha版</translation>
-    </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
@@ -1063,14 +848,6 @@
         <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>安装</translation>
-    </message>
-    <message>
-        <source>Boot</source>
-        <translation type="vanished">启动 </translation>
-    </message>
-    <message>
-        <source>No device connected</source>
-        <translation type="vanished">无连接设备</translation>
     </message>
 </context>
 <context>
@@ -1197,18 +974,6 @@
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
         <source>Autoscan</source>
         <translation>自动扫描</translation>
-    </message>
-    <message>
-        <source>Find next available links</source>
-        <translation type="vanished">查找下一个可用链接</translation>
-    </message>
-    <message>
-        <source>Check for SDK</source>
-        <translation type="vanished">检查SDK</translation>
-    </message>
-    <message>
-        <source>Software Release: </source>
-        <translation type="vanished">软件版本：</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>

@@ -2,114 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
-    <name>AppWorld</name>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Zurück</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="vanished">Startseite</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Suchen</translation>
-    </message>
-    <message>
-        <source>Featured</source>
-        <translation type="vanished">Highlights</translation>
-    </message>
-    <message>
-        <source>Carrier</source>
-        <translation type="vanished">Netzbetreiber</translation>
-    </message>
-    <message>
-        <source>Cars</source>
-        <translation type="vanished">Autos</translation>
-    </message>
-    <message>
-        <source>by</source>
-        <translation type="vanished">von</translation>
-    </message>
-    <message>
-        <source>File Bundle</source>
-        <translation type="vanished">Anwendungspaket</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="vanished">Version</translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="vanished">MB</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="vanished">Ansehen</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Herunterladen</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="vanished">Optionen</translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="vanished">Server</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">Produktion</translation>
-    </message>
-    <message>
-        <source>Enterprise</source>
-        <translation type="vanished">Unternehmen</translation>
-    </message>
-    <message>
-        <source>Eval</source>
-        <translation type="vanished">Eval</translation>
-    </message>
-    <message>
-        <source>Model</source>
-        <translation type="vanished">Modell</translation>
-    </message>
-    <message>
-        <source>OS</source>
-        <translation type="vanished">Betriebssystem</translation>
-    </message>
-    <message>
-        <source>Latest</source>
-        <translation type="vanished">Neuestes</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="vanished">Alle</translation>
-    </message>
-</context>
-<context>
     <name>Backup</name>
     <message>
         <location filename="../qml/generic/Backup.qml" line="24"/>
         <source>Options</source>
         <translation>Optionen</translation>
-    </message>
-    <message>
-        <source>Loading Backup Options</source>
-        <translation type="vanished">Lade Backup-Optionen ...</translation>
-    </message>
-    <message>
-        <source>Load Backup Options</source>
-        <translation type="vanished">Backup-Optionen laden</translation>
-    </message>
-    <message>
-        <source>Refreshing Backup Sizes</source>
-        <translation type="vanished">Backup-Größen aktualisieren</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="obsolete">Unbekannt</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
@@ -149,10 +46,6 @@
         <translation>Backup blind erstellen</translation>
     </message>
     <message>
-        <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;Blind&apos;.</source>
-        <translation type="vanished">Backup-Größen können manchmal nicht aktualisiert werden. In diesem Fall können sie &apos;blind&apos; ein Backup erstellen.</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Backup.qml" line="82"/>
         <source>Choose Backup Filename</source>
         <translation>Backup-Dateiname eingeben</translation>
@@ -168,35 +61,15 @@
         <translation>Backup erstellen</translation>
     </message>
     <message>
-        <source>(Blind)</source>
-        <translation type="vanished">(blind)</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Backup.qml" line="110"/>
         <source>Restore Backup</source>
         <translation>Backup wiederherstellen</translation>
-    </message>
-    <message>
-        <source>Choose backup filename</source>
-        <translation type="vanished">Backup-Dateiname eingeben</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
         <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>BlackBerry-Backup-Datei (*.bbb)</translation>
-    </message>
-    <message>
-        <source>Select restore file</source>
-        <translation type="vanished">Wiederherstellungsdatei auswählen</translation>
-    </message>
-    <message>
-        <source>Create backup</source>
-        <translation type="vanished">Backup erstellen</translation>
-    </message>
-    <message>
-        <source>Restore backup</source>
-        <translation type="vanished">Backup wiederherstellen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
@@ -467,10 +340,6 @@
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <source>Autoloader Tools</source>
-        <translation type="vanished">Autoloader-Werkzeuge</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
@@ -498,10 +367,6 @@
         <translation>PINList</translation>
     </message>
     <message>
-        <source>Split signed images from autoloader .exe, .bar or .zip</source>
-        <translation type="vanished">Signierte Dateien aus Autoloader (.exe, .bar oder .zip) extrahieren</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Extract.qml" line="71"/>
         <source>Create Autoloader</source>
         <translation>Autoloader erstellen</translation>
@@ -525,16 +390,6 @@
         <location filename="../qml/generic/Extract.qml" line="63"/>
         <source>Extraction Tools</source>
         <translation>Extraktionswerkzeuge</translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="78"/>
-        <source>Signed Images (*.signed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/generic/Extract.qml" line="115"/>
-        <source>Signed Containers (*.exe *.bar *.zip)</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
@@ -607,6 +462,16 @@
         <translation>Warte</translation>
     </message>
     <message>
+        <location filename="../qml/generic/Extract.qml" line="78"/>
+        <source>Signed Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Extract.qml" line="115"/>
+        <source>Signed Containers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
         <source>Extracts filesystem image</source>
         <translation>Extrahiert ein Abbild des Dateisystems</translation>
@@ -616,17 +481,9 @@
         <source>Extract Apps</source>
         <translation>Apps extrahieren</translation>
     </message>
-    <message>
-        <source>Extract all bar archives</source>
-        <translation type="vanished">Extrahiert alle BAR-Dateien</translation>
-    </message>
 </context>
 <context>
     <name>Installer</name>
-    <message>
-        <source>View Install (</source>
-        <translation type="vanished">Installationsvorgang einblenden (</translation>
-    </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
@@ -641,18 +498,6 @@
         <location filename="../qml/generic/Installer.qml" line="47"/>
         <source>Install</source>
         <translation>Installation</translation>
-    </message>
-    <message>
-        <source>Sending </source>
-        <translation type="vanished">Versende </translation>
-    </message>
-    <message>
-        <source>Installing </source>
-        <translation type="vanished">Installiere </translation>
-    </message>
-    <message>
-        <source>Sent </source>
-        <translation type="vanished">Versendet: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
@@ -676,10 +521,6 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>Ordner installieren</translation>
     </message>
     <message>
-        <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;;</source>
-        <translation type="vanished">Fehler: Ihr Gerät kann nur eine Aufgabe gleichzeitig verarbeiten. Bitte warten Sie bis der derzeitige Vorgang abgeschlossen ist.&lt;br&gt;</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
@@ -699,26 +540,6 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <location filename="../qml/generic/Installer.qml" line="115"/>
         <source>Select Files</source>
         <translation>Dateien auswählen</translation>
-    </message>
-    <message>
-        <source>Allow downgrades</source>
-        <translation type="vanished">Downgrades erlauben</translation>
-    </message>
-    <message>
-        <source>Advanced Tools</source>
-        <translation type="vanished">Fortgeschrittene Werkzeuge</translation>
-    </message>
-    <message>
-        <source>Wipe</source>
-        <translation type="vanished">Vollständig löschen</translation>
-    </message>
-    <message>
-        <source>Factory Reset</source>
-        <translation type="vanished">Auf Werkseinstellungen zurücksetzen</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Neustarten</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
@@ -881,10 +702,6 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>Verifiziere</translation>
     </message>
     <message>
-        <source>View Download (</source>
-        <translation type="vanished">Ladevorgang einblenden (</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
         <source>Server did not respond as expected [%1].</source>
         <translation>Server reagierte nicht wie erwartet [%1].</translation>
@@ -976,41 +793,9 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <source>Server</source>
-        <translation type="vanished">Server</translation>
-    </message>
-    <message>
-        <source>Production</source>
-        <translation type="vanished">Produktion</translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="vanished">Beta</translation>
-    </message>
-    <message>
-        <source>Beta 2</source>
-        <translation type="vanished">Beta 2</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="vanished">Alpha</translation>
-    </message>
-    <message>
-        <source>Alpha 2</source>
-        <translation type="vanished">Alpha 2</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Search.qml" line="348"/>
         <source>1700.0 MB</source>
         <translation>1700,0 MB</translation>
-    </message>
-    <message>
-        <source>Selected: </source>
-        <translation type="vanished">Ausgewählt: </translation>
-    </message>
-    <message>
-        <source>. Needed: </source>
-        <translation type="vanished">. Benötigt: </translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="372"/>
@@ -1032,37 +817,13 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <source>Uncheck All</source>
         <translation>Auswahl aufheben</translation>
     </message>
-    <message>
-        <source> (downloaded)</source>
-        <translation type="vanished"> (heruntergeladen)</translation>
-    </message>
-    <message>
-        <source> (installed)</source>
-        <translation type="vanished"> (installiert)</translation>
-    </message>
 </context>
 <context>
     <name>Title</name>
     <message>
-        <source>Sachesi</source>
-        <translation type="vanished">Sachesi</translation>
-    </message>
-    <message>
-        <source>SACHESI</source>
-        <translation type="vanished">SACHESI</translation>
-    </message>
-    <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
         <translation>Fortgeschrittene Optionen</translation>
-    </message>
-    <message>
-        <source>AppWorld</source>
-        <translation type="vanished">BlackBerry World</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="vanished">Alpha</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="71"/>
@@ -1088,14 +849,6 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Install</source>
         <translation>Installation</translation>
-    </message>
-    <message>
-        <source>Boot</source>
-        <translation type="vanished">Boot</translation>
-    </message>
-    <message>
-        <source>No device connected</source>
-        <translation type="vanished">Kein Gerät verbunden</translation>
     </message>
 </context>
 <context>
@@ -1153,10 +906,6 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
 </context>
 <context>
     <name>VersionLookup</name>
-    <message>
-        <source>Sachesi</source>
-        <translation type="vanished">Sachesi</translation>
-    </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Version Lookup</source>
@@ -1226,18 +975,6 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
         <source>Autoscan</source>
         <translation>Scannen</translation>
-    </message>
-    <message>
-        <source>Find next available links</source>
-        <translation type="vanished">Nächst verfügbare Links finden</translation>
-    </message>
-    <message>
-        <source>Check for SDK</source>
-        <translation type="vanished">Nach SDK-Versionen suchen</translation>
-    </message>
-    <message>
-        <source>Software Release: </source>
-        <translation type="vanished">Software-Release: </translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>
