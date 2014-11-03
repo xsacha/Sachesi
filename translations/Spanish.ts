@@ -568,7 +568,7 @@ Conexión a la sector de inicio</translation>
         <translation>Error: Su dispositivo sólo puede procesar una tarea a la vez. Por favor, espere a que la instalación anterior para completar. &lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Sólo instale aplicaciones más nuevas</translation>
     </message>

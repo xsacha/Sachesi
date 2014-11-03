@@ -568,7 +568,7 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het installatieproces is voltooid.&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Installeer alleen nieuwere apps</translation>
     </message>

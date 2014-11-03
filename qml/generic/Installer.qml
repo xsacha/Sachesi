@@ -119,6 +119,12 @@ Item {
                     }
                 }
             }
+            CheckBox {
+                checked: !i.allowDowngrades
+                onCheckedChanged: i.allowDowngrades = !checked
+                text: qsTr("Only install newer apps") + translator.lang
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
         TabView {
             id: tabs
@@ -127,12 +133,6 @@ Item {
             Layout.fillWidth: true
             RowLayout {
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
-                CheckBox {
-                    checked: !i.allowDowngrades
-                    onCheckedChanged: i.allowDowngrades = !checked
-                    text: qsTr("Only install newer apps") + translator.lang
-                }
-
                 Button {
                     id: list_files
                     enabled: i.device !== null && i.device.setupComplete

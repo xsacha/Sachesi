@@ -568,7 +568,7 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>Fehler: Ihr Gerät kann nur eine Aufgabe gleichzeitig verarbeiten. Bitte warten Sie bis der Installationsvorgang abgeschlossen ist.&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Nur neuere Apps installieren</translation>
     </message>

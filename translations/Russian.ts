@@ -567,7 +567,7 @@
         <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз .&lt;br&gt;;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Устанавливать только новые версии приложений</translation>
     </message>
