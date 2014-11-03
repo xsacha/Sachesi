@@ -789,7 +789,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="133"/>
         <source>Only install newer apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Устанавливать только новые версии приложений</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
