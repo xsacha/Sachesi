@@ -131,15 +131,15 @@ Item {
             Layout.alignment: Qt.AlignBottom
             Layout.fillHeight: true
             Layout.fillWidth: true
-            RowLayout {
+
+            Button {
+                id: list_files
                 anchors { top: parent.top; topMargin:-height; right: parent.right }
-                Button {
-                    id: list_files
-                    enabled: i.device !== null && i.device.setupComplete
-                    text:  qsTr("Refresh") + translator.lang
-                    onClicked: i.scanProps();
-                }
+                enabled: i.device !== null && i.device.setupComplete
+                text:  qsTr("Refresh") + translator.lang
+                onClicked: i.scanProps();
             }
+
             // Applications
             Tab {
                 title: qsTr("Your Applications") + translator.lang
