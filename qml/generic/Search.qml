@@ -162,9 +162,10 @@ Item {
             http.onreadystatechange = function() {
                 if(http.readyState == 4 && http.status == 200) {
                     var array = http.responseText.split('\n')
-                    if (array.length > 1) {
+                    if (array.length > 2) {
                         country.value = array[0]
                         carrier.value = array[1]
+                        device.selectedItem = array[2]
                     }
                 }
             }
