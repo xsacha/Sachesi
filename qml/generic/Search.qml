@@ -153,6 +153,9 @@ Item {
             visible: !settings.advanced
             text: qsTr("Finds updates approved by other carriers") + translator.lang
         }
+        // On a new device becoming connected, update search results
+        property bool devicePresent: i.completed
+        onDevicePresentChanged: if (devicePresent && searchButton.enabled) searchButton.clicked()
         // Find latest country/carrier pair from github
         property string latestOS: "10.3.1.1016"
         Component.onCompleted: {
@@ -168,6 +171,8 @@ Item {
                         carrier.value = array[1]
                         device.selectedItem = parseInt(array[2])
                         latestOS = array[3]
+                        if (searchButton.enabled)
+                            searchButton.clicked()
                     }
                 }
             }
@@ -441,6 +446,7 @@ Item {
                     CheckBox {
                         id: delegateBox
                         text: friendlyName + (isInstalled ? " " + qsTr("(older)") : (isAvailable ? "" : " " + qsTr("(downloaded)"))) + translator.lang
+                        opacity: (!isInstalled && isAvailable) ? 1.0 : 0.6
                         width: Math.min(implicitWidth, parent.width - versionText.width*versionText.visible - sizeText.width)
                         clip: true
                         checked: isMarked
