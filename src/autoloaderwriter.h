@@ -19,21 +19,16 @@
 #include <QObject>
 #include <QList>
 #include <QFile>
-#include <QFileInfo>
 #include "fs/fs.h" // QNXStream
 #include "ports.h"
 
 class AutoloaderWriter: public QFile {
     Q_OBJECT
 public:
-    AutoloaderWriter(QList<QFileInfo> selectedInfo)
-        : _infos(selectedInfo)
+    AutoloaderWriter(QList<QIODevice*> devices)
+        : _devHandle(devices)
     {
-        qSort(selectedInfo.begin(), selectedInfo.end(), compareSizes);
-    }
-    static bool compareSizes(QFileInfo i, QFileInfo j)
-    {
-        return i.size() > j.size();
+
     }
     void create(QString name) {
         // Find potential file
@@ -52,39 +47,38 @@ public:
 
         QByteArray dataHeader;
         QNXStream dataStream(&dataHeader, QIODevice::WriteOnly);
-        dataStream << (quint64)_infos.count();
+        dataStream << (quint64)_devHandle.count();
         quint64 counter = pos() + 64;
-        foreach (QFileInfo info, _infos)
+        foreach (QIODevice* file, _devHandle)
         {
             dataStream << counter;
-            counter += info.size();
+            file->open(QIODevice::ReadOnly);
+            counter += file->size();
         }
-        for (int i = _infos.count() - 1; i < 6; i++)
+        for (int i = _devHandle.count() - 1; i < 6; i++)
             dataStream << (qint64)0;
         write(dataHeader);
         _read = 100 * pos();
         _maxSize = counter;
-        foreach (QFileInfo file, _infos)
-            appendFile(file.filePath());
+        foreach (QIODevice* file, _devHandle)
+            appendFile(file);
         close();
     }
 
-    void appendFile(QString fileName) {
-        QFile file(fileName);
-        file.open(QIODevice::ReadOnly);
-        while (!file.atEnd())
+    void appendFile(QIODevice* file) {
+        while (!file->atEnd())
         {
-            QByteArray tmp = file.read(FAST_BUFFER_LEN);
+            QByteArray tmp = file->read(FAST_BUFFER_LEN);
             if (tmp.size() < 0)
                 break;
             _read += 100 * write(tmp);
             emit newProgress((int)(_read / _maxSize));
         }
-        file.close();
+        file->close();
     }
 signals:
     void newProgress(int percent);
 private:
     qint64 _read, _maxSize;
-    QList<QFileInfo> _infos;
+    QList<QIODevice*> _devHandle;
 };

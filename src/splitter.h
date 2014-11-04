@@ -113,6 +113,7 @@ public slots:
         die();
     }
     void cleanDevHandle() {
+        // Cleanup all pointers we had.
         foreach (QIODevice* dev, devHandle) {
             // QIODevice's are automatically closed.
             if (dev != nullptr) {
@@ -172,24 +173,27 @@ public slots:
 
     void processExtractAutoloader();
 
+    static bool compareSizes(QFileInfo i, QFileInfo j)
+    {
+        return i.size() > j.size();
+    }
+
     void processCombine() {
         if (selectedInfo.count() > 6) {
             QMessageBox::information(nullptr, "Error", "Autoloaders can only have a maximum of 6 signed files.");
             return;
         }
         combining = true;
-        QFileInfo largestInfo;
-        qint64 largestSize = 0;
+        qSort(selectedInfo.begin(), selectedInfo.end(), compareSizes);
         foreach (QFileInfo info, selectedInfo) {
-            if (info.size() > largestSize) {
-                largestSize = info.size();
-                largestInfo = info;
-            }
+            QFile* newFile = new QFile(info.absoluteFilePath());
+            devHandle.append(newFile);
         }
         // Create new Autoloader object
-        AutoloaderWriter newAutoloader(selectedInfo);
+        AutoloaderWriter newAutoloader(devHandle);
         connect(&newAutoloader, &AutoloaderWriter::newProgress, [=](int percent) { emit this->progressChanged(percent); });
-        newAutoloader.create(largestInfo.absolutePath() + "/" + largestInfo.completeBaseName());
+        newAutoloader.create(selectedInfo.first().absolutePath() + "/" + selectedInfo.first().completeBaseName());
+        cleanDevHandle();
         emit finished();
     }
 

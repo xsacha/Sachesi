@@ -75,15 +75,7 @@ void Splitter::processExtractWrapper() {
     }
     emit finished();
 
-    // Cleanup all pointers we had.
-    foreach(QIODevice* dev, devHandle) {
-        // QIODevice's are automatically closed.
-        if (dev != nullptr) {
-            dev->deleteLater();
-            dev = nullptr;
-        }
-    }
-    devHandle.clear();
+    cleanDevHandle();
     partitionInfo.clear();
     progressInfo.clear();
 }

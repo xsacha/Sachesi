@@ -743,7 +743,7 @@ void InstallNet::discoveryReply() {
     if (_state /*&& ip_addr != _ip*/)
         return;
     QByteArray data = replyTemp->readAll();
-    //qDebug() << "Message:\n" << QString(data).simplified().left(3000);
+    //qDebug() << "Message:\n" << QString(data).simplified().left(3500);
     QXmlStreamReader xml(data);
     xml.readNextStartElement(); // RimTabletResponse
     xml.readNextStartElement();
@@ -903,7 +903,7 @@ void InstallNet::restoreReply()
         return;
 
     QByteArray data = reply->readAll();
-    //for (int s = 0; s < data.size(); s+=3000) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3000);
+    //for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
     if (data.size() == 0) {
         if (_restoring) {
             QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
