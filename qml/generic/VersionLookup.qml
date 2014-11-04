@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
 Window {
-    title: "Sachesi " + version + " – " + qsTr("Version Lookup")
+    title: "Sachesi " + version + " – " + qsTr("Version Lookup") + translator.lang
     visible: false
     onVisibleChanged: if (visible) {
                           x = window.x + (window.width - width) / 2
@@ -18,7 +18,7 @@ Window {
         anchors { left: parent.left; leftMargin: 10 }
         RowLayout {
         GroupBox {
-            title: qsTr("Stop on:")
+            title: qsTr("Stop on:") + translator.lang
             Column {
                 ExclusiveGroup {
                     id: group
@@ -26,22 +26,22 @@ Window {
                 }
                 RadioButton {
                     property int item: 0
-                    text: qsTr("Next Found")
+                    text: qsTr("Next Found") + translator.lang
                     exclusiveGroup: group
                     checked: true
                 }
                 RadioButton {
                     property int item: 1
-                    text: qsTr("Next Available Links")
+                    text: qsTr("Next Available Links") + translator.lang
                     exclusiveGroup: group
                 }
                 RadioButton {
                     property int item: 2
-                    text: qsTr("Never")
+                    text: qsTr("Never") + translator.lang
                     exclusiveGroup: group
                 }
                 Button {
-                    text: scanner.isAuto ? qsTr("Stop Scan") : qsTr("Autoscan")
+                    text: scanner.isAuto ? qsTr("Stop Scan") : qsTr("Autoscan") + translator.lang
                     onClicked: {
                         scanner.isAuto = !scanner.isAuto;
                         if (scanner.isAuto) { build.value += 3; relookup.clicked(); }
@@ -65,7 +65,7 @@ Window {
             visible: scanner.curRelease !== null && scanner.curRelease.srVersion !== ""
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("SR: %1").arg(scanner.curRelease !== null ? scanner.curRelease.srVersion : "") + " | " + qsTr("OS: %1").arg(scanner.curRelease !== null ? scanner.curRelease.osVersion : "")
+                text: qsTr("SR: %1").arg(scanner.curRelease !== null ? scanner.curRelease.srVersion : "") + " | " + qsTr("OS: %1").arg(scanner.curRelease !== null ? scanner.curRelease.osVersion : "") + translator.lang
                 font.pointSize: 12
             }
             Label {
@@ -82,7 +82,7 @@ Window {
                         if (ret.length > 0)
                             ret = qsTr("Servers:") + " " + ret
                     }
-                    return ret;
+                    return ret + translator.lang;
                 }
             }
             RowLayout {
@@ -92,7 +92,7 @@ Window {
                 Button {
                     id: grabPotential
                     enabled: scanner.curRelease !== null && scanner.curRelease.baseUrl !== ""
-                    text: enabled ? qsTr("Grab Public Links") : qsTr("No Links Available")
+                    text: enabled ? qsTr("Grab Public Links") : qsTr("No Links Available") + translator.lang
                     onClicked: scanner.generatePotentialLinks()
                 }
             }
@@ -125,14 +125,14 @@ Window {
             }
             Button {
                 id: relookup
-                text:  qsTr("Lookup")
+                text: qsTr("Lookup") + translator.lang
                 enabled: !scanner.isActive && !scanner.isAuto
                 onClicked: scanner.reverseLookup("10." + major.value + "." + minor.value + "." + build.value);
             }
         }
         Button {
             Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
-            text:  qsTr("Hide")
+            text: qsTr("Hide") + translator.lang
             onClicked: close();
         }
     }

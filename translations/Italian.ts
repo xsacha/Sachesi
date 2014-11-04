@@ -567,7 +567,7 @@
         <translation>Errore: il tuo device può eseguire una sola azione alla volta. Attendi il completamento della precedente installazione.&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -825,27 +825,27 @@
         <translation>Opzioni Avanzate</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="71"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
         <translation>Device</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="75"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
         <translation>Estrai</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="91"/>
         <source>Backup</source>
         <translation>Backup</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
         <translation>Installa</translation>
     </message>

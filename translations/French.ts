@@ -567,7 +567,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -825,27 +825,27 @@
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="71"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
         <translation type="unfinished">Appareil</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="75"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
         <translation>Extrait</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Search</source>
         <translation>Chercher</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="91"/>
         <source>Backup</source>
         <translation>Sauvegarde</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>

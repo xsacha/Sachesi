@@ -202,7 +202,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
         <source>HW Name</source>
-        <translation>Naam HW</translation>
+        <translation>Naam hardware</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="61"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="76"/>
         <source>BSN</source>
-        <translation>BSN</translation>
+        <translation>Serienummer bord</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="90"/>
@@ -464,12 +464,12 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesigneerde bestanden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesigneerde archieven</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
@@ -568,7 +568,7 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Fout: Uw toestel kan slechts een proces per keer verwerken. Wacht tot het installatieproces is voltooid.&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Installeer alleen nieuwere apps</translation>
     </message>
@@ -826,27 +826,27 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Geavanceerde opties</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="71"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
         <translation>Toestel</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="75"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
         <translation>Extractie</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Search</source>
         <translation>Zoeken</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="91"/>
         <source>Backup</source>
         <translation>Backup</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
         <translation>Installatie</translation>
     </message>

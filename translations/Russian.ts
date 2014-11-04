@@ -567,7 +567,7 @@
         <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз .&lt;br&gt;;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Устанавливать только новые версии приложений</translation>
     </message>
@@ -825,27 +825,27 @@
         <translation>Расширенный режим</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="71"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="75"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
         <translation>Извлечение   </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="91"/>
         <source>Backup</source>
         <translation>Резервное копирование</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
         <translation>Установка</translation>
     </message>

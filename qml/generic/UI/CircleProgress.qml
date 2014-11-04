@@ -114,7 +114,7 @@ Canvas {
         // Show count if we are looking at individual percents
         Text {
             visible: !mouseArea.pressed && maxId > 0;
-            text: qsTr("%1 of %2").arg(curId).arg(maxId)
+            text: qsTr("%1 of %2").arg(curId).arg(maxId) + translator.lang
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Text {

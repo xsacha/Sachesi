@@ -568,7 +568,7 @@ Conexión a la sector de inicio</translation>
         <translation>Error: Su dispositivo sólo puede procesar una tarea a la vez. Por favor, espere a que la instalación anterior para completar. &lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Sólo instale aplicaciones más nuevas</translation>
     </message>
@@ -826,27 +826,27 @@ Conexión a la sector de inicio</translation>
         <translation>Avanzada</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="71"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="75"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
         <translation>Extracto</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="91"/>
         <source>Backup</source>
         <translation>Copia de seguridad</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
         <translation>Instale</translation>
     </message>

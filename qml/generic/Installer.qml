@@ -88,17 +88,17 @@ Item {
                 }
 
                 selectMultiple: true
-                nameFilters: [ qsTr("Blackberry Installable (*.bar)") ]
+                nameFilters: [ qsTr("Blackberry Installable (*.bar)") + translator.lang ]
             }
             Button {
                 text:  qsTr("Install Folder") + translator.lang
                 onClicked: {
                     if (i.installing)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>") + translator.lang
                     else if (i.backing || i.restoring)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>") + translator.lang
                     else {
-                        install_files.title = qsTr("Select Folder")
+                        install_files.title = qsTr("Select Folder") + translator.lang
                         install_files.selectFolder = true;
                         install_files.open();
                     }
@@ -108,16 +108,22 @@ Item {
                 text: qsTr("Install Files") + translator.lang
                 onClicked: {
                     if (i.installing)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for previous install to complete.<br>") + translator.lang
                     else if (i.backing || i.restoring)
-                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>")
+                        details += qsTr("Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.<br>") + translator.lang
                     else {
-                        install_files.title = qsTr("Select Files")
+                        install_files.title = qsTr("Select Files") + translator.lang
                         install_files.selectFolder = false;
                         install_files.selectMultiple = true;
                         install_files.open();
                     }
                 }
+            }
+            CheckBox {
+                checked: !i.allowDowngrades
+                onCheckedChanged: i.allowDowngrades = !checked
+                text: qsTr("Only install newer apps") + translator.lang
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
         TabView {
@@ -125,21 +131,15 @@ Item {
             Layout.alignment: Qt.AlignBottom
             Layout.fillHeight: true
             Layout.fillWidth: true
-            RowLayout {
-                anchors { top: parent.top; topMargin:-height; right: parent.right }
-                CheckBox {
-                    checked: !i.allowDowngrades
-                    onCheckedChanged: i.allowDowngrades = !checked
-                    text: qsTr("Only install newer apps") + translator.lang
-                }
 
-                Button {
-                    id: list_files
-                    enabled: i.device !== null && i.device.setupComplete
-                    text:  qsTr("Refresh") + translator.lang
-                    onClicked: i.scanProps();
-                }
+            Button {
+                id: list_files
+                anchors { top: parent.top; topMargin:-height; right: parent.right }
+                enabled: i.device !== null && i.device.setupComplete
+                text:  qsTr("Refresh") + translator.lang
+                onClicked: i.scanProps();
             }
+
             // Applications
             Tab {
                 title: qsTr("Your Applications") + translator.lang

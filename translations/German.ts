@@ -202,7 +202,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
         <source>HW Name</source>
-        <translation>Name HW</translation>
+        <translation>Hardwarename</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="61"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="76"/>
         <source>BSN</source>
-        <translation>BSN</translation>
+        <translation>Platine-Seriennummer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="90"/>
@@ -464,12 +464,12 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Signierte Dateien</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>Signierte Archive</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
@@ -568,7 +568,7 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>Fehler: Ihr Gerät kann nur eine Aufgabe gleichzeitig verarbeiten. Bitte warten Sie bis der Installationsvorgang abgeschlossen ist.&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="133"/>
+        <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
         <translation>Nur neuere Apps installieren</translation>
     </message>
@@ -826,27 +826,27 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
         <translation>Fortgeschrittene Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="71"/>
+        <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
         <translation>Gerät</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="75"/>
+        <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
         <translation>Extraktion</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="87"/>
         <source>Search</source>
         <translation>Suche</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="91"/>
         <source>Backup</source>
         <translation>Backup</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
         <translation>Installation</translation>
     </message>

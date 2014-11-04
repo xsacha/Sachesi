@@ -75,7 +75,7 @@ Item {
                         settings.installFolder = folder;
                     }
 
-                    nameFilters: [ qsTr("Signed Images") + " (*.signed)" ]
+                    nameFilters: [ qsTr("Signed Images") + " (*.signed)" + translator.lang ]
                 }
                 Button {
                     text:  qsTr("Create from Folder") + translator.lang
@@ -112,7 +112,7 @@ Item {
                         settings.installFolder = folder;
                     }
 
-                    nameFilters: [ qsTr("Signed Containers") + " (*.exe *.bar *.zip)" ]
+                    nameFilters: [ qsTr("Signed Containers") + " (*.exe *.bar *.zip)" + translator.lang ]
                 }
 
                 Button {
