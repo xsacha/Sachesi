@@ -27,6 +27,23 @@ void Scanner::clearHistory() {
     emit historyChanged();
 }
 
+void Scanner::exportHistory() {
+    QString historyText;
+    foreach(DiscoveredRelease* rel, _history) {
+        historyText.append(tr("SR: ") + " " + rel->srVersion() + " | " + tr("OS: ") + rel->osVersion() + " [");
+        if (rel->activeServers() & 1)
+            historyText.append(tr("Production") + " ");
+        if (rel->activeServers() & 2)
+            historyText.append(tr("Beta") + " ");
+        if (rel->activeServers() & 4)
+            historyText.append(tr("Alpha") + " ");
+        historyText.chop(1);
+        historyText.append("]\n");
+    }
+
+    writeDisplayFile(tr("History"), historyText);
+}
+
 void Scanner::reverseLookup(QString OSver) {
     // If we only want real links, we're only going to want the server we can download from
     _isActive = true; emit isActiveChanged();

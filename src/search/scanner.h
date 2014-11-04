@@ -83,6 +83,7 @@ public:
     void setFindExisting(int findExisting) { _findExisting = findExisting; emit findExistingChanged(); }
 
     Q_INVOKABLE void clearHistory();
+    Q_INVOKABLE void exportHistory();
     Q_INVOKABLE void reverseLookup(QString OSver);
     Q_INVOKABLE void generatePotentialLinks();
 
