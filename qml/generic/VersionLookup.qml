@@ -102,23 +102,30 @@ Window {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             Row {
                 spacing: 1
+                property string latestOS: variables.latestOS
+                onLatestOSChanged: {
+                    var array = latestOS.split('.')
+                    if (array.length > 3) {
+                        major.prefix = array[0] + "."
+                        major.value = parseInt(array[1])
+                        minor.value = parseInt(array[2])
+                        build.value = parseInt(array[3])
+                    }
+                }
+
                 SpinBox {
                     id: major
-                    prefix: "10."
                     width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 3
                     maximumValue: 255
                 }
                 SpinBox {
                     id: minor
                     width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 1
                     maximumValue: 255
                 }
                 SpinBox {
                     id: build
                     width: qt_new ? implicitWidth : implicitWidth + 25
-                    value: 1016
                     maximumValue: 9999
                     stepSize: 3
                 }

@@ -154,6 +154,7 @@ Item {
             text: qsTr("Finds updates approved by other carriers") + translator.lang
         }
         // Find latest country/carrier pair from github
+        property string latestOS: "10.3.1.1016"
         Component.onCompleted: {
             var http = new XMLHttpRequest()
             var url = "https://raw.githubusercontent.com/xsacha/Sachesi/master/carrier";
@@ -162,10 +163,11 @@ Item {
             http.onreadystatechange = function() {
                 if(http.readyState == 4 && http.status == 200) {
                     var array = http.responseText.split('\n')
-                    if (array.length > 2) {
+                    if (array.length > 3) {
                         country.value = array[0]
                         carrier.value = array[1]
-                        device.selectedItem = array[2]
+                        device.selectedItem = parseInt(array[2])
+                        latestOS = array[3]
                     }
                 }
             }
