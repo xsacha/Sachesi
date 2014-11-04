@@ -49,7 +49,7 @@ ApplicationWindow {
     ComboBox {
         model: [ Qt.locale().nativeLanguageName, "English" ]
         anchors { right: parent.right; top: parent.top; topMargin: 1 }
-        //visible: translator.exists
+        visible: translator.exists
         currentIndex: settings.nativelang ? 0 : 1
 
         onCurrentIndexChanged: {

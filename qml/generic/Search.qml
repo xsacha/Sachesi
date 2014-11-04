@@ -153,11 +153,27 @@ Item {
             visible: !settings.advanced
             text: qsTr("Finds updates approved by other carriers") + translator.lang
         }
+        // Find latest country/carrier pair from github
+        Component.onCompleted: {
+            var http = new XMLHttpRequest()
+            var url = "https://raw.githubusercontent.com/xsacha/Sachesi/master/carrier";
+            http.open("GET", url, true);
+            http.send(null)
+            http.onreadystatechange = function() {
+                if(http.readyState == 4 && http.status == 200) {
+                    var array = http.responseText.split('\n')
+                    if (array.length > 1) {
+                        country.value = array[0]
+                        carrier.value = array[1]
+                    }
+                }
+            }
+        }
 
         TextCouple {
             id: country
             type: qsTr("Country") + translator.lang
-            value: "310"
+            value: "302"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -168,7 +184,7 @@ Item {
         TextCouple {
             id: carrier
             type: qsTr("Carrier") + translator.lang
-            value: "410"
+            value: "720"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
