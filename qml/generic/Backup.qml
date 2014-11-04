@@ -9,7 +9,7 @@ import "UI" 1.0
 
 Item {
     id: main
-    visible: i.device !== null && !i.loginBlock && !i.wrongPass
+    visible: i.device !== null && i.completed && !i.loginBlock && !i.wrongPass
     anchors { fill: parent; leftMargin: 20; topMargin: 20 }
 
     Timer {

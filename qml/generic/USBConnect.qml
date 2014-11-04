@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.1
 
 Item {
     id:main
-    visible: titleRow.currentIndex > 2 && (i.device === null || i.loginBlock || i.wrongPass)
+    visible: titleRow.currentIndex > 2 && (i.device === null || i.loginBlock || i.wrongPass || !i.completed)
     anchors.fill: parent
 
     ColumnLayout {
