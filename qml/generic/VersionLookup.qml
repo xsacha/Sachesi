@@ -102,7 +102,7 @@ Window {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             Row {
                 spacing: 1
-                property string latestOS: variables.latestOS
+                property string latestOS: whitelistSettings.latestOS
                 onLatestOSChanged: {
                     var array = latestOS.split('.')
                     if (array.length > 3) {
