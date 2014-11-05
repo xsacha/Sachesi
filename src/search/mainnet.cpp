@@ -61,23 +61,9 @@ void MainNet::splitAutoloader(QUrl url, int options) {
 
 void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
 {
-    QList<QFileInfo> splitFiles;
-    foreach(QUrl url, selectedFiles) {
-        QFileInfo fileInfo = QFileInfo(url.toLocalFile());
-        if (fileInfo.isDir())
-        {
-            QStringList suffixOnly = fileInfo.absoluteDir().entryList(QStringList("*.signed"));
-            foreach (QString suffix, suffixOnly) {
-                splitFiles.append(QFileInfo(fileInfo.absoluteFilePath() + "/" + suffix));
-            }
-        } else if (fileInfo.suffix() == "signed")
-            splitFiles.append(fileInfo);
-    }
-    if (splitFiles.isEmpty())
-        return;
     splitThread = new QThread;
     _splitting = CreatingAuto; emit splittingChanged();
-    Splitter* splitter = new Splitter(splitFiles);
+    Splitter* splitter = new Splitter(selectedFiles);
     splitter->moveToThread(splitThread);
     connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
     connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));

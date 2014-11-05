@@ -93,7 +93,7 @@ public:
     Splitter(QString file) : selectedFile(file) { reset(); }
     Splitter(QString file, int options) : option(options), selectedFile(file)  { reset(); }
     Splitter(QStringList files) : selectedFiles(files)  { reset(); }
-    Splitter(QList<QFileInfo> info) : selectedInfo(info)  { reset(); }
+    Splitter(QList<QUrl> urls) : selectedUrls(urls) { reset(); }
     ~Splitter() { }
     bool extractApps, extractImage;
     int extractTypes;
@@ -179,20 +179,44 @@ public slots:
     }
 
     void processCombine() {
-        if (selectedInfo.count() > 6) {
+        // Convert URL list to FileInfo list
+        QList<QFileInfo> splitFiles;
+        foreach(QUrl url, selectedUrls) {
+            QFileInfo fileInfo = QFileInfo(url.toLocalFile());
+            if (fileInfo.isDir())
+            {
+                QStringList suffixOnly = fileInfo.absoluteDir().entryList(QStringList() << "*.signed" << ".bar" << ".zip");
+                foreach (QString suffix, suffixOnly) {
+                    splitFiles.append(QFileInfo(fileInfo.absoluteFilePath() + "/" + suffix));
+                }
+            } else if (fileInfo.suffix() == "signed" || fileInfo.suffix() == "bar" || fileInfo.suffix() == "zip")
+                splitFiles.append(fileInfo);
+        }
+        // Sort files by size
+        qSort(splitFiles.begin(), splitFiles.end(), compareSizes);
+        // Convert FileInfo list to dev handle list
+        cleanDevHandle();
+        foreach (QFileInfo info, splitFiles) {
+            QFile* newFile = new QFile(info.absoluteFilePath());
+            if (info.suffix() == "signed") {
+                devHandle.append(newFile);
+            } else {
+                // TODO: Not supported yet
+            }
+        }
+        if (devHandle.isEmpty())
+            return;
+        if (devHandle.count() > 6) {
             QMessageBox::information(nullptr, "Error", "Autoloaders can only have a maximum of 6 signed files.");
+            cleanDevHandle();
             return;
         }
+        // All good, lets officially start creating
         combining = true;
-        qSort(selectedInfo.begin(), selectedInfo.end(), compareSizes);
-        foreach (QFileInfo info, selectedInfo) {
-            QFile* newFile = new QFile(info.absoluteFilePath());
-            devHandle.append(newFile);
-        }
         // Create new Autoloader object
         AutoloaderWriter newAutoloader(devHandle);
         connect(&newAutoloader, &AutoloaderWriter::newProgress, [=](int percent) { emit this->progressChanged(percent); });
-        newAutoloader.create(selectedInfo.first().absolutePath() + "/" + selectedInfo.first().completeBaseName());
+        newAutoloader.create(splitFiles.first().absolutePath() + "/" + splitFiles.first().completeBaseName());
         cleanDevHandle();
         emit finished();
     }
@@ -244,6 +268,7 @@ private:
     QString selectedFile;
     QStringList selectedFiles;
     QList<QFileInfo> selectedInfo;
+    QList<QUrl> selectedUrls;
     QList<QFile*> tmpFile;
 
     // New

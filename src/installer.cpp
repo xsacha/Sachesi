@@ -280,9 +280,10 @@ void InstallNet::install(QList<QUrl> files)
         zip.open(QuaZip::mdUnzip);
 
         QuaZipFile file(&zip);
+        QFileInfo zipInfo(zip.getZipName());
 
-        QString baseName = QFileInfo(zip.getZipName()).absoluteFilePath();
-        baseName.chop(4);
+        QString baseName = zipInfo.absolutePath() + "/" + zipInfo.completeBaseName();
+
         if (!QDir(baseName).mkpath("."))
             QMessageBox::information(nullptr, "Error", "Was unable to extract the zip container.");
 
@@ -1016,8 +1017,11 @@ void InstallNet::restoreReply()
                                 newApp->setName(longName);
                                 if (longName.contains(".test"))
                                     longName = longName.split(".test").first();
+                                else if (longName.contains(".andrB"))
+                                    longName = longName.split(".andrB").first();
                                 else
                                     longName = longName.split(".gY").first();
+
                                 QStringList newLineParts = longName.split('.');
                                 if (newLineParts.last().isEmpty())
                                     newLineParts.removeLast();
@@ -1025,6 +1029,7 @@ void InstallNet::restoreReply()
                                 for (int i = 0; i < newLineParts.size() - 1; i++)
                                     longName += newLineParts.at(i) + ".";
                                 longName += "<b>" + newLineParts.last() + "</b>";
+                                newApp->setObjectName(newLineParts.last().toLower());
                                 newApp->setFriendlyName(longName);
                             }
                             else if (xml.name() == "Type")
@@ -1090,6 +1095,15 @@ void InstallNet::restoreReply()
             }
         }
         determineDeviceFamily();
+        std::sort(_appList.begin(), _appList.end(),
+                  [=](const Apps* i, const Apps* j) {
+            if (i->type() != "application" && j->type() == "application")
+                return true;
+            if (j->type() != "application" && i->type() == "application")
+                return false;
+            return (i->objectName() < j->objectName());
+        }
+        );
         emit deviceChanged();
         emit appListChanged();
     }

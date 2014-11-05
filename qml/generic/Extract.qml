@@ -75,7 +75,7 @@ Item {
                         settings.installFolder = folder;
                     }
 
-                    nameFilters: [ qsTr("Signed Images") + " (*.signed)" + translator.lang ]
+                    nameFilters: [ qsTr("Signed Images") + " (*.signed *.bar *.zip)" + translator.lang ]
                 }
                 Button {
                     text:  qsTr("Create from Folder") + translator.lang
