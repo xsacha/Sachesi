@@ -714,12 +714,12 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
     <message>
         <location filename="../qml/generic/Search.qml" line="150"/>
         <source>Hide</source>
-        <translation type="unfinished">Ausblenden</translation>
+        <translation>Ausblenden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="150"/>
         <source>Show Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen einblenden</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="161"/>
@@ -999,7 +999,7 @@ Alternativ können Sie die folgenden Optionen verwenden:</translation>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="144"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Verlauf</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="149"/>
