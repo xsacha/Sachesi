@@ -348,7 +348,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>Подписанные Контейнеры</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="126"/>
@@ -379,7 +379,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Подписанные изображения</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="81"/>
@@ -671,7 +671,7 @@
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="88"/>
-        <location filename="../qml/generic/Search.qml" line="189"/>
+        <location filename="../qml/generic/Search.qml" line="224"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
@@ -711,108 +711,118 @@
         <translation>Посмотреть загрузку (%1%)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="149"/>
+        <location filename="../qml/generic/Search.qml" line="150"/>
+        <source>Hide</source>
+        <translation>Скрыть</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="150"/>
+        <source>Show Settings</source>
+        <translation>Показать настройки</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="161"/>
         <source>Whitelist Settings</source>
         <translation>Настройка белого списка</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="154"/>
+        <location filename="../qml/generic/Search.qml" line="166"/>
         <source>Finds updates approved by other carriers</source>
         <translation>Поиск доступных обновлений у операторов сотовой связи</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="159"/>
+        <location filename="../qml/generic/Search.qml" line="194"/>
         <source>Country</source>
         <translation>Страна</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="170"/>
+        <location filename="../qml/generic/Search.qml" line="205"/>
         <source>Carrier</source>
         <translation>Оператор</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="184"/>
+        <location filename="../qml/generic/Search.qml" line="219"/>
         <source>Search For</source>
         <translation>Искать для  </translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="222"/>
+        <location filename="../qml/generic/Search.qml" line="257"/>
         <source>Any</source>
         <translation>Любая</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="238"/>
+        <location filename="../qml/generic/Search.qml" line="273"/>
         <source>Variant</source>
         <translation>Вариант</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="255"/>
+        <location filename="../qml/generic/Search.qml" line="290"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="256"/>
+        <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Upgrade</source>
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="256"/>
+        <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Debrick</source>
         <translation>Восстановление</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="352"/>
+        <location filename="../qml/generic/Search.qml" line="388"/>
         <source>Selected: %1 Apps</source>
         <translation>Выбрано: %1 приложений</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="352"/>
-        <location filename="../qml/generic/Search.qml" line="353"/>
+        <location filename="../qml/generic/Search.qml" line="388"/>
+        <location filename="../qml/generic/Search.qml" line="389"/>
         <source>All (%1)</source>
         <translation>Все (%1)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="353"/>
+        <location filename="../qml/generic/Search.qml" line="389"/>
         <source>Needed: %1 Apps</source>
         <translation>Нужно: %1 приложений</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="424"/>
+        <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(older)</source>
         <translation>(старая версия)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="424"/>
+        <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(downloaded)</source>
         <translation>(загружено)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="448"/>
+        <location filename="../qml/generic/Search.qml" line="485"/>
         <source>%1 MB</source>
         <translation>%1 МБ</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="348"/>
+        <location filename="../qml/generic/Search.qml" line="384"/>
         <source>1700.0 MB</source>
         <translation>1700.0 МБ</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="372"/>
+        <location filename="../qml/generic/Search.qml" line="408"/>
         <source>Options</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="375"/>
+        <location filename="../qml/generic/Search.qml" line="411"/>
         <source>Check All</source>
         <translation>Отметить все</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="384"/>
+        <location filename="../qml/generic/Search.qml" line="420"/>
         <source>Check All Needed</source>
         <translation>Отметить все необходимые</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="393"/>
+        <location filename="../qml/generic/Search.qml" line="429"/>
         <source>Uncheck All</source>
         <translation>Снять все отметки</translation>
     </message>
@@ -961,7 +971,7 @@
         <translation>Альфа</translation>
     </message>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="128"/>
+        <location filename="../qml/generic/VersionLookup.qml" line="135"/>
         <source>Lookup</source>
         <translation>Поиск</translation>
     </message>
@@ -986,7 +996,12 @@
         <translation>Нет доступных ссылок</translation>
     </message>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="135"/>
+        <location filename="../qml/generic/VersionLookup.qml" line="144"/>
+        <source>History</source>
+        <translation>история</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/VersionLookup.qml" line="149"/>
         <source>Hide</source>
         <translation>Скрыть</translation>
     </message>

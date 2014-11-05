@@ -672,7 +672,7 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="88"/>
-        <location filename="../qml/generic/Search.qml" line="189"/>
+        <location filename="../qml/generic/Search.qml" line="224"/>
         <source>Device</source>
         <translation>Toestel</translation>
     </message>
@@ -712,108 +712,118 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Bekijk download (%1%)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="149"/>
+        <location filename="../qml/generic/Search.qml" line="150"/>
+        <source>Hide</source>
+        <translation type="unfinished">Verberg</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="150"/>
+        <source>Show Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="161"/>
         <source>Whitelist Settings</source>
         <translation>Whitelist-instellingen</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="154"/>
+        <location filename="../qml/generic/Search.qml" line="166"/>
         <source>Finds updates approved by other carriers</source>
         <translation>Vindt door providers toegestane updates</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="159"/>
+        <location filename="../qml/generic/Search.qml" line="194"/>
         <source>Country</source>
         <translation>Land</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="170"/>
+        <location filename="../qml/generic/Search.qml" line="205"/>
         <source>Carrier</source>
         <translation>Provider</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="184"/>
+        <location filename="../qml/generic/Search.qml" line="219"/>
         <source>Search For</source>
         <translation>Zoek voor</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="222"/>
+        <location filename="../qml/generic/Search.qml" line="257"/>
         <source>Any</source>
         <translation>Alle</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="238"/>
+        <location filename="../qml/generic/Search.qml" line="273"/>
         <source>Variant</source>
         <translation>Variant</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="255"/>
+        <location filename="../qml/generic/Search.qml" line="290"/>
         <source>Mode</source>
         <translation>Modus</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="256"/>
+        <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Upgrade</source>
         <translation>Upgrade</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="256"/>
+        <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Debrick</source>
         <translation>Debrick</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="352"/>
+        <location filename="../qml/generic/Search.qml" line="388"/>
         <source>Selected: %1 Apps</source>
         <translation>Geselecteerd: %1 apps</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="352"/>
-        <location filename="../qml/generic/Search.qml" line="353"/>
+        <location filename="../qml/generic/Search.qml" line="388"/>
+        <location filename="../qml/generic/Search.qml" line="389"/>
         <source>All (%1)</source>
         <translation>alle (%1)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="353"/>
+        <location filename="../qml/generic/Search.qml" line="389"/>
         <source>Needed: %1 Apps</source>
         <translation>Benodigd: %1 apps</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="424"/>
+        <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(older)</source>
         <translation>(ouder)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="424"/>
+        <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(downloaded)</source>
         <translation>(gedownload)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="448"/>
+        <location filename="../qml/generic/Search.qml" line="485"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="348"/>
+        <location filename="../qml/generic/Search.qml" line="384"/>
         <source>1700.0 MB</source>
         <translation>1700,0 MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="372"/>
+        <location filename="../qml/generic/Search.qml" line="408"/>
         <source>Options</source>
         <translation>Opties</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="375"/>
+        <location filename="../qml/generic/Search.qml" line="411"/>
         <source>Check All</source>
         <translation>Selecteer alle</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="384"/>
+        <location filename="../qml/generic/Search.qml" line="420"/>
         <source>Check All Needed</source>
         <translation>Selecteer benodigde</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="393"/>
+        <location filename="../qml/generic/Search.qml" line="429"/>
         <source>Uncheck All</source>
         <translation>Hef selectie op</translation>
     </message>
@@ -962,7 +972,7 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Alfa</translation>
     </message>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="128"/>
+        <location filename="../qml/generic/VersionLookup.qml" line="135"/>
         <source>Lookup</source>
         <translation>Zoek op</translation>
     </message>
@@ -987,7 +997,12 @@ Als alternatief kunt u de volgende opties gebruiken:</translation>
         <translation>Geen links beschikbaar</translation>
     </message>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="135"/>
+        <location filename="../qml/generic/VersionLookup.qml" line="144"/>
+        <source>History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/VersionLookup.qml" line="149"/>
         <source>Hide</source>
         <translation>Verberg</translation>
     </message>

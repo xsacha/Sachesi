@@ -11,24 +11,24 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Refreshing backup sizes</source>
-        <translation type="unfinished"></translation>
+        <translation>清爽的备份大小</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
         <location filename="../qml/generic/Backup.qml" line="62"/>
         <source>Unknown Size</source>
-        <translation type="unfinished"></translation>
+        <translation>未知大小</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
         <location filename="../qml/generic/Backup.qml" line="62"/>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="62"/>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>总计：</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="70"/>
@@ -38,32 +38,32 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>加载备份的大小有时可能会失败。在这种情况下，你可以备份“盲目”。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Create Backup Blind</source>
-        <translation type="unfinished"></translation>
+        <translation>创建备份盲</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="82"/>
         <source>Choose Backup Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>选择备份文件名</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="94"/>
         <source>Select Restore File</source>
-        <translation type="unfinished"></translation>
+        <translation>选择恢复文件</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Create Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>创建备份</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="110"/>
         <source>Restore Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>还原备份</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="90"/>
@@ -74,22 +74,22 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
         <source>Your device needs a Blackberry ID to perform backups or restores!</source>
-        <translation type="unfinished"></translation>
+        <translation>您的设备需要的BlackBerry ID来执行备份或还原！</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="121"/>
         <source>Please note that backups can take a long time, depending on your device data.</source>
-        <translation type="unfinished"></translation>
+        <translation>请注意，备份可能需要很长的时间，具体取决于您的设备数据。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Creating Backup (%1%)</source>
-        <translation type="unfinished"></translation>
+        <translation>创建备份（%1%）</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Restoring Backup (%1%)</source>
-        <translation type="unfinished"></translation>
+        <translation>恢复备份（%1%）</translation>
     </message>
 </context>
 <context>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../qml/generic/UI/CircleProgress.qml" line="117"/>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1的%2</translation>
     </message>
 </context>
 <context>
@@ -153,32 +153,32 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="12"/>
         <source>Device Information</source>
-        <translation type="unfinished"></translation>
+        <translation>设备信息</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="18"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>工具</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="22"/>
         <source>Wipe</source>
-        <translation type="unfinished">擦除</translation>
+        <translation>擦除</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="27"/>
         <source>Factory Reset</source>
-        <translation type="unfinished">恢复出厂设置</translation>
+        <translation>恢复出厂设置</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="32"/>
         <source>Reboot</source>
-        <translation type="unfinished">重启</translation>
+        <translation>重启</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="44"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>名字</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="49"/>
@@ -197,121 +197,121 @@
         <location filename="../qml/generic/Device.qml" line="164"/>
         <location filename="../qml/generic/Device.qml" line="184"/>
         <source>Unknown</source>
-        <translation type="unfinished">未知</translation>
+        <translation>未知</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
         <source>HW Name</source>
-        <translation type="unfinished"></translation>
+        <translation>五金产品</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="61"/>
         <source>BBID</source>
-        <translation type="unfinished"></translation>
+        <translation>BBID</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="68"/>
         <source>PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>针数</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="76"/>
         <source>BSN</source>
-        <translation type="unfinished"></translation>
+        <translation>主板序列号</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="90"/>
         <source>OS</source>
-        <translation type="unfinished">操作系统</translation>
+        <translation>操作系统</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="98"/>
         <source>Radio</source>
-        <translation type="unfinished">无线电</translation>
+        <translation>无线电</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="106"/>
         <source>HW</source>
-        <translation type="unfinished"></translation>
+        <translation>硬件</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="114"/>
         <source>Restrictions</source>
-        <translation type="unfinished"></translation>
+        <translation>限制</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="118"/>
         <location filename="../qml/generic/Device.qml" line="150"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>无</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="122"/>
         <source>Setup Complete</source>
-        <translation type="unfinished"></translation>
+        <translation>安装完成</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="126"/>
         <location filename="../qml/generic/Device.qml" line="134"/>
         <source>True</source>
-        <translation type="unfinished"></translation>
+        <translation>真</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="126"/>
         <location filename="../qml/generic/Device.qml" line="134"/>
         <source>False</source>
-        <translation type="unfinished"></translation>
+        <translation>假</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="130"/>
         <source>Developer Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>开发模式</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="138"/>
         <source>Battery</source>
-        <translation type="unfinished"></translation>
+        <translation>电池</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="146"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>连接</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="150"/>
         <source>USB</source>
-        <translation type="unfinished"></translation>
+        <translation>USB</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="154"/>
         <source>Refurbished Date</source>
-        <translation type="unfinished"></translation>
+        <translation>翻新日期</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="160"/>
         <location filename="../qml/generic/Device.qml" line="163"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>决不</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>肃清</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>放置</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="180"/>
         <source>Free Disk Space</source>
-        <translation type="unfinished"></translation>
+        <translation>可用磁盘空间</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="184"/>
         <source>%1 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 GB</translation>
     </message>
 </context>
 <context>
@@ -394,17 +394,17 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
-        <translation type="unfinished"></translation>
+        <translation>从磁带自动加载机的.exe，.bar或.zip分割.signed</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
         <source>Extracts all bar archives from a debrick/repair .signed</source>
-        <translation type="unfinished"></translation>
+        <translation>提取所有的酒吧档案从维修.signed</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="170"/>
         <source>Note: To extract apps from a .bar, please split it first (above)</source>
-        <translation type="unfinished"></translation>
+        <translation>注意：要从.bar提取的应用程序，请首先将其分割（图）</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="209"/>
@@ -434,42 +434,42 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="27"/>
         <source>Splitting Autoloader</source>
-        <translation type="unfinished"></translation>
+        <translation>分裂磁带自动加载机</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="28"/>
         <source>Combining Autoloader</source>
-        <translation type="unfinished"></translation>
+        <translation>结合自动加载磁带机</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="29"/>
         <source>Extracting Image</source>
-        <translation type="unfinished"></translation>
+        <translation>提取图片</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="30"/>
         <source>Extracting Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>提取应用程序</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="31"/>
         <source>Fetching required files</source>
-        <translation type="unfinished"></translation>
+        <translation>获取所需文件</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="32"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>等候</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation type="unfinished"></translation>
+        <translation>签名图片</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation type="unfinished"></translation>
+        <translation>签名集装箱</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
@@ -487,7 +487,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
-        <translation type="unfinished"></translation>
+        <translation>请耐心等待安装.zip提取。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="47"/>
@@ -543,33 +543,33 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
         <source>View Install (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>查看安装（%1）</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sending %1</source>
-        <translation type="unfinished"></translation>
+        <translation>发送%1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Installing %1</source>
-        <translation type="unfinished"></translation>
+        <translation>安装%1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sent %1</source>
-        <translation type="unfinished"></translation>
+        <translation>发送%1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>错误：您的设备只能处理一个任务的时间。请等待前面的安装完成。&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
-        <translation type="unfinished"></translation>
+        <translation>只安装新的应用程序</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
@@ -594,12 +594,12 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Your device has not completed setup</source>
-        <translation type="unfinished"></translation>
+        <translation>您的设备尚未完成安装</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Device disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>设备断开连接</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="177"/>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../src/search/scanner.h" line="68"/>
         <source>No Release</source>
-        <translation type="unfinished"></translation>
+        <translation>没有释放</translation>
     </message>
 </context>
 <context>
@@ -671,7 +671,7 @@
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="88"/>
-        <location filename="../qml/generic/Search.qml" line="189"/>
+        <location filename="../qml/generic/Search.qml" line="224"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
@@ -703,116 +703,126 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
         <source>Server did not respond as expected [%1].</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器没有响应如预期[%1]。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="130"/>
         <source>View Download (%1%)</source>
-        <translation type="unfinished"></translation>
+        <translation>查看下载（%1%）</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="149"/>
+        <location filename="../qml/generic/Search.qml" line="150"/>
+        <source>Hide</source>
+        <translation>隐藏</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="150"/>
+        <source>Show Settings</source>
+        <translation>显示设置</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Search.qml" line="161"/>
         <source>Whitelist Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>白名单设置</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="154"/>
+        <location filename="../qml/generic/Search.qml" line="166"/>
         <source>Finds updates approved by other carriers</source>
-        <translation type="unfinished"></translation>
+        <translation>认定批准的其他运营商更新</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="159"/>
+        <location filename="../qml/generic/Search.qml" line="194"/>
         <source>Country</source>
         <translation>国家</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="170"/>
+        <location filename="../qml/generic/Search.qml" line="205"/>
         <source>Carrier</source>
         <translation>运营商</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="184"/>
+        <location filename="../qml/generic/Search.qml" line="219"/>
         <source>Search For</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="222"/>
+        <location filename="../qml/generic/Search.qml" line="257"/>
         <source>Any</source>
         <translation>任意</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="238"/>
+        <location filename="../qml/generic/Search.qml" line="273"/>
         <source>Variant</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="255"/>
+        <location filename="../qml/generic/Search.qml" line="290"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="256"/>
+        <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Upgrade</source>
         <translation>升级</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="256"/>
+        <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Debrick</source>
         <translation>修复</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="352"/>
+        <location filename="../qml/generic/Search.qml" line="388"/>
         <source>Selected: %1 Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>选择：%1应用程序</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="352"/>
-        <location filename="../qml/generic/Search.qml" line="353"/>
+        <location filename="../qml/generic/Search.qml" line="388"/>
+        <location filename="../qml/generic/Search.qml" line="389"/>
         <source>All (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>全部（%1）</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="353"/>
+        <location filename="../qml/generic/Search.qml" line="389"/>
         <source>Needed: %1 Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>需要：%1应用程序</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="424"/>
+        <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(older)</source>
-        <translation type="unfinished"></translation>
+        <translation>（旧的）</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="424"/>
+        <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(downloaded)</source>
-        <translation type="unfinished"></translation>
+        <translation>（下载）</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="448"/>
+        <location filename="../qml/generic/Search.qml" line="485"/>
         <source>%1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="348"/>
+        <location filename="../qml/generic/Search.qml" line="384"/>
         <source>1700.0 MB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="372"/>
+        <location filename="../qml/generic/Search.qml" line="408"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="375"/>
+        <location filename="../qml/generic/Search.qml" line="411"/>
         <source>Check All</source>
         <translation>检查全部</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="384"/>
+        <location filename="../qml/generic/Search.qml" line="420"/>
         <source>Check All Needed</source>
         <translation>检查所需</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Search.qml" line="393"/>
+        <location filename="../qml/generic/Search.qml" line="429"/>
         <source>Uncheck All</source>
         <translation>取消检查全部</translation>
     </message>
@@ -827,7 +837,7 @@
     <message>
         <location filename="../qml/generic/Title.qml" line="79"/>
         <source>Device</source>
-        <translation type="unfinished">设备</translation>
+        <translation>设备</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="83"/>
@@ -870,22 +880,22 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="47"/>
         <source>Hide Password</source>
-        <translation type="unfinished"></translation>
+        <translation>隐藏密码</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="47"/>
         <source>Show Password</source>
-        <translation type="unfinished"></translation>
+        <translation>显示密码</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="83"/>
         <source>Detected %1 Blackberry USB device(s) in %2 mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>在%2模式检测%1黑莓USB设备（多个）。</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="87"/>
         <source>Talking to %1 possible device(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>Talking to %1 possible device (s).</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
@@ -913,55 +923,55 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="21"/>
         <source>Stop on:</source>
-        <translation type="unfinished"></translation>
+        <translation>停止：</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="29"/>
         <source>Next Found</source>
-        <translation type="unfinished"></translation>
+        <translation>接下来发现</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="35"/>
         <source>Next Available Links</source>
-        <translation type="unfinished"></translation>
+        <translation>下一个可用链接</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="40"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>决不</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="68"/>
         <source>SR: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>软件版本：%1</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="68"/>
         <source>OS: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>操作系统：%1</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="83"/>
         <source>Servers:</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器：</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="77"/>
         <source>Production</source>
-        <translation type="unfinished">正式版</translation>
+        <translation>正式版</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="79"/>
         <source>Beta</source>
-        <translation type="unfinished">Beta版</translation>
+        <translation>Beta版</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="81"/>
         <source>Alpha</source>
-        <translation type="unfinished">Alpha版</translation>
+        <translation>Alpha版</translation>
     </message>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="128"/>
+        <location filename="../qml/generic/VersionLookup.qml" line="135"/>
         <source>Lookup</source>
         <translation>查找</translation>
     </message>
@@ -986,7 +996,12 @@
         <translation>无可用链接</translation>
     </message>
     <message>
-        <location filename="../qml/generic/VersionLookup.qml" line="135"/>
+        <location filename="../qml/generic/VersionLookup.qml" line="144"/>
+        <source>History</source>
+        <translation>历史</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/VersionLookup.qml" line="149"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
