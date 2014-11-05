@@ -129,6 +129,10 @@ public slots:
         if (extracting) {
             cleanDevHandle();
         }
+        if (combining) {
+            newAutoloader->kill();
+            cleanDevHandle();
+        }
         if (splitting)
         {
             for (int i = 0; i < tmpFile.count(); i++)
@@ -197,11 +201,25 @@ public slots:
         // Convert FileInfo list to dev handle list
         cleanDevHandle();
         foreach (QFileInfo info, splitFiles) {
-            QFile* newFile = new QFile(info.absoluteFilePath());
             if (info.suffix() == "signed") {
+                QFile* newFile = new QFile(info.absoluteFilePath());
+                newFile->open(QIODevice::ReadOnly);
                 devHandle.append(newFile);
             } else {
-                // TODO: Not supported yet
+                QuaZip barFile(info.absoluteFilePath());
+                barFile.open(QuaZip::mdUnzip);
+                foreach (QString signedName, barFile.getFileNameList()) {
+                    if (QFileInfo(signedName).suffix() == "signed") {
+                        // Create a new internal QuaZip instance so we can successfully close the search instance but leave devHandle open
+                        QuaZipFile* signedFile = new QuaZipFile(info.absoluteFilePath(), signedName);
+                        // Couldn't open file. Shouldn't ever happen so don't worry about error
+                        if (!signedFile->open(QIODevice::ReadOnly)) {
+                            continue;
+                        }
+                        devHandle.append(signedFile);
+                    }
+                }
+                barFile.close();
             }
         }
         if (devHandle.isEmpty())
@@ -214,10 +232,12 @@ public slots:
         // All good, lets officially start creating
         combining = true;
         // Create new Autoloader object
-        AutoloaderWriter newAutoloader(devHandle);
-        connect(&newAutoloader, &AutoloaderWriter::newProgress, [=](int percent) { emit this->progressChanged(percent); });
-        newAutoloader.create(splitFiles.first().absolutePath() + "/" + splitFiles.first().completeBaseName());
+        newAutoloader = new AutoloaderWriter(devHandle);
+        connect(newAutoloader, &AutoloaderWriter::newProgress, [=](int percent) { emit this->progressChanged(percent); });
+        // This is blocking, but we are in a thread
+        newAutoloader->create(splitFiles.first().absolutePath() + "/" + splitFiles.first().completeBaseName());
         cleanDevHandle();
+        delete newAutoloader;
         emit finished();
     }
 
@@ -267,7 +287,6 @@ private:
     int option;
     QString selectedFile;
     QStringList selectedFiles;
-    QList<QFileInfo> selectedInfo;
     QList<QUrl> selectedUrls;
     QList<QFile*> tmpFile;
 
@@ -275,4 +294,5 @@ private:
     QList<ProgressInfo> progressInfo;
     QList<PartitionInfo> partitionInfo;
     QList<QIODevice*> devHandle;
+    AutoloaderWriter* newAutoloader;
 };

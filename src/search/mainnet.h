@@ -66,6 +66,7 @@ public:
     Q_INVOKABLE void extractImage(int type, int options);
     Q_INVOKABLE void grabLinks(int downloadDevice);
     Q_INVOKABLE void abortSplit();
+    void splitConnectStart();
 
     Q_INVOKABLE QString nameFromVariant(unsigned int device, unsigned int variant);
     Q_INVOKABLE QString hwidFromVariant(unsigned int device, unsigned int variant);
@@ -120,7 +121,6 @@ signals:
     void maxIdChanged();
     void splittingChanged();
     void splitProgressChanged();
-    void killSplit();
 private slots:
     void serverReply();
     void showFirmwareData(QByteArray data, QString variant);
@@ -139,6 +139,7 @@ private:
     QString NPCFromLocale(int country, int carrier);
 
     QThread* splitThread;
+    Splitter* splitter;
     QNetworkAccessManager *manager;
     QList<Apps*> _updateAppList;
     QString _updateMessage;

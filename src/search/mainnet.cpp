@@ -36,6 +36,15 @@ MainNet::~MainNet()
 {
 }
 
+void MainNet::splitConnectStart() {
+    connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
+    connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
+    connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
+    connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
+    connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
+    splitThread->start();
+}
+
 void MainNet::splitAutoloader(QUrl url, int options) {
     if (url.isEmpty())
         return;
@@ -45,33 +54,17 @@ void MainNet::splitAutoloader(QUrl url, int options) {
     QFileInfo fileInfo(fileName);
     _splitting = SplittingAuto; emit splittingChanged();
     splitThread = new QThread();
-    Splitter* splitter = new Splitter(fileName, _options);
+    splitter = new Splitter(fileName, _options);
     splitter->moveToThread(splitThread);
     if (fileInfo.suffix() == "exe")
         connect(splitThread, SIGNAL(started()), splitter, SLOT(processSplitAutoloader()));
     else
         connect(splitThread, SIGNAL(started()), splitter, SLOT(processSplitBar()));
-    connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-    connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-    connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-    connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-    connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-    splitThread->start();
+    splitConnectStart();
 }
 
 void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
 {
-    splitThread = new QThread;
-    _splitting = CreatingAuto; emit splittingChanged();
-    Splitter* splitter = new Splitter(selectedFiles);
-    splitter->moveToThread(splitThread);
-    connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
-    connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-    connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-    connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-    connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-    connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-
     // Download required files.
     if (!QFileInfo(capPath()).exists())
     {
@@ -88,8 +81,12 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         QObject::connect(reply, &QNetworkReply::finished, [=]() {
             // If the download was successful, copy it to the path we check. Some users quit before this happens!
             QFile::rename(capPath(true), capPath());
+            splitThread = new QThread;
             _splitting = CreatingAuto; emit splittingChanged();
-            splitThread->start();
+            splitter = new Splitter(selectedFiles);
+            splitter->moveToThread(splitThread);
+            connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
+            splitConnectStart();
             reply->deleteLater();
         });
         QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
@@ -102,8 +99,14 @@ void MainNet::combineAutoloader(QList<QUrl> selectedFiles)
         });
 
         return;
+    } else {
+        splitThread = new QThread;
+        _splitting = CreatingAuto; emit splittingChanged();
+        splitter = new Splitter(selectedFiles);
+        splitter->moveToThread(splitThread);
+        connect(splitThread, SIGNAL(started()), splitter, SLOT(processCombine()));
+        splitConnectStart();
     }
-    splitThread->start();
 }
 
 void MainNet::extractImage(int type, int options)
@@ -138,7 +141,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     }
     _splitting = (_type == 2) ? ExtractingApps : ExtractingImage; emit splittingChanged();
     splitThread = new QThread;
-    Splitter* splitter = new Splitter(selectedFiles.first());
+    splitter = new Splitter(selectedFiles.first());
     switch (_type) {
     case 1:
         splitter->extractImage = true;
@@ -154,12 +157,7 @@ void MainNet::extractImageSlot(const QStringList& selectedFiles)
     splitter->moveToThread(splitThread);
     // Wrapper should detect file type and deal extract everything inside, according to _options;
     connect(splitThread, SIGNAL(started()), splitter, SLOT(processExtractWrapper()));
-    connect(splitter, SIGNAL(finished()), splitThread, SLOT(quit()));
-    connect(splitter, SIGNAL(finished()), this, SLOT(cancelSplit()));
-    connect(splitter, SIGNAL(progressChanged(int)), this, SLOT(setSplitProgress(int)));
-    connect(splitThread, SIGNAL(finished()), splitter, SLOT(deleteLater()));
-    connect(splitThread, SIGNAL(finished()), splitThread, SLOT(deleteLater()));
-    splitThread->start();
+    splitConnectStart();
 }
 
 void MainNet::cancelSplit()
@@ -170,7 +168,7 @@ void MainNet::cancelSplit()
 
 void MainNet::abortSplit()
 {
-    killSplit();
+    emit splitter->killSplit();
     cancelSplit();
 }
 

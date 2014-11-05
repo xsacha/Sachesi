@@ -38,7 +38,7 @@
 // Crash: If you are looking at a different tab when backup size results return
 
 // Feature and function TODO
-// TODO: Allow combining and installing directly from zip
+// TODO: Allow installing directly from zip
 // TODO: Make extraction handle decent % tracking for QNX FS
 // TODO: Completely redo how Splitter is accessed. Possibly make it a class with per-function jobs/threads
 // Need help: Check and improve the USB Loader (Boot).

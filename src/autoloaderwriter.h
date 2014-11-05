@@ -16,7 +16,7 @@
 // http://github.com/xsacha/Sachesi
 
 #pragma once
-#include <QObject>
+#include <QApplication>
 #include <QList>
 #include <QFile>
 #include "fs/fs.h" // QNXStream
@@ -27,19 +27,32 @@ class AutoloaderWriter: public QFile {
 public:
     AutoloaderWriter(QList<QIODevice*> devices)
         : _devHandle(devices)
+        , _finished(false)
     {
 
     }
+
+    void kill() {
+        _finished = true;
+        if (isOpen())
+            close();
+        remove();
+    }
+
     void create(QString name) {
+        _maxSize = 0x10000000; // A very large number :)
         // Find potential file
         QString append = ".exe";
         for (int f = 2; QFile::exists(name + append); f++) {
             append = QString("-%1.exe").arg(QString::number(f));
         }
         // Start the autoloader as a cap file
-        QFile::copy(capPath(), name + append);
         setFileName(name + append);
-        open(QIODevice::WriteOnly | QIODevice::Append);
+        open(QIODevice::WriteOnly);
+        QFile cap(capPath());
+        cap.open(QIODevice::ReadOnly);
+        appendFile(&cap);
+
         // This code is used as a separator
         write(QByteArray::fromBase64("at9dFE5LT0dJSE5JTk1TDRAMBRceERhTLUY8T0crSzk5OVNOT1FNT09RTU9RSEhwnNXFl5zVxZec1cWX").constData(), 60);
         // This is a placeholder for a password
@@ -52,7 +65,6 @@ public:
         foreach (QIODevice* file, _devHandle)
         {
             dataStream << counter;
-            file->open(QIODevice::ReadOnly);
             counter += file->size();
         }
         for (int i = _devHandle.count() - 1; i < 6; i++)
@@ -60,18 +72,26 @@ public:
         write(dataHeader);
         _read = 100 * pos();
         _maxSize = counter;
+        resize(_maxSize);
         foreach (QIODevice* file, _devHandle)
-            appendFile(file);
-        close();
+            if (!_finished) appendFile(file);
+        if (isOpen())
+            close();
     }
 
     void appendFile(QIODevice* file) {
         while (!file->atEnd())
         {
-            QByteArray tmp = file->read(FAST_BUFFER_LEN);
-            if (tmp.size() < 0)
-                break;
-            _read += 100 * write(tmp);
+            // Check if we are being told to leave
+            qApp->processEvents();
+            if (_finished)
+                return;
+            int writeSize = write(file->read(FAST_BUFFER_LEN));
+            if (writeSize < 0) {
+                kill();
+                return;
+            }
+            _read += 100 * writeSize;
             emit newProgress((int)(_read / _maxSize));
         }
         file->close();
@@ -81,4 +101,5 @@ signals:
 private:
     qint64 _read, _maxSize;
     QList<QIODevice*> _devHandle;
+    bool _finished;
 };

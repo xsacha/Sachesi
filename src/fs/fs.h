@@ -40,7 +40,7 @@
 #define READ_TMP(x, y) x y; stream >> y;
 // Maximum amount to store in RAM at any time between reading QIODevice and writing to disk.
 #define BUFFER_LEN (qint64)4096
-#define FAST_BUFFER_LEN (qint64)409600
+#define FAST_BUFFER_LEN (qint64)819200
 
 #ifdef _WIN32
 #include "Windows.h"
