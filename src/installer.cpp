@@ -295,6 +295,8 @@ void InstallNet::install(QList<QUrl> files)
                 if (QFile(thisFile).size() == info.uncompressedSize) {
                     filenames.append(thisFile);
                     continue;
+                } else {
+                    QFile(thisFile).remove();
                 }
             }
             if (!file.open(QIODevice::ReadOnly))
@@ -309,7 +311,7 @@ void InstallNet::install(QList<QUrl> files)
                 writeFile.write(QByteArray::fromHex("504b"));
                 while (!file.atEnd()) {
                     qApp->processEvents();
-                    writeFile.write(file.read(4096000));
+                    writeFile.write(file.read(8192000));
                 }
                 filenames.append(thisFile);
             }
@@ -479,6 +481,7 @@ bool InstallNet::uninstallMarked()
     return true;
 }
 
+// For finding Blackberry Link backup path
 /*#ifdef _WIN32
     QFile linkSettings(QDir::homePath()+"/AppData/Roaming/Research In Motion/BlackBerry 10 Desktop/Settings.config");
     linkSettings.open(QIODevice::WriteOnly);

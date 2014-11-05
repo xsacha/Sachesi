@@ -39,16 +39,16 @@
 
 // Feature and function TODO
 // TODO: Allow installing directly from zip
-// TODO: Make extraction handle decent % tracking for QNX FS
+// TODO: Make extraction handle decent % tracking for QNX FS. Perhaps a per-file extractor for progress circle.
 // TODO: Completely redo how Splitter is accessed. Possibly make it a class with per-function jobs/threads
 // Need help: Check and improve the USB Loader (Boot).
-// TODO: Use CircleProgress in every progress (Extract) section. Pass a class to QML that contains file count, current and total progress
+// TODO: Use CircleProgress in Extract section. Pass a class to QML that contains file count, current and total progress
 
 // Platform TODO
 // TODO: Window {} not working on Android. Maybe special QML files required?
-// TODO: Blackberry is having a lot of issues with Qt5. Not sure how to support.
+// TODO: Blackberry is having a lot of issues with Qt5. For now I have a custom Cascades version with reduced feature-set
 
-// Need testing: Check PolicyRestrictions somehow?
+// Need testing of policies:
 // Personal: policy_block_backup_and_restore, policy_backup_and_restore
 // Enterprise: policy_disable_devmode, policy_log_submission, policy_block_computer_access_to_device
 

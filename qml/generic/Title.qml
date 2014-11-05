@@ -6,7 +6,7 @@ import "UI" 1.0
 
 ApplicationWindow {
     id: window
-    title: "Sachesi " + version + " Beta"
+    title: "Sachesi " + version + " RC"
     width: 820
     height: 680
     minimumHeight: 540

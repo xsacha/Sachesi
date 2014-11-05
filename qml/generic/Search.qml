@@ -144,40 +144,51 @@ Item {
         anchors.leftMargin: 10
         Layout.fillHeight: true
         height: (parent.height * 4) / 6
-        Label {
-            font.pointSize: 14
-            text: qsTr("Whitelist Settings") + translator.lang
-            font.bold: true
+        Button {
+            id: hideWhitelistButton
+            checkable: true
+            text: checked ? qsTr("Hide") : qsTr("Show Settings")
         }
-        Label {
-            visible: !settings.advanced
-            text: qsTr("Finds updates approved by other carriers") + translator.lang
-        }
-        // On a new device becoming connected, update search results
-        property bool devicePresent: i.completed
-        onDevicePresentChanged: if (devicePresent && searchButton.enabled) searchButton.clicked()
-        // Find latest country/carrier pair from github
-        property string latestOS: "10.3.1.1016"
-        Component.onCompleted: {
-            var http = new XMLHttpRequest()
-            var url = "https://raw.githubusercontent.com/xsacha/Sachesi/master/carrier";
-            http.open("GET", url, true);
-            http.send(null)
-            http.onreadystatechange = function() {
-                if(http.readyState == 4 && http.status == 200) {
-                    var array = http.responseText.split('\n')
-                    if (array.length > 3) {
-                        country.value = array[0]
-                        carrier.value = array[1]
-                        device.selectedItem = parseInt(array[2])
-                        latestOS = array[3]
-                        if (searchButton.enabled)
-                            searchButton.clicked()
+
+        ColumnLayout {
+            id: whitelistSettings
+            spacing: 25
+            scale: hideWhitelistButton.checked
+            visible: scale !== 0.0
+            Behavior on scale { NumberAnimation { duration: 300 } }
+            Label {
+                font.pointSize: 14
+                text: qsTr("Whitelist Settings") + translator.lang
+                font.bold: true
+            }
+            Label {
+                visible: !settings.advanced
+                text: qsTr("Finds updates approved by other carriers") + translator.lang
+            }
+            // On a new device becoming connected, update search results
+            property bool devicePresent: i.completed
+            onDevicePresentChanged: if (devicePresent && searchButton.enabled) searchButton.clicked()
+            // Find latest country/carrier pair from github
+            property string latestOS: "10.3.1.1016"
+            Component.onCompleted: {
+                var http = new XMLHttpRequest()
+                var url = "https://raw.githubusercontent.com/xsacha/Sachesi/master/carrier";
+                http.open("GET", url, true);
+                http.send(null)
+                http.onreadystatechange = function() {
+                    if(http.readyState == 4 && http.status == 200) {
+                        var array = http.responseText.split('\n')
+                        if (array.length > 3) {
+                            country.value = array[0]
+                            carrier.value = array[1]
+                            device.selectedItem = parseInt(array[2])
+                            latestOS = array[3]
+                            if (searchButton.enabled)
+                                searchButton.clicked()
+                        }
                     }
                 }
             }
-        }
-
         TextCouple {
             id: country
             type: qsTr("Country") + translator.lang
@@ -292,6 +303,7 @@ Item {
             type: "API"
             listModel: [ "2.1.0", "2.0.0", "1.0.0" ]
         }*/
+        }
     }
     VersionLookup {
         id: versionLookup
