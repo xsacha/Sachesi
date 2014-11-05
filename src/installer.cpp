@@ -381,7 +381,7 @@ void InstallNet::install(QList<QUrl> files)
             foreach(Apps* app, _appList) {
                 if (!_allowDowngrades && info.packageid == app->packageId()) {
                     if (isVersionNewer(app->version(), info.version, true)) {
-                        setNewLine(QString("%1 was skipped. Newer version already installed (%2)").arg(QFileInfo(info.name).completeBaseName()).arg(app->version()));
+                        setNewLine(QString("%1 was skipped. Version %2 already installed").arg(QFileInfo(info.name).completeBaseName()).arg(app->version()));
                         info.type = NotInstallableType;
                     }
 
@@ -399,9 +399,9 @@ void InstallNet::install(QList<QUrl> files)
                    .arg(skipCount));
         return;
     }
-    setNewLine(QString("Installing <b>%1</b> .bar(s). Skipped %2.")
+    setNewLine(QString("Installing <b>%1</b> .bar(s).%2.")
                .arg(_installInfo.count())
-               .arg(skipCount));
+               .arg(skipCount > 0 ? QString(" Skipped %1").arg(skipCount) : ""));
     install();
 }
 
