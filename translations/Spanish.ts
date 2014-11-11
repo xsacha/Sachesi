@@ -11,7 +11,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Refreshing backup sizes</source>
-        <translation>Tamaños de copia de seguridad refrescantes</translation>
+        <translation>Refrescando tamaños de Copia de Seguridad</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="62"/>
         <source>Total:</source>
-        <translation>Sumar:</translation>
+        <translation>Total:</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="70"/>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>Cargando tamaños de copia de seguridad a veces puede fallar. En esta situación, usted puede copias de seguridad &quot;a ciegas&quot;.</translation>
+        <translation>Cargando tamaños de copia de seguridad a veces puede fallar. En esa situación, usted puede realizar copias de seguridad &quot;a ciegas&quot;.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
@@ -69,7 +69,7 @@
         <location filename="../qml/generic/Backup.qml" line="90"/>
         <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
-        <translation>copia de seguridad Blackberry (*.bbb)</translation>
+        <translation>Copia de Seguridad Blackberry (*.bbb)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Creating Backup (%1%)</source>
-        <translation>Crear copia de seguridad (%1 %)</translation>
+        <translation>Crear Copia de Seguridad (%1 %)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Restoring Backup (%1%)</source>
-        <translation>La restauración de copia de seguridad (%1 %)</translation>
+        <translation>Restaurando Copia de Seguridad (%1 %)</translation>
     </message>
 </context>
 <context>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="26"/>
         <source>Nuke</source>
-        <translation>Nuke</translation>
+        <translation>Destruir</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="30"/>
@@ -127,8 +127,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="43"/>
         <source>Connecting to bootrom</source>
-        <translation>
-Conexión a la sector de inicio</translation>
+        <translation>Conectando con la ROM de inicio</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="50"/>
@@ -159,7 +158,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Device.qml" line="18"/>
         <source>Tools</source>
-        <translation>Instrumentos</translation>
+        <translation>Herramientas</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="22"/>
@@ -169,7 +168,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Device.qml" line="27"/>
         <source>Factory Reset</source>
-        <translation>Restablecimiento de Fábrica</translation>
+        <translation>Restaurar a Valores de Fabrica</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="32"/>
@@ -203,7 +202,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
         <source>HW Name</source>
-        <translation>HW Nombre</translation>
+        <translation>Nombre HW</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="61"/>
@@ -286,7 +285,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Device.qml" line="154"/>
         <source>Refurbished Date</source>
-        <translation>Fecha Reformado</translation>
+        <translation>Fecha de Reconstrucción</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="160"/>
@@ -320,12 +319,12 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Downloader.qml" line="45"/>
         <source>#1. Start RTAS (Requires OS10.2)</source>
-        <translation>#1. Inicio RTAS (Requiere OS 10.2)</translation>
+        <translation>#1. Iniciar RTAS (Requiere SO 10.2)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Downloader.qml" line="49"/>
         <source>Start RTAS</source>
-        <translation>Inicio RTAS</translation>
+        <translation>Iniciar RTAS</translation>
     </message>
 </context>
 <context>
@@ -333,7 +332,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
-        <translation>Los porcentajes no son del todo exacto para archivos QNX6.</translation>
+        <translation>Los porcentajes no son del todo exactos para archivos QNX6.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="55"/>
@@ -344,13 +343,13 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
-        <translation>Extracto Firmado</translation>
+        <translation>Extrar Firmadox</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="126"/>
         <location filename="../qml/generic/Extract.qml" line="221"/>
         <source>User</source>
-        <translation>Consumidor</translation>
+        <translation>Usuario</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="132"/>
@@ -365,17 +364,17 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="150"/>
         <source>PINList</source>
-        <translation>PINLista</translation>
+        <translation>ListaPIN</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="71"/>
         <source>Create Autoloader</source>
-        <translation>Crear instalador</translation>
+        <translation>Crear Instalador</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="81"/>
         <source>Create from Folder</source>
-        <translation>Crear en la Carpeta</translation>
+        <translation>Crear a Partir de la Carpeta</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="89"/>
@@ -395,7 +394,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
-        <translation>Separación .signed de .exe instalador, .bar o .zip</translation>
+        <translation>Seperar .signed de instalador .exe, .bar o .zip</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
@@ -405,12 +404,12 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="170"/>
         <source>Note: To extract apps from a .bar, please split it first (above)</source>
-        <translation>Nota: Para extraer aplicaciones desde un .bar, por favor dividirlo primera (arriba)</translation>
+        <translation>Nota: Para extraer aplicaciones desde un .bar, por favor divídalo primero (arriba)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="209"/>
         <source>Dump Contents</source>
-        <translation>Volcar los Contenidos</translation>
+        <translation>Volcar el Contenido</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="216"/>
@@ -420,22 +419,22 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="226"/>
         <source>Boot</source>
-        <translation>Inicio</translation>
+        <translation>Arranque</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="230"/>
         <source>Dump all file contents</source>
-        <translation>Volcar todos los contenidos del archivo</translation>
+        <translation>Volcar el contenido del archivo</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="179"/>
         <source>Extract Image</source>
-        <translation>Imagen Extracto</translation>
+        <translation>Extraer Imagen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="27"/>
         <source>Splitting Autoloader</source>
-        <translation>Separación Instalador</translation>
+        <translation>Separando Instalador</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="28"/>
@@ -445,22 +444,22 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="29"/>
         <source>Extracting Image</source>
-        <translation>La Extracción de Imagen</translation>
+        <translation>Extrayendo Imagen</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="30"/>
         <source>Extracting Apps</source>
-        <translation>La Extracción de Aplicaciones</translation>
+        <translation>Extrayendo Aplicaciones</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="31"/>
         <source>Fetching required files</source>
-        <translation>Obtención de archivos necesarios</translation>
+        <translation>Obteniendo de archivos necesarios</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="32"/>
         <source>Waiting</source>
-        <translation>Espera</translation>
+        <translation>Esperando</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
@@ -470,17 +469,17 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation>Firmadas Contenedores</translation>
+        <translation>Contenedores Firmados</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
         <source>Extracts filesystem image</source>
-        <translation>Extractos de la imagen del sistema de ficheros</translation>
+        <translation>Extrae la imagen del sistema de ficheros</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="161"/>
         <source>Extract Apps</source>
-        <translation>Aplicaciones de Extracto</translation>
+        <translation>Extraer Aplicaciones</translation>
     </message>
 </context>
 <context>
@@ -513,7 +512,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Installer.qml" line="91"/>
         <source>Blackberry Installable (*.bar)</source>
-        <translation>Blackberry instalable (*.bar)</translation>
+        <translation>Instalable Blackberry (*.bar)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="94"/>
@@ -524,7 +523,7 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
-        <translation>Error: Su dispositivo sólo puede procesar una tarea a la vez. Por favor espere a que la copia de seguridad/proceso de restauración para completar. &lt;br&gt;</translation>
+        <translation>Error: Su dispositivo sólo puede procesar una tarea a la vez. Por favor espere a que la copia de seguridad/proceso de restauración sea completado. &lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="101"/>
@@ -544,17 +543,17 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
         <source>View Install (%1)</source>
-        <translation>Ver Instale (%1)</translation>
+        <translation>Ver Instalación (%1)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sending %1</source>
-        <translation>Envío (%1)</translation>
+        <translation>Enviando (%1)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Installing %1</source>
-        <translation>Instalación %1</translation>
+        <translation>Instalando %1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
@@ -565,7 +564,7 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
-        <translation>Error: Su dispositivo sólo puede procesar una tarea a la vez. Por favor, espere a que la instalación anterior para completar. &lt;br&gt;</translation>
+        <translation>Error: Su dispositivo sólo puede procesar una tarea a la vez. Por favor, espere a que la instalación anterior sea completado. &lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="125"/>
@@ -595,12 +594,12 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Your device has not completed setup</source>
-        <translation>El dispositivo no se ha completado la configuración</translation>
+        <translation>El dispositivo no ha completado la configuración</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Device disconnected</source>
-        <translation>Dispositivos desconectado</translation>
+        <translation>Dispositivo desconectado</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="177"/>
@@ -638,12 +637,12 @@ Conexión a la sector de inicio</translation>
         <location filename="../qml/generic/Search.qml" line="38"/>
         <location filename="../qml/generic/Search.qml" line="135"/>
         <source>Cancel Download</source>
-        <translation>Cancelar Descargar</translation>
+        <translation>Cancelar Descarga</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Searching...</source>
-        <translation>Búsqueda...</translation>
+        <translation>Buscando...</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="53"/>
@@ -658,7 +657,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Search.qml" line="64"/>
         <source>Version Lookup</source>
-        <translation>Versión de buscar</translation>
+        <translation>Buscar Version</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="76"/>
@@ -668,7 +667,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Search.qml" line="85"/>
         <source>Download For</source>
-        <translation>Download para</translation>
+        <translation>Descargar Para</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="88"/>
@@ -694,12 +693,12 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Search.qml" line="118"/>
         <source>Grab Links</source>
-        <translation>Enlaces de Arrebatar</translation>
+        <translation>Obtener Enlaces</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="125"/>
         <source>Verifying</source>
-        <translation>Verificación</translation>
+        <translation>Verificando</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
@@ -749,7 +748,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Search.qml" line="257"/>
         <source>Any</source>
-        <translation>Cualquier</translation>
+        <translation>Cualquiera</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="273"/>
@@ -833,7 +832,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Title.qml" line="46"/>
         <source>Advanced</source>
-        <translation>Avanzada</translation>
+        <translation>Avanzado</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="79"/>
@@ -843,7 +842,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
-        <translation>Extracto</translation>
+        <translation>Extraer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="87"/>
@@ -858,7 +857,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/Title.qml" line="95"/>
         <source>Install</source>
-        <translation>Instale</translation>
+        <translation>Instalar</translation>
     </message>
 </context>
 <context>
@@ -901,7 +900,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
         <source>There was an issue connecting.</source>
-        <translation>Había un problema de conexión.</translation>
+        <translation>Hubo un problema de conexión.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="59"/>
@@ -919,12 +918,12 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Version Lookup</source>
-        <translation>Versión de buscar</translation>
+        <translation>Buscar Version</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="21"/>
         <source>Stop on:</source>
-        <translation>Pare en:</translation>
+        <translation>Detener en:</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="29"/>
@@ -944,7 +943,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="68"/>
         <source>SR: %1</source>
-        <translation>SR: %1</translation>
+        <translation>VS: %1</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="68"/>
@@ -989,7 +988,7 @@ Conexión a la sector de inicio</translation>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>
         <source>Grab Public Links</source>
-        <translation>Enlaces de Arrebatar Públicos</translation>
+        <translation>Obtener Enlaces Públicos</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>
