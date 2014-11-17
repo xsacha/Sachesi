@@ -11,7 +11,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Refreshing backup sizes</source>
-        <translation>清爽的备份大小</translation>
+        <translation>正在刷新备份大小</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
@@ -38,12 +38,12 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>加载备份的大小有时可能会失败。在这种情况下，你可以备份“盲目”。</translation>
+        <translation>加载备份的大小有时可能会失败。在这种情况下，你可以选择视而不见的备份。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Create Backup Blind</source>
-        <translation>创建备份盲</translation>
+        <translation>创建视而不见的备份</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="82"/>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
         <source>HW Name</source>
-        <translation>五金产品</translation>
+        <translation>硬件名称</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="61"/>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="68"/>
         <source>PIN</source>
-        <translation>针数</translation>
+        <translation>PIN码</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="76"/>
@@ -252,15 +252,23 @@
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="126"/>
+        <source>True</source>
+        <translation>已完成</translation>
+    </message>
+    <message>
         <location filename="../qml/generic/Device.qml" line="134"/>
         <source>True</source>
-        <translation>真</translation>
+        <translation>开</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="126"/>
+        <source>False</source>
+        <translation>未完成</translation>
+    </message>
+     <message>
         <location filename="../qml/generic/Device.qml" line="134"/>
         <source>False</source>
-        <translation>假</translation>
+        <translation>关</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="130"/>
@@ -285,23 +293,23 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="154"/>
         <source>Refurbished Date</source>
-        <translation>翻新日期</translation>
+        <translation>刷新日期</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="160"/>
         <location filename="../qml/generic/Device.qml" line="163"/>
         <source>Never</source>
-        <translation>决不</translation>
+        <translation>从不</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Clear</source>
-        <translation>肃清</translation>
+        <translation>清除</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Set</source>
-        <translation>放置</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="180"/>
@@ -394,17 +402,17 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
-        <translation>从磁带自动加载机的.exe，.bar或.zip分割.signed</translation>
+        <translation>从autoloader.exe,.bar或者.zip文件中分离出.signed文件</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
         <source>Extracts all bar archives from a debrick/repair .signed</source>
-        <translation>提取所有的酒吧档案从维修.signed</translation>
+        <translation>从debrick/repair .signed文件中提取所有的bar文件</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="170"/>
         <source>Note: To extract apps from a .bar, please split it first (above)</source>
-        <translation>注意：要从.bar提取的应用程序，请首先将其分割（图）</translation>
+        <translation>注意：要从.bar提取应用程序，请首先将其分离（参见上面的功能）</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="209"/>
@@ -434,12 +442,12 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="27"/>
         <source>Splitting Autoloader</source>
-        <translation>分裂磁带自动加载机</translation>
+        <translation>正在分离Autoloader</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="28"/>
         <source>Combining Autoloader</source>
-        <translation>结合自动加载磁带机</translation>
+        <translation>组合Autoloader</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="29"/>
@@ -459,7 +467,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="32"/>
         <source>Waiting</source>
-        <translation>等候</translation>
+        <translation>请稍后</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
@@ -469,7 +477,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
         <source>Signed Containers</source>
-        <translation>签名集装箱</translation>
+        <translation>签名容器</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
@@ -487,7 +495,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
-        <translation>请耐心等待安装.zip提取。</translation>
+        <translation>请耐心等待提取.zip安装包。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="47"/>
@@ -502,7 +510,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
         <source>To install &lt;b&gt;.bar&lt;/b&gt; files such as applications or firmware, you can just &lt;b&gt;Drag and Drop&lt;/b&gt; to this page. Otherwise, select the options below:</source>
-        <translation>要安装&lt;b&gt;.bar&lt;/b&gt;文件如应用程序或固件，您可以只是&lt;b&gt;拖放&lt;/b&gt;该页面。否则，请选择下面的选项：</translation>
+        <translation>要安装&lt;b&gt;.bar&lt;/b&gt;文件例如应用程序或固件，您只能&lt;b&gt;拖放到&lt;/b&gt;该页面。否则，请选择下面的选项：</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="82"/>
@@ -652,7 +660,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="61"/>
         <source>Delta</source>
-        <translation>三角洲</translation>
+        <translation>增量</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="64"/>
