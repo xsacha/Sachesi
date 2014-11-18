@@ -38,12 +38,12 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>加载备份的大小有时可能会失败。在这种情况下，你可以选择视而不见的备份。</translation>
+        <translation>加载备份的大小有时可能会失败。在这种情况下，你可以选择模糊备份。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Create Backup Blind</source>
-        <translation>创建视而不见的备份</translation>
+        <translation>创建模糊备份</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="82"/>
@@ -572,7 +572,7 @@
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
-        <translation>错误：您的设备只能处理一个任务的时间。请等待前面的安装完成。&lt;br&gt;</translation>
+        <translation>错误：您的设备一次只能处理一个任务。请等待前面的安装完成。&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="125"/>
@@ -711,7 +711,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="74"/>
         <source>Server did not respond as expected [%1].</source>
-        <translation>服务器没有响应如预期[%1]。</translation>
+        <translation>服务器没有响应[%1]。</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="130"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="166"/>
         <source>Finds updates approved by other carriers</source>
-        <translation>认定批准的其他运营商更新</translation>
+        <translation>查找其他运营商推送的更新</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="194"/>
@@ -797,12 +797,12 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(older)</source>
-        <translation>（旧的）</translation>
+        <translation>（更早的）</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(downloaded)</source>
-        <translation>（下载）</translation>
+        <translation>（已下载）</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="485"/>
@@ -903,7 +903,7 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="87"/>
         <source>Talking to %1 possible device(s).</source>
-        <translation>Talking to %1 possible device (s).</translation>
+        <translation>正在尝试和 %1 个设备建立对话.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
@@ -931,22 +931,22 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="21"/>
         <source>Stop on:</source>
-        <translation>停止：</translation>
+        <translation>停止条件：</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="29"/>
         <source>Next Found</source>
-        <translation>接下来发现</translation>
+        <translation>发现下一个版本</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="35"/>
         <source>Next Available Links</source>
-        <translation>下一个可用链接</translation>
+        <translation>发现下一个可用链接</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="40"/>
         <source>Never</source>
-        <translation>决不</translation>
+        <translation>从不</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="68"/>
