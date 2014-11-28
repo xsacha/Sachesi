@@ -160,8 +160,19 @@ Item {
                     text: ((i.device === null) ? qsTr("Unknown") : (i.device.refurbDate === "" ? qsTr("Never") : i.device.refurbDate)) + translator.lang
                 }
                 Button {
+                    visible: {
+                        if (i.device === null)
+                            return false;
+                        var strArray = i.device.os.split('.')
+                        if (strArray[0] !== 10 || strArray[1] > 3)
+                            return false;
+                        if (strArray[1] === 3 && strArray[2] > 1)
+                            return false;
+                        if (strArray[1] === 3 && strArray[2] === 1 && strArray[3] > 821)
+                            return false;
+                        return true;
+                    }
                     property bool isSet: refurbText.text !== (qsTr("Never") + translator.lang)
-                    visible: refurbText.text !== (qsTr("Unknown") + translator.lang)
                     text: (isSet ? qsTr("Clear") : qsTr("Set")) + translator.lang
                     onClicked: {
                         var date = Math.floor(new Date().getTime() / 1000)
