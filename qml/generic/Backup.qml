@@ -12,10 +12,17 @@ Item {
     visible: i.device !== null && i.completed && !i.loginBlock && !i.wrongPass
     anchors { fill: parent; leftMargin: 20; topMargin: 20 }
 
+    MessageDialog {
+        id: timeoutWarning
+        title: qsTr("Timed out")
+        informativeText: qsTr("The request timed out. Please backup blind. This is a bug that Blackberry needs to fix.")
+        standardButtons: StandardButton.Ok
+    }
     Timer {
         id: attemptLookup
         running: false
-        interval: 22000
+        interval: 40000
+        onTriggered: timeoutWarning.open()
     }
 
     ColumnLayout {
@@ -43,6 +50,7 @@ Item {
                     model: i.backMethods
                     delegate: CheckBox {
                         text: (i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(i.backSizes[index].toFixed(1))) + ")") + translator.lang // index
+                        onTextChanged: if (attemptLookup.running) attemptLookup.stop()
                         onCheckedChanged: {
                             if (checked) {
                                 options.value += 1 << index;
@@ -141,10 +149,16 @@ Item {
                     font.pointSize: 12
                     text: i.backStatus + " (" + i.backCurProgress + "%)";
                 }
+
                 BusyIndicator {
                     width: parent.height
                     height: parent.height
                 }
+            }
+            Text {
+                font.pointSize: 10
+                visible: i.backProgress == 0
+                text: "The device is currently generating a list of files to backup. Please wait."
             }
         }
     }

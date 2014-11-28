@@ -35,10 +35,11 @@
 #endif
 
 // Known bugs
-// Crash: If you are looking at a different tab when backup size results return
+// Crash: If you are looking at a different tab when backup size results return. Unknown cause!
 
 // Feature and function TODO
-// TODO: Allow installing directly from zip
+// TODO: We can make blitz faster by checking OTAs. Do this in download stage and perhaps in live blitz
+// TODO: Allow installing directly from zip (difficult due to pipelining and requirement of seek which QuaZip won't support)
 // TODO: Make extraction handle decent % tracking for QNX FS. Perhaps a per-file extractor for progress circle.
 // TODO: Completely redo how Splitter is accessed. Possibly make it a class with per-function jobs/threads
 // Need help: Check and improve the USB Loader (Boot).
