@@ -135,7 +135,7 @@ public:
         });
     }
 
-    void verifyLink(QString url, QString type) {
+    void verifyLink(QString url, QString type, bool delta) {
         toVerify++;
         emit verifyingChanged();
         QNetworkReply* reply = _manager->head(QNetworkRequest(url));
@@ -158,7 +158,7 @@ public:
                 emit verifyingChanged();
                 // Verified. Now lets complete
                 if (toVerify == 0)
-                    download();
+                    download(delta);
             } else {
                 reset();
                 QMessageBox::information(NULL, "Error", "The server did not have the " + type + " for the selected 'Download Device'.\n\nPlease try a different search result or a different download device.");
@@ -174,13 +174,15 @@ public:
         });
     }
 
-    void download() {
+    void download(bool delta) {
         // Check for deltas
-        for (int i = 0; i < apps.count(); i++) {
-            if (!apps.at(i)->isMarked() || apps.at(i)->installedVersion().isEmpty())
-                continue;
-            if (isVersionNewer(apps.at(i)->version(), apps.at(i)->installedVersion(), false))
-                verifyDelta(i);
+        if (delta) { // Checking for connected
+            for (int i = 0; i < apps.count(); i++) {
+                if (!apps.at(i)->isMarked() || apps.at(i)->installedVersion().isEmpty())
+                    continue;
+                if (isVersionNewer(apps.at(i)->version(), apps.at(i)->installedVersion(), false))
+                    verifyDelta(i);
+            }
         }
         if (toVerify == 0)
             startDownload();

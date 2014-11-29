@@ -134,9 +134,9 @@ private:
     // Utils:
     InstallNet* _i;
     void verifyLink(QString url, QString type);
-    QString convertLinks(int downloadDevice, QString prepend);
+    QString convertLinks(QString prepend);
     QString fixVariantName(QString name, QString replace, int type);
-    void fixApps(int downloadDevice);
+    void fixApps();
     QString NPCFromLocale(int country, int carrier);
 
     QThread* splitThread;
@@ -155,4 +155,5 @@ private:
     int _splitting, _splitProgress;
     int _options;
     int _type;
+    int _downloadDevice;
 };

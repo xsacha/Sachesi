@@ -176,7 +176,8 @@ void MainNet::abortSplit()
 
 void MainNet::grabLinks(int downloadDevice)
 {
-    writeDisplayFile("Updates", convertLinks(downloadDevice, "Links have been converted to work on your selected device.\n\n").toLocal8Bit());
+    _downloadDevice = downloadDevice;
+    writeDisplayFile("Updates", convertLinks("Links have been converted to work on your selected device.\n\n").toLocal8Bit());
 }
 
 QString MainNet::fixVariantName(QString name, QString replace, int type) {
@@ -202,9 +203,9 @@ QString MainNet::fixVariantName(QString name, QString replace, int type) {
 
 // Permanently converts the currentDownload object apps to the current 'Download Device'
 // Important not to change this object during the, rather large, download!
-void MainNet::fixApps(int downloadDevice) {
-#ifndef BLACKBERRY
-    QPair<QString,QString> results = _i->getConnected(downloadDevice, _versionRelease.startsWith("10.3.0"));
+void MainNet::fixApps() {
+if (_i != nullptr) {
+    QPair<QString,QString> results = _i->getConnected(_downloadDevice, _versionRelease.startsWith("10.3.0"));
     if (results.first == "" && results.second == "")
         return;
 
@@ -213,29 +214,29 @@ void MainNet::fixApps(int downloadDevice) {
             app->setUrl(fixVariantName(app->url(), results.first, 0));
             app->setName(app->url().split("/").last());
             app->setFriendlyName(QFileInfo(app->name()).completeBaseName());
-            currentDownload->verifyLink(app->url(), "OS");
+            currentDownload->verifyLink(app->url(), "OS", _downloadDevice == 0 && _i != nullptr && _i->device != nullptr);
         } else if (results.second != "" && app->type() == "radio") {
             app->setUrl(fixVariantName(app->url(), results.second, 1));
             app->setName(app->url().split("/").last());
             app->setFriendlyName(QFileInfo(app->name()).completeBaseName());
-            currentDownload->verifyLink(app->url(), "Radio");
+            currentDownload->verifyLink(app->url(), "Radio", _downloadDevice == 0 && _i != nullptr && _i->device != nullptr);
         }
     }
     // Refresh the names in QML
     currentDownload->nextFile(0);
-#endif
+}
 }
 
 
 // Creates a string with a list of URLs based on current 'Search Device'
 // and converted to current 'Download Device'
-QString MainNet::convertLinks(int downloadDevice, QString prepend)
+QString MainNet::convertLinks(QString prepend)
 {
     bool convert = true;
     QPair<QString,QString> results;
 
     if (_i != nullptr) {
-        results = _i->getConnected(downloadDevice, _versionRelease.startsWith("10.3.0"));
+        results = _i->getConnected(_downloadDevice, _versionRelease.startsWith("10.3.0"));
         if (results.first == "" && results.second == "")
             convert = false;
     }
@@ -262,10 +263,11 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
 
 void MainNet::downloadLinks(int downloadDevice)
 {
+    _downloadDevice = downloadDevice;
     // Have we been here before? Starting but ids already generated. Maybe links were verified, so skip this
     if (currentDownload->maxId == 0) {
         currentDownload->setApps(_updateAppList, _versionRelease);
-        fixApps(downloadDevice);
+        fixApps();
         // Did we find any apps?
         if (currentDownload->maxId == 0) {
             currentDownload->reset();
@@ -273,7 +275,7 @@ void MainNet::downloadLinks(int downloadDevice)
         }
     }
     if (currentDownload->toVerify == 0) {
-        currentDownload->download();
+        currentDownload->download(_downloadDevice == 0 && _i != nullptr && _i->device != nullptr);
     }
 }
 
