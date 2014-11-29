@@ -105,10 +105,12 @@ HEADERS += \
         src/installer_qml.cpp \
         src/installer_establish.cpp \
         src/installer_auth.cpp \
-        src/backupinfo.cpp
+        src/backupinfo.cpp \
+        src/blitzinfo.cpp
     HEADERS += \
         src/installer.h \
-        src/backupinfo.h
+        src/backupinfo.h \
+        src/blitzinfo.h
 }
 
 # This requires libusb to be linked

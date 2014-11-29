@@ -40,6 +40,7 @@
 #include "apps.h"
 #include "backupinfo.h"
 #include "deviceinfo.h"
+#include "blitzinfo.h"
 
 // TODO: Maybe name families by radio
 enum DeviceFamily {
@@ -52,20 +53,6 @@ enum DeviceFamily {
     Q10Family,
 };
 
-enum BarType {
-    NotInstallableType = 0,
-    AppType,
-    RadioType,
-    OSType,
-};
-
-struct BarInfo {
-    QString name;
-    QString version;
-    QString packageid;
-    BarType type;
-};
-
 class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
@@ -74,22 +61,6 @@ public:
 
 protected:
     QNetworkReply* createRequest(Operation op, const QNetworkRequest & req, QIODevice * outgoingData = 0);
-};
-
-// Blitz means it has more than one OS or Radio.
-// In this situation we need to work out which one is intended instead of asking about every single one.
-// If there is only one good OS and Radio, the intention is clear.
-class BlitzInfo: public QObject {
-    Q_OBJECT
-public:
-    BlitzInfo(QList<QString> filenames, QString deviceOS, QString deviceRadio);
-    BarInfo blitzCheck(QString name);
-    bool isSafe() { return (osIsSafe && radioIsSafe); }
-    bool isBlitz() { return (osCount > 1 || radioCount > 1); }
-    bool osIsSafe, radioIsSafe;
-    int radioCount, osCount;
-private:
-    QString _deviceOS, _deviceRadio;
 };
 
 class InstallNet : public QObject {
