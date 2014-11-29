@@ -10,13 +10,6 @@ enum BarType {
     OSType,
 };
 
-struct BarInfo {
-    QString name;
-    QString version;
-    QString packageid;
-    BarType type;
-};
-
 // Blitz means it has more than one OS or Radio.
 // In this situation we need to work out which one is intended instead of asking about every single one.
 // If there is only one good OS and Radio, the intention is clear.
@@ -24,7 +17,7 @@ class BlitzInfo: public QObject {
     Q_OBJECT
 public:
     BlitzInfo(QList<QString> filenames, QString deviceOS, QString deviceRadio);
-    BarInfo blitzCheck(QString name);
+    void blitzCheck(QString name);
     bool isSafe() { return (osIsSafe && radioIsSafe); }
     bool isBlitz() { return (osCount > 1 || radioCount > 1); }
     bool osIsSafe, radioIsSafe;

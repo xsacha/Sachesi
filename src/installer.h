@@ -53,6 +53,13 @@ enum DeviceFamily {
     Q10Family,
 };
 
+struct BarInfo {
+    QString name;
+    QString version;
+    QString packageid;
+    BarType type;
+};
+
 class SslNetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT

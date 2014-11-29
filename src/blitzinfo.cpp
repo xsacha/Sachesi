@@ -13,30 +13,19 @@ BlitzInfo::BlitzInfo(QList<QString> filenames, QString deviceOS, QString deviceR
     , _deviceRadio(deviceRadio)
 {
     foreach(QString barFile, filenames)
-    {
-        BarInfo info = blitzCheck(barFile);
-        if (info.type == OSType) {
-            osCount++;
-            if (info.name == "GOOD")
-                osIsSafe = true;
-        } else if (info.type == RadioType) {
-            radioCount++;
-            if (info.name == "GOOD")
-                radioIsSafe = true;
-        }
-    }
+        blitzCheck(barFile);
 }
 
-BarInfo BlitzInfo::blitzCheck(QString name)
+void BlitzInfo::blitzCheck(QString name)
 {
-    BarInfo barInfo = {name, "", "", NotInstallableType};
+    BarType fileType = NotInstallableType;
     // Check if it's a 'hidden' file as we use these for temporary file downloads.
     if (QFileInfo(name).fileName().startsWith('.'))
-        return barInfo;
+        return;
 
     QuaZipFile manifest(name, "META-INF/MANIFEST.MF", QuaZip::csSensitive);
     if (!manifest.open(QIODevice::ReadOnly))
-        return barInfo;
+        return;
     QString appName, type;
     while (!manifest.atEnd()) {
         QByteArray newLine = manifest.readLine();
@@ -44,38 +33,39 @@ BarInfo BlitzInfo::blitzCheck(QString name)
             appName = newLine.split(':').last().simplified();
             if (newLine.startsWith("Patch") && type == "system") {
                 if (appName.contains("radio"))
-                    barInfo.type = RadioType;
+                    fileType = RadioType;
                 else
-                    barInfo.type = OSType;
+                    fileType = OSType;
             }
         }
         else if (newLine.startsWith("Package-Type:")  || newLine.startsWith("Patch-Package-Type:")) {
             type = newLine.split(':').last().simplified();
-            if (type == "system" && barInfo.type == NotInstallableType)
-                barInfo.type = OSType;
+            if (type == "system" && fileType == NotInstallableType)
+                fileType = OSType;
             else if (type != "patch")
                 break;
         }
         else if (newLine.startsWith("System-Type:")) {
             if (newLine.split(':').last().simplified() == "radio")
-                barInfo.type = RadioType;
+                fileType = RadioType;
             break;
         }
     }
-    if (barInfo.type != OSType && barInfo.type != RadioType)
-        return barInfo;
+    if (fileType != OSType && fileType != RadioType)
+        return;
 
-    barInfo.name = "GOOD";
-    if (barInfo.type == OSType) {
+    if (fileType == OSType) {
+        osCount++;
         QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
-        if (_deviceOS != "" && installableOS != _deviceOS && !(installableOS.contains("8974") && _deviceOS.contains("8974"))) {
-            barInfo.name = "BAD";
+        if (_deviceOS == "" || installableOS == _deviceOS || (installableOS.contains("8974") && _deviceOS.contains("8974"))) {
+            osIsSafe = true;
         }
-    } else if (barInfo.type == RadioType) {
+    } else if (fileType == RadioType) {
+        radioCount++;
         QString installableRadio = appName.split("radio.").last().remove(".omadm");
-        if (_deviceRadio != "" && installableRadio != _deviceRadio) {
-            barInfo.name = "BAD";
+        if (_deviceRadio == "" || installableRadio == _deviceRadio) {
+            radioIsSafe = true;
         }
     }
-    return barInfo;
+    return;
 }
