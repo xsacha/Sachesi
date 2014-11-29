@@ -44,7 +44,7 @@ Apps::Apps(const Apps* app, QObject *parent)
     , _code(app->code()), _size(app->size())
     , _isMarked(app->isMarked()), _isAvailable(app->isAvailable()), _isInstalled(app->isInstalled())
     , _type(app->type())
-    , _installedVersion(""), _version(app->version()), _versionId(app->versionId())
+    , _installedVersion(app->installedVersion()), _version(app->version()), _versionId(app->versionId())
     , _checksum(app->checksum())
 { }
 

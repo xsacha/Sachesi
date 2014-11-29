@@ -119,7 +119,7 @@ Item {
                 onClicked: p.grabLinks(downloadDevice.selectedItem)
             }
             Button {
-                enabled: p.updateCheckedNeededCount > 0 && !download.verifying
+                enabled: p.updateCheckedCount > 0 && !download.verifying
                 visible: !download.running
                 Layout.alignment: Qt.AlignHCenter
                 text: (download.verifying ? qsTr("Verifying") : qsTr("Download")) + translator.lang

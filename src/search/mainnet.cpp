@@ -233,11 +233,12 @@ QString MainNet::convertLinks(int downloadDevice, QString prepend)
 {
     bool convert = true;
     QPair<QString,QString> results;
-#ifndef BLACKBERRY
-    results = _i->getConnected(downloadDevice, _versionRelease.startsWith("10.3.0"));
-    if (results.first == "" && results.second == "")
-        convert = false;
-#endif
+
+    if (_i != nullptr) {
+        results = _i->getConnected(downloadDevice, _versionRelease.startsWith("10.3.0"));
+        if (results.first == "" && results.second == "")
+            convert = false;
+    }
 
     QString updated;
     foreach (Apps* app, _updateAppList) {

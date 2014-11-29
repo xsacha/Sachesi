@@ -25,24 +25,6 @@
 #define QQmlListProperty QDeclarativeListProperty
 #endif
 
-class VersionInfo : public QObject {
-    Q_OBJECT
-
-public:
-    static int compare(QString first, QString second) {
-        QStringList firstparts = first.split('.');
-        QStringList secondparts = second.split('.');
-        if (firstparts.count() < 4 || secondparts.count() < 4)
-            return 0;
-        for (int i = 0; i < 4; i++) {
-            if (firstparts.at(i) == secondparts.at(i))
-                continue;
-            return firstparts.at(i) > secondparts.at(i);
-        }
-        return 0;
-    }
-};
-
 class Apps : public QObject {
     Q_OBJECT
 

@@ -24,6 +24,7 @@
 #include <QNetworkAccessManager>
 #include <QMessageBox>
 #include "apps.h"
+#include "ports.h"
 
 // Need to get creative with CURR_FILE when threading comes
 enum {
@@ -104,7 +105,6 @@ public:
         oldVersion.replace('.','_');
         url.chop(4);
         url.append(QString("+patch+%1.bar").arg(oldVersion));
-        qDebug() << url;
         QNetworkReply* reply = _manager->head(QNetworkRequest(url));
 
         QObject::connect(reply, &QNetworkReply::finished, [=]() {
@@ -138,7 +138,6 @@ public:
     void verifyLink(QString url, QString type) {
         toVerify++;
         emit verifyingChanged();
-        qDebug() << type << url;
         QNetworkReply* reply = _manager->head(QNetworkRequest(url));
 
         QObject::connect(reply, &QNetworkReply::finished, [=]() {
@@ -180,7 +179,7 @@ public:
         for (int i = 0; i < apps.count(); i++) {
             if (!apps.at(i)->isMarked() || apps.at(i)->installedVersion().isEmpty())
                 continue;
-            //if (VersionInfo::compare(apps.at(i)->version(), apps.at(i)->installedVersion()))
+            if (isVersionNewer(apps.at(i)->version(), apps.at(i)->installedVersion(), false))
                 verifyDelta(i);
         }
         if (toVerify == 0)
