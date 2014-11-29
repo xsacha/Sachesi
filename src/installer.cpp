@@ -23,7 +23,7 @@
 #include <QNetworkInterface>
 
 InstallNet::InstallNet( QObject* parent) : QObject(parent),
-    manager(nullptr), reply(nullptr), cookieJar(nullptr), device(nullptr),
+    device(nullptr), manager(nullptr), reply(nullptr), cookieJar(nullptr),
     _wrongPass(false), _loginBlock(false),
     _state(0), _dlBytes(0), _dlTotal(0), _dgProgress(-1), _curDGProgress(-1),
     _completed(false), _extractInstallZip(false), _allowDowngrades(false), _installing(false), _restoring(false), _backing(false),
@@ -205,7 +205,7 @@ BarInfo InstallNet::checkInstallableInfo(QString name, bool blitz)
     return barInfo;
 }
 
-BarInfo InstallNet::blitzCheck(QString name)
+BarInfo BlitzInfo::blitzCheck(QString name)
 {
     BarInfo barInfo = {name, "", "", NotInstallableType};
     // Check if it's a 'hidden' file as we use these for temporary file downloads.
@@ -246,16 +246,40 @@ BarInfo InstallNet::blitzCheck(QString name)
     barInfo.name = "GOOD";
     if (barInfo.type == OSType) {
         QString installableOS = appName.split("os.").last().remove(".desktop").replace("verizon", "factory");
-        if (_knownConnectedOSType != "" && installableOS != _knownConnectedOSType && !(installableOS.contains("8974") && _knownConnectedOSType.contains("8974"))) {
+        if (_deviceOS != "" && installableOS != _deviceOS && !(installableOS.contains("8974") && _deviceOS.contains("8974"))) {
             barInfo.name = "BAD";
         }
     } else if (barInfo.type == RadioType) {
         QString installableRadio = appName.split("radio.").last().remove(".omadm");
-        if (_knownConnectedRadioType != "" && installableRadio != _knownConnectedRadioType) {
+        if (_deviceRadio != "" && installableRadio != _deviceRadio) {
             barInfo.name = "BAD";
         }
     }
     return barInfo;
+}
+
+BlitzInfo::BlitzInfo(QList<QString> filenames, QString deviceOS, QString deviceRadio)
+    : QObject()
+    , osIsSafe(false)
+    , radioIsSafe(false)
+    , radioCount(0)
+    , osCount(0)
+    , _deviceOS(deviceOS)
+    , _deviceRadio(deviceRadio)
+{
+    foreach(QString barFile, filenames)
+    {
+        BarInfo info = blitzCheck(barFile);
+        if (info.type == OSType) {
+            osCount++;
+            if (info.name == "GOOD")
+                osIsSafe = true;
+        } else if (info.type == RadioType) {
+            radioCount++;
+            if (info.name == "GOOD")
+                radioIsSafe = true;
+        }
+    }
 }
 
 void InstallNet::install(QList<QUrl> files)
@@ -339,36 +363,22 @@ void InstallNet::install(QList<QUrl> files)
     }
 
     // Detect Blitz files (second pass)
-    bool blitzOSIsSafe = false;
-    bool blitzRadioIsSafe = false;
-    int radioCount = 0, osCount = 0;
-    foreach(QString barFile, filenames)
-    {
-        BarInfo info = blitzCheck(barFile);
-        if (info.type == OSType) {
-            osCount++;
-            if (info.name == "GOOD")
-                blitzOSIsSafe = true;
-        } else if (info.type == RadioType) {
-            radioCount++;
-            if (info.name == "GOOD")
-                blitzRadioIsSafe = true;
-        }
-    }
-    if (osCount > 1 || radioCount > 1) {
+    BlitzInfo blitz(filenames, _knownConnectedOSType, _knownConnectedRadioType);
+
+    if (blitz.isBlitz()) {
         setNewLine(QString("%1 Blitz detected. %2 OSes and %3 Radios")
-                   .arg((blitzOSIsSafe && blitzRadioIsSafe) ? "Safe " : "Unsafe")
-                   .arg(osCount)
-                   .arg(radioCount));
-        if (_knownConnectedRadioType == "" && radioCount > 1) {
+                   .arg(blitz.isSafe() ? "Safe " : "Unsafe")
+                   .arg(blitz.osCount)
+                   .arg(blitz.radioCount));
+        if (_knownConnectedRadioType == "" && blitz.radioCount > 1) {
             QMessageBox::critical(nullptr, "Error", "Your device is reporting no Radio. The blitz install is unable to detect the correct Radio for your system and cannot continue.");
             return;
-        } else if (_knownConnectedOSType == "" && osCount > 1) {
+        } else if (_knownConnectedOSType == "" && blitz.osCount > 1) {
             QMessageBox::critical(nullptr, "Error", "Your device is reporting no OS. The blitz install is unable to detect the correct OS for your system and cannot continue.");
             return;
         }
-        if (!blitzOSIsSafe || !blitzRadioIsSafe) {
-            QMessageBox::critical(nullptr, "Error", QString("The blitz file does not contain compatible firmware.") + (!blitzOSIsSafe ? "\nNo compatible OS" : "") + (!blitzRadioIsSafe ? "\nNo compatible Radio" : ""));
+        if (!blitz.isSafe()) {
+            QMessageBox::critical(nullptr, "Error", QString("The blitz file does not contain compatible firmware.") + (!blitz.osIsSafe ? "\nNo compatible OS" : "") + (!blitz.radioIsSafe ? "\nNo compatible Radio" : ""));
             return;
         }
     }
@@ -377,7 +387,7 @@ void InstallNet::install(QList<QUrl> files)
     // Detect everything (third pass)
     foreach(QString barFile, filenames)
     {
-        BarInfo info = checkInstallableInfo(barFile, osCount > 1 || radioCount > 1);
+        BarInfo info = checkInstallableInfo(barFile, blitz.isBlitz());
         if (info.name == "EXIT")
             return setNewLine("Install aborted.");
         else if (info.type == AppType) {
@@ -443,6 +453,7 @@ void InstallNet::install()
 
 void InstallNet::uninstall(QStringList packageids, bool firmwareUpdate)
 {
+    Q_UNUSED(firmwareUpdate) // Dangerous!
     // Tested with OS and it removed the old OS. Not entirely what I wanted.
     if (packageids.isEmpty())
         return;

@@ -76,6 +76,22 @@ protected:
     QNetworkReply* createRequest(Operation op, const QNetworkRequest & req, QIODevice * outgoingData = 0);
 };
 
+// Blitz means it has more than one OS or Radio.
+// In this situation we need to work out which one is intended instead of asking about every single one.
+// If there is only one good OS and Radio, the intention is clear.
+class BlitzInfo: public QObject {
+    Q_OBJECT
+public:
+    BlitzInfo(QList<QString> filenames, QString deviceOS, QString deviceRadio);
+    BarInfo blitzCheck(QString name);
+    bool isSafe() { return (osIsSafe && radioIsSafe); }
+    bool isBlitz() { return (osCount > 1 || radioCount > 1); }
+    bool osIsSafe, radioIsSafe;
+    int radioCount, osCount;
+private:
+    QString _deviceOS, _deviceRadio;
+};
+
 class InstallNet : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString password         MEMBER _password        WRITE setPassword         NOTIFY passwordChanged)
