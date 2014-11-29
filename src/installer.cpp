@@ -850,7 +850,7 @@ void InstallNet::backupFileFinish()
     postQuery("backup.cgi", "x-www-form-urlencoded", postData);
 }
 
-QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
+QPair<QString,QString> InstallNet::getConnected(int downloadDevice, bool specialQ30) {
     QPair<QString,QString> ret = {"", ""};
     if (downloadDevice == 0) {
         if (device != nullptr && device->hw != "" && device->hw != "Unknown") {
@@ -871,7 +871,10 @@ QPair<QString,QString> InstallNet::getConnected(int downloadDevice) {
             ret = {"qc8960.factory_sfi", "qc8930.wtr5"};
             break;
         case Q30Family:
-            ret = {"qc8960.factory_sfi_hybrid_qc8974", "qc8974.wtr2"};
+            if (specialQ30)
+                ret = {"qc8974.factory_sfi", "qc8974.wtr2"};
+            else
+                ret = {"qc8960.factory_sfi_hybrid_qc8974", "qc8974.wtr2"};
             break;
         case Q10Family:
             ret = {"qc8960.factory_sfi", "qc8960.wtr"};

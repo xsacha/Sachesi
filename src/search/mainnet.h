@@ -109,7 +109,8 @@ public:
     }
     DownloadInfo* currentDownload;
 public slots:
-    void    setSplitProgress(const int &progress);
+    void setSplitProgress(const int &progress);
+    void newDeviceConnected();
 signals:
     void softwareReleaseChanged();
     void updateMessageChanged();

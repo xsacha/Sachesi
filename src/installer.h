@@ -152,7 +152,7 @@ public:
     int backMethods() const;
     QStringList backNames() const;
     QList<double> backSizes() const;
-    QPair<QString,QString> getConnected(int downloadDevice);
+    QPair<QString,QString> getConnected(int downloadDevice, bool specialQ30);
     DeviceInfo* device;
 
     void setIp(const QString &ip);

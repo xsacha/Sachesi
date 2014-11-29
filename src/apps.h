@@ -25,10 +25,29 @@
 #define QQmlListProperty QDeclarativeListProperty
 #endif
 
+class VersionInfo : public QObject {
+    Q_OBJECT
+
+public:
+    static int compare(QString first, QString second) {
+        QStringList firstparts = first.split('.');
+        QStringList secondparts = second.split('.');
+        if (firstparts.count() < 4 || secondparts.count() < 4)
+            return 0;
+        for (int i = 0; i < 4; i++) {
+            if (firstparts.at(i) == secondparts.at(i))
+                continue;
+            return firstparts.at(i) > secondparts.at(i);
+        }
+        return 0;
+    }
+};
+
 class Apps : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
     Q_PROPERTY(QString packageId READ packageId WRITE setPackageId NOTIFY packageIdChanged)
     Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName NOTIFY friendlyNameChanged)
     Q_PROPERTY(int code READ code WRITE setCode NOTIFY codeChanged)
@@ -37,6 +56,7 @@ class Apps : public QObject {
     Q_PROPERTY(bool isAvailable READ isAvailable WRITE setIsAvailable NOTIFY isAvailableChanged)
     Q_PROPERTY(bool isInstalled READ isInstalled WRITE setIsInstalled NOTIFY isInstalledChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(QString installedVersion READ installedVersion WRITE setInstalledVersion NOTIFY installedVersionChanged)
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(QString versionId READ versionId WRITE setVersionId NOTIFY versionIdChanged)
     Q_PROPERTY(QString checksum READ checksum WRITE setChecksum NOTIFY checksumChanged)
@@ -46,6 +66,7 @@ public:
     Apps(const Apps* app, QObject *parent = 0);
 
     QString name() const;
+    QString url() const;
     QString packageId() const;
     QString friendlyName() const;
     int code() const;
@@ -54,10 +75,12 @@ public:
     bool isAvailable() const;
     bool isInstalled() const;
     QString type() const;
+    QString installedVersion() const;
     QString version() const;
     QString versionId() const;
     QString checksum() const;
     void setName(const QString &str);
+    void setUrl(const QString &str);
     void setPackageId(const QString &str);
     void setFriendlyName(const QString &str);
     void setCode(const int &num);
@@ -66,12 +89,14 @@ public:
     void setIsAvailable(const bool &available);
     void setIsInstalled(const bool &installed);
     void setType(const QString &str);
+    void setInstalledVersion(const QString &str);
     void setVersion(const QString &str);
     void setVersionId(const QString &str);
     void setChecksum(const QString &str);
 
 signals:
     void nameChanged();
+    void urlChanged();
     void packageIdChanged();
     void friendlyNameChanged();
     void codeChanged();
@@ -80,12 +105,14 @@ signals:
     void isAvailableChanged();
     void isInstalledChanged();
     void typeChanged();
+    void installedVersionChanged();
     void versionChanged();
     void versionIdChanged();
     void checksumChanged();
 
 private:
     QString _name;
+    QString _url;
     QString _friendlyName;
     QString _packageId;
     int _code;
@@ -94,6 +121,7 @@ private:
     bool _isAvailable;
     bool _isInstalled;
     QString _type;
+    QString _installedVersion;
     QString _version;
     QString _versionId;
     QString _checksum;
