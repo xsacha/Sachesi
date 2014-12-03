@@ -169,7 +169,7 @@ Item {
             property bool devicePresent: i.completed
             onDevicePresentChanged: if (devicePresent && searchButton.enabled) searchButton.clicked()
             // Find latest country/carrier pair from github
-            property string latestOS: "10.3.1.1016"
+            property string latestOS: "10.3.1.1154"
             Component.onCompleted: {
                 var http = new XMLHttpRequest()
                 var url = "https://raw.githubusercontent.com/xsacha/Sachesi/master/carrier";
@@ -220,7 +220,7 @@ Item {
             ColumnLayout {
                 TextCoupleSelect {
                     id: device
-                    selectedItem: 4
+                    selectedItem: 0
                     type: qsTr("Device") + translator.lang
 
                     // List everything we know except abandoned models

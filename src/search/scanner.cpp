@@ -32,12 +32,12 @@ void Scanner::exportHistory() {
     foreach(DiscoveredRelease* rel, _history) {
         historyText.append(tr("SR: ") + " " + rel->srVersion() + " | " + tr("OS: ") + rel->osVersion() + " [");
         if (rel->activeServers() & 1)
-            historyText.append(tr("Production") + " ");
+            historyText.append(tr("Production") + ", ");
         if (rel->activeServers() & 2)
-            historyText.append(tr("Beta") + " ");
+            historyText.append(tr("Beta") + ", ");
         if (rel->activeServers() & 4)
-            historyText.append(tr("Alpha") + " ");
-        historyText.chop(1);
+            historyText.append(tr("Alpha") + ", ");
+        historyText.chop(2);
         historyText.append("]\n");
     }
 

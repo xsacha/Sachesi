@@ -287,7 +287,7 @@ QString MainNet::NPCFromLocale(int carrier, int country) {
 
 static QStringList dev[] = {
     // 0 = Z30 (A Series) + Classic
-    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6" << "Classic AT/T" << "Classic Verizon" << "Classic ROW" << " Classic NA",
+    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6" << "Classic AT/T" << "Classic Verizon" << "Classic ROW" << "Classic NA",
     QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A" << "9400270A" << "9500270A" << "9600270A" << "9700270A",
     // 1 = Z10 (L Series) OMAP
     QStringList() << "STL 100-1",
