@@ -167,7 +167,8 @@ Item {
             }
             // On a new device becoming connected, update search results
             property bool devicePresent: i.completed
-            onDevicePresentChanged: if (devicePresent && searchButton.enabled) searchButton.clicked()
+            property bool githubUpdateComplete: false
+            onDevicePresentChanged: if (githubUpdateComplete && devicePresent && searchButton.enabled) searchButton.clicked()
             // Find latest country/carrier pair from github
             property string latestOS: "10.3.1.1154"
             Component.onCompleted: {
@@ -185,6 +186,7 @@ Item {
                             latestOS = array[3]
                             if (searchButton.enabled)
                                 searchButton.clicked()
+                            githubUpdateComplete = true;
                         }
                     }
                 }
