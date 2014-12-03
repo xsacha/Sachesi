@@ -51,8 +51,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 enabled: !p.scanning
                 text: (p.scanning ? qsTr("Searching...") : qsTr("Search")) + translator.lang
-                onClicked: { p.updateDetailRequest(delta.checked ? i.appDeltaMsg : "", country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem /*, server.selectedItem , version.selectedItem*/) }
-            }
+                onClicked: { p.updateDetailRequest((/*delta.checked ? i.appDeltaMsg() :*/ ""), country.value, carrier.value, device.selectedItem, variant.selectedItem, mode.selectedItem /*, server.selectedItem , version.selectedItem*/) }            }
             RadioButton {
                 id: delta
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -178,12 +177,16 @@ Item {
                 http.send(null)
                 http.onreadystatechange = function() {
                     if(http.readyState == 4 && http.status == 200) {
-                        var array = http.responseText.split('\n')
+                        var array = http.responseText.split('\n');
+                        array = array.filter(function(e){return e});
                         if (array.length > 3) {
                             country.value = array[0]
                             carrier.value = array[1]
                             device.selectedItem = parseInt(array[2])
                             latestOS = array[3]
+                            if (array.length > 4) {
+                                variant.selectedItem = parseInt(array[4])
+                            }
                             if (searchButton.enabled)
                                 searchButton.clicked()
                             githubUpdateComplete = true;
@@ -240,7 +243,7 @@ Item {
                     // Only list released models
                     ListModel {
                         id: babyModel
-                        ListElement { text:  "Z30" }
+                        ListElement { text:  "Z30 + Classic" }
                         ListElement { text:  "Z10 (STL 100-1)" }
                         ListElement { text:  "Z10 (STL 100-2/3/4) + P9982" }
                         ListElement { text:  "Z3"}
@@ -270,7 +273,6 @@ Item {
                 }
 
                 TextCoupleSelect {
-                    visible: settings.advanced
                     id: variant
                     type: qsTr("Variant") + translator.lang
                     selectedItem: 0

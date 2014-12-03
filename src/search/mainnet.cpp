@@ -387,6 +387,7 @@ void MainNet::updateDetailRequest(QString delta, QString carrier, QString countr
     setScanning((variant != 0) ? 1 : variantCount(device));
     if (_scanning > 1)
         setMultiscan(true);
+
     for (int i = start; i < end; i++) {
         QString query = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                                 "<updateDetailRequest version=\"%1\" authEchoTS=\"%2\">"
@@ -472,6 +473,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     newApp->setIsAvailable(true);
                     if (_i != nullptr && _i->device != nullptr) {
                         newApp->setIsInstalled(isVersionNewer(_i->device->os, newApp->version(), true));
+                        newApp->setInstalledVersion(_i->device->os);
                     }
                 } else if (type == "system:radio") {
                     radio = newApp->version();
@@ -480,6 +482,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
                     newApp->setIsAvailable(true);
                     if (_i != nullptr && _i->device != nullptr) {
                         newApp->setIsInstalled(isVersionNewer(_i->device->radio, newApp->version(), true));
+                        newApp->setInstalledVersion(_i->device->radio);
                     }
                 } else {
                     newApp->setType("application");
