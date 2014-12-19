@@ -28,6 +28,34 @@
 #endif
 #include <QDir>
 
+QPair<QString,QString> getFamilyFromDevice(int device, bool specialQ30) {
+    QPair<QString,QString> ret = {"", ""};
+    switch(device) {
+    case Z30Family:
+        ret = {"qc8960.factory_sfi", "qc8960.wtr5"};
+        break;
+    case OMAPFamily:
+        ret = {"winchester.factory_sfi", "m5730"};
+        break;
+    case Z10Family:
+        ret = {"qc8960.factory_sfi", "qc8960"};
+        break;
+    case Z3Family:
+        ret = {"qc8960.factory_sfi", "qc8930.wtr5"};
+        break;
+    case Q30Family:
+        if (specialQ30)
+            ret = {"qc8974.factory_sfi", "qc8974.wtr2"};
+        else
+            ret = {"qc8960.factory_sfi_hybrid_qc8974", "qc8974.wtr2"};
+        break;
+    case Q10Family:
+        ret = {"qc8960.factory_sfi", "qc8960.wtr"};
+        break;
+    }
+    return ret;
+}
+
 QString capPath(bool temp) {
 #ifndef BLACKBERRY
     QSettings ini(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());

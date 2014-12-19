@@ -785,37 +785,13 @@ void InstallNet::backupFileFinish()
 }
 
 QPair<QString,QString> InstallNet::getConnected(int downloadDevice, bool specialQ30) {
-    QPair<QString,QString> ret = {"", ""};
     if (downloadDevice == 0) {
         if (device != nullptr && device->hw != "" && device->hw != "Unknown") {
-            ret = qMakePair(_knownConnectedOSType, _knownConnectedRadioType);
+            return qMakePair(_knownConnectedOSType, _knownConnectedRadioType);
         }
-    } else {
-        switch(downloadDevice) {
-        case Z30Family:
-            ret = {"qc8960.factory_sfi", "qc8960.wtr5"};
-            break;
-        case OMAPFamily:
-            ret = {"winchester.factory_sfi", "m5730"};
-            break;
-        case Z10Family:
-            ret = {"qc8960.factory_sfi", "qc8960"};
-            break;
-        case Z3Family:
-            ret = {"qc8960.factory_sfi", "qc8930.wtr5"};
-            break;
-        case Q30Family:
-            if (specialQ30)
-                ret = {"qc8974.factory_sfi", "qc8974.wtr2"};
-            else
-                ret = {"qc8960.factory_sfi_hybrid_qc8974", "qc8974.wtr2"};
-            break;
-        case Q10Family:
-            ret = {"qc8960.factory_sfi", "qc8960.wtr"};
-            break;
-        }
+        return {"", ""};
     }
-    return ret;
+    return getFamilyFromDevice(downloadDevice, specialQ30);
 }
 
 void InstallNet::determineDeviceFamily()
@@ -844,7 +820,7 @@ void InstallNet::restoreReply()
         return;
 
     QByteArray data = reply->readAll();
-    //for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
+    for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
     if (data.size() == 0) {
         if (_restoring) {
             QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
@@ -858,6 +834,7 @@ void InstallNet::restoreReply()
     QXmlStreamReader xml(data);
     xml.readNextStartElement(); // RimTabletResponse
     xml.readNextStartElement();
+    QString hwid;
     if (xml.name() == "AuthChallenge")
     { // We need to verify
         QString salt, challenge;
@@ -1006,7 +983,7 @@ void InstallNet::restoreReply()
                 else if (name == "HardwareID") {
                     // If the firmware reports the device as unknown (eg. Dev Alpha on 10.3), show the Hardware ID
                     if (device->hw == "Unknown") {
-                        QString hwid = xml.readElementText().remove(0, 2);
+                        hwid = xml.readElementText().remove(0, 2);
                         // If we already know the name, make it nicer
                         if (hwid == "8d00270a")
                             hwid = "Alpha C";
@@ -1034,6 +1011,24 @@ void InstallNet::restoreReply()
                 }
             }
         }
+        // We do have the radio type but we don't entirely trust it. The user could have installed anything or nothing!
+        QString temporaryRadioType = _knownConnectedRadioType;
+        _knownConnectedRadioType = "";
+        // Not future-proof, but will work for most. Families # hardcoded to 5
+        for (int i = 1; i < (5 * 2) && _knownConnectedRadioType.isEmpty(); i+=2) {
+            for (int j = 0; j < dev[i].count(); j++) {
+                if (dev[i][j] == hwid.toUpper()) {
+                    // Q30 OS status doesn't matter, so we set 0
+                    _knownConnectedRadioType = getFamilyFromDevice(j + 1, 0).second;
+                    break;
+                }
+            }
+        }
+        // Well, our detection failed, so let's trust the current system.
+        if (_knownConnectedRadioType.isEmpty()) {
+            _knownConnectedRadioType = temporaryRadioType;
+        }
+        // Now we can work out the real family
         determineDeviceFamily();
         std::sort(_appList.begin(), _appList.end(),
                   [=](const Apps* i, const Apps* j) {

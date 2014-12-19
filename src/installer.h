@@ -42,17 +42,6 @@
 #include "deviceinfo.h"
 #include "blitzinfo.h"
 
-// TODO: Maybe name families by radio
-enum DeviceFamily {
-    UnknownFamily = 0,
-    Z30Family,
-    OMAPFamily,
-    Z10Family,
-    Z3Family,
-    Q30Family,
-    Q10Family,
-};
-
 struct BarInfo {
     QString name;
     QString version;
