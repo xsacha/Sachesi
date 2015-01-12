@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="qml/Qt/labs/settings/qmldir">C:\Qt\Static\qml\Qt\labs\settings\qmldir</file>
-        <file alias="qml/QtQuick/Controls/qmldir">C:\Qt\Static\qml\QtQuick\Controls\qmldir</file>
-        <file alias="qml/QtQuick/Dialogs/qmldir">C:\Qt\Static\qml\QtQuick\Dialogs\qmldir</file>
-        <file alias="qml/QtQuick/Layouts/qmldir">C:\Qt\Static\qml\QtQuick\Layouts\qmldir</file>
-        <file alias="qml/QtQuick/Window.2/qmldir">C:\Qt\Static\qml\QtQuick\Window.2\qmldir</file>
-        <file alias="qml/QtQuick.2/qmldir">C:\Qt\Static\qml\QtQuick.2\qmldir</file>
+        <file alias="qml/Qt/labs/settings/qmldir">C:\Qt54\5.4\mingw491_32\qml\Qt\labs\settings\qmldir</file>
+        <file alias="qml/QtQuick/Controls/qmldir">C:\Qt54\5.4\mingw491_32\qml\QtQuick\Controls\qmldir</file>
+        <file alias="qml/QtQuick/Dialogs/qmldir">C:\Qt54\5.4\mingw491_32\qml\QtQuick\Dialogs\qmldir</file>
+        <file alias="qml/QtQuick/Layouts/qmldir">C:\Qt54\5.4\mingw491_32\qml\QtQuick\Layouts\qmldir</file>
+        <file alias="qml/QtQuick/Window.2/qmldir">C:\Qt54\5.4\mingw491_32\qml\QtQuick\Window.2\qmldir</file>
+        <file alias="qml/QtQuick.2/qmldir">C:\Qt54\5.4\mingw491_32\qml\QtQuick.2\qmldir</file>
     </qresource>
 </RCC>

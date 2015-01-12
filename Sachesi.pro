@@ -23,7 +23,7 @@ win32 {
     INCLUDEPATH += $$OPENSSL_PATH\\include
 
     # Is all-in-one binary?
-    CONFIG += static
+    #CONFIG += static
     static: DEFINES += STATIC STATIC_BUILD
 
     !contains(QT_CONFIG, openssl-linked) {
