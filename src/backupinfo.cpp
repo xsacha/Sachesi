@@ -19,7 +19,8 @@
 
 BackupInfo::BackupInfo() :
     _progress(0), _size(0), _maxSize(1),
-    _mode(0), _curMode(0), _numMethods(0)
+    _mode(0), _curMode(0), _numMethods(0),
+    _rev(2)
 {
     _numMethods = 3;
     categories.append(new BackupCategory("app", "Application Data"));
@@ -35,6 +36,9 @@ void BackupInfo::clearModes() {
     categories.clear();
     _curSize.clear();
     _curMaxSize.clear();
+    foreach(Apps* app, apps)
+        app->deleteLater();
+    apps.clear();
     emit curModeChanged();
     emit numMethodsChanged();
 }
@@ -45,6 +49,27 @@ void BackupInfo::addMode(QXmlStreamAttributes cat) {
     emit numMethodsChanged();
     _curSize.append(0);
     _curMaxSize.append(1);
+}
+#include <QDebug>
+void BackupInfo::addApp(QXmlStreamAttributes cat) {
+    Apps* newApp = new Apps();
+    foreach(QXmlStreamAttribute attr, cat)
+    {
+        QString att = attr.name().toString();
+        QString val = attr.value().toString();
+        if (att == "pkgid")
+            newApp->setPackageId(val);
+        else if (att == "name")
+            newApp->setFriendlyName(val);
+        else if (att == "bytesize")
+            newApp->setSize(val.toInt());
+        else if (att == "version")
+            newApp->setVersion(val);
+        else if (att == "type")
+            newApp->setType(val);
+    }
+    newApp->setIsMarked(true);
+    apps.append(newApp);
 }
 
 QString BackupInfo::modeString()
@@ -162,4 +187,8 @@ void BackupInfo::setCurMaxSize(int index, const qint64 &val) {
 
 int BackupInfo::numMethods() const {
     return categories.size();
+}
+
+int BackupInfo::rev() const {
+    return _rev;
 }

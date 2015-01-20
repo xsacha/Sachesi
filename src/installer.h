@@ -94,6 +94,7 @@ class InstallNet : public QObject {
     Q_PROPERTY(int     backMethods READ backMethods NOTIFY backMethodsChanged)
     Q_PROPERTY(QStringList backNames READ backNames NOTIFY backMethodsChanged)
     Q_PROPERTY(QList<qreal> backSizes READ backSizes NOTIFY backMethodsChanged)
+    Q_PROPERTY(QQmlListProperty<Apps> backAppList READ backAppList                                NOTIFY backMethodsChanged)
 public:
     InstallNet(QObject* parent = 0);
     ~InstallNet();
@@ -126,6 +127,7 @@ public:
     QString password() const;
     int dgMaxPos() const;
     QQmlListProperty<Apps> appList();
+    QQmlListProperty<Apps> backAppList();
     QList<Apps*> appQList() { return _appList; }
     int appCount() const { return _appList.count(); }
     BackupInfo* back();
@@ -181,6 +183,7 @@ signals:
     void extractInstallZipChanged();
     void allowDowngradesChanged();
     void appListChanged();
+    void backAppListChanged();
     void deviceChanged();
 private slots:
     bool checkLogin();

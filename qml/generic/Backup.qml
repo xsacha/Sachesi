@@ -2,6 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
+import QtQuick.Window 2.1
 import Qt.labs.settings 1.0
 import BackupTools 1.0
 import "UI" 1.0
@@ -49,7 +50,9 @@ Item {
                 Repeater {
                     model: i.backMethods
                     delegate: CheckBox {
-                        text: (i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(i.backSizes[index].toFixed(1))) + ")") + translator.lang // index
+                        property double curSize: i.backSizes[index]
+                        text: (i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg( (index == 0 ? appData.selectedSize : i.backSizes[index]).toFixed(1))) + ")") + translator.lang // index
+                        onCurSizeChanged: if (index == 0) appData.selectedSize = curSize
                         onTextChanged: if (attemptLookup.running) attemptLookup.stop()
                         onCheckedChanged: {
                             if (checked) {
@@ -60,9 +63,126 @@ Item {
                                 totalText.totalVal -= i.backSizes[index]
                             }
                         }
+                        Button {
+                            anchors.left: parent.right
+                            visible: index == 0 && i.backSizes[0] > 0 && !appDataSelect.visible
+                            text: qsTr("Choose") + translator.lang
+                            onClicked: appDataSelect.show()
+                        }
                     }
                 }
             }
+            Window {
+                id: appDataSelect
+                width: 600
+                height: 600
+                title: qsTr("Choose Application Data") + translator.lang
+                onVisibleChanged: if (visible) {
+                                      x = window.x + (window.width - width) / 2
+                                      y = window.y + (window.height - height) / 2
+                                  }
+                ColumnLayout {
+                    anchors.fill: parent
+                    Text {
+                        text: qsTr("Total Application Data: %1 MB (%2 Apps)").arg(i.backMethods > 0 ? i.backSizes[0].toFixed(1) : "0").arg(backAppView.count) + translator.lang
+                        Layout.fillWidth: true
+                        wrapMode: Text.Wrap
+                    }
+                    Text {
+                        id: appData
+                        Layout.fillWidth: true
+                        property double selectedSize: -1.0
+                        text: qsTr("Selected Application Data: %1 MB").arg(selectedSize.toFixed(1)) + translator.lang
+                        wrapMode: Text.Wrap
+                    }
+
+                    ScrollView {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        ListView {
+                            anchors.fill: parent
+                            id: backAppView
+                            model: i.backAppList
+                            Menu {
+                                id: back_options_menu
+                                signal checkAll()
+                                signal uncheckAll()
+                                title:  qsTr("Options") + translator.lang
+                                MenuItem {
+                                    text:  qsTr("Check All Visible") + translator.lang
+                                    onTriggered: {
+                                        back_options_menu.checkAll();
+                                    }
+                                }
+                                MenuItem {
+                                    text:  qsTr("Uncheck All Visible") + translator.lang
+                                    onTriggered: {
+                                        back_options_menu.uncheckAll()
+                                    }
+                                }
+                            }
+
+                            MouseArea {
+                                acceptedButtons: Qt.RightButton
+                                onClicked: back_options_menu.popup()
+                                anchors.fill: parent
+                            }
+                            delegate: Item {
+                                visible: type !== "";
+                                width: parent.width - 3
+                                height: type === "" ? 0 : 26
+                                Rectangle {
+                                    anchors.fill: parent
+                                    color: { switch(type) {
+                                        case "bin": return "red";
+                                        case "data": return "purple";
+                                        case "system": return "steelblue";
+                                        default: return "transparent";
+                                        }
+                                    }
+                                    opacity: 0.2
+                                }
+                                CheckBox {
+                                    id: backDelegateBox
+                                    text: friendlyName + " (" + type + ") " + version
+                                    width: Math.min(implicitWidth, parent.width - sizeText.width)
+                                    clip: true
+                                    checked: isMarked
+                                    onCheckedChanged: isMarked = checked
+                                    onClicked: {
+                                        if (checked)
+                                            appData.selectedSize += size / 1024 / 1024;
+                                        else
+                                            appData.selectedSize -= size / 1024 / 1024;
+                                    }
+                                    Connections {
+                                        target: back_options_menu
+                                        onCheckAll: {
+                                            if (!backDelegateBox.checked) {
+                                                backDelegateBox.checked = true;
+                                                appData.selectedSize += size / 1024 / 1024;
+                                            }
+                                        }
+                                        onUncheckAll: {
+                                            if (backDelegateBox.checked) {
+                                                backDelegateBox.checked = false;
+                                                appData.selectedSize -= size / 1024 / 1024;
+                                            }
+                                        }
+                                    }
+                                }
+                                Label {
+                                    id: sizeText
+                                    anchors.right: parent.right
+                                    text: qsTr("%1 MB").arg((size / 1024 / 1024).toFixed(1)) + translator.lang
+                                    font.pointSize: 12;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             Text {
                 visible: i.backMethods
                 id: totalText
@@ -76,7 +196,7 @@ Item {
             visible: /*!i.backMethods &&*/ !attemptLookup.running
             enabled: !i.installing && !i.backing && !i.restoring && i.device !== null && i.device.bbid !== ""
             text:  qsTr("Refresh Backup Sizes") + translator.lang
-            onClicked: { totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
+            onClicked: { appDataSelect.hide(); totalText.totalVal = 0; i.backupQuery(); attemptLookup.start(); }
         }
 
         Label {

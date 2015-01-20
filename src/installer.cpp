@@ -491,6 +491,8 @@ void InstallNet::backupQuery() {
         QUrlQuery postData;
         postData.addQueryItem("action", "backup");
         postData.addQueryItem("query", "list");
+        if (_back.rev() == 2)
+            postData.addQueryItem("opt", "rev2"); // Per-app backups
         postQuery("backup.cgi", "x-www-form-urlencoded", postData);
     }
 }
@@ -820,7 +822,7 @@ void InstallNet::restoreReply()
         return;
 
     QByteArray data = reply->readAll();
-    for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
+    //for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
     if (data.size() == 0) {
         if (_restoring) {
             QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
@@ -835,6 +837,11 @@ void InstallNet::restoreReply()
     xml.readNextStartElement(); // RimTabletResponse
     xml.readNextStartElement();
     QString hwid;
+    if (xml.name() == "Rev") {
+        xml.readNextStartElement();
+        xml.readNextStartElement();
+    }
+
     if (xml.name() == "AuthChallenge")
     { // We need to verify
         QString salt, challenge;
@@ -1313,8 +1320,11 @@ void InstallNet::restoreReply()
         _back.clearModes();
         while(!xml.atEnd() && !xml.hasError()) {
             QXmlStreamReader::TokenType token = xml.readNext();
-            if(token == QXmlStreamReader::StartElement && xml.attributes().count() > 3 && xml.attributes().at(0).name() == "id") {
-                _back.addMode(xml.attributes());
+            if(token == QXmlStreamReader::StartElement && xml.attributes().count() > 3) {
+                if (xml.attributes().at(0).name() == "id")
+                    _back.addMode(xml.attributes());
+                else if (xml.attributes().at(0).name() == "pkgid")
+                    _back.addApp(xml.attributes());
             }
         }
     }

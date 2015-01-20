@@ -21,6 +21,9 @@
 #include <QStringList>
 #include <QObject>
 #include <QXmlStreamAttributes>
+
+#include "apps.h"
+
 class BackupCategory {
 
 public:
@@ -69,6 +72,7 @@ public:
     int mode() const;
     int numMethods() const;
     void addMode(QXmlStreamAttributes cat);
+    void addApp(QXmlStreamAttributes cat);
     void clearModes();
     void setMode(const int &val);
     QString curMode() const;
@@ -88,6 +92,9 @@ public:
     void setProgress(const int &progress);
 
     QList<BackupCategory*> categories;
+    QList<Apps*> apps;
+
+    int rev() const;
 signals:
     void modeChanged();
     void progressChanged();
@@ -104,4 +111,5 @@ private:
     int _mode;
     int _curMode;
     int _numMethods;
+    int _rev;
 };

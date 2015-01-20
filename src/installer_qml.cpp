@@ -65,6 +65,11 @@ QQmlListProperty<Apps> InstallNet::appList()
     return QQmlListProperty<Apps>(this, _appList);
 }
 
+QQmlListProperty<Apps> InstallNet::backAppList()
+{
+    return QQmlListProperty<Apps>(this, _back.apps);
+}
+
 void InstallNet::setIp(const QString &ip)
 {
     _ip = ip;

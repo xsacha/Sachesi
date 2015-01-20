@@ -13,7 +13,7 @@ Item {
         id: downloadWin
         property int maxId: download.maxId
         onMaxIdChanged: visible = (maxId > 0)
-        visible: false
+        //visible: false
         onVisibleChanged: if (visible) {
                               x = window.x + (window.width - width) / 2
                               y = window.y + (window.height - height) / 2
