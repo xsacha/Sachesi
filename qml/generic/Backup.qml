@@ -48,10 +48,11 @@ Item {
             }
             ColumnLayout {
                 Repeater {
+                    onCountChanged: options.value = 0
                     model: i.backMethods
                     delegate: CheckBox {
                         property double curSize: i.backSizes[index]
-                        text: (i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg( (index == 0 ? appData.selectedSize : i.backSizes[index]).toFixed(1))) + ")") + translator.lang // index
+                        text: (i.backNames[index] + " (" + (i.backSizes[index] < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg( ((index == 0 ? appData.selectedSize : i.backSizes[index]) / 1024 / 1024).toFixed(1))) + ")") + translator.lang // index
                         onCurSizeChanged: if (index == 0) appData.selectedSize = curSize
                         onTextChanged: if (attemptLookup.running) attemptLookup.stop()
                         onCheckedChanged: {
@@ -84,7 +85,7 @@ Item {
                 ColumnLayout {
                     anchors.fill: parent
                     Text {
-                        text: qsTr("Total Application Data: %1 MB (%2 Apps)").arg(i.backMethods > 0 ? i.backSizes[0].toFixed(1) : "0").arg(backAppView.count) + translator.lang
+                        text: qsTr("Total Application Data: %1 MB (%2 Apps)").arg(i.backMethods > 0 ? (i.backSizes[0] / 1024 / 1024).toFixed(1) : "0").arg(backAppView.count) + translator.lang
                         Layout.fillWidth: true
                         wrapMode: Text.Wrap
                     }
@@ -92,10 +93,30 @@ Item {
                         id: appData
                         Layout.fillWidth: true
                         property double selectedSize: -1.0
-                        text: qsTr("Selected Application Data: %1 MB").arg(selectedSize.toFixed(1)) + translator.lang
+                        text: qsTr("Selected Application Data: %1 MB").arg((selectedSize / 1024 / 1024).toFixed(1)) + translator.lang
                         wrapMode: Text.Wrap
                     }
 
+                    Component {
+                        id: sectionHeading
+                        RowLayout{
+                            CheckBox {
+                                checked: true
+                            }
+
+                            Rectangle {
+                                //width: container.width
+                                height: childrenRect.height
+                                color: "lightsteelblue"
+
+                                Text {
+                                    text: section
+                                    font.bold: true
+                                    font.pixelSize: 20
+                                }
+                            }
+                        }
+                    }
                     ScrollView {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -103,6 +124,9 @@ Item {
                             anchors.fill: parent
                             id: backAppView
                             model: i.backAppList
+                            section.property: "type"
+                            section.criteria: ViewSection.FullString
+                            section.delegate: sectionHeading
                             Menu {
                                 id: back_options_menu
                                 signal checkAll()
@@ -148,25 +172,26 @@ Item {
                                     width: Math.min(implicitWidth, parent.width - sizeText.width)
                                     clip: true
                                     checked: isMarked
+
                                     onCheckedChanged: isMarked = checked
                                     onClicked: {
                                         if (checked)
-                                            appData.selectedSize += size / 1024 / 1024;
+                                            appData.selectedSize += size;
                                         else
-                                            appData.selectedSize -= size / 1024 / 1024;
+                                            appData.selectedSize -= size;
                                     }
                                     Connections {
                                         target: back_options_menu
                                         onCheckAll: {
                                             if (!backDelegateBox.checked) {
                                                 backDelegateBox.checked = true;
-                                                appData.selectedSize += size / 1024 / 1024;
+                                                appData.selectedSize += size;
                                             }
                                         }
                                         onUncheckAll: {
                                             if (backDelegateBox.checked) {
                                                 backDelegateBox.checked = false;
-                                                appData.selectedSize -= size / 1024 / 1024;
+                                                appData.selectedSize -= size;
                                             }
                                         }
                                     }
@@ -187,7 +212,7 @@ Item {
                 visible: i.backMethods
                 id: totalText
                 property double totalVal: 0.0
-                text: (qsTr("Total:") + " " + (totalVal < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg(totalVal.toFixed(1)))) + translator.lang
+                text: (qsTr("Total:") + " " + (totalVal < 0 ? qsTr("Unknown Size") : qsTr("%1 MB").arg((totalVal / 1024 / 1024).toFixed(1)))) + translator.lang
                 font.pointSize: 12
             }
         }

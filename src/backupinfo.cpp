@@ -50,7 +50,7 @@ void BackupInfo::addMode(QXmlStreamAttributes cat) {
     _curSize.append(0);
     _curMaxSize.append(1);
 }
-#include <QDebug>
+
 void BackupInfo::addApp(QXmlStreamAttributes cat) {
     Apps* newApp = new Apps();
     foreach(QXmlStreamAttribute attr, cat)
@@ -70,6 +70,19 @@ void BackupInfo::addApp(QXmlStreamAttributes cat) {
     }
     newApp->setIsMarked(true);
     apps.append(newApp);
+    std::sort(apps.begin(), apps.end(),
+              [=](const Apps* i, const Apps* j) {
+        if (i->type() == "system" && j->type() != "system")
+            return true;
+        if (j->type() == "bin" && i->type() != "bin")
+            return true;
+        return false;
+    }
+    );
+}
+
+void BackupInfo::sortApps() {
+
 }
 
 QString BackupInfo::modeString()

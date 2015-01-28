@@ -129,7 +129,7 @@ QStringList InstallNet::backNames() const {
 QList<double> InstallNet::backSizes() const {
     QList<double> sizes;
     foreach(BackupCategory* cat, _back.categories)
-        sizes.append(cat->bytesize.toLongLong() / (double)(1024.0 * 1024.0));
+        sizes.append(cat->bytesize.toLongLong());
     return sizes;
 }
 

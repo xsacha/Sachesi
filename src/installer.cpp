@@ -15,6 +15,8 @@
 // Official GIT repository and contact information can be found at
 // http://github.com/xsacha/Sachesi
 
+#define DEBUG_LOG 0
+
 #include "installer.h"
 #include "ports.h"
 #include <QAbstractListModel>
@@ -465,9 +467,26 @@ void InstallNet::backup()
         delete manifest;
 
         QUrlQuery postData;
-        postData.addQueryItem("action", "backup");
-        postData.addQueryItem("mode", _back.modeString());
-        postQuery("backup.cgi", "x-www-form-urlencoded", postData);
+        //postData.addQueryItem("action", "backup");
+        if (_back.rev() == 2) {
+            /*QString packageXML = "<Packages>";
+            packageXML += "<Package category=\"app\" pkgid=\"gYABgGhMIKEe6t-zx-otuOtK1JM\" type=\"data\"/>";
+            packageXML += "<Package category=\"app\" pkgid=\"andrBnWwO_pMnqtLJ4heAlnaufQ\" type=\"data\"/>";
+            packageXML += "</Packages>";
+            QNetworkRequest request = setData("backup.cgi?opt=rev2&mode=" + _back.modeString(), "x-www-form-urlencoded");
+            reply = manager->post(request, packageXML.toLatin1());
+
+            //connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(installProgress(qint64,qint64)));
+            connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                    this, SLOT(restoreError(QNetworkReply::NetworkError)));
+            connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));*/
+            postData.addQueryItem("mode", _back.modeString());
+            postData.addQueryItem("opt", "rev2");
+            postQuery("backup.cgi", "x-www-form-urlencoded", postData);
+        } else {
+            postData.addQueryItem("mode", _back.modeString());
+            postQuery("backup.cgi", "x-www-form-urlencoded", postData);
+        }
     }
 }
 
@@ -489,7 +508,7 @@ void InstallNet::backupQuery() {
     if (checkLogin())
     {
         QUrlQuery postData;
-        postData.addQueryItem("action", "backup");
+        //postData.addQueryItem("action", "backup");
         postData.addQueryItem("query", "list");
         if (_back.rev() == 2)
             postData.addQueryItem("opt", "rev2"); // Per-app backups
@@ -822,7 +841,9 @@ void InstallNet::restoreReply()
         return;
 
     QByteArray data = reply->readAll();
-    //for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
+#if DEBUG_LOG
+    for (int s = 0; s < data.size(); s+=3500) qDebug() << "Message:\n" << QString(data).simplified().mid(s, 3500);
+#endif
     if (data.size() == 0) {
         if (_restoring) {
             QMessageBox::information(nullptr, "Restore Error", "There was an error loading the backup file.\nThe device encountered an unrecoverable bug.\nIt is not designed to restore this backup.");
@@ -912,7 +933,7 @@ void InstallNet::restoreReply()
             restore();
         else /*if (_hadPassword)*/
             scanProps();
-        // This can take up to 25 seconds to respond and all communication on device is Blocking!
+        // This can take up to 40 seconds to respond and all communication on device is Blocking!
         // backupQuery();
     }
     else if (xml.name() == "DynamicProperties")
@@ -1292,7 +1313,7 @@ void InstallNet::restoreReply()
     else if (xml.name() == "BackupCheck")
     {
         if (_back.curMode() != "complete") {
-            postData.addQueryItem("action", "backup");
+            //postData.addQueryItem("action", "backup");
             postData.addQueryItem("type", _back.curMode());
             reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
             _zipFile = new QuaZipFile(currentBackupZip);
@@ -1327,6 +1348,7 @@ void InstallNet::restoreReply()
                     _back.addApp(xml.attributes());
             }
         }
+        _back.sortApps();
     }
     else if (xml.name() == "BackupStart")
     {
@@ -1335,14 +1357,29 @@ void InstallNet::restoreReply()
             setRestoring(false);
             return;
         }
-        postData.addQueryItem("action", "backup");
-        postData.addQueryItem("type", _back.curMode());
+
+        postData.addQueryItem("query", "activity");
+        if (_back.rev() == 2)
+            postData.addQueryItem("opt", "rev2");
         postQuery("backup.cgi", "x-www-form-urlencoded", postData);
     }
     else if (xml.name() == "BackupStartActivity")
     {
         postData.addQueryItem("type", _back.curMode());
+
+        if (_back.rev() == 2) {
+            postData.addQueryItem("opt", "rev2");
+
+            if (_back.curMode() == "app") {
+                // Select app by pkgid:
+                postData.addQueryItem("pkgid", "gYABgGhMIKEe6t-zx-otuOtK1JM");
+                // Select apps by pkgtype (system, bin, data):
+                postData.addQueryItem("pkgtype", "data");
+            }
+        }
+
         reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
+
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(restoreError(QNetworkReply::NetworkError)));
 

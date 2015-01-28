@@ -73,6 +73,7 @@ public:
     int numMethods() const;
     void addMode(QXmlStreamAttributes cat);
     void addApp(QXmlStreamAttributes cat);
+    void sortApps();
     void clearModes();
     void setMode(const int &val);
     QString curMode() const;
