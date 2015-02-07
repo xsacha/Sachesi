@@ -38,7 +38,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>Определение размера резервной копии иногда завершается ошибкой,вы можете сделать копию &quot;вслепую&quot;.</translation>
+        <translation>Определение размера резервной копии иногда завершается ошибкой, Вы можете сделать копию &quot;вслепую&quot;.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="121"/>
         <source>Please note that backups can take a long time, depending on your device data.</source>
-        <translation>Пожалуйста, обратите внимание, что резервное копирование может занять много времени в зависимости от объёма данных вашего устройства.</translation>
+        <translation>Пожалуйста, обратите внимание, что резервное копирование может занять много времени в зависимости от объёма данных Вашего устройства.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
@@ -137,7 +137,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="55"/>
         <source>Detected devices:</source>
-        <translation>Обнаруженные устройства:    </translation>
+        <translation>Обнаруженные устройства:</translation>
     </message>
 </context>
 <context>
@@ -158,12 +158,12 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="18"/>
         <source>Tools</source>
-        <translation>Инструменты   </translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="22"/>
         <source>Wipe</source>
-        <translation>Очитстка</translation>
+        <translation>Очистка</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="27"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../qml/generic/Downloader.qml" line="45"/>
         <source>#1. Start RTAS (Requires OS10.2)</source>
-        <translation>#1. Запуск RTAS ( Требуется OS10.2 )</translation>
+        <translation>#1. Запуск RTAS (требуется OS10.2)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Downloader.qml" line="49"/>
@@ -332,7 +332,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
-        <translation>Проценты не совсем точны для QNX6 файлов .</translation>
+        <translation>Проценты не совсем точны для файлов QNX6.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="55"/>
@@ -379,7 +379,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation>Подписанные изображения</translation>
+        <translation>Подписанные образы</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="81"/>
@@ -404,7 +404,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
-        <translation>Рапаковка autoloader.exe, .bar или .zip</translation>
+        <translation>Распаковка autoloader.exe, .bar или .zip</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="170"/>
         <source>Note: To extract apps from a .bar, please split it first (above)</source>
-        <translation>Примечание: Для того, чтобы извлечь bar-файлы необходимо сначала произвести распаковку автолоадера.</translation>
+        <translation>Примечание: Для того, чтобы извлечь bar-файлы, необходимо сначала произвести распаковку автолоадера.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="209"/>
@@ -434,7 +434,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="230"/>
         <source>Dump all file contents</source>
-        <translation>Дамп всех файлов</translation>
+        <translation>Дамп содержимого всех файлов</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="179"/>
@@ -474,7 +474,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="199"/>
         <source>Extracts filesystem image</source>
-        <translation>Извлечение образов файловых систем</translation>
+        <translation>Извлечение образов файловой системы</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="161"/>
@@ -487,7 +487,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
-        <translation>Пожалуйста дождитесь окончания распаковки архива.</translation>
+        <translation>Пожалуйста, дождитесь окончания распаковки архива.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="47"/>
@@ -502,17 +502,17 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
         <source>To install &lt;b&gt;.bar&lt;/b&gt; files such as applications or firmware, you can just &lt;b&gt;Drag and Drop&lt;/b&gt; to this page. Otherwise, select the options below:</source>
-        <translation>Для установки &lt;b&gt;bar&lt;/b&gt;-файлов, таких, как приложения или прошивки, просто &lt;b&gt; перетащите&lt;/b&gt; их на эту страницу. Или же выберите нужные параметры ниже:</translation>
+        <translation>Для установки &lt;b&gt;bar&lt;/b&gt;-файлов, таких, как приложения или прошивки, просто &lt;b&gt; перетащите&lt;/b&gt; их на эту страницу. Либо выберите нужные параметры ниже:</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="82"/>
         <source>Install applications to device</source>
-        <translation>Установка приложения на устройство</translation>
+        <translation>Установка приложений на устройство</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="91"/>
         <source>Blackberry Installable (*.bar)</source>
-        <translation>Blackberry Installable (*.bar)</translation>
+        <translation>Установочный файл для Blackberry (*.bar)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="94"/>
@@ -523,7 +523,7 @@
         <location filename="../qml/generic/Installer.qml" line="99"/>
         <location filename="../qml/generic/Installer.qml" line="113"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
-        <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз. Пожалуйста дождитесь завершения операции резервного копирования / восстановления.&lt;br&gt;</translation>
+        <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз. Пожалуйста, дождитесь завершения операции резервного копирования/восстановления.&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="101"/>
@@ -564,7 +564,7 @@
         <location filename="../qml/generic/Installer.qml" line="97"/>
         <location filename="../qml/generic/Installer.qml" line="111"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
-        <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз .&lt;br&gt;;</translation>
+        <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз. Пожалуйста, дождитесь окончания предыдущей установки.&lt;br&gt;;</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="125"/>
@@ -637,7 +637,7 @@
         <location filename="../qml/generic/Search.qml" line="38"/>
         <location filename="../qml/generic/Search.qml" line="135"/>
         <source>Cancel Download</source>
-        <translation>Прекратиь загрузку</translation>
+        <translation>Прекратить загрузку</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="53"/>
@@ -652,7 +652,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="61"/>
         <source>Delta</source>
-        <translation>дельта</translation>
+        <translation>Дельта</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="64"/>
@@ -667,7 +667,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="85"/>
         <source>Download For</source>
-        <translation>Загрузить для  </translation>
+        <translation>Загрузить для</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="88"/>
@@ -743,7 +743,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="219"/>
         <source>Search For</source>
-        <translation>Искать для  </translation>
+        <translation>Искать для</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="257"/>
@@ -842,7 +842,7 @@
     <message>
         <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
-        <translation>Извлечение   </translation>
+        <translation>Извлечение</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="87"/>
@@ -865,7 +865,7 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="16"/>
         <source>These tools require a USB connection</source>
-        <translation>Эти инструменты требуют подключения USB</translation>
+        <translation>Эти инструменты требуют подключения по USB</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="22"/>
@@ -900,17 +900,17 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
         <source>There was an issue connecting.</source>
-        <translation>Возникли проблемы с подключением</translation>
+        <translation>Возникли проблемы с подключением.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="59"/>
         <source>Try Again</source>
-        <translation>Попробуй еще раз</translation>
+        <translation>Попробуйте еще раз</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="68"/>
         <source>Searching for USB device</source>
-        <translation>Поиск USB устройств</translation>
+        <translation>Поиск USB-устройств</translation>
     </message>
 </context>
 <context>
@@ -978,7 +978,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
         <source>Stop Scan</source>
-        <translation>Стоп</translation>
+        <translation>Остановить поиск</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
@@ -998,7 +998,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="144"/>
         <source>History</source>
-        <translation>история</translation>
+        <translation>История</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="149"/>
