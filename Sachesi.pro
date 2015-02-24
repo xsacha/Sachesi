@@ -4,7 +4,7 @@ TARGET="Sachesi"
 win32: RC_ICONS += assets/sachesi.ico
 else:mac: ICON = assets/sachesi.icns
 else: ICON = assets/sachesi.png
-VERSION = 2.0.0
+VERSION = 2.0.1
 
 # Global specific
 CONFIG += c++11
@@ -29,7 +29,7 @@ win32 {
     !contains(QT_CONFIG, openssl-linked) {
         mingw: LIBS += -L$$OPENSSL_PATH -llibssl -llibcrypto -lgdi32
         else:static: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lssleay32MT -lGDI32 -lAdvapi32
-        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MT -lGDI32
+        else: LIBS += -L$$OPENSSL_PATH\\lib -llibeay32MD -lGDI32
     }
 
     !mingw {
