@@ -49,9 +49,9 @@ enum DeviceFamily {
 };
 
 static QStringList dev[] = {
-    // 0 = Z30 (A Series) + Classic
-    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6" << "Classic AT/T" << "Classic Verizon" << "Classic ROW" << "Classic NA",
-    QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A" << "9400270A" << "9500270A" << "9600270A" << "9700270A",
+    // 0 = Z30 (A Series) + Classic + Leap
+    QStringList() << "STA 100-1" << "STA 100-2" << "STA 100-3" << "STA 100-4" << "STA 100-5" << "STA 100-6" << "SQC 100-1" << "SQC 100-2" << "SQC 100-3" << "SQC 100-4" << "SQC 100-5" << "STR 100-1" << "STR 100-2",
+    QStringList() << "8C00240A" << "8D00240A" << "8E00240A" << "8F00240A" << "9500240A" << "B500240A" << "9600270A" << "9400270A" << "9500270A" << "9700270A" << "9C00270A" << "07002E0A" << "06002E0A",
     // 1 = Z10 (L Series) OMAP
     QStringList() << "STL 100-1",
     QStringList() << "4002607",
@@ -59,8 +59,8 @@ static QStringList dev[] = {
     QStringList() << "STL 100-2" << "STL 100-3" << "STL 100-4" << "STK 100-1" << "STK 100-2",
     QStringList() << "8700240A" << "8500240A" << "8400240A" << "A500240A" << "A600240A",
     // 3 = Z3  (J Series) + Cafe
-    QStringList() << "STJ 100-1" << "Cafe NA" << "Cafe Europe/ME/Asia" << "Cafe ROW" << "Cafe AT/T" << "Cafe LatinAm" << "Cafe Verizon",
-    QStringList() << "04002E07" << "87002A07" << "8C002A07" << "9600240A" << "9700240A" << "9C00240A" << "A700240A",
+    QStringList() << "STJ 100-1" << "STJ 100-2" << "Kopi NA" << "Kopi Europe/ME/Asia" << "Cafe ROW" << "Cafe AT/T" << "Cafe LatinAm" << "Cafe Verizon" << "Cafe Sprint",
+    QStringList() << "04002E07" << "05002E07" << "87002A07" << "8C002A07" << "9600240A" << "9700240A" << "9C00240A" << "A700240A" << "AC00240A",
     // 4 = Passport / Q30 (W Series)
     QStringList() << "SQW 100-1" << "SQW 100-2" << "SQW 100-3" << "SQW 100-4" << "Passport Wichita",
     QStringList() << "87002C0A" << "85002C0A" << "84002C0A" << "86002C0A" << "8C002C0A",
