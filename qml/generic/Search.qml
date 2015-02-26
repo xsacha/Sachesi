@@ -231,10 +231,10 @@ Item {
                     // List everything we know except abandoned models
                     ListModel {
                         id: advancedModel
-                        ListElement { text:  "Z30 + Classic"}
+                        ListElement { text:  "Z30 + Classic + Leap"}
                         ListElement { text:  "Z10 (OMAP)" }
                         ListElement { text:  "Z10 (QCOM) + P9982" }
-                        ListElement { text:  "Z3 + Cafe" }
+                        ListElement { text:  "Z3 + Kopi/Cafe" }
                         ListElement { text:  "Passport" }
                         ListElement { text:  "Q5 + Q10 + P9983" }
                         ListElement { text:  "Developer" }
