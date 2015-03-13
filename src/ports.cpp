@@ -41,7 +41,7 @@ QPair<QString,QString> getFamilyFromDevice(int device, bool specialQ30) {
         ret = {"qc8960.factory_sfi", "qc8960"};
         break;
     case Z3Family:
-        ret = {"qc8960.factory_sfi", "qc8930.wtr5"};
+        ret = {"qc8960.factory_sfi_hybrid_qc8x30", "qc8930.wtr5"};
         break;
     case Q30Family:
         if (specialQ30)
