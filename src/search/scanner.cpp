@@ -158,15 +158,19 @@ void Scanner::generatePotentialLinks() {
         radioVersion += parts.at(i) + ".";
     radioVersion += QString::number(build);
 
-    QString potentialText = QString("Potential OS and Radio links for SR" + _curRelease->srVersion() + " (OS:" + _curRelease->osVersion() + " + Radio:" + radioVersion + ")\n\n"
+    QString potentialText = QString("Potential OS and Radio links for SR " + _curRelease->srVersion() + " (OS " + _curRelease->osVersion() + " + Radio " + radioVersion + ")\n\n"
                                     "* Operating Systems *\n");
     appendNewHeader(&potentialText, "QC8974", "Blackberry Passport");
     appendNewLink(&potentialText, "Debrick", "qc8960.factory_sfi_hybrid_qc8974.desktop", _curRelease->osVersion());
     appendNewLink(&potentialText, "Core",    "qc8960.factory_sfi_hybrid_qc8974", _curRelease->osVersion());
 
-    appendNewHeader(&potentialText, "QC8960", "Blackberry Z3/Z10/Z30/Q5/Q10");
+    appendNewHeader(&potentialText, "QC8960", "Blackberry Z10/Z30/Q5/Q10");
     appendNewLink(&potentialText, "Debrick", "qc8960.factory_sfi.desktop", _curRelease->osVersion());
     appendNewLink(&potentialText, "Core",    "qc8960.factory_sfi", _curRelease->osVersion());
+    
+    appendNewHeader(&potentialText, "QC8x30", "Blackberry Z3");
+    appendNewLink(&potentialText, "Debrick", "qc8960.factory_sfi_hybrid_qc8x30.desktop", _curRelease->osVersion());
+    appendNewLink(&potentialText, "Core",    "qc8960.factory_sfi_hybrid_qc8x30", _curRelease->osVersion());
 
     appendNewHeader(&potentialText, "OMAP", "Blackberry Z10 STL 100-1");
     appendNewLink(&potentialText, "Debrick", "winchester.factory_sfi.desktop", _curRelease->osVersion());
@@ -174,13 +178,13 @@ void Scanner::generatePotentialLinks() {
 
     potentialText.append("\n\n* Radios *\n");
     // Touch
-    appendNewLink(&potentialText, "Z30 + Classic", "qc8960.wtr5", radioVersion);
+    appendNewLink(&potentialText, "Z30 + Classic + Leap", "qc8960.wtr5", radioVersion);
     appendNewLink(&potentialText, "Z10 (STL 100-1)", "m5730", radioVersion);
-    appendNewLink(&potentialText, "Z10 (STL 100-2/3/4) and Porsche P9982", "qc8960", radioVersion);
-    appendNewLink(&potentialText, "Z3 (Jakarta) + Cafe", "qc8930.wtr5", radioVersion);
+    appendNewLink(&potentialText, "Z10 (STL 100-2/3/4) + P9982", "qc8960", radioVersion);
+    appendNewLink(&potentialText, "Z3 + Kopi/Cafe", "qc8930.wtr5", radioVersion);
     // QWERTY
     appendNewLink(&potentialText, "Passport + Ontario", "qc8974.wtr2", radioVersion);
-    appendNewLink(&potentialText, "Q5 + Q10 + Khan", "qc8960.wtr", radioVersion);
+    appendNewLink(&potentialText, "Q5 + Q10 + P9983", "qc8960.wtr", radioVersion);
     writeDisplayFile(tr("VersionLookup"), potentialText);
 }
 
