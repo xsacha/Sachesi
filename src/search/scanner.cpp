@@ -62,7 +62,7 @@ void Scanner::reverseLookup(QString OSver) {
     request.setRawHeader("Content-Type", "text/xml;charset=UTF-8");
     QStringList serverList = QStringList("cs.sl");
     if (_findExisting != 1) {
-        serverList << "beta2.sl.eval" << "alpha2.sl.eval";
+        serverList << "beta2.sl.eval" << "alpha.sl.eval";
     }
     _scansActive = serverList.count();
     foreach(QString server, serverList) {

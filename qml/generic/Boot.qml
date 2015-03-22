@@ -2,6 +2,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import "UI" 1.0
 
+// This page is unix-only as Windows has an outdated driver model which is not compatible
+
 Column {
     id: toolsColumn
     anchors {top: parent.top; topMargin: 20; left: parent.left; leftMargin: 20 }

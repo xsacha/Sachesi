@@ -59,6 +59,7 @@ Item {
     }
 
     DropArea {
+        id: dragArea
         anchors.fill: parent
         onDropped: {
             if (drop.hasUrls) {
@@ -67,6 +68,11 @@ Item {
             }
         }
     }
+    Rectangle {
+        anchors.fill: parent
+        color: dragArea.containsDrag ? Qt.rgba(0.2,0.2,0.6,0.1) : Qt.rgba(0.0,0.0,0.0,0.0)
+    }
+
     ColumnLayout {
         anchors {fill: parent; margins: 15 }
         Label {
