@@ -275,7 +275,7 @@ Item {
                 TextCoupleSelect {
                     id: variant
                     type: qsTr("Variant") + translator.lang
-                    selectedItem: 0
+                    selectedItem: 5
                     // This is going to be hell to maintain. Maybe an identifier in dev[] for carrier-specific and its associated code?
                     /*onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
                                            else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
