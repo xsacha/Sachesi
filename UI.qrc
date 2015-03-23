@@ -16,5 +16,6 @@
         <file>qml/generic/text.png</file>
         <file>qml/generic/trash.png</file>
         <file>qml/generic/Device.qml</file>
+        <file>qml/generic/DeviceSub.qml</file>
     </qresource>
 </RCC>

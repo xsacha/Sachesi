@@ -77,7 +77,7 @@ ApplicationWindow {
 
         Tab {
             title: qsTr("Device") + translator.lang
-            Device { anchors.fill: parent; }
+            Device { anchors.fill: parent }
         }
         Tab {
             title: qsTr("Extract") + translator.lang
