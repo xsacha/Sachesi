@@ -19,6 +19,7 @@
 
 #include <QFile>
 #include <QIODevice>
+#include <QDataStream>
 #include <QDir>
 #include <QDebug>
 #include <QDesktopServices>
