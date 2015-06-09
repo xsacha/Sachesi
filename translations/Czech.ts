@@ -296,7 +296,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Clear</source>
-        <translation>Čistý</translation>
+        <translation>Vyčištěno</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
