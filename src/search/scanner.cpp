@@ -181,7 +181,7 @@ void Scanner::generatePotentialLinks() {
     appendNewLink(&potentialText, "Z30 + Classic + Leap", "qc8960.wtr5", radioVersion);
     appendNewLink(&potentialText, "Z10 (STL 100-1)", "m5730", radioVersion);
     appendNewLink(&potentialText, "Z10 (STL 100-2/3/4) + P9982", "qc8960", radioVersion);
-    appendNewLink(&potentialText, "Z3 + Kopi/Cafe", "qc8930.wtr5", radioVersion);
+    appendNewLink(&potentialText, "Z3", "qc8930.wtr5", radioVersion);
     // QWERTY
     appendNewLink(&potentialText, "Passport + Ontario", "qc8974.wtr2", radioVersion);
     appendNewLink(&potentialText, "Q5 + Q10 + P9983", "qc8960.wtr", radioVersion);

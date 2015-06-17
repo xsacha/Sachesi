@@ -169,7 +169,7 @@ Item {
             property bool githubUpdateComplete: false
             onDevicePresentChanged: if (githubUpdateComplete && devicePresent && searchButton.enabled) searchButton.clicked()
             // Find latest country/carrier pair from github
-            property string latestOS: "10.3.1.1154"
+            property string latestOS: "10.3.2.840"
             Component.onCompleted: {
                 var http = new XMLHttpRequest()
                 var url = "https://raw.githubusercontent.com/xsacha/Sachesi/master/carrier";
@@ -197,7 +197,7 @@ Item {
         TextCouple {
             id: country
             type: qsTr("Country") + translator.lang
-            value: "302"
+            value: "311"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -208,7 +208,7 @@ Item {
         TextCouple {
             id: carrier
             type: qsTr("Carrier") + translator.lang
-            value: "720"
+            value: "480"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -275,7 +275,7 @@ Item {
                 TextCoupleSelect {
                     id: variant
                     type: qsTr("Variant") + translator.lang
-                    selectedItem: 5
+                    selectedItem: 9
                     // This is going to be hell to maintain. Maybe an identifier in dev[] for carrier-specific and its associated code?
                     /*onSelectedItemChanged: if (device.text === "Z10 QCOM" && selectedItem == 3) { country.value = "311"; carrier.value = "480" }
                                            else if (device.text === "Q10" && selectedItem == 2) { country.value = "311"; carrier.value = "480" }
