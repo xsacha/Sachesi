@@ -533,7 +533,7 @@ void MainNet::showFirmwareData(QByteArray data, QString variant)
 
                 // No need to check OS and Radio as they are variable
                 if (app->type() == "application") {
-                    bool exists = QFile(QDir::currentPath() + "/" + _versionRelease + "/" + app->name()).size() == app->size();
+                    bool exists = QFile(getSaveDir() + "/" + _versionRelease + "/" + app->name()).size() == app->size();
                     app->setIsAvailable(!exists);
                 }
                 app->setIsMarked(app->isAvailable() && !app->isInstalled());

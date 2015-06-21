@@ -299,7 +299,7 @@ public:
     }
 
     void setApps(QList<Apps*> newApps, QString& version) {
-        baseDir = QDir::currentPath() + "/" + version;
+        baseDir = getSaveDir() + "/" + version;
 
         // Check which apps user wanted
         foreach (Apps* newApp, newApps) {
