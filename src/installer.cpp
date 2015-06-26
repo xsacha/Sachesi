@@ -43,7 +43,7 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
     connect(&_back, SIGNAL(curSizeChanged()), this, SIGNAL(backCurProgressChanged()));
     connect(&_back, SIGNAL(numMethodsChanged()), this, SIGNAL(backMethodsChanged()));
 
-    logFile = new QTemporaryFile();
+    logFile = new QTemporaryFile("XXXXXXXX.txt");
     logFile->open(); // This will autoclose and autoremove by default when ~InstallNet
 
     QByteArray hashedPass = settings.value("pass", "").toByteArray();

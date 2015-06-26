@@ -113,7 +113,7 @@ void InstallNet::setNewLine(const QString &newLine)
 }
 
 bool InstallNet::hasLog() {
-    return logFile->fileName() != "";
+    return logFile->size() > 0;
 }
 
 void InstallNet::openLog() {
