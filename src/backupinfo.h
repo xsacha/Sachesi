@@ -70,12 +70,14 @@ public:
     QString modeString();
     QString stringFromMode(int mode);
     int mode() const;
+    int appMode() const;
     int numMethods() const;
     void addMode(QXmlStreamAttributes cat);
     void addApp(QXmlStreamAttributes cat);
     void sortApps();
     void clearModes();
     void setMode(const int &val);
+    qint64 setAppMode(QString mode);
     QString curMode() const;
     void setCurMode(int increment);
 
@@ -113,4 +115,5 @@ private:
     int _curMode;
     int _numMethods;
     int _rev;
+    int _appMode;
 };

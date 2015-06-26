@@ -1376,12 +1376,23 @@ void InstallNet::restoreReply()
         if (_back.rev() == 2) {
             postData.addQueryItem("opt", "rev2");
 
-            //if (_back.curMode() == "app") {
                 // Select app by pkgid:
                 //postData.addQueryItem("pkgid", "gYABgGhMIKEe6t-zx-otuOtK1JM");
                 // Select apps by pkgtype (system, bin, data):
                 //postData.addQueryItem("pkgtype", "data");
-            //}
+            // Perform backup by pkgtype: system, bin, data
+            if (_back.curMode() == "app") {
+                QString pkgtype;
+                if (_back.appMode() & 1)
+                    pkgtype += "system,";
+                if (_back.appMode() & 2)
+                    pkgtype += "data,";
+                if (_back.appMode() & 4)
+                    pkgtype += "bin,";
+                pkgtype.chop(1);
+
+                postData.addQueryItem("pkgtype", pkgtype);
+            }
         }
 
         reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
@@ -1459,6 +1470,10 @@ void InstallNet::restoreSendFile() {
             this, SLOT(restoreError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(restoreProgress(qint64, qint64)));
     connect(reply, SIGNAL(finished()), this, SLOT(restoreReply()));
+}
+
+qint64 InstallNet::changeBackAppMode(QString type) {
+    return _back.setAppMode(type);
 }
 
 void InstallNet::resetVars()

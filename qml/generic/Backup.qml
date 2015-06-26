@@ -99,12 +99,12 @@ Item {
 
                     Component {
                         id: sectionHeading
-                        RowLayout{
-                            // Try to do a per-mode backup first?
-                            /*CheckBox {
-                                checked: true
-                            }*/
 
+                        RowLayout{
+                            CheckBox {
+                                checked: true
+                                onClicked: appData.selectedSize += i.changeBackAppMode(section)
+                            }
                             Rectangle {
                                 //width: container.width
                                 height: childrenRect.height
@@ -178,7 +178,6 @@ Item {
 
                                     onCheckedChanged: isMarked = checked
                                     onClicked: {
-                                        console.log(size)
                                         if (checked)
                                             appData.selectedSize += size;
                                         else

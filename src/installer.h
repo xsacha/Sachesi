@@ -116,6 +116,7 @@ public:
     Q_INVOKABLE void getPIN();
     Q_INVOKABLE void setActionProperty(QString name, QString value);
     Q_INVOKABLE void backupQuery();
+    Q_INVOKABLE qint64 changeBackAppMode(QString type);
     Q_INVOKABLE void exportInstalled();
     Q_INVOKABLE void openLog();
     Q_INVOKABLE bool hasLog();
