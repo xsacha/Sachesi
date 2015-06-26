@@ -100,9 +100,10 @@ Item {
                     Component {
                         id: sectionHeading
                         RowLayout{
-                            CheckBox {
+                            // Try to do a per-mode backup first?
+                            /*CheckBox {
                                 checked: true
-                            }
+                            }*/
 
                             Rectangle {
                                 //width: container.width
@@ -172,9 +173,12 @@ Item {
                                     width: Math.min(implicitWidth, parent.width - sizeText.width)
                                     clip: true
                                     checked: isMarked
+                                    // Per-app backup wasn't working when > 1 app selected
+                                    enabled: false
 
                                     onCheckedChanged: isMarked = checked
                                     onClicked: {
+                                        console.log(size)
                                         if (checked)
                                             appData.selectedSize += size;
                                         else

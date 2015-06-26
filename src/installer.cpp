@@ -1373,12 +1373,12 @@ void InstallNet::restoreReply()
         if (_back.rev() == 2) {
             postData.addQueryItem("opt", "rev2");
 
-            if (_back.curMode() == "app") {
+            //if (_back.curMode() == "app") {
                 // Select app by pkgid:
-                postData.addQueryItem("pkgid", "gYABgGhMIKEe6t-zx-otuOtK1JM");
+                //postData.addQueryItem("pkgid", "gYABgGhMIKEe6t-zx-otuOtK1JM");
                 // Select apps by pkgtype (system, bin, data):
-                postData.addQueryItem("pkgtype", "data");
-            }
+                //postData.addQueryItem("pkgtype", "data");
+            //}
         }
 
         reply = manager->post(setData("backup.cgi", "x-www-form-urlencoded"), postData.encodedQuery());
