@@ -67,6 +67,9 @@ InstallNet::InstallNet( QObject* parent) : QObject(parent),
 }
 InstallNet::~InstallNet()
 {
+    // Windows has issues autoremoving logFile
+    logFile->close();
+    logFile->remove();
 #ifdef _MSC_VER
     WSACleanup();
 #endif
