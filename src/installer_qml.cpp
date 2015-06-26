@@ -99,10 +99,26 @@ void InstallNet::setCompleted(const bool &exists)
 
 void InstallNet::setNewLine(const QString &newLine)
 {
-    _newLine = ""; // Otherwise it thinks it didn't change...
+    // Prefix with date
+    QString newLog = QTime().currentTime().toString("[hh:mm:ss] ") + newLine;
+
+    _newLine = ""; // Reset qproperty and notify
     emit newLineChanged();
-    _newLine = newLine + "<br>";
+    _newLine = newLog + "<br>";
     emit newLineChanged();
+    newLog.append("\n");
+    logFile->write(newLog.toLatin1());
+    logFile->flush(); // Update file so it can be viewed in real-time
+    emit hasLogChanged();
+}
+
+bool InstallNet::hasLog() {
+    return logFile->fileName() != "";
+}
+
+void InstallNet::openLog() {
+    if (logFile->fileName() != "")
+      openFile(logFile->fileName());
 }
 
 QString InstallNet::backStatus() const {

@@ -84,7 +84,14 @@ Item {
                 }
                 Label {
                     visible: i.possibleDevices
+                    Layout.alignment: Qt.AlignHCenter
                     text: qsTr("Talking to %1 possible device(s).").arg(i.possibleDevices) + translator.lang
+                }
+                Button {
+                    visible: i.hasLog
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTr("Connection Log");
+                    onClicked: i.openLog();
                 }
             }
             BusyIndicator {
