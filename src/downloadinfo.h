@@ -103,7 +103,7 @@ public:
         QString url = apps.at(i)->url();
         QString oldVersion = apps.at(i)->installedVersion();
         oldVersion.replace('.','_');
-        url.chop(4);
+        url.chop(4); // Remove extension
         url.append(QString("+patch+%1.bar").arg(oldVersion));
         QNetworkReply* reply = _manager->head(QNetworkRequest(url));
 
@@ -120,7 +120,7 @@ public:
             }
             toVerify--;
             emit verifyingChanged();
-            // Verified. Now lets complete
+            // Verified. Now to complete
             if (toVerify == 0)
                 startDownload();
             reply->deleteLater();
@@ -128,7 +128,7 @@ public:
         QObject::connect(reply, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
             toVerify--;
             emit verifyingChanged();
-            // Verified. Now lets complete
+            // Verified. Now to complete
             if (toVerify == 0)
                 startDownload();
             reply->deleteLater();
@@ -156,7 +156,7 @@ public:
 
                 toVerify--;
                 emit verifyingChanged();
-                // Verified. Now lets complete
+                // Verified. Now to complete
                 if (toVerify == 0)
                     download(delta);
             } else {
@@ -222,6 +222,14 @@ public:
         // Obviously something is wrong if this file is bigger than what we want
         if (_updateFile.size() > apps.at(id)->size())
             _updateFile.remove();
+        // In the unlikely event that we missed that we had already downloaded it
+        // Maybe the user copied the relevant files in to a new folder during download?
+        if (_updateFile.size() == apps.at(id)->size()) {
+            size += _updateFile.size();
+            _updateFile.rename(baseDir + "/" + apps.at(id)->name());
+            completedFile();
+            return;
+        }
         // It is possible that it already exists and, in this case, we would want to resume
         if (_updateFile.size() > 0) {
             size += _updateFile.size();
@@ -272,21 +280,7 @@ public:
                 return;
             }
 
-            if (nextFile())
-            {
-                downloadNextFile();
-            } else {
-                /*if (size != totalSize)
-                    QMessageBox::information(NULL, "Warning", QString("Your update completed successfully.\n"
-                                             "However, the update size does not match the download size. This is probably just be a bug that you can ignore.\n"
-                                             "Downloaded: %1\n"
-                                             "Expected: %2")
-                                             .arg(size)
-                                             .arg(totalSize));*/
-
-                QDesktopServices::openUrl(QUrl(QFileInfo(_updateFile).absolutePath()));
-                reset();
-            }
+            completedFile();
         });
         QObject::connect(replydl, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), [=]() {
             replydl->deleteLater();
@@ -296,6 +290,24 @@ public:
 
             qDebug() << "DL Error: "  << replydl->error() << replydl->errorString();
         });
+    }
+
+    void completedFile() {
+        if (nextFile())
+        {
+            downloadNextFile();
+        } else {
+            /*if (size != totalSize)
+                QMessageBox::information(NULL, "Warning", QString("Your update completed successfully.\n"
+                                         "However, the update size does not match the download size. This is probably just be a bug that you can ignore.\n"
+                                         "Downloaded: %1\n"
+                                         "Expected: %2")
+                                         .arg(size)
+                                         .arg(totalSize));*/
+
+            QDesktopServices::openUrl(QUrl(QFileInfo(_updateFile).absolutePath()));
+            reset();
+        }
     }
 
     void setApps(QList<Apps*> newApps, QString& version) {

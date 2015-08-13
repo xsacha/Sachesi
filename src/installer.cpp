@@ -655,6 +655,11 @@ void InstallNet::login()
     {
         if ((inter.flags() & (flags | QNetworkInterface::IsLoopBack)) == flags)
         {
+            if (inter.allAddresses().contains(QHostAddress("::1")) ||
+                inter.allAddresses().contains(QHostAddress("127.0.0.1")) ) {
+                // This is our primary internet (eg. wlan0) and not a USB.
+                continue;
+            }
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
             {
                 if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol)
@@ -1048,8 +1053,8 @@ void InstallNet::restoreReply()
         // We do have the radio type but we don't entirely trust it. The user could have installed anything or nothing!
         QString temporaryRadioType = _knownConnectedRadioType;
         _knownConnectedRadioType = "";
-        // Not future-proof, but will work for most. Families # hardcoded to 5
-        for (int i = 1; i < (5 * 2) && _knownConnectedRadioType.isEmpty(); i+=2) {
+        // Not future-proof, but will work for most. Families # hardcoded to 7
+        for (int i = 1; i < (7 * 2) && _knownConnectedRadioType.isEmpty(); i+=2) {
             for (int j = 0; j < dev[i].count(); j++) {
                 if (dev[i][j] == hwid.toUpper()) {
                     // Q30 OS status doesn't matter, so we set 0
