@@ -6,18 +6,18 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="24"/>
         <source>Options</source>
-        <translation>Choix</translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="33"/>
         <source>Refreshing backup sizes</source>
-        <translation>Tailles de sauvegarde rafraîchissantes</translation>
+        <translation>Mise à jour de la Taille des Sauvegardes</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
         <location filename="../qml/generic/Backup.qml" line="62"/>
         <source>Unknown Size</source>
-        <translation>Inconnu Taille</translation>
+        <translation>Taille Inconnue</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="45"/>
@@ -33,27 +33,27 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="70"/>
         <source>Refresh Backup Sizes</source>
-        <translation>Actualiser Tailles de Sauvegarde</translation>
+        <translation>Actualiser la Tailles des Sauvegardes</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="76"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
-        <translation>Tailles de sauvegarde de chargement peut parfois échouer. Dans cette situation, vous pouvez sauvegarder «aveugle».</translation>
+        <translation>Charger les Tailles de sauvegardes peut parfois échouer. Dans cette situation, vous pouvez sauvegarder en «aveugle».</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
         <source>Create Backup Blind</source>
-        <translation>Créer aveugles de sauvegarde</translation>
+        <translation>Créer une sauvegarde aveugle</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="82"/>
         <source>Choose Backup Filename</source>
-        <translation>Choisissez Nom du fichier de sauvegarde</translation>
+        <translation>Choisissez le Nom du fichier de la Sauvegarde</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="94"/>
         <source>Select Restore File</source>
-        <translation>Sélectionnez Restaurer le fichier</translation>
+        <translation>Sélectionnez le fichier à restaurer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="105"/>
@@ -69,27 +69,27 @@
         <location filename="../qml/generic/Backup.qml" line="90"/>
         <location filename="../qml/generic/Backup.qml" line="101"/>
         <source>Blackberry Backup (*.bbb)</source>
-        <translation>Blackberry Sauvegarde (*.bbb)</translation>
+        <translation>Sauvegarde Blackberry (*.bbb)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="117"/>
         <source>Your device needs a Blackberry ID to perform backups or restores!</source>
-        <translation>Votre appareil a besoin d&apos;un identifiant BlackBerry ID pour effectuer des sauvegardes ou restaurations!</translation>
+        <translation>Votre appareil a besoin d'un identifiant BlackBerry ID pour effectuer des sauvegardes ou restaurations!</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="121"/>
         <source>Please note that backups can take a long time, depending on your device data.</source>
-        <translation>Se il vous plaît noter que les sauvegardes peuvent prendre un certain temps, en fonction des données de votre appareil.</translation>
+        <translation>S'il vous plaît veuillez noter que les sauvegardes peuvent prendre un certain temps, en fonction des données de votre appareil.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Creating Backup (%1%)</source>
-        <translation>Création de sauvegarde (%1%)</translation>
+        <translation>Création d'une sauvegarde (%1%)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="136"/>
         <source>Restoring Backup (%1%)</source>
-        <translation>Restauration d&apos;une sauvegarde (%1%)</translation>
+        <translation>Restauration d'une sauvegarde (%1%)</translation>
     </message>
 </context>
 <context>
@@ -97,7 +97,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="11"/>
         <source>Boot Communication</source>
-        <translation>Communication de Démarrage</translation>
+        <translation>Communication de Démarrage (Boot)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="18"/>
@@ -107,7 +107,7 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="22"/>
         <source>RimBoot</source>
-        <translation>RimDémarrage</translation>
+        <translation>RimBoot</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="26"/>
@@ -122,12 +122,12 @@
     <message>
         <location filename="../qml/generic/Boot.qml" line="36"/>
         <source>Reboot after</source>
-        <translation>Ensuite un redémarrage</translation>
+        <translation>Redémarrer après</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="43"/>
         <source>Connecting to bootrom</source>
-        <translation>Connexion à démarragerom</translation>
+        <translation>Connexion au secteur de démarrage (bootrom)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Boot.qml" line="50"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../qml/generic/UI/CircleProgress.qml" line="117"/>
         <source>%1 of %2</source>
-        <translation>%1 de %2</translation>
+        <translation>%1 sur %2</translation>
     </message>
 </context>
 <context>
@@ -163,17 +163,17 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="22"/>
         <source>Wipe</source>
-        <translation>Effacement</translation>
+        <translation>Nettoyage de sécurité</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="27"/>
         <source>Factory Reset</source>
-        <translation>Remettre Usine</translation>
+        <translation>Réinitialisation sortie d'usine</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="32"/>
         <source>Reboot</source>
-        <translation>Reboot</translation>
+        <translation>Redémarrage</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="44"/>
@@ -197,7 +197,7 @@
         <location filename="../qml/generic/Device.qml" line="164"/>
         <location filename="../qml/generic/Device.qml" line="184"/>
         <source>Unknown</source>
-        <translation>Méconnu</translation>
+        <translation>Inconnu</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="52"/>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="76"/>
         <source>BSN</source>
-        <translation>Numéro de Série</translation>
+        <translation>Numéro de Série BSN</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="90"/>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="122"/>
         <source>Setup Complete</source>
-        <translation>Complète Initialisé</translation>
+        <translation>Configuration terminée</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="126"/>
@@ -285,7 +285,7 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="154"/>
         <source>Refurbished Date</source>
-        <translation>Date de remise à neuf</translation>
+        <translation>Date de remise au propre</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="160"/>
@@ -296,12 +296,12 @@
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Clear</source>
-        <translation>Clair</translation>
+        <translation>Effacer</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="165"/>
         <source>Set</source>
-        <translation>Fixer</translation>
+        <translation>Valider</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="180"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../qml/generic/Downloader.qml" line="45"/>
         <source>#1. Start RTAS (Requires OS10.2)</source>
-        <translation>#1. Démarrer RTAS ( Requires OS10.2 )</translation>
+        <translation>#1. Démarrer RTAS ( Nécessite OS10.2 )</translation>
     </message>
     <message>
         <location filename="../qml/generic/Downloader.qml" line="49"/>
@@ -332,7 +332,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="46"/>
         <source>Percentages are not entirely accurate for QNX6 files.</source>
-        <translation>Les pourcentages ne sont pas tout à fait exact pour les fichiers QNX6.</translation>
+        <translation>Les pourcentages ne sont pas tout à fait exacts pour les fichiers QNX6.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="55"/>
@@ -343,7 +343,7 @@
         <location filename="../qml/generic/Extract.qml" line="108"/>
         <location filename="../qml/generic/Extract.qml" line="119"/>
         <source>Extract Signed</source>
-        <translation>Extrait Signé</translation>
+        <translation>Extraire Fichiers Signés</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="126"/>
@@ -364,27 +364,27 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="150"/>
         <source>PINList</source>
-        <translation>PINListe</translation>
+        <translation>PINList</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="71"/>
         <source>Create Autoloader</source>
-        <translation>Créer Autochargeur</translation>
+        <translation>Créer un Lanceur (Autoloader)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="81"/>
         <source>Create from Folder</source>
-        <translation>Créer de Dossier</translation>
+        <translation>Créer à partir du Dossier</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="89"/>
         <source>Create from Files</source>
-        <translation>Créer à Partir de Fichiers</translation>
+        <translation>Créer à Partir des Fichiers</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="99"/>
         <source>Create Autoloader .exe from .signed images</source>
-        <translation>Créer Autochargeur .exe à partir d&apos;images .signed</translation>
+        <translation>Créer un lanceur (Autoloader) .exe à partir d'images .signed</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="63"/>
@@ -394,27 +394,27 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="154"/>
         <source>Split .signed from autoloader .exe, .bar or .zip</source>
-        <translation>Scission .signed de Autochargeur .exe, .bar ou .zip</translation>
+        <translation>Scinder le .signed venant du Lanceur (Autoloader) .exe, .bar ou .zip</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="166"/>
         <source>Extracts all bar archives from a debrick/repair .signed</source>
-        <translation>Extrait toutes les archives de la barre d&apos;un réparation .signed</translation>
+        <translation>Extraction de toutes les archives .bar à partir d'un fichier debrick/repair .signed</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="170"/>
         <source>Note: To extract apps from a .bar, please split it first (above)</source>
-        <translation>Remarque: Pour extraire des applications à partir d&apos;un .bar, se il vous plaît diviser première (ci-dessus)</translation>
+        <translation>Remarque: Pour extraire des applications à partir d&apos;un .bar, s'il vous plaît veuillez le scinder d'abord(ci-dessus)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="209"/>
         <source>Dump Contents</source>
-        <translation>Contenu de Benne</translation>
+        <translation>Vider le Contenu</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="216"/>
         <source>Core</source>
-        <translation>Cœur</translation>
+        <translation>Core</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="226"/>
@@ -424,37 +424,37 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="230"/>
         <source>Dump all file contents</source>
-        <translation>Dump tous les contenus de fichiers</translation>
+        <translation>Vider tous le contenus des fichiers</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="179"/>
         <source>Extract Image</source>
-        <translation>Extraire des Image</translation>
+        <translation>Extraire l'Image</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="27"/>
         <source>Splitting Autoloader</source>
-        <translation>Fractionnement Autochargeur</translation>
+        <translation>Découpage du Lanceur (Autoloader)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="28"/>
         <source>Combining Autoloader</source>
-        <translation>Autochargeur combinant</translation>
+        <translation>Combinaison du Lanceur (Autoloader)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="29"/>
         <source>Extracting Image</source>
-        <translation>Extraire l&apos;image</translation>
+        <translation>Extraction de l'image</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="30"/>
         <source>Extracting Apps</source>
-        <translation>Extraire les Apps</translation>
+        <translation>Extraction des Apps</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="31"/>
         <source>Fetching required files</source>
-        <translation>Comparaison fichiers requis</translation>
+        <translation>Téléchargement des fichiers requis</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="32"/>
@@ -464,7 +464,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="78"/>
         <source>Signed Images</source>
-        <translation>Images signés</translation>
+        <translation>Images signées</translation>
     </message>
     <message>
         <location filename="../qml/generic/Extract.qml" line="115"/>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../qml/generic/Extract.qml" line="161"/>
         <source>Extract Apps</source>
-        <translation>Apps Extraire</translation>
+        <translation>Extrait les Applications</translation>
     </message>
 </context>
 <context>
@@ -487,17 +487,17 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="34"/>
         <source>Please be patient while the installation zip is extracted.</source>
-        <translation>Se il vous plaît être patient pendant que le zip d&apos;installation est extrait.</translation>
+        <translation>S'il vous plaît soyez patient pendant que le zip d&apos;installation est extrait.</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="47"/>
         <source>Firmware Update</source>
-        <translation>Firmware Update</translation>
+        <translation>Mise à jour du Firmware</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="47"/>
         <source>Install</source>
-        <translation>Install</translation>
+        <translation>Installation</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="74"/>
@@ -507,12 +507,12 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="82"/>
         <source>Install applications to device</source>
-        <translation>Installer des applications à appareil</translation>
+        <translation>Installer les applications sur l'appareil</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="91"/>
         <source>Blackberry Installable (*.bar)</source>
-        <translation>Blackberry Installable (*.bar)</translation>
+        <translation>Fichier Blackberry Installable (*.bar)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="94"/>
@@ -538,27 +538,27 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="115"/>
         <source>Select Files</source>
-        <translation>Sélectionnez Fichiers</translation>
+        <translation>Sélectionnez les Fichiers</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="20"/>
         <source>View Install (%1)</source>
-        <translation>Voir Installer (%1)</translation>
+        <translation>Voir l'Installation (%1)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sending %1</source>
-        <translation>Envoi %1</translation>
+        <translation>Envoi de %1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Installing %1</source>
-        <translation>Installation %1</translation>
+        <translation>Installation de %1</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sent %1</source>
-        <translation>Envoyé %1</translation>
+        <translation>%1 Envoyé</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="97"/>
@@ -569,7 +569,7 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="125"/>
         <source>Only install newer apps</source>
-        <translation>Installer uniquement les applications plus récentes</translation>
+        <translation>N'iInstaller uniquement que les applications avec une version plus récente</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="139"/>
@@ -584,12 +584,12 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="233"/>
         <source>Log</source>
-        <translation>Livre de Bord</translation>
+        <translation>Log</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Use &apos;Refresh&apos; to update list</source>
-        <translation>Utilisez &apos;Rafraîchissement&apos; à la liste mise à jour</translation>
+        <translation>Utilisez &apos;Rafraîchir&apos; pour mettre à jour la liste</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
@@ -599,17 +599,17 @@
     <message>
         <location filename="../qml/generic/Installer.qml" line="164"/>
         <source>Device disconnected</source>
-        <translation>Périphérique déconnecté</translation>
+        <translation>Appareil déconnecté</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="177"/>
         <source>Options</source>
-        <translation>Choix</translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="179"/>
         <source>Uninstall Marked</source>
-        <translation>Désinstaller Marqué</translation>
+        <translation>Désinstaller la sélection</translation>
     </message>
     <message>
         <location filename="../qml/generic/Installer.qml" line="186"/>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../src/search/scanner.h" line="68"/>
         <source>No Release</source>
-        <translation>Non Libération</translation>
+        <translation>Pas de numéro de version</translation>
     </message>
 </context>
 <context>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="53"/>
         <source>Search</source>
-        <translation>chercher</translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="61"/>
@@ -657,7 +657,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="64"/>
         <source>Version Lookup</source>
-        <translation>Version Recherche</translation>
+        <translation>Recherche de Version</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="76"/>
@@ -678,22 +678,22 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="94"/>
         <source>Unknown</source>
-        <translation>Méconnu</translation>
+        <translation>Inconnu</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="100"/>
         <source>Connected</source>
-        <translation>Lié</translation>
+        <translation>Connecté</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="100"/>
         <source>As Searched</source>
-        <translation>Comme Fouillé</translation>
+        <translation>Comme recherché</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="118"/>
         <source>Grab Links</source>
-        <translation>Faire Liens</translation>
+        <translation>Télécharger les Liens</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="125"/>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="130"/>
         <source>View Download (%1%)</source>
-        <translation>Voir Télécharger (%1%)</translation>
+        <translation>Voir Téléchargement (%1%)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="150"/>
@@ -728,7 +728,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="166"/>
         <source>Finds updates approved by other carriers</source>
-        <translation>Trouve mises à jour approuvées par d&apos;autres transporteurs</translation>
+        <translation>Trouver les mises à jour approuvées par d&apos;autres opérateurs</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="194"/>
@@ -738,7 +738,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="205"/>
         <source>Carrier</source>
-        <translation>Pourvoyeur</translation>
+        <translation>Opérateur</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="219"/>
@@ -768,7 +768,7 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="291"/>
         <source>Debrick</source>
-        <translation>Réparation</translation>
+        <translation>Debrick</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="388"/>
@@ -784,12 +784,12 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="389"/>
         <source>Needed: %1 Apps</source>
-        <translation>Nécessaire: %1 Apps</translation>
+        <translation>Requis: %1 Apps</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="460"/>
         <source>(older)</source>
-        <translation>(plus)</translation>
+        <translation>(plus ancien)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="460"/>
@@ -809,22 +809,22 @@
     <message>
         <location filename="../qml/generic/Search.qml" line="408"/>
         <source>Options</source>
-        <translation>Choix</translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="411"/>
         <source>Check All</source>
-        <translation>Cocher tout</translation>
+        <translation>Tout Cocher</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="420"/>
         <source>Check All Needed</source>
-        <translation>Cocher Tout Nécessaire</translation>
+        <translation>Cocher Tout le Nécessaire</translation>
     </message>
     <message>
         <location filename="../qml/generic/Search.qml" line="429"/>
         <source>Uncheck All</source>
-        <translation>Décocher Tout</translation>
+        <translation>Tout Décocher</translation>
     </message>
 </context>
 <context>
@@ -842,7 +842,7 @@
     <message>
         <location filename="../qml/generic/Title.qml" line="83"/>
         <source>Extract</source>
-        <translation>Extrait</translation>
+        <translation>Extraire</translation>
     </message>
     <message>
         <location filename="../qml/generic/Title.qml" line="87"/>
@@ -890,12 +890,12 @@
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="83"/>
         <source>Detected %1 Blackberry USB device(s) in %2 mode.</source>
-        <translation>Détecté %1 Blackberry USB (s) en mode %2.</translation>
+        <translation>%1 appareil(s) USB Blackberry en mode %2.</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="87"/>
         <source>Talking to %1 possible device(s).</source>
-        <translation>Parler à %1 dispositif (s) possible.</translation>
+        <translation>En discussion avec %1 appareil(s) possible(s).</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
@@ -918,7 +918,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="7"/>
         <source>Version Lookup</source>
-        <translation>Version Recherche</translation>
+        <translation>Recherche de Version</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="21"/>
@@ -933,7 +933,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="35"/>
         <source>Next Available Links</source>
-        <translation>Suivant liens disponibles</translation>
+        <translation>Liens suivants disponibles</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="40"/>
@@ -973,12 +973,12 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="135"/>
         <source>Lookup</source>
-        <translation>Recherche</translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
         <source>Stop Scan</source>
-        <translation>Arrêter</translation>
+        <translation>Arrêter de chercher</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="44"/>
@@ -988,7 +988,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>
         <source>Grab Public Links</source>
-        <translation>Prenez Liens Publics</translation>
+        <translation>Récupérer le Liens Publics</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="95"/>
@@ -998,7 +998,7 @@
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="144"/>
         <source>History</source>
-        <translation>Histoire</translation>
+        <translation>Historique</translation>
     </message>
     <message>
         <location filename="../qml/generic/VersionLookup.qml" line="149"/>
