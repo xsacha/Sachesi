@@ -116,7 +116,7 @@ QString getSaveDir() {
     if (QFileInfo(writable).isWritable())
         return writable;
 
-    return QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    return QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
 #endif
 }
 
