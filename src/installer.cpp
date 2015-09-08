@@ -655,11 +655,6 @@ void InstallNet::login()
     {
         if ((inter.flags() & (flags | QNetworkInterface::IsLoopBack)) == flags)
         {
-            if (inter.allAddresses().contains(QHostAddress("::1")) ||
-                inter.allAddresses().contains(QHostAddress("127.0.0.1")) ) {
-                // This is our primary internet (eg. wlan0) and not a USB.
-                continue;
-            }
             foreach(QNetworkAddressEntry addr, inter.addressEntries())
             {
                 if (addr.ip().protocol() == QAbstractSocket::IPv4Protocol)
