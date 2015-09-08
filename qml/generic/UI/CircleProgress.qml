@@ -32,6 +32,7 @@ Canvas {
     property real angleOffset: -Math.PI / 2
 
     property string text: ""
+    property string statusText: ""
 
     signal clicked()
 
@@ -97,13 +98,19 @@ Canvas {
 
     Column {
         anchors.centerIn: parent
-        spacing: height / 5
+        spacing: height / 6
         add: Transition {
             NumberAnimation {
                 duration: 100
                 properties: "y"
                 easing.type: Easing.OutBounce
             }
+        }
+
+        Text {
+            text: canvas.statusText
+            font.bold: true
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         Text {

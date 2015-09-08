@@ -54,7 +54,8 @@ Item {
             overallValue: i.dgProgress
             curId: i.dgPos + 1
             maxId: i.dgMaxPos
-            text: (((i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending %1").arg(i.curInstallName) : qsTr("Installing %1").arg(i.curInstallName)) : qsTr("Sent %1").arg(i.curInstallName))) + translator.lang
+            statusText: ((i.curDGProgress != 100) ? ( i.curDGProgress < 50 ? qsTr("Sending") : qsTr("Installing")) : qsTr("Sent")) + translator.lang
+            text: i.curInstallName
         }
     }
 
