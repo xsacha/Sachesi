@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>Backup</name>
     <message>
         <location filename="../qml/generic/Backup.qml" line="32"/>
-        <location filename="../qml/generic/Backup.qml" line="134"/>
+        <location filename="../qml/generic/Backup.qml" line="135"/>
         <source>Options</source>
         <translation>Параметры</translation>
     </message>
@@ -16,14 +16,14 @@
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="55"/>
-        <location filename="../qml/generic/Backup.qml" line="215"/>
+        <location filename="../qml/generic/Backup.qml" line="218"/>
         <source>Unknown Size</source>
         <translation>Размер неизвестен</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="55"/>
-        <location filename="../qml/generic/Backup.qml" line="202"/>
-        <location filename="../qml/generic/Backup.qml" line="215"/>
+        <location filename="../qml/generic/Backup.qml" line="205"/>
+        <location filename="../qml/generic/Backup.qml" line="218"/>
         <source>%1 MB</source>
         <translation>%1 МБ</translation>
     </message>
@@ -35,71 +35,71 @@
     <message>
         <location filename="../qml/generic/Backup.qml" line="80"/>
         <source>Choose Application Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать данные приложений</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="88"/>
         <source>Total Application Data: %1 MB (%2 Apps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Общий размер данных: %1 МБ (%2 программ)</translation>
     </message>
     <message>
         <location filename="../qml/generic/Backup.qml" line="96"/>
         <source>Selected Application Data: %1 MB</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрано данных приложений: %1 МБ</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="136"/>
+        <location filename="../qml/generic/Backup.qml" line="137"/>
         <source>Check All Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Отметить все</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="142"/>
+        <location filename="../qml/generic/Backup.qml" line="143"/>
         <source>Uncheck All Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Снять все отметки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="215"/>
+        <location filename="../qml/generic/Backup.qml" line="218"/>
         <source>Total:</source>
         <translation>Всего:</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="223"/>
+        <location filename="../qml/generic/Backup.qml" line="226"/>
         <source>Refresh Backup Sizes</source>
         <translation>Определить размер резервной копии</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="229"/>
+        <location filename="../qml/generic/Backup.qml" line="232"/>
         <source>Loading backup sizes can sometimes fail. In this situation, you can backup &apos;blind&apos;.</source>
         <translation>Определение размера резервной копии иногда завершается ошибкой, Вы можете сделать копию &quot;вслепую&quot;.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="258"/>
+        <location filename="../qml/generic/Backup.qml" line="261"/>
         <source>Create Backup Blind</source>
         <translation>Создание резервной копии &quot;вслепую&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="235"/>
+        <location filename="../qml/generic/Backup.qml" line="238"/>
         <source>Choose Backup Filename</source>
         <translation>Введите имя файла резервной копии</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="247"/>
+        <location filename="../qml/generic/Backup.qml" line="250"/>
         <source>Select Restore File</source>
         <translation>Выберите файл восстановления</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="258"/>
+        <location filename="../qml/generic/Backup.qml" line="261"/>
         <source>Create Backup</source>
         <translation>Создать резервную копию</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="263"/>
+        <location filename="../qml/generic/Backup.qml" line="266"/>
         <source>Restore Backup</source>
         <translation>Восстановить из резервной копии</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="243"/>
-        <location filename="../qml/generic/Backup.qml" line="254"/>
+        <location filename="../qml/generic/Backup.qml" line="246"/>
+        <location filename="../qml/generic/Backup.qml" line="257"/>
         <source>Blackberry Backup (*.bbb)</source>
         <translation>Blackberry Backup (*.bbb)</translation>
     </message>
@@ -114,22 +114,22 @@
         <translation>Время ожидания запроса истекло. Пожалуйста выполните операцию резервного копирования вслепую.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="270"/>
+        <location filename="../qml/generic/Backup.qml" line="273"/>
         <source>Your device needs a Blackberry ID to perform backups or restores!</source>
         <translation>Устройство нуждается в верификации Blackberry ID для выполнения резервного копирования и восстановления!</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="274"/>
+        <location filename="../qml/generic/Backup.qml" line="277"/>
         <source>Please note that backups can take a long time, depending on your device data.</source>
         <translation>Пожалуйста, обратите внимание, что резервное копирование может занять много времени в зависимости от объёма данных Вашего устройства.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="289"/>
+        <location filename="../qml/generic/Backup.qml" line="292"/>
         <source>Creating Backup (%1%)</source>
         <translation>Создание резервной копии (%1%)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Backup.qml" line="289"/>
+        <location filename="../qml/generic/Backup.qml" line="292"/>
         <source>Restoring Backup (%1%)</source>
         <translation>Восстановление (%1%)</translation>
     </message>
@@ -185,7 +185,7 @@
 <context>
     <name>CircleProgress</name>
     <message>
-        <location filename="../qml/generic/UI/CircleProgress.qml" line="117"/>
+        <location filename="../qml/generic/UI/CircleProgress.qml" line="124"/>
         <source>%1 of %2</source>
         <translation>%1 из %2</translation>
     </message>
@@ -194,91 +194,91 @@
     <name>Device</name>
     <message>
         <source>Device Information</source>
-        <translation type="vanished">Информация об устройстве</translation>
+        <translation>Информация об устройстве</translation>
     </message>
     <message>
         <source>Tools</source>
-        <translation type="vanished">Инструменты</translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <source>Wipe</source>
-        <translation type="vanished">Очистка</translation>
+        <translation>Очистка</translation>
     </message>
     <message>
         <source>Factory Reset</source>
-        <translation type="vanished">Сброс настроек</translation>
+        <translation>Сброс настроек</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="vanished">Перезагрузка</translation>
+        <translation>Перезагрузка</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Имя устройства</translation>
+        <translation>Имя устройства</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Неизвестно</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <source>HW Name</source>
-        <translation type="vanished">Ревизия</translation>
+        <translation>Ревизия</translation>
     </message>
     <message>
         <source>BBID</source>
-        <translation type="vanished">BBID</translation>
+        <translation>BBID</translation>
     </message>
     <message>
         <source>PIN</source>
-        <translation type="vanished">PIN</translation>
+        <translation>PIN</translation>
     </message>
     <message>
         <source>BSN</source>
-        <translation type="vanished">Серийный номер</translation>
+        <translation>Серийный номер</translation>
     </message>
     <message>
         <source>OS</source>
-        <translation type="vanished">ОС</translation>
+        <translation>ОС</translation>
     </message>
     <message>
         <source>Radio</source>
-        <translation type="vanished">Радиомодуль</translation>
+        <translation>Радиомодуль</translation>
     </message>
     <message>
         <source>HW</source>
-        <translation type="vanished">Номер модели</translation>
+        <translation>Номер модели</translation>
     </message>
     <message>
         <source>Restrictions</source>
-        <translation type="vanished">Ограничения</translation>
+        <translation>Ограничения</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="vanished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>Setup Complete</source>
-        <translation type="vanished">Настройка завершена</translation>
+        <translation>Настройка завершена</translation>
     </message>
     <message>
         <source>True</source>
-        <translation type="vanished">Да</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <source>False</source>
-        <translation type="vanished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>Developer Mode</source>
-        <translation type="vanished">Режим разработки</translation>
+        <translation>Режим разработки</translation>
     </message>
     <message>
         <source>Battery</source>
-        <translation type="vanished">Батарея</translation>
+        <translation>Батарея</translation>
     </message>
     <message>
         <source>Connection</source>
-        <translation type="vanished">Подключение</translation>
+        <translation>Подключение</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="19"/>
@@ -287,27 +287,27 @@
     </message>
     <message>
         <source>Refurbished Date</source>
-        <translation type="vanished">Дата восстановления</translation>
+        <translation>Дата восстановления</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="vanished">Никогда</translation>
+        <translation>Никогда</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="vanished">Чисто</translation>
+        <translation>Чисто</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="vanished">Установить</translation>
+        <translation>Установить</translation>
     </message>
     <message>
         <source>Free Disk Space</source>
-        <translation type="vanished">Свободное дисковое пространство</translation>
+        <translation>Свободное дисковое пространство</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="vanished">%1 ГБ</translation>
+        <translation>%1 ГБ</translation>
     </message>
 </context>
 <context>
@@ -661,43 +661,58 @@
         <translation>Установка</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="80"/>
+        <location filename="../qml/generic/Installer.qml" line="57"/>
+        <source>Sending</source>
+        <translation>Отправка</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="57"/>
+        <source>Installing</source>
+        <translation>Установка</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="57"/>
+        <source>Sent</source>
+        <translation>Отправлено</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/Installer.qml" line="81"/>
         <source>To install &lt;b&gt;.bar&lt;/b&gt; files such as applications or firmware, you can just &lt;b&gt;Drag and Drop&lt;/b&gt; to this page. Otherwise, select the options below:</source>
         <translation>Для установки &lt;b&gt;bar&lt;/b&gt;-файлов, таких, как приложения или прошивки, просто &lt;b&gt; перетащите&lt;/b&gt; их на эту страницу. Либо выберите нужные параметры ниже:</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="88"/>
+        <location filename="../qml/generic/Installer.qml" line="89"/>
         <source>Install applications to device</source>
         <translation>Установка приложений на устройство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="97"/>
+        <location filename="../qml/generic/Installer.qml" line="98"/>
         <source>Blackberry Installable (*.bar)</source>
         <translation>Установочный файл для Blackberry (*.bar)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="100"/>
+        <location filename="../qml/generic/Installer.qml" line="101"/>
         <source>Install Folder</source>
         <translation>Установить из папки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="105"/>
-        <location filename="../qml/generic/Installer.qml" line="119"/>
+        <location filename="../qml/generic/Installer.qml" line="106"/>
+        <location filename="../qml/generic/Installer.qml" line="120"/>
         <source>Error: Your device can only process one task at a time. Please wait for backup/restore process to complete.&lt;br&gt;</source>
         <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз. Пожалуйста, дождитесь завершения операции резервного копирования/восстановления.&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="107"/>
+        <location filename="../qml/generic/Installer.qml" line="108"/>
         <source>Select Folder</source>
         <translation>Выбор папки</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="114"/>
+        <location filename="../qml/generic/Installer.qml" line="115"/>
         <source>Install Files</source>
         <translation>Установить файлы</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="121"/>
+        <location filename="../qml/generic/Installer.qml" line="122"/>
         <source>Select Files</source>
         <translation>Выбрать файлы</translation>
     </message>
@@ -707,73 +722,70 @@
         <translation>Показать установленные (%1)</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sending %1</source>
         <translation>Отправка %1</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Installing %1</source>
         <translation>Установка %1</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="57"/>
         <source>Sent %1</source>
         <translation>Отправка %1</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="103"/>
-        <location filename="../qml/generic/Installer.qml" line="117"/>
+        <location filename="../qml/generic/Installer.qml" line="104"/>
+        <location filename="../qml/generic/Installer.qml" line="118"/>
         <source>Error: Your device can only process one task at a time. Please wait for previous install to complete.&lt;br&gt;</source>
         <translation>Ошибка: Устройство может обрабатывать только одну задачу за один раз. Пожалуйста, дождитесь окончания предыдущей установки.&lt;br&gt;;</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="131"/>
+        <location filename="../qml/generic/Installer.qml" line="132"/>
         <source>Only install newer apps</source>
         <translation>Устанавливать только новые версии приложений</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="145"/>
+        <location filename="../qml/generic/Installer.qml" line="146"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="151"/>
+        <location filename="../qml/generic/Installer.qml" line="152"/>
         <source>Your Applications</source>
         <translation>Установлено</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="239"/>
+        <location filename="../qml/generic/Installer.qml" line="240"/>
         <source>Log</source>
         <translation>Лог</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="170"/>
+        <location filename="../qml/generic/Installer.qml" line="171"/>
         <source>Use &apos;Refresh&apos; to update list</source>
         <translation>Нажмите &quot;Обновить&quot; для обновления списка</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="170"/>
+        <location filename="../qml/generic/Installer.qml" line="171"/>
         <source>Your device has not completed setup</source>
         <translation>Настройка устройства не завершена</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="170"/>
+        <location filename="../qml/generic/Installer.qml" line="171"/>
         <source>Device disconnected</source>
         <translation>Устройство отключено</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="183"/>
+        <location filename="../qml/generic/Installer.qml" line="184"/>
         <source>Options</source>
         <translation>Опции</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="185"/>
+        <location filename="../qml/generic/Installer.qml" line="186"/>
         <source>Uninstall Marked</source>
         <translation>Удалить отмеченные</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Installer.qml" line="192"/>
+        <location filename="../qml/generic/Installer.qml" line="193"/>
         <source>Show Installed Apps</source>
         <translation>Показать установленные приложения</translation>
     </message>
@@ -991,32 +1003,32 @@
 <context>
     <name>Title</name>
     <message>
-        <location filename="../qml/generic/Title.qml" line="46"/>
+        <location filename="../qml/generic/Title.qml" line="90"/>
         <source>Advanced</source>
         <translation>Расширенный режим</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="79"/>
+        <location filename="../qml/generic/Title.qml" line="123"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="83"/>
+        <location filename="../qml/generic/Title.qml" line="127"/>
         <source>Extract</source>
         <translation>Извлечение</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="87"/>
+        <location filename="../qml/generic/Title.qml" line="131"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="91"/>
+        <location filename="../qml/generic/Title.qml" line="135"/>
         <source>Backup</source>
         <translation>Резервное копирование</translation>
     </message>
     <message>
-        <location filename="../qml/generic/Title.qml" line="95"/>
+        <location filename="../qml/generic/Title.qml" line="139"/>
         <source>Install</source>
         <translation>Установка</translation>
     </message>
@@ -1054,9 +1066,14 @@
         <translation>Обнаружено %1 Blackberry USB устройство(а ) в режиме %2.</translation>
     </message>
     <message>
-        <location filename="../qml/generic/USBConnect.qml" line="87"/>
+        <location filename="../qml/generic/USBConnect.qml" line="88"/>
         <source>Talking to %1 possible device(s).</source>
         <translation>Запрос к %1 возможному устройству.</translation>
+    </message>
+    <message>
+        <location filename="../qml/generic/USBConnect.qml" line="93"/>
+        <source>Connection Log</source>
+        <translation>Лог подключения</translation>
     </message>
     <message>
         <location filename="../qml/generic/USBConnect.qml" line="56"/>
