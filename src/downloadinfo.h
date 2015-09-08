@@ -220,8 +220,13 @@ public:
         // Set to a temporary filename
         _updateFile.setFileName(baseDir + "/." + apps.at(id)->name());
         // Obviously something is wrong if this file is bigger than what we want
-        if (_updateFile.size() > apps.at(id)->size())
-            _updateFile.remove();
+        if (_updateFile.size() > apps.at(id)->size()) {
+            if (QMessageBox::warning(nullptr, "Issue",
+                                     QString("Expected filesize of %1 did not match (Expected %2, Received %3). Ignore the warning or discard the file to try again?").arg(apps.at(id)->name()).arg(apps.at(id)->size()).arg(_updateFile.size()),
+                                     QMessageBox::Discard, QMessageBox::Ignore) == QMessageBox::Discard) {
+                _updateFile.remove();
+            }
+        }
         // In the unlikely event that we missed that we had already downloaded it
         // Maybe the user copied the relevant files in to a new folder during download?
         if (_updateFile.size() == apps.at(id)->size()) {
@@ -272,12 +277,18 @@ public:
             if (_updateFile.size() == apps.at(id)->size())
                 _updateFile.rename(baseDir + "/" + apps.at(id)->name());
             else {
-                // Pretend like that didn't happen and try again
-                size -= _updateFile.size();
-                _updateFile.close();
-                _updateFile.remove();
-                downloadNextFile();
-                return;
+                if (QMessageBox::warning(nullptr, "Issue",
+                                         QString("Expected filesize of %1 did not match (Expected %2, Received %3). Ignore the warning or discard the file to try again?").arg(apps.at(id)->name()).arg(apps.at(id)->size()).arg(_updateFile.size()),
+                                         QMessageBox::Discard, QMessageBox::Ignore) == QMessageBox::Discard)
+                {
+                    // Discard and try again
+                    size -= _updateFile.size();
+                    _updateFile.close();
+                    _updateFile.remove();
+                    downloadNextFile();
+                    return;
+                }
+                // Pretend like that didn't happen
             }
 
             completedFile();
