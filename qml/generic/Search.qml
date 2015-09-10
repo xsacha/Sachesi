@@ -31,6 +31,7 @@ Item {
                 overallValue: download.progress
                 curId: download.id + 1
                 maxId: download.maxId
+                statusText: "Downloading"
                 text: download.curName
             }
             Button {
