@@ -90,7 +90,7 @@ Item {
                 Button {
                     visible: i.hasLog
                     Layout.alignment: Qt.AlignHCenter
-                    text: qsTr("Connection Log");
+                    text: qsTr("Connection Log")+ translator.lang
                     onClicked: i.openLog();
                 }
             }
