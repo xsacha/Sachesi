@@ -198,7 +198,7 @@ Item {
         TextCouple {
             id: country
             type: qsTr("Country") + translator.lang
-            value: "311"
+            value: "310"
             subtext: carrierinfo.country
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -209,7 +209,7 @@ Item {
         TextCouple {
             id: carrier
             type: qsTr("Carrier") + translator.lang
-            value: "480"
+            value: "200"
             subtext: carrierinfo.carrier
             restrictions: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
             maxLength: 3
@@ -264,7 +264,7 @@ Item {
                             for (var i = 0; i < p.variantCount(selectedItem); i++)
                                 variantModel.append({ 'text': p.nameFromVariant(selectedItem, i)})
 
-                            variant.selectedItem = 0;
+                            variant.selectedItem = 10;
                         }
                     }
                     property bool advanced: settings.advanced
