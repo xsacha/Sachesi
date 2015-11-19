@@ -465,7 +465,7 @@ void InstallNet::backup()
                 "<QnxOSDevice><Archives>";
         foreach(BackupCategory* cat, _back.categories) {
             if (_back.modeString().contains(cat->id))
-                manifestXML.append("<Archive id=\"" + cat->id + "\" name=\"" + cat->name + "\" count=\"" + cat->count + "\" bytesize=\"" + cat->bytesize + "\" keyid=" + device->bbid + "\" perimetertype=" + cat->perimetertype + "\"/>");
+                manifestXML.append("<Archive id=\"" + cat->id + "\" name=\"" + cat->name + "\" count=\"" + cat->count + "\" bytesize=\"" + cat->bytesize + "\" keyid=\"" + device->bbid + "\" perimetertype=\"" + cat->perimetertype + "\"/>");
         }
         manifestXML.append("</Archives></QnxOSDevice></BlackBerry_Backup>");
         manifest->write(manifestXML.toStdString().c_str());
