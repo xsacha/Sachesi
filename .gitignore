@@ -24,3 +24,33 @@
 # Qt
 *.user
 *.qm
+
+# Compiler Stuff
+/Makefile
+/Sachesi
+/moc_apps.cpp
+/moc_apps.cpp
+/moc_autoloaderwriter.cpp
+/moc_backupinfo.cpp
+/moc_blitzinfo.cpp
+/moc_boot.cpp
+/moc_carrierinfo.cpp
+/moc_deviceinfo.cpp
+/moc_discoveredrelease.cpp
+/moc_downloadinfo.cpp
+/moc_fs.cpp
+/moc_ifs.cpp
+/moc_installer.cpp
+/moc_mainnet.cpp
+/moc_qnx6.cpp
+/moc_quagzipfile.cpp
+/moc_quaziodevice.cpp
+/moc_quazipfile.cpp
+/moc_rcfs.cpp
+/moc_scanner.cpp
+/moc_splitter.cpp
+/moc_translator.cpp
+/qrc_UI.cpp
+/qrc_translations.cpp
+
+
