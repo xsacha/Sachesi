@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>Backup</name>
     <message>
@@ -194,91 +194,91 @@
     <name>Device</name>
     <message>
         <source>Device Information</source>
-        <translation type="vanished">Информация об устройстве</translation>
+        <translation>Информация об устройстве</translation>
     </message>
     <message>
         <source>Tools</source>
-        <translation type="vanished">Инструменты</translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <source>Wipe</source>
-        <translation type="vanished">Очистка</translation>
+        <translation>Очистка</translation>
     </message>
     <message>
         <source>Factory Reset</source>
-        <translation type="vanished">Сброс настроек</translation>
+        <translation>Сброс настроек</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="vanished">Перезагрузка</translation>
+        <translation>Перезагрузка</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="vanished">Имя устройства</translation>
+        <translation>Имя устройства</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">Неизвестно</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <source>HW Name</source>
-        <translation type="vanished">Ревизия</translation>
+        <translation>Ревизия</translation>
     </message>
     <message>
         <source>BBID</source>
-        <translation type="vanished">BBID</translation>
+        <translation>BBID</translation>
     </message>
     <message>
         <source>PIN</source>
-        <translation type="vanished">PIN</translation>
+        <translation>PIN</translation>
     </message>
     <message>
         <source>BSN</source>
-        <translation type="vanished">Серийный номер</translation>
+        <translation>Серийный номер</translation>
     </message>
     <message>
         <source>OS</source>
-        <translation type="vanished">ОС</translation>
+        <translation>ОС</translation>
     </message>
     <message>
         <source>Radio</source>
-        <translation type="vanished">Радиомодуль</translation>
+        <translation>Радиомодуль</translation>
     </message>
     <message>
         <source>HW</source>
-        <translation type="vanished">Номер модели</translation>
+        <translation>Номер модели</translation>
     </message>
     <message>
         <source>Restrictions</source>
-        <translation type="vanished">Ограничения</translation>
+        <translation>Ограничения</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="vanished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>Setup Complete</source>
-        <translation type="vanished">Настройка завершена</translation>
+        <translation>Настройка завершена</translation>
     </message>
     <message>
         <source>True</source>
-        <translation type="vanished">Да</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <source>False</source>
-        <translation type="vanished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>Developer Mode</source>
-        <translation type="vanished">Режим разработки</translation>
+        <translation>Режим разработки</translation>
     </message>
     <message>
         <source>Battery</source>
-        <translation type="vanished">Батарея</translation>
+        <translation>Батарея</translation>
     </message>
     <message>
         <source>Connection</source>
-        <translation type="vanished">Подключение</translation>
+        <translation>Подключение</translation>
     </message>
     <message>
         <location filename="../qml/generic/Device.qml" line="19"/>
@@ -287,27 +287,27 @@
     </message>
     <message>
         <source>Refurbished Date</source>
-        <translation type="vanished">Дата восстановления</translation>
+        <translation>Дата восстановления</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="vanished">Никогда</translation>
+        <translation>Никогда</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="vanished">Чисто</translation>
+        <translation>Чисто</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="vanished">Установить</translation>
+        <translation>Установить</translation>
     </message>
     <message>
         <source>Free Disk Space</source>
-        <translation type="vanished">Свободное дисковое пространство</translation>
+        <translation>Свободное дисковое пространство</translation>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation type="vanished">%1 ГБ</translation>
+        <translation>%1 ГБ</translation>
     </message>
 </context>
 <context>
