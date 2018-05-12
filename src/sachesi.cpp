@@ -61,7 +61,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app.setOrganizationName("Qtness");
     app.setOrganizationDomain("qtness.com");
     app.setApplicationName("Sachesi");
-    app.setApplicationVersion("2.0.3");
+    app.setApplicationVersion("2.0.4");
 
     // Use system proxy except where not possible
     QNetworkProxyFactory::setUseSystemConfiguration(true);
