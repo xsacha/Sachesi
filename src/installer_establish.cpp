@@ -17,6 +17,21 @@
 
 #include "installer.h"
 
+// Compatibility for old OpenSSL
+#if OPENSSL_VERSION_NUMBER < 0x10100005L
+static void RSA_get0_key(const RSA *r, const BIGNUM **n, const BIGNUM **e, const BIGNUM **d)
+{
+    if(n != NULL)
+        *n = r->n;
+
+    if(e != NULL)
+        *e = r->e;
+
+    if(d != NULL)
+        *d = r->d;
+}
+#endif
+
 void InstallNet::requestConfigure()
 {
     if (!_state)
@@ -34,8 +49,10 @@ void InstallNet::requestChallenge()
     BIGNUM* e = BN_new(); BN_set_word(e, 65537);
     privkey = RSA_new();
     RSA_generate_key_ex(privkey, 1024, e, nullptr);
-    unsigned char* privkey_mod = new unsigned char[BN_num_bytes(privkey->n)];
-    BN_bn2bin(privkey->n, privkey_mod);
+    const BIGNUM* bign;
+    RSA_get0_key(privkey, &bign, nullptr, nullptr);
+    unsigned char* privkey_mod = new unsigned char[BN_num_bytes(bign)];
+    BN_bn2bin(bign, privkey_mod);
     QByteArray buffer(128,0);
     buffer = QByteArray::fromRawData((char*)privkey_mod,128);
     QByteArray header;

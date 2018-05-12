@@ -15,9 +15,7 @@ win32 {
     SOURCES += $$P/ext/zlib-win/*.c
     HEADERS += $$P/ext/zlib-win/*.h
     INCLUDEPATH += ext/zlib-win
-}
 
-win32 {
     # Where is your OpenSSL Install? Hardcoded for Win32
     OPENSSL_PATH = C:\\OpenSSL
     INCLUDEPATH += $$OPENSSL_PATH\\include

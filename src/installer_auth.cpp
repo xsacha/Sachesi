@@ -33,13 +33,13 @@ void InstallNet::AESEncryptSend(QByteArray &plain, int code)
     RAND_bytes(iv, 16);
     int ilen, tlen;
     unsigned char* encrypt = new unsigned char[plain.length() + 16];
-    EVP_CIPHER_CTX ctx;
-    EVP_CIPHER_CTX_init(&ctx);
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    EVP_CIPHER_CTX_init(ctx);
     const EVP_CIPHER *cipher = EVP_aes_128_cbc();
-    EVP_EncryptInit(&ctx, cipher, (unsigned char*)sessionKey.data(), iv);
-    EVP_EncryptUpdate(&ctx, encrypt, &ilen, (unsigned char*)plain.data(), plain.length());
-    EVP_EncryptFinal(&ctx, encrypt + ilen, &tlen);
-    EVP_CIPHER_CTX_cleanup(&ctx);
+    EVP_EncryptInit(ctx, cipher, (unsigned char*)sessionKey.data(), iv);
+    EVP_EncryptUpdate(ctx, encrypt, &ilen, (unsigned char*)plain.data(), plain.length());
+    EVP_EncryptFinal(ctx, encrypt + ilen, &tlen);
+    EVP_CIPHER_CTX_free(ctx);
 
     /* Create buffer */
     QByteArray buffer;
