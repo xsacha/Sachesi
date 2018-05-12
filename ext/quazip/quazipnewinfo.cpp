@@ -5,7 +5,7 @@ This file is part of QuaZIP.
 
 QuaZIP is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+the Free Software Foundation, either version 2.1 of the License, or
 (at your option) any later version.
 
 QuaZIP is distributed in the hope that it will be useful,
@@ -29,9 +29,18 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 #include <string.h>
 
 static void QuaZipNewInfo_setPermissions(QuaZipNewInfo *info,
-        QFile::Permissions perm, bool isDir)
+        QFile::Permissions perm, bool isDir, bool isSymLink = false)
 {
     quint32 uPerm = isDir ? 0040000 : 0100000;
+
+    if ( isSymLink ) {
+#ifdef Q_OS_WIN
+        uPerm = 0200000;
+#else
+        uPerm = 0120000;
+#endif
+    }
+
     if ((perm & QFile::ReadOwner) != 0)
         uPerm |= 0400;
     if ((perm & QFile::WriteOwner) != 0)
@@ -91,7 +100,7 @@ QuaZipNewInfo::QuaZipNewInfo(const QString& name, const QString& file):
     dateTime = QDateTime::currentDateTime();
   } else {
     dateTime = lm;
-    QuaZipNewInfo_setPermissions(this, info.permissions(), info.isDir());
+    QuaZipNewInfo_setPermissions(this, info.permissions(), info.isDir(), info.isSymLink());
   }
 }
 
@@ -107,7 +116,7 @@ void QuaZipNewInfo::setFilePermissions(const QString &file)
 {
     QFileInfo info = QFileInfo(file);
     QFile::Permissions perm = info.permissions();
-    QuaZipNewInfo_setPermissions(this, perm, info.isDir());
+    QuaZipNewInfo_setPermissions(this, perm, info.isDir(), info.isSymLink());
 }
 
 void QuaZipNewInfo::setPermissions(QFile::Permissions permissions)
